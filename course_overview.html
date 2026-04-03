@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Respiratory Physiology — Course Overview</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Lora:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black:      #2E2E2E;
+  --sage:       #6B8C74;
+  --sage-dark:  #4E6E57;
+  --sage-bg:    #EEF4F0;
+  --cream:      #FAFAF7;
+  --cream-dark: #F0F0EB;
+  --gray:       #E0DDD8;
+  --gray-text:  #595959;
+  --white:      #FFFFFF;
+  --green:      #3A6B50;
+  --green-lt:   #E8F2EC;
+}
+
+html, body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--cream);
+  color: var(--black);
+  line-height: 1.65;
+  font-size: 15px;
+}
+
+/* ── HEADER ─────────────────────────────── */
+.page-header {
+  background: #F4F1EC;
+  padding: 36px 48px 32px;
+  border-bottom: 4px solid var(--sage);
+  border-bottom: 4px solid var(--sage);
+}
+.header-eyebrow {
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--sage-dark);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.header-title {
+  font-family: 'Lora', serif;
+  font-size: 36px;
+  color: var(--black);
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+.header-subtitle {
+  font-size: 16px;
+  color: var(--gray-text);
+  font-style: italic;
+}
+
+/* ── MAIN LAYOUT ─────────────────────────── */
+.page-body {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px 48px 72px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+/* ── SECTIONS ────────────────────────────── */
+.section-eyebrow {
+  font-size: 9px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--sage-dark);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: 'Lora', serif;
+  font-size: 24px;
+  color: var(--black);
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--gray);
+}
+
+/* ── DESCRIPTION BLOCK ───────────────────── */
+.description-block {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 32px 36px;
+  border: 1px solid var(--gray);
+  border-left: 5px solid var(--sage-dark);
+}
+.description-block p {
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--black);
+}
+.description-block p + p {
+  margin-top: 16px;
+}
+
+/* ── PHASE STEPS ─────────────────────────── */
+.phases {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.phase-card {
+  display: flex;
+  gap: 20px;
+  background: var(--white);
+  border: 1px solid var(--gray);
+  border-radius: 10px;
+  padding: 22px 24px;
+  align-items: flex-start;
+  transition: border-color .2s;
+}
+.phase-card:hover { border-color: var(--sage); }
+.phase-num {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--sage-dark);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-family: 'Lora', serif;
+}
+.phase-content {}
+.phase-label {
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--sage-dark);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.phase-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--black);
+  margin-bottom: 6px;
+}
+.phase-desc {
+  font-size: 14px;
+  color: var(--gray-text);
+  line-height: 1.7;
+}
+
+/* ── RULES GRID ──────────────────────────── */
+.rules-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.rule-card {
+  background: var(--white);
+  border: 1px solid var(--gray);
+  border-radius: 10px;
+  padding: 20px 22px;
+}
+.rule-icon {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.rule-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--black);
+  margin-bottom: 6px;
+}
+.rule-text {
+  font-size: 13px;
+  color: var(--gray-text);
+  line-height: 1.65;
+}
+
+/* ── SPACED REP TIMELINE ─────────────────── */
+.timeline {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: var(--white);
+  border: 1px solid var(--gray);
+  border-radius: 10px;
+  padding: 24px 28px;
+  overflow-x: auto;
+}
+.timeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+.timeline-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--gray);
+  z-index: 0;
+}
+.tl-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--sage-bg);
+  border: 2px solid var(--sage);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--sage-dark);
+  position: relative;
+  z-index: 1;
+  margin-bottom: 10px;
+}
+.tl-dot.mastered {
+  background: var(--green-lt);
+  border-color: var(--green);
+  color: var(--green);
+}
+.tl-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--black);
+  text-align: center;
+}
+.tl-sub {
+  font-size: 10px;
+  color: var(--gray-text);
+  text-align: center;
+  margin-top: 2px;
+}
+
+/* ── TIPS BOX ────────────────────────────── */
+.tips-box {
+  background: var(--sage-bg);
+  border-radius: 10px;
+  padding: 24px 28px;
+  border: 1px solid var(--sage);
+}
+.tips-box h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--sage-dark);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.tips-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tips-list li {
+  display: flex;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--black);
+  line-height: 1.6;
+}
+.tip-check {
+  color: var(--sage-dark);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ── DASHBOARD CALLOUT ───────────────────── */
+.dashboard-callout {
+  background: #EAE6DF;
+  border-radius: 12px;
+  padding: 28px 32px;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  border: 1px solid var(--gray);
+  border-left: 5px solid var(--sage-dark);
+}
+.dash-icon {
+  font-size: 36px;
+  flex-shrink: 0;
+}
+.dash-content {}
+.dash-title {
+  font-family: 'Lora', serif;
+  font-size: 20px;
+  color: var(--black);
+  margin-bottom: 6px;
+}
+.dash-text {
+  font-size: 14px;
+  color: var(--gray-text);
+  line-height: 1.65;
+}
+
+/* ── FOOTER ──────────────────────────────── */
+.page-footer {
+  background: #F4F1EC;
+  padding: 20px 48px;
+  border-top: 3px solid var(--sage);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-text {
+  font-size: 12px;
+  color: var(--gray-text);
+}
+.footer-badge {
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--sage-dark);
+  font-weight: 700;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="page-header" role="banner">
+  <div class="header-eyebrow">Respiratory Physiology</div>
+  <h1 class="header-title">Active Learning System</h1>
+  <p class="header-subtitle">Watch. Reflect. Review. Repeat.</p>
+</header>
+
+<main class="page-body" id="main-content">
+
+  <!-- ── COURSE DESCRIPTION ────────────────────────── -->
+  <section aria-labelledby="about-heading">
+    <div class="section-eyebrow">About This Course</div>
+    <h2 class="section-title" id="about-heading">This course is built differently.</h2>
+    <div class="description-block">
+      <p>Rather than passively watching videos and hoping things stick, this course walks you through 56 core concepts in respiratory physiology using a structured three-phase process: watch, reflect, and review. Each concept has its own video, reference PDF, and interactive module that will not let you skip ahead without genuinely engaging.</p>
+      <p>After every concept, your next review date is automatically scheduled using spaced repetition — the most evidence-backed method for long-term retention. Your personal dashboard tracks every concept, shows you what is due today, what is coming up, and what you have mastered. The goal is not to get through the material. It is to own it.</p>
+    </div>
+  </section>
+
+  <!-- ── HOW IT WORKS ───────────────────────────────── -->
+  <section aria-labelledby="how-heading">
+    <div class="section-eyebrow">How It Works</div>
+    <h2 class="section-title" id="how-heading">Three phases per concept</h2>
+
+    <div class="phases">
+      <article class="phase-card" aria-label="Phase 1: Watch">
+        <div class="phase-num" aria-hidden="true">1</div>
+        <div class="phase-content">
+          <div class="phase-label">Phase 1</div>
+          <div class="phase-name">Watch and Read</div>
+          <p class="phase-desc">The video and your reference PDF load side by side. Watch the full video while following along with the PDF. A timer tracks how long you have been on the page — the Reflect phase does not unlock until you have spent enough time with the material. There is no skipping.</p>
+        </div>
+      </article>
+
+      <article class="phase-card" aria-label="Phase 2: Reflect">
+        <div class="phase-num" aria-hidden="true">2</div>
+        <div class="phase-content">
+          <div class="phase-label">Phase 2</div>
+          <div class="phase-name">Teach It Back</div>
+          <p class="phase-desc">You will see a prompt asking you to explain the concept in your own words — as if you are teaching it to a friend with no medical background. You must type your explanation. Pasting is disabled. The submit button does not activate until you have written at least 30 words. This is the Feynman Technique: if you cannot explain it simply, you do not know it yet.</p>
+        </div>
+      </article>
+
+      <article class="phase-card" aria-label="Phase 3: Review">
+        <div class="phase-num" aria-hidden="true">3</div>
+        <div class="phase-content">
+          <div class="phase-label">Phase 3</div>
+          <div class="phase-name">See How You Did</div>
+          <p class="phase-desc">Your explanation appears on the right. Your instructor's complete answer appears on the left. Read them side by side. Then work through a short checklist of what a complete explanation must include — check off everything you covered. Your score updates live. Your next review date is automatically set and saved to your dashboard.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ── RULES ──────────────────────────────────────── -->
+  <section aria-labelledby="rules-heading">
+    <div class="section-eyebrow">What to Expect</div>
+    <h2 class="section-title" id="rules-heading">Things that are intentional</h2>
+
+    <div class="rules-grid">
+      <div class="rule-card">
+        <div class="rule-icon" aria-hidden="true">⏱</div>
+        <div class="rule-title">The timer is real</div>
+        <p class="rule-text">You cannot click past Phase 1 until you have spent a minimum amount of time watching. The length varies by concept based on video duration. If you need more time, there is an Extend button.</p>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-icon" aria-hidden="true">⌨️</div>
+        <div class="rule-title">No pasting allowed</div>
+        <p class="rule-text">The explanation field blocks paste and drag-and-drop. You have to type your answer. This is not a bug — retrieval practice only works when you actually retrieve.</p>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-icon" aria-hidden="true">📋</div>
+        <div class="rule-title">You grade yourself</div>
+        <p class="rule-text">There is no automated scoring. You compare your explanation to your instructor's and check off what you included. Be honest. The only person you are fooling by checking things you did not say is yourself.</p>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-icon" aria-hidden="true">🔁</div>
+        <div class="rule-title">Return visits are different</div>
+        <p class="rule-text">When you revisit a concept, you will see a welcome screen showing your history and when your next review is due. You can jump straight to the recall phase or rewatch the video first. Your choice.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SPACED REP ─────────────────────────────────── -->
+  <section aria-labelledby="sr-heading">
+    <div class="section-eyebrow">Spaced Repetition</div>
+    <h2 class="section-title" id="sr-heading">Your review schedule</h2>
+
+    <div class="timeline" role="list" aria-label="Spaced repetition intervals">
+      <div class="timeline-step" role="listitem">
+        <div class="tl-dot" aria-label="First review">1</div>
+        <div class="tl-label">Day 1</div>
+        <div class="tl-sub">First review</div>
+      </div>
+      <div class="timeline-step" role="listitem">
+        <div class="tl-dot" aria-label="Second review">2</div>
+        <div class="tl-label">Day 3</div>
+        <div class="tl-sub">Second review</div>
+      </div>
+      <div class="timeline-step" role="listitem">
+        <div class="tl-dot" aria-label="Third review">3</div>
+        <div class="tl-label">Day 7</div>
+        <div class="tl-sub">Third review</div>
+      </div>
+      <div class="timeline-step" role="listitem">
+        <div class="tl-dot" aria-label="Fourth review">4</div>
+        <div class="tl-label">Day 14</div>
+        <div class="tl-sub">Fourth review</div>
+      </div>
+      <div class="timeline-step" role="listitem">
+        <div class="tl-dot mastered" aria-label="Mastered">✓</div>
+        <div class="tl-label">Day 30</div>
+        <div class="tl-sub">Mastered</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 16px;">
+      <div class="tips-box" role="note">
+        <h3>One important note about your progress</h3>
+        <ul class="tips-list" aria-label="Progress tracking notes">
+          <li>
+            <span class="tip-check" aria-hidden="true">✦</span>
+            <span>Your review schedule is saved to this browser on this device. If you switch browsers or devices, your progress will not carry over — use the same browser each time.</span>
+          </li>
+          <li>
+            <span class="tip-check" aria-hidden="true">✦</span>
+            <span>Do not use private or incognito mode — your progress will not be saved between sessions.</span>
+          </li>
+          <li>
+            <span class="tip-check" aria-hidden="true">✦</span>
+            <span>Clearing your browser data will reset your review schedule. Treat this course like any other study tool you depend on.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DASHBOARD ──────────────────────────────────── -->
+  <section aria-labelledby="dashboard-heading">
+    <div class="section-eyebrow">Your Dashboard</div>
+    <h2 class="section-title" id="dashboard-heading">Start here every time</h2>
+
+    <div class="dashboard-callout" role="complementary" aria-label="Dashboard instructions">
+      <div class="dash-icon" aria-hidden="true">📊</div>
+      <div class="dash-content">
+        <h3 class="dash-title" id="dashboard-heading">The Review Dashboard</h3>
+        <p class="dash-text">The first lesson in this course is your personal review dashboard. Every time you open the course, check it first. It shows you which concepts are overdue, which are due today, which are coming up, and which you have mastered. Work your way through what is due before moving to new material.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TIPS ───────────────────────────────────────── -->
+  <section aria-labelledby="tips-heading">
+    <div class="section-eyebrow">Getting the Most Out of This</div>
+    <h2 class="section-title" id="tips-heading">Practical advice</h2>
+
+    <div class="tips-box">
+      <h3>Before you start each session</h3>
+      <ul class="tips-list">
+        <li>
+          <span class="tip-check" aria-hidden="true">✦</span>
+          <span>Open the dashboard and check what is due. Prioritize overdue concepts over new ones.</span>
+        </li>
+        <li>
+          <span class="tip-check" aria-hidden="true">✦</span>
+          <span>Give yourself at least 10-15 minutes per concept — not because the video is long, but because the thinking is.</span>
+        </li>
+        <li>
+          <span class="tip-check" aria-hidden="true">✦</span>
+          <span>When you write your Feynman explanation, do not just define terms. Explain the mechanism — why things happen, what causes what.</span>
+        </li>
+        <li>
+          <span class="tip-check" aria-hidden="true">✦</span>
+          <span>When you see your instructor's answer, read it carefully — not just to check your score but to understand what you missed and why.</span>
+        </li>
+        <li>
+          <span class="tip-check" aria-hidden="true">✦</span>
+          <span>If you scored low on a concept, use the Try Again button right then. A second attempt immediately after seeing the correct answer is one of the most effective learning strategies there is.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="page-footer" role="contentinfo">
+  <span class="footer-text">Respiratory Physiology — Active Learning System</span>
+  <span class="footer-badge">Built for nursing students</span>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Respiratory Physiology — Review Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lora:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black:       #2E2E2E;
+  --sage:        #6B8C74;
+  --sage-light:  #8AAF93;
+  --sage-bg:     #EEF4F0;
+  --sage-dark:   #4E6E57;
+  --cream:       #FAFAF7;
+  --cream-dark:  #F0F0EB;
+  --gray:        #999;
+  --gray-light:  #E0DDD8;
+  --white:       #FFFFFF;
+  --green:       #3A6B50;
+  --green-light: #E8F2EC;
+  --red:         #A33020;
+  --red-light:   #FDECEA;
+}
+
+html, body { min-height: 100%; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--cream); color: var(--black); }
+
+/* HEADER */
+.header { background: #F4F1EC; padding: 0 28px; height: 58px; border: 1px solid var(--gray-light); display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid var(--sage); position: sticky; top: 0; z-index: 100; }
+.header-left { display: flex; flex-direction: column; gap: 1px; }
+.unit-eyebrow { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--sage-dark); font-weight: 700; }
+.unit-title { font-family: 'Lora', serif; font-size: 18px; color: var(--black); }
+.last-updated { font-size: 11px; color: #666; }
+
+/* STATS */
+.stats-bar { background: var(--white); border-bottom: 1px solid var(--gray-light); padding: 0 28px; display: flex; }
+.stat { flex: 1; padding: 16px 16px; display: flex; flex-direction: column; gap: 3px; border-right: 1px solid var(--gray-light); }
+.stat:last-child { border-right: none; }
+.stat-value { font-family: 'Lora', serif; font-size: 28px; font-weight: 600; line-height: 1; }
+.stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: var(--gray); font-weight: 600; margin-top: 4px; }
+.stat.s-overdue  .stat-value { color: var(--red); }
+.stat.s-due      .stat-value { color: var(--sage-dark); }
+.stat.s-mastered .stat-value { color: var(--green); }
+
+/* PROGRESS */
+.progress-wrap { background: var(--white); border-bottom: 1px solid var(--gray-light); padding: 12px 28px 14px; }
+.progress-header { display: flex; justify-content: space-between; margin-bottom: 7px; }
+.progress-label { font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: var(--gray); font-weight: 600; }
+.progress-pct { font-size: 10px; font-weight: 700; color: var(--sage-dark); }
+.progress-track { height: 5px; background: var(--gray-light); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--sage-dark), var(--sage-light)); transition: width .8s ease; }
+
+/* LIST */
+.list-wrap { padding: 16px 28px 48px; display: flex; flex-direction: column; gap: 5px; }
+
+.section-label { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: var(--sage); padding: 14px 4px 5px; margin-top: 4px; }
+.section-label:first-child { padding-top: 4px; }
+
+.concept-row {
+  background: var(--white); border: 1.5px solid var(--gray-light);
+  border-radius: 8px; padding: 12px 16px;
+  display: flex; align-items: center; gap: 12px;
+  transition: border-color .15s, box-shadow .15s;
+}
+.concept-row:hover { border-color: var(--sage); box-shadow: 0 2px 10px rgba(107,140,116,.1); }
+.concept-row.is-overdue  { background: var(--red-light);  border-color: #e0b8b4; }
+.concept-row.is-due      { background: var(--sage-bg);    border-color: var(--sage); }
+.concept-row.is-mastered { background: var(--green-light); border-color: #a8ccb8; }
+
+.concept-num { font-size: 11px; font-weight: 700; color: var(--gray); min-width: 24px; text-align: right; flex-shrink: 0; }
+.concept-name { font-size: 13.5px; font-weight: 500; flex: 1; line-height: 1.3; }
+.concept-row.is-overdue .concept-name { color: var(--red); }
+
+.concept-meta { font-size: 11px; color: var(--gray); text-align: right; flex-shrink: 0; line-height: 1.6; }
+.concept-meta strong { display: block; font-size: 9px; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: .07em; }
+
+/* BADGES */
+.badge { flex-shrink: 0; font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+.badge-notstarted { background: var(--cream-dark); color: #bbb; }
+.badge-future     { background: var(--sage-bg);    color: var(--sage-dark); }
+.badge-due        { background: var(--sage);        color: #fff; }
+.badge-overdue    { background: var(--red-light);   color: var(--red); border: 1px solid #e0b8b4; }
+.badge-mastered   { background: var(--green-light); color: var(--green); border: 1px solid #a8ccb8; }
+
+/* HELP BUTTON */
+.help-link { width: 30px; height: 30px; border-radius: 50%; background: var(--sage-bg); border: 1.5px solid var(--sage); color: var(--sage-dark); font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .18s; font-family: 'Plus Jakarta Sans', sans-serif; text-decoration: none; flex-shrink: 0; }
+.help-link:hover { background: var(--sage); color: #fff; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="unit-eyebrow">Respiratory Physiology</div>
+    <div class="unit-title">Review Dashboard</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div class="last-updated" id="last-updated"></div>
+    <a class="help-link" href="https://www.medmasterscollaborative.com/physiology-interactive-lecture-instructions"
+      target="_blank" rel="noopener" aria-label="Open course instructions in new tab"
+      title="Course instructions">?</a>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat s-overdue">
+    <div class="stat-value" id="stat-overdue">—</div>
+    <div class="stat-label">Overdue</div>
+  </div>
+  <div class="stat s-due">
+    <div class="stat-value" id="stat-due">—</div>
+    <div class="stat-label">Due Today</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value" id="stat-upcoming">—</div>
+    <div class="stat-label">Coming Up</div>
+  </div>
+  <div class="stat s-mastered">
+    <div class="stat-value" id="stat-mastered">—</div>
+    <div class="stat-label">Mastered</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value" id="stat-notstarted">—</div>
+    <div class="stat-label">Not Started</div>
+  </div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-header">
+    <span class="progress-label">Overall Progress</span>
+    <span class="progress-pct" id="progress-pct">0%</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+</div>
+
+<div class="list-wrap" id="concept-list"></div>
+
+<script>
+const CONCEPTS = [
+  { id: 'functions_of_the_respiratory_system',                                  name: 'Functions of the Respiratory System' },
+  { id: 'pulmonary_ventilation_normal_ventilation',                              name: 'Pulmonary Ventilation / Normal Ventilation' },
+  { id: 'internal_vs_external_respiration',                                      name: 'Internal vs. External Respiration' },
+  { id: 'steps_of_respiration',                                                  name: 'Steps of Respiration' },
+  { id: 'quiet_vs_forced_respiration',                                           name: 'Quiet vs. Forced Respiration' },
+  { id: 'requirements_for_ventilation',                                          name: 'Requirements for Ventilation' },
+  { id: 'air_flow_and_pressure_syringe_analogy',                                 name: 'Air Flow and Pressure — Syringe Analogy' },
+  { id: 'muscles_of_respiration_and_air_flow_1',                                 name: 'Muscles of Respiration and Air Flow (1)' },
+  { id: 'muscles_of_respiration_and_air_flow_2',                                 name: 'Muscles of Respiration and Air Flow (2)' },
+  { id: 'non_thoracic_effects_of_changes_in_abdominal_pressure',                 name: 'Non-Thoracic Effects of Changes in Abdominal Pressure' },
+  { id: 'neural_control_of_breathing',                                           name: 'Neural Control of Breathing' },
+  { id: 'respiratory_centers_of_the_brain_stem_1',                               name: 'Respiratory Centers of the Brain Stem (1)' },
+  { id: 'respiratory_centers_of_the_brain_stem_2',                               name: 'Respiratory Centers of the Brain Stem (2)' },
+  { id: 'central_and_peripheral_inputs_to_resp_system_1',                        name: 'Central and Peripheral Inputs to Resp. System (1)' },
+  { id: 'central_and_peripheral_inputs_to_resp_system_2',                        name: 'Central and Peripheral Inputs to Resp. System (2)' },
+  { id: 'central_and_peripheral_inputs_to_resp_system_3',                        name: 'Central and Peripheral Inputs to Resp. System (3)' },
+  { id: 'central_and_peripheral_inputs_to_resp_system_4',                        name: 'Central and Peripheral Inputs to Resp. System (4)' },
+  { id: 'chemoreceptors_and_gas_levels_co2_and_o2_primary_stimulus_to_breathe',  name: 'Chemoreceptors and Gas Levels (CO₂ & O₂)' },
+  { id: 'voluntary_control_of_breathing',                                        name: 'Voluntary Control of Breathing' },
+  { id: 'pressure_and_volume_boyles_law',                                        name: "Pressure and Volume — Boyle's Law" },
+  { id: 'air_flow_and_pressure',                                                 name: 'Air Flow and Pressure' },
+  { id: 'describe_pre_inspiration_rest',                                         name: 'Describe Pre-Inspiration (Rest)' },
+  { id: 'describe_inspiration',                                                  name: 'Describe Inspiration' },
+  { id: 'charles_law',                                                           name: "Charles' Law" },
+  { id: 'describe_expiration',                                                   name: 'Describe Expiration' },
+  { id: 'what_is_atelectasis',                                                   name: 'What is Atelectasis?' },
+  { id: 'what_is_a_pneumothorax',                                                name: 'What is a Pneumothorax?' },
+  { id: 'describe_airflow_resistance',                                           name: 'Describe Airflow Resistance' },
+  { id: 'pulmonary_compliance_and_surface_tension',                              name: 'Pulmonary Compliance and Surface Tension' },
+  { id: 'alveolar_ventilation',                                                  name: 'Alveolar Ventilation' },
+  { id: 'minute_ventilation',                                                    name: 'Minute Ventilation' },
+  { id: 'spirometry',                                                            name: 'Spirometry' },
+  { id: 'gas_exchange',                                                          name: 'Gas Exchange' },
+  { id: 'daltons_law',                                                           name: "Dalton's Law" },
+  { id: 'henrys_law',                                                            name: "Henry's Law" },
+  { id: 'ficks_law_of_diffusion',                                                name: "Fick's Law of Diffusion" },
+  { id: 'po2',                                                                   name: 'PO₂' },
+  { id: 'pco2',                                                                  name: 'PCO₂' },
+  { id: 'diffusion_time',                                                        name: 'Diffusion Time' },
+  { id: 'ventilation_perfusion_coupling_1',                                      name: 'Ventilation-Perfusion Coupling (1)' },
+  { id: 'ventilation_perfusion_coupling_2',                                      name: 'Ventilation-Perfusion Coupling (2)' },
+  { id: 'ventilation_perfusion_coupling_3',                                      name: 'Ventilation-Perfusion Coupling (3)' },
+  { id: 'ventilation_perfusion_coupling_4',                                      name: 'Ventilation-Perfusion Coupling (4)' },
+  { id: 'gas_transport',                                                         name: 'Gas Transport' },
+  { id: 'o2_hb_dissociation_curve_1',                                            name: 'O₂-Hb Dissociation Curve (1)' },
+  { id: 'o2_hb_dissociation_curve_2',                                            name: 'O₂-Hb Dissociation Curve (2)' },
+  { id: 'o2_loading_and_unloading',                                              name: 'O₂ Loading and Unloading' },
+  { id: 'o2_loading_and_unloading_of_fetal_hemoglobin',                          name: 'O₂ Loading and Unloading — Fetal Hemoglobin' },
+  { id: 'o2_loading_and_unloading_during_exercise',                              name: 'O₂ Loading and Unloading During Exercise' },
+  { id: 'transport_of_co2_co2_loading',                                          name: 'Transport of CO₂ — CO₂ Loading' },
+  { id: 'transport_of_co2_co2_unloading',                                        name: 'Transport of CO₂ — CO₂ Unloading' },
+  { id: '4_steps_of_collective_respiration',                                     name: '4 Steps of Collective Respiration' },
+  { id: 'respiratory_terminology_dyspnea_eupnea_etc',                            name: 'Respiratory Terminology (Dyspnea, Eupnea, etc.)' },
+  { id: 'respiratory_terminology_hypercarbia_hypercapnia_etc',                   name: 'Respiratory Terminology (Hypercarbia, Hypercapnia, etc.)' },
+  { id: 'respiratory_terminology_respiratory_alkalosis_and_acidosis',            name: 'Respiratory Terminology — Alkalosis and Acidosis' },
+  { id: 'hypoxia',                                                               name: 'Hypoxia' },
+];
+
+const MASTERED_DAYS = 30;
+
+function getStatus(id) {
+  let s = {};
+  try { s = JSON.parse(localStorage.getItem('srep_' + id)) || {}; } catch(e) {}
+  if (!s.reviewCount) return { type: 'notstarted' };
+  const now = Date.now();
+  const daysUntil = Math.round((s.nextReview - now) / 86400000);
+  if (s.intervalDays >= MASTERED_DAYS) return { type: 'mastered',  count: s.reviewCount };
+  if (daysUntil < 0)                   return { type: 'overdue',   count: s.reviewCount, daysOver: Math.abs(daysUntil), nextReview: s.nextReview };
+  if (daysUntil === 0)                 return { type: 'due',       count: s.reviewCount };
+  return                                      { type: 'future',    count: s.reviewCount, daysUntil, nextReview: s.nextReview };
+}
+
+function badge(st) {
+  if (st.type === 'notstarted') return '<div class="badge badge-notstarted">Not started</div>';
+  if (st.type === 'mastered')   return '<div class="badge badge-mastered">✓ Mastered</div>';
+  if (st.type === 'due')        return '<div class="badge badge-due">● Due today</div>';
+  if (st.type === 'overdue')    return '<div class="badge badge-overdue">↑ ' + st.daysOver + 'd overdue</div>';
+  return '<div class="badge badge-future">In ' + st.daysUntil + 'd</div>';
+}
+
+function meta(st) {
+  if (st.type === 'notstarted' || st.type === 'due') return '';
+  const cnt = st.count + ' review' + (st.count !== 1 ? 's' : '');
+  if (st.type === 'mastered') return '<div class="concept-meta">' + cnt + '</div>';
+  const d = new Date(st.nextReview).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  if (st.type === 'overdue') return '<div class="concept-meta"><strong>was due</strong>' + d + ' · ' + cnt + '</div>';
+  return '<div class="concept-meta"><strong>next review</strong>' + d + ' · ' + cnt + '</div>';
+}
+
+function rowClass(st) {
+  if (st.type === 'overdue')  return 'concept-row is-overdue';
+  if (st.type === 'due')      return 'concept-row is-due';
+  if (st.type === 'mastered') return 'concept-row is-mastered';
+  return 'concept-row';
+}
+
+function render() {
+  const list = document.getElementById('concept-list');
+  list.innerHTML = '';
+  const counts = { overdue: 0, due: 0, future: 0, mastered: 0, notstarted: 0 };
+
+  const items = CONCEPTS.map((c, i) => ({ ...c, i, st: getStatus(c.id) }));
+  const order = ['overdue','due','future','notstarted','mastered'];
+  items.sort((a, b) => {
+    const d = order.indexOf(a.st.type) - order.indexOf(b.st.type);
+    if (d !== 0) return d;
+    if (a.st.type === 'overdue') return b.st.daysOver - a.st.daysOver;
+    if (a.st.type === 'future')  return a.st.daysUntil - b.st.daysUntil;
+    return a.i - b.i;
+  });
+
+  const sectionLabels = {
+    overdue:    '↑ Overdue — review these now',
+    due:        '● Due today',
+    future:     'Scheduled — coming up',
+    notstarted: 'Not yet started',
+    mastered:   '✓ Mastered'
+  };
+
+  let lastSection = null;
+  items.forEach(({ name, st, i }) => {
+    counts[st.type]++;
+    if (st.type !== lastSection) {
+      const div = document.createElement('div');
+      div.className = 'section-label';
+      div.textContent = sectionLabels[st.type];
+      list.appendChild(div);
+      lastSection = st.type;
+    }
+    const row = document.createElement('div');
+    row.className = rowClass(st);
+    row.innerHTML = '<div class="concept-num">' + (i + 1) + '</div>' +
+      '<div class="concept-name">' + name + '</div>' +
+      meta(st) + badge(st);
+    list.appendChild(row);
+  });
+
+  document.getElementById('stat-overdue').textContent   = counts.overdue;
+  document.getElementById('stat-due').textContent       = counts.due;
+  document.getElementById('stat-upcoming').textContent  = counts.future;
+  document.getElementById('stat-mastered').textContent  = counts.mastered;
+  document.getElementById('stat-notstarted').textContent= counts.notstarted;
+
+  const touched = CONCEPTS.length - counts.notstarted;
+  const pct = Math.round((touched / CONCEPTS.length) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent  = pct + '%';
+  document.getElementById('last-updated').textContent  =
+    'Updated ' + new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+}
+
+render();
+</script>
+</body>
+</html>
