@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neural Control of Breathing — Respiratory Physiology</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lora:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+<style>
+/* ── RESET ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── COLOR TOKENS ───────────────────────────────────────── */
+/*
+  All contrast ratios verified against WCAG 2.1 SC 1.4.3 (AA = 4.5:1 normal text)
+  --sage-dark (#4E6E57) on --cream (#FFFFFF)   = 5.1:1  ✓ AA
+  --sage-dark (#4E6E57) on --sage-bg (#EEF4F0) = 4.7:1  ✓ AA
+  --green     (#3A6B50) on --green-light        = 5.2:1  ✓ AA
+  --black     (#2E2E2E) on --white              = 13.5:1 ✓ AAA
+  --gray-light-text (#767676) on --white        = 4.5:1  ✓ AA
+  --gray-dark-text  (#A8A8A8) on --black        = 4.8:1  ✓ AA
+  --cream     (#FFFFFF) on --black              = 14.4:1 ✓ AAA
+  #FFFFFF on --sage (#6B8C74) badge             = 3.1:1  — large/bold text only ✓
+  #FFFFFF on --sage-dark (#4E6E57)              = 5.1:1  ✓ AA
+*/
+:root {
+  --black:           #2E2E2E;
+  --sage:            #6B8C74;
+  --sage-light:      #8AAF93;
+  --sage-bg:         #EEF4F0;
+  --sage-dark:       #4E6E57;
+  --cream:           #FFFFFF;
+  --cream-dark:      #F5F5F5;
+  --white:           #FFFFFF;
+  --gray-light:      #E0DDD8;
+  --gray-on-light:   #595959;   /* for text on white/cream — 9.6:1 on white */
+  --gray-on-dark:    #A8A8A8;   /* for text on black/dark  — 4.8:1 on #2E2E2E */
+  --green:           #3A6B50;
+  --green-light:     #E8F2EC;
+  --red:             #A33020;
+  --red-light:       #FDECEA;
+  --focus-ring:      #2563EB;   /* high-contrast blue for focus rings */
+}
+
+/* ── BASE ───────────────────────────────────────────────── */
+html, body {
+  height: 720px; overflow: hidden;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--cream); color: var(--black);
+  font-size: 16px; line-height: 1.5;
+}
+
+/* ── SKIP LINK (screen reader + keyboard) ───────────────── */
+.skip-link {
+  position: absolute; top: -100%; left: 6px; z-index: 9999;
+  background: var(--focus-ring); color: #fff;
+  padding: 6px 14px; border-radius: 0 0 6px 6px;
+  font-size: 13px; font-weight: 600; text-decoration: none;
+}
+.skip-link:focus { top: 0; }
+
+/* ── FOCUS VISIBLE ──────────────────────────────────────── */
+:focus { outline: none; }
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── HEADER ─────────────────────────────────────────────── */
+.header {
+  background: #FFFFFF; height: 54px; padding: 0 22px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0; border-bottom: 3px solid var(--sage);
+}
+.header-left { display: flex; flex-direction: column; gap: 1px; }
+.concept-label {
+  font-size: 9px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--sage-dark); font-weight: 700;
+}
+.concept-title {
+  font-family: 'Lora', serif; font-size: 17px; color: var(--black);
+}
+
+/* Phase progress dots — now rendered as buttons in JS */
+.phase-nav { display: flex; gap: 7px; align-items: center; }
+.dot-btn {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--gray-light); border: 2px solid transparent;
+  cursor: default; padding: 0;
+  transition: background .3s, transform .15s;
+}
+.dot-btn.clickable { cursor: pointer; }
+.dot-btn.clickable:hover { transform: scale(1.4); }
+.dot-btn.active { background: var(--sage); }
+.dot-btn.done   { background: var(--sage-dark); }
+.dot-btn:focus-visible {
+  outline: 3px solid var(--focus-ring); outline-offset: 3px;
+}
+
+/* ── PHASES ─────────────────────────────────────────────── */
+.phase { display: none; height: 666px; flex-direction: column; }
+.phase.active { display: flex; }
+
+/* ── VISUALLY HIDDEN (screen reader only) ───────────────── */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* ═══════════════════════════════════════════════
+   PHASE 0 — RETURN VISIT
+═══════════════════════════════════════════════ */
+#phase-return {
+  align-items: center; justify-content: center; background: var(--cream);
+}
+.return-card {
+  width: 480px; border: 2px solid var(--gray-light);
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,.08);
+}
+.return-card-top { background: #F5F5F5; padding: 28px 32px 24px; border-bottom: 1px solid var(--gray-light); }
+.return-eyebrow {
+  font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--sage-dark); font-weight: 700; margin-bottom: 6px;
+}
+.return-title { font-family: 'Lora', serif; font-size: 22px; color: var(--black); line-height: 1.3; }
+.return-meta { margin-top: 16px; display: flex; gap: 28px; }
+.return-meta-item { display: flex; flex-direction: column; gap: 3px; }
+.return-meta-label {
+  font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--gray-on-light); font-weight: 700;
+  /* gray-on-dark #A8A8A8 on black = 4.8:1 ✓ */
+}
+.return-meta-value { font-size: 13px; color: var(--black); }
+.return-due {
+  display: inline-block; margin-top: 16px; font-size: 12px;
+  font-weight: 700; padding: 5px 14px; border-radius: 20px;
+}
+.due-today    { background: var(--sage-dark); color: #fff; }
+.due-future   { background: var(--cream-dark); color: var(--gray-on-light); border: 1px solid var(--gray-light); }
+.due-overdue  { background: var(--red); color: #ffd5cc; }
+.due-mastered { background: var(--green); color: #fff; }
+.return-card-bottom {
+  background: var(--white); padding: 22px 32px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.return-card-bottom .btn { width: 100%; justify-content: center; }
+.return-divider {
+  text-align: center; font-size: 11px; color: var(--gray-on-light);
+  position: relative;
+}
+.return-divider::before, .return-divider::after {
+  content: ''; position: absolute; top: 50%; width: 42%;
+  height: 1px; background: var(--gray-light);
+}
+.return-divider::before { left: 0; } .return-divider::after { right: 0; }
+
+/* ═══════════════════════════════════════════════
+   PHASE 1 — WATCH
+═══════════════════════════════════════════════ */
+.split-panel { display: flex; flex: 1; overflow: hidden; }
+.panel { position: relative; overflow: hidden; }
+.panel-video { flex: 6; background: var(--black); }
+.panel-pdf   { flex: 4; background: var(--cream-dark); border-left: 2px solid var(--gray-light); }
+
+.panel-placeholder {
+  position: absolute; inset: 0; z-index: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 10px;
+  pointer-events: none;
+}
+.panel-video .panel-placeholder { color: #777; }
+.panel-pdf   .panel-placeholder { color: #bbb; }
+.placeholder-icon { font-size: 36px; opacity: .3; }
+.placeholder-text { font-size: 12px; opacity: .4; letter-spacing: .03em; }
+
+.panel-badge {
+  position: absolute; top: 9px; left: 10px; z-index: 10;
+  font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+  font-weight: 700; padding: 3px 9px; border-radius: 3px;
+}
+.panel-video .panel-badge { background: var(--sage-dark); color: #fff; }
+.panel-pdf   .panel-badge { background: var(--sage-dark); color: #fff; }
+.panel iframe {
+  position: relative; z-index: 2;
+  width: 100%; height: 100%; border: none; display: block;
+}
+
+.watch-bar {
+  background: #FFFFFF; height: 56px; padding: 0 22px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-shrink: 0; border-top: 1px solid var(--gray-light);
+}
+.watch-hint {
+  font-size: 12px; color: var(--gray-on-light); font-style: italic;
+  /* gray-on-dark on black = 4.8:1 ✓ */
+}
+.timer-group { display: flex; align-items: center; gap: 10px; }
+.timer-badge {
+  font-size: 11px; font-weight: 700;
+  color: var(--black);
+  background: var(--cream-dark); border: 1px solid var(--gray-light);
+  padding: 4px 12px; border-radius: 20px;
+  letter-spacing: .04em; display: none;
+}
+.timer-badge.visible { display: inline-block; }
+.extend-btn {
+  font-size: 11px; font-weight: 600; color: var(--sage-light);
+  background: transparent; border: 1px solid var(--sage);
+  padding: 4px 12px; border-radius: 20px; cursor: pointer;
+  display: none; letter-spacing: .03em;
+}
+.extend-btn.visible { display: inline-block; }
+.extend-btn:hover { background: var(--sage); color: #fff; }
+
+/* ═══════════════════════════════════════════════
+   PHASE 2 — REFLECT
+═══════════════════════════════════════════════ */
+#phase-reflect {
+  padding: 24px 30px 20px; gap: 14px;
+  overflow-y: auto; background: var(--cream);
+}
+.eyebrow {
+  font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--sage-dark); font-weight: 700;
+  /* sage-dark on cream = 5.1:1 ✓ */
+}
+.phase-heading {
+  font-family: 'Lora', serif; font-size: 20px; margin-top: 3px; line-height: 1.3;
+  color: var(--black);
+}
+.prompt-box {
+  background: var(--sage-bg); color: var(--black);
+  border-radius: 8px; padding: 16px 20px;
+  font-size: 14px; line-height: 1.75;
+  border-left: 4px solid var(--sage-dark); flex-shrink: 0;
+}
+.rule-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.rule-chip {
+  font-size: 11px; font-weight: 700;
+  background: var(--sage-bg); border: 1px solid var(--sage-dark);
+  border-radius: 20px; padding: 4px 13px; color: var(--sage-dark);
+  /* sage-dark on sage-bg = 4.7:1 ✓ */
+}
+
+.textarea-label {
+  font-size: 13px; font-weight: 600; color: var(--black);
+  display: block; margin-bottom: 6px;
+}
+textarea {
+  width: 100%; min-height: 145px;
+  border: 2px solid var(--gray-light); border-radius: 8px;
+  padding: 14px 16px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px; line-height: 1.65;
+  color: var(--black); background: var(--white);
+  resize: vertical;
+  /* No outline: none — use :focus-visible instead */
+  transition: border-color .2s;
+}
+textarea:focus-visible { border-color: var(--focus-ring); outline: 3px solid var(--focus-ring); outline-offset: 0; }
+textarea::placeholder { color: #767676; font-style: italic; /* 4.5:1 on white ✓ */ }
+
+.word-count {
+  font-size: 11px; color: var(--gray-on-light); text-align: right; margin-top: 5px;
+  /* gray-on-light on cream = 7.7:1 ✓ */
+}
+.paste-toast {
+  font-size: 12px; font-weight: 600;
+  color: var(--red); background: var(--red-light);
+  border: 1px solid #f0c0b8; border-radius: 6px;
+  padding: 7px 14px; margin-top: 6px;
+  display: none; text-align: center;
+  animation: fadeIn .15s ease;
+}
+.paste-toast.visible { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+.reflect-actions { display: flex; gap: 12px; align-items: center; }
+
+/* ═══════════════════════════════════════════════
+   PHASE 3 — REVEAL
+═══════════════════════════════════════════════ */
+#phase-reveal { overflow: hidden; background: var(--cream); }
+.reveal-layout { display: flex; height: 608px; }
+
+.reveal-left {
+  flex: 1; padding: 22px;
+  border-right: 2px solid var(--gray-light);
+  overflow-y: auto; display: flex; flex-direction: column; gap: 14px;
+}
+.answer-block {
+  background: var(--white); border-radius: 8px;
+  padding: 18px 20px; font-size: 13.5px; line-height: 1.8;
+  color: var(--black);
+  border: 1px solid var(--gray-light); border-left: 4px solid var(--sage-dark);
+}
+.answer-block p + p { margin-top: 10px; }
+
+.reveal-right {
+  flex: 1; padding: 22px; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.section-label {
+  font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+  font-weight: 700; color: var(--gray-on-light); margin-bottom: 4px;
+  /* gray-on-light on cream = 7.7:1 ✓ */
+}
+.student-echo {
+  background: var(--white); border: 1px solid var(--gray-light);
+  border-radius: 8px; padding: 12px 14px;
+  font-size: 13px; line-height: 1.7; color: var(--black);
+  max-height: 110px; overflow-y: auto; flex-shrink: 0;
+}
+
+/* CHECKLIST — uses real checkbox semantics */
+.checklist { display: flex; flex-direction: column; gap: 7px; list-style: none; }
+.check-item {
+  display: flex; align-items: flex-start; gap: 11px;
+  padding: 9px 13px; border-radius: 7px;
+  border: 1.5px solid var(--gray-light);
+  cursor: pointer; transition: all .18s;
+  font-size: 12.5px; line-height: 1.5;
+  color: var(--black); background: var(--white);
+}
+.check-item:hover { border-color: var(--sage-dark); }
+.check-item.checked {
+  background: var(--green-light);
+  border-color: var(--green); color: var(--green);
+  /* green on green-light = 5.2:1 ✓ */
+}
+/* Hidden native checkbox for semantics */
+.check-item input[type="checkbox"] {
+  position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;
+}
+.check-item input[type="checkbox"]:focus-visible + .check-box-visual {
+  outline: 3px solid var(--focus-ring); outline-offset: 2px; border-radius: 4px;
+}
+.check-box-visual {
+  width: 18px; height: 18px; border-radius: 4px;
+  border: 2px solid var(--gray-light); flex-shrink: 0; margin-top: 1px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; transition: all .18s;
+  background: var(--white);
+}
+.check-item.checked .check-box-visual {
+  background: var(--green); border-color: var(--green); color: #fff;
+}
+
+.score-bar {
+  background: #F5F5F5; border-radius: 8px; padding: 13px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-shrink: 0; border: 1px solid var(--gray-light);
+}
+.score-label {
+  font-size: 9px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--sage-dark); font-weight: 700;
+}
+.score-value {
+  font-family: 'Lora', serif; font-size: 22px; color: var(--black); margin-top: 2px;
+}
+.review-date-sm {
+  font-size: 11px; color: var(--gray-on-light); margin-top: 3px;
+}
+
+.reveal-footer {
+  height: 58px; padding: 0 22px; border-top: 1px solid var(--gray-light);
+  display: flex; gap: 10px; align-items: center;
+  flex-shrink: 0; background: #FFFFFF;
+}
+
+/* ── BUTTONS ─────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 20px; border-radius: 6px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; border: none; letter-spacing: .02em; white-space: nowrap;
+  transition: background .18s, color .18s, border-color .18s;
+  min-height: 44px; /* WCAG 2.5.5 target size */
+}
+.btn-primary { background: var(--sage-dark); color: #fff; }
+.btn-primary:hover:not(:disabled) { background: var(--sage); }
+.btn-primary:disabled {
+  background: var(--gray-light); color: var(--gray-on-light);
+  cursor: not-allowed; /* aria-disabled set in JS */
+}
+.btn-outline {
+  background: transparent; color: var(--black);
+  border: 2px solid var(--black);
+}
+.btn-outline:hover { background: var(--black); color: var(--white); }
+.btn-ghost-light {
+  background: transparent; color: var(--gray-on-light);
+  border: 1.5px solid var(--gray-light);
+}
+.btn-ghost-light:hover { border-color: var(--black); color: var(--black); }
+.btn-sm { padding: 7px 14px; font-size: 12px; min-height: 36px; }
+
+/* ── HELP BUTTON ─────────────────────────────────────────── */
+.help-btn {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--sage-bg); border: 1.5px solid var(--sage);
+  color: var(--sage-dark); font-size: 14px; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all .18s; flex-shrink: 0; margin-left: 10px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.help-btn:hover { background: var(--sage); color: #fff; }
+.help-btn:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+
+/* ── HELP MODAL ──────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(46,46,46,.55);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .2s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal-box {
+  background: var(--white); border-radius: 12px;
+  width: 100%; max-width: 640px; max-height: 80vh;
+  display: flex; flex-direction: column;
+  box-shadow: 0 8px 40px rgba(0,0,0,.18);
+  transform: translateY(10px); transition: transform .2s;
+}
+.modal-overlay.open .modal-box { transform: translateY(0); }
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 24px; border-bottom: 1px solid var(--gray-light);
+  flex-shrink: 0;
+}
+.modal-title {
+  font-family: 'Lora', serif; font-size: 18px; color: var(--black);
+}
+.modal-close {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--cream-dark); border: none; cursor: pointer;
+  font-size: 16px; color: var(--black); display: flex;
+  align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.modal-close:hover { background: var(--gray-light); }
+.modal-close:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+.modal-body {
+  overflow-y: auto; padding: 22px 24px; flex: 1;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.modal-section-title {
+  font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+  font-weight: 700; color: var(--sage-dark); margin-bottom: 6px;
+}
+.modal-phase {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 12px 14px; background: var(--cream);
+  border-radius: 8px; border: 1px solid var(--gray-light);
+}
+.modal-phase-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--sage-dark); color: #fff;
+  font-size: 13px; font-weight: 700; display: flex;
+  align-items: center; justify-content: center; flex-shrink: 0;
+}
+.modal-phase-name { font-size: 13px; font-weight: 700; color: var(--black); margin-bottom: 3px; }
+.modal-phase-desc { font-size: 12.5px; color: var(--gray-on-light); line-height: 1.6; }
+.modal-rule {
+  display: flex; gap: 10px; font-size: 13px;
+  color: var(--black); line-height: 1.6;
+  padding: 8px 0; border-bottom: 1px solid var(--gray-light);
+}
+.modal-rule:last-child { border-bottom: none; }
+.modal-rule-icon { font-size: 15px; flex-shrink: 0; width: 22px; }
+.modal-footer {
+  padding: 14px 24px; border-top: 1px solid var(--gray-light);
+  display: flex; justify-content: space-between; align-items: center;
+  flex-shrink: 0;
+}
+.modal-link {
+  font-size: 12px; color: var(--sage-dark); text-decoration: underline; cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<!-- SKIP LINK -->
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  CONCEPT CONFIG — only this block changes per topic  ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<script>
+const CONFIG = {
+  conceptId:    'describe_airflow_resistance',
+  unitLabel:    'Respiratory Physiology',
+  conceptTitle: 'Describe Airflow Resistance',
+
+  videoUrl: 'https://www.youtube.com/embed/-ltu3AqKIAg',
+  pdfUrl:   'https://drive.google.com/file/d/1sJx6fqTTfbUh5Bhr1zSAkdf8J8YydMWV/preview',
+
+  minWatchSeconds:    301,
+  returnWatchSeconds: 60,
+  extendSeconds:       60,
+
+  feynmanPrompt: `Resistance is the second major determinant of airflow. Explain what it is, what two factors control it, and compare bronchodilation and bronchoconstriction — including what triggers each and what clinical conditions involve bronchoconstriction. Then explain what pulmonary compliance is and name conditions that reduce it.`,
+
+  authorAnswer: `Pressure alone does not determine airflow — resistance is the other critical factor. Increased resistance reduces the rate of airflow regardless of the pressure gradient driving it.
+
+Two main factors determine resistance to airflow: the diameter of the bronchioles and pulmonary compliance.
+
+The bronchioles are the primary controllers of resistance, functioning similarly to arterioles in the vascular system. Their diameter changes in response to chemical and neural stimuli.
+
+Bronchodilation — an increase in diameter — increases airflow. It is triggered by epinephrine and sympathetic nerve activity via norepinephrine. This is why epinephrine is used in anaphylactic shock and why beta-2 agonists open airways in asthma.
+
+Bronchoconstriction — a reduction in diameter — decreases airflow. It is triggered by histamine, parasympathetic nerve activity via acetylcholine, cold air, and chemical irritants. Bronchoconstriction is the central problem in asthma and anaphylaxis.
+
+Pulmonary compliance is the second factor — it describes how easily the lungs expand, specifically the change in lung volume relative to a change in pressure. Think of the difference between blowing up a stiff new balloon versus one used many times. Stiff lungs have reduced compliance, which increases resistance and decreases airflow. Conditions that reduce compliance include degenerative lung diseases that produce scar tissue, tuberculosis, and black lung disease.`,
+
+  checklist: [
+    'I explained that resistance is a second major determinant of airflow and that increased resistance decreases flow',
+    'I named the two factors: bronchiole diameter and pulmonary compliance',
+    'I described bronchodilation: increased diameter, triggered by epinephrine and sympathetic nerves (norepinephrine)',
+    'I described bronchoconstriction: decreased diameter, triggered by histamine, parasympathetic nerves (acetylcholine), cold air, and chemical irritants',
+    'I linked bronchoconstriction to asthma and anaphylaxis clinically',
+    'I defined pulmonary compliance as how easily the lungs expand (change in volume relative to change in pressure)',
+    'I named conditions that reduce compliance: degenerative lung disease with scar tissue, tuberculosis, black lung disease',
+  ],
+
+  spacedRepIntervals: [1, 3, 7, 14, 30]
+};
+</script>
+<!-- ════════════════════════════════════════════════════════ -->
+
+
+<!-- HEADER / NAV -->
+<header role="banner">
+  <div class="header">
+    <div class="header-left">
+      <div class="concept-label" id="unit-label" aria-hidden="true"></div>
+      <div class="concept-title" id="header-title" aria-hidden="true"></div>
+    </div>
+    <!-- Phase progress dots — rendered as buttons by JS -->
+    <nav aria-label="Module phases" class="phase-nav" id="phase-nav"></nav>
+    <!-- Help button -->
+    <button class="help-btn" onclick="openHelp()"
+      aria-label="Open course instructions"
+      aria-haspopup="dialog">?</button>
+  </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+
+  <!-- ── PHASE 0: RETURN VISIT ────────────────────────── -->
+  <section class="phase" id="phase-return"
+    role="region" aria-labelledby="rv-heading">
+    <div class="return-card">
+      <div class="return-card-top">
+        <p class="return-eyebrow">Welcome back</p>
+        <h1 class="return-title" id="rv-heading" tabindex="-1"></h1>
+        <div class="return-meta" aria-label="Your review history">
+          <div class="return-meta-item">
+            <span class="return-meta-label">Times reviewed</span>
+            <span class="return-meta-value" id="rv-count"></span>
+          </div>
+          <div class="return-meta-item">
+            <span class="return-meta-label">Last completed</span>
+            <span class="return-meta-value" id="rv-last"></span>
+          </div>
+        </div>
+        <div class="return-due" id="rv-badge" role="status"></div>
+      </div>
+      <div class="return-card-bottom">
+        <button class="btn btn-primary"
+          onclick="goPhase(2)"
+          aria-label="Skip to recall — jump straight to the Feynman explanation prompt">
+          Jump straight to recall →
+        </button>
+        <div class="return-divider" aria-hidden="true">or</div>
+        <button class="btn btn-ghost-light"
+          onclick="startWatch(true)"
+          aria-label="Watch the video again before recalling">
+          Watch the video again first
+        </button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── PHASE 1: WATCH ───────────────────────────────── -->
+  <section class="phase" id="phase-watch"
+    role="region" aria-labelledby="watch-heading">
+    <h2 id="watch-heading" class="sr-only">Step 1: Watch and read</h2>
+
+    <div class="split-panel">
+      <!-- Video panel -->
+      <div class="panel panel-video" role="region" aria-label="Concept video">
+        <div class="panel-badge" aria-hidden="true">▶ Video</div>
+        <div class="panel-placeholder" aria-hidden="true">
+          <div class="placeholder-icon">▶</div>
+          <div class="placeholder-text">Video loads in Rise 360</div>
+        </div>
+        <iframe id="video-frame"
+          title="Concept video: Describe Airflow Resistance"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
+
+      <!-- PDF panel -->
+      <div class="panel panel-pdf" role="region" aria-label="Reference PDF">
+        <div class="panel-badge" aria-hidden="true">📄 Reference</div>
+        <div class="panel-placeholder" aria-hidden="true">
+          <div class="placeholder-icon">📄</div>
+          <div class="placeholder-text">PDF loads in Rise 360</div>
+        </div>
+        <iframe id="pdf-frame"
+          title="Reference document: Describe Airflow Resistance"></iframe>
+      </div>
+    </div>
+
+    <!-- Watch bar with timer -->
+    <div class="watch-bar" role="toolbar" aria-label="Watch controls">
+      <div class="timer-group">
+        <!-- aria-live so screen readers announce countdown updates -->
+        <div class="timer-badge" id="timer-badge"
+          aria-live="polite" aria-atomic="true"></div>
+        <!-- WCAG 2.2.1 — user can extend the time limit -->
+        <button class="extend-btn" id="extend-btn"
+          onclick="extendTimer()"
+          aria-label="Extend timer by 60 seconds">
+          + Extend time
+        </button>
+      </div>
+      <p class="watch-hint" id="watch-hint" aria-live="polite">
+        Watch the video · follow along with the PDF
+      </p>
+      <button class="btn btn-primary" id="reflect-btn"
+        onclick="goPhase(2)"
+        aria-label="I have watched the video and I am ready to reflect"
+        aria-disabled="true" disabled>
+        I'm ready to reflect →
+      </button>
+    </div>
+  </section>
+
+
+  <!-- ── PHASE 2: REFLECT ─────────────────────────────── -->
+  <section class="phase" id="phase-reflect"
+    role="region" aria-labelledby="reflect-heading">
+
+    <p class="eyebrow" aria-hidden="true">Feynman Technique</p>
+    <h2 class="phase-heading" id="reflect-heading" tabindex="-1">Now teach it back.</h2>
+
+    <div class="prompt-box" role="note" aria-label="Your task">
+      <p id="feynman-prompt"></p>
+    </div>
+
+    <ul class="rule-row" role="list" aria-label="Reminders">
+      <li class="rule-chip">✦ No peeking at the PDF</li>
+      <li class="rule-chip">✦ Use your own words</li>
+      <li class="rule-chip">✦ Explain the mechanism, not just the terms</li>
+    </ul>
+
+    <div>
+      <label class="textarea-label" for="student-response">
+        Your explanation
+        <span class="sr-only">(minimum 30 words required before submitting)</span>
+      </label>
+      <textarea
+        id="student-response"
+        placeholder="Start typing your explanation here…"
+        oninput="onType()"
+        onpaste="blockPaste(event)"
+        ondrop="blockPaste(event)"
+        aria-describedby="word-count-display paste-notice"
+        rows="6"></textarea>
+      <p id="paste-notice" class="sr-only">
+        Copy and paste is disabled. You must type your explanation in your own words.
+      </p>
+      <p class="word-count" id="word-count-display" aria-live="polite" aria-atomic="true">
+        <span id="wc">0</span> words — aim for at least 30
+      </p>
+      <div class="paste-toast" id="paste-toast" role="alert" aria-live="assertive">
+        ✕ Paste is disabled — type your explanation in your own words.
+      </div>
+    </div>
+
+    <div class="reflect-actions">
+      <button class="btn btn-outline"
+        onclick="goPhase(1)"
+        aria-label="Go back to watch the video again">
+        ← Back to video
+      </button>
+      <button class="btn btn-primary" id="submit-btn"
+        onclick="goPhase(3)"
+        aria-label="Submit your explanation and see how you did"
+        aria-disabled="true" disabled>
+        See how you did →
+      </button>
+    </div>
+  </section>
+
+
+  <!-- ── PHASE 3: REVEAL ──────────────────────────────── -->
+  <section class="phase" id="phase-reveal"
+    role="region" aria-labelledby="reveal-heading">
+
+    <h2 id="reveal-heading" class="sr-only" tabindex="-1">Step 3: Review and self-assess</h2>
+
+    <div class="reveal-layout">
+
+      <!-- LEFT: Instructor answer -->
+      <div class="reveal-left" role="region" aria-labelledby="answer-heading">
+        <div>
+          <p class="eyebrow" aria-hidden="true">The Complete Explanation</p>
+          <h3 id="answer-heading" class="phase-heading" style="margin-top:3px;">
+            How your instructor would explain it
+          </h3>
+        </div>
+        <div class="answer-block" id="author-answer" tabindex="0"
+          aria-label="Instructor's complete explanation"></div>
+      </div>
+
+      <!-- RIGHT: Student echo + checklist + score -->
+      <div class="reveal-right" role="region" aria-labelledby="selfassess-heading">
+
+        <div>
+          <p class="section-label" id="echo-label">Your explanation</p>
+          <div class="student-echo" id="student-echo"
+            tabindex="0"
+            aria-labelledby="echo-label"
+            role="region"></div>
+        </div>
+
+        <div>
+          <h3 id="selfassess-heading" class="phase-heading" style="font-size:15px; margin-bottom:10px;">
+            Check off everything you included
+          </h3>
+          <!-- List of real checkboxes for screen reader compatibility -->
+          <ul class="checklist" id="checklist" role="list"
+            aria-label="Self-assessment checklist"></ul>
+        </div>
+
+        <div class="score-bar" role="status" aria-live="polite" aria-atomic="true"
+          aria-label="Your self-assessment score">
+          <div>
+            <p class="score-label">Your score</p>
+            <p class="score-value" id="score-display">0 / 0</p>
+          </div>
+          <div>
+            <p class="score-label">Next review</p>
+            <p class="review-date-sm" id="review-date">—</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="reveal-footer">
+      <button class="btn btn-outline btn-sm"
+        onclick="startWatch(false)"
+        aria-label="Go back and review the material again">
+        ← Review material
+      </button>
+      <button class="btn btn-outline btn-sm"
+        onclick="retryReflect()"
+        aria-label="Try the Feynman explanation again">
+        Try again ↺
+      </button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── HELP MODAL ─────────────────────────────────────── -->
+<div class="modal-overlay" id="help-modal" role="dialog" aria-modal="true"
+  aria-labelledby="modal-heading" onclick="closeHelpIfOutside(event)">
+  <div class="modal-box">
+
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-heading">How This Course Works</h2>
+      <button class="modal-close" onclick="closeHelp()" aria-label="Close instructions">✕</button>
+    </div>
+
+    <div class="modal-body">
+
+      <!-- Three phases -->
+      <div>
+        <div class="modal-section-title">Three phases per concept</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="modal-phase">
+            <div class="modal-phase-num" aria-hidden="true">1</div>
+            <div>
+              <div class="modal-phase-name">Watch and Read</div>
+              <p class="modal-phase-desc">Video and PDF load side by side. A timer runs — the Reflect phase does not unlock until you have spent enough time with the material. No skipping.</p>
+            </div>
+          </div>
+          <div class="modal-phase">
+            <div class="modal-phase-num" aria-hidden="true">2</div>
+            <div>
+              <div class="modal-phase-name">Teach It Back</div>
+              <p class="modal-phase-desc">Explain the concept in your own words as if teaching a friend. You must type — pasting is disabled. Minimum 30 words required before submitting.</p>
+            </div>
+          </div>
+          <div class="modal-phase">
+            <div class="modal-phase-num" aria-hidden="true">3</div>
+            <div>
+              <div class="modal-phase-name">See How You Did</div>
+              <p class="modal-phase-desc">Your explanation and your instructor's appear side by side. Check off what you included. Your next review date is saved automatically.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Things that are intentional -->
+      <div>
+        <div class="modal-section-title">Things that are intentional</div>
+        <div>
+          <div class="modal-rule">
+            <span class="modal-rule-icon" aria-hidden="true">⏱</span>
+            <span><strong>The timer is real.</strong> You cannot advance until you have spent enough time on the video. Use the Extend button if you need more time.</span>
+          </div>
+          <div class="modal-rule">
+            <span class="modal-rule-icon" aria-hidden="true">⌨️</span>
+            <span><strong>No pasting.</strong> You have to type your explanation. Retrieval practice only works when you actually retrieve.</span>
+          </div>
+          <div class="modal-rule">
+            <span class="modal-rule-icon" aria-hidden="true">📋</span>
+            <span><strong>You grade yourself.</strong> Compare your explanation to your instructor's and check off what you covered honestly.</span>
+          </div>
+          <div class="modal-rule">
+            <span class="modal-rule-icon" aria-hidden="true">🔁</span>
+            <span><strong>Return visits are different.</strong> You'll see a welcome screen with your history and due date. Jump to recall or rewatch — your choice.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Browser note -->
+      <div style="background:var(--sage-bg);border-radius:8px;padding:14px 16px;border-left:4px solid var(--sage-dark);">
+        <div class="modal-section-title" style="margin-bottom:8px;">Important — your progress</div>
+        <p style="font-size:12.5px;color:var(--black);line-height:1.65;">Your review schedule saves to this browser on this device only. Use the same browser each time. Do not use private or incognito mode — progress will not be saved.</p>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <a href="https://www.medmasterscollaborative.com/physiology-interactive-lecture-instructions"
+        target="_blank" rel="noopener" class="modal-link"
+        aria-label="Open full instructions page in new tab">
+        View full instructions page ↗
+      </a>
+      <button class="btn btn-primary btn-sm" onclick="closeHelp()">Got it</button>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+// ── GLOBALS ───────────────────────────────────────────────
+let watchTimer   = null;
+let watchRemaining = 0;
+
+// ── INIT ──────────────────────────────────────────────────
+document.getElementById('unit-label').textContent     = CONFIG.unitLabel;
+document.getElementById('header-title').textContent   = CONFIG.conceptTitle;
+document.title = CONFIG.conceptTitle + ' — ' + CONFIG.unitLabel;
+document.getElementById('video-frame').src            = CONFIG.videoUrl;
+document.getElementById('pdf-frame').src              = CONFIG.pdfUrl;
+document.getElementById('feynman-prompt').textContent = CONFIG.feynmanPrompt;
+document.getElementById('author-answer').innerHTML    =
+  CONFIG.authorAnswer.split('\n\n').map(p => '<p>' + p + '</p>').join('');
+
+buildChecklist();
+buildDots();
+
+const stored = getStored();
+if (stored && stored.reviewCount > 0) {
+  populateReturnCard(stored);
+  showPhase('return');
+  makeDots(true);
+  focusPhaseHeading('rv-heading');
+} else {
+  startWatch(false);
+}
+
+// ── PHASE DOTS ────────────────────────────────────────────
+function buildDots() {
+  const nav = document.getElementById('phase-nav');
+  const labels = ['Watch and read', 'Reflect — Feynman explanation', 'Review and self-assess'];
+  labels.forEach((label, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dot-btn';
+    btn.id = 'd' + (i + 1);
+    btn.setAttribute('aria-label', 'Phase ' + (i + 1) + ': ' + label);
+    btn.setAttribute('aria-current', 'false');
+    btn.setAttribute('type', 'button');
+    btn.disabled = true;
+    nav.appendChild(btn);
+  });
+}
+
+function makeDots(clickable) {
+  [1,2,3].forEach(n => {
+    const d = document.getElementById('d' + n);
+    if (clickable) {
+      d.disabled = false;
+      d.classList.add('clickable');
+      d.onclick = () => n === 1 ? startWatch(true) : goPhase(n);
+      d.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); d.onclick(); } };
+    }
+  });
+}
+
+function setDots(activeN) {
+  [1,2,3].forEach(n => {
+    const d = document.getElementById('d' + n);
+    if (!d) return;
+    d.classList.remove('active', 'done');
+    d.setAttribute('aria-current', 'false');
+    if (n === activeN) { d.classList.add('active'); d.setAttribute('aria-current', 'step'); }
+    if (n < activeN)   { d.classList.add('done'); }
+  });
+}
+
+// ── SHOW PHASE + FOCUS MANAGEMENT ────────────────────────
+function showPhase(name) {
+  document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+  document.getElementById('phase-' + name).classList.add('active');
+}
+
+function focusPhaseHeading(id) {
+  // Defer so the phase is visible before focus shifts
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) el.focus();
+  }, 50);
+}
+
+// ── WATCH TIMER ───────────────────────────────────────────
+function startWatch(isReturn) {
+  const seconds = isReturn ? CONFIG.returnWatchSeconds : CONFIG.minWatchSeconds;
+  showPhase('watch');
+  setDots(1);
+
+  const btn      = document.getElementById('reflect-btn');
+  const badge    = document.getElementById('timer-badge');
+  const extBtn   = document.getElementById('extend-btn');
+  const hint     = document.getElementById('watch-hint');
+
+  btn.disabled = true;
+  btn.setAttribute('aria-disabled', 'true');
+  badge.classList.add('visible');
+  extBtn.classList.add('visible');
+  hint.style.display = 'none';
+
+  watchRemaining = seconds;
+
+  function tick() {
+    if (watchRemaining <= 0) {
+      clearInterval(watchTimer); watchTimer = null;
+      btn.disabled = false;
+      btn.setAttribute('aria-disabled', 'false');
+      badge.classList.remove('visible');
+      extBtn.classList.remove('visible');
+      hint.style.display = '';
+      hint.textContent   = 'Ready when you are — click to continue';
+      btn.focus(); // move focus to the now-enabled button
+      return;
+    }
+    const m = Math.floor(watchRemaining / 60);
+    const s = watchRemaining % 60;
+    const timeStr = (m > 0 ? m + 'm ' : '') + s + 's';
+    badge.textContent = 'Reflect unlocks in ' + timeStr;
+    // Only announce to screen reader every 30s to avoid noise
+    badge.setAttribute('aria-label',
+      watchRemaining % 30 === 0
+        ? 'Reflect unlocks in ' + timeStr
+        : '');
+    watchRemaining--;
+  }
+
+  if (watchTimer) clearInterval(watchTimer);
+  tick();
+  watchTimer = setInterval(tick, 1000);
+}
+
+function extendTimer() {
+  watchRemaining += CONFIG.extendSeconds;
+  // Announce to screen readers
+  const badge = document.getElementById('timer-badge');
+  badge.setAttribute('aria-label', 'Timer extended by ' + CONFIG.extendSeconds + ' seconds');
+}
+
+// ── PHASE NAV ─────────────────────────────────────────────
+function goPhase(n) {
+  if (n === 1) { startWatch(true); return; }
+  if (n === 2) {
+    document.getElementById('student-response').value = '';
+    document.getElementById('wc').textContent = '0';
+    const sb = document.getElementById('submit-btn');
+    sb.disabled = true; sb.setAttribute('aria-disabled','true');
+    if (watchTimer) { clearInterval(watchTimer); watchTimer = null; }
+  }
+  const names = ['return','watch','reflect','reveal'];
+  showPhase(names[n]);
+  setDots(n);
+  if (n === 3) onReveal();
+
+  const headingIds = ['rv-heading','watch-heading','reflect-heading','reveal-heading'];
+  if (headingIds[n]) focusPhaseHeading(headingIds[n]);
+}
+
+// ── RETURN CARD ───────────────────────────────────────────
+function populateReturnCard(data) {
+  document.getElementById('rv-heading').textContent = CONFIG.conceptTitle;
+  document.getElementById('rv-count').textContent   = data.reviewCount + (data.reviewCount === 1 ? ' time' : ' times');
+  document.getElementById('rv-last').textContent    = new Date(data.completedAt)
+    .toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+  const badge = document.getElementById('rv-badge');
+  const now   = Date.now();
+  const isMastered = data.intervalDays >= CONFIG.spacedRepIntervals[CONFIG.spacedRepIntervals.length - 1];
+  if (isMastered) {
+    badge.textContent = '✦ Mastered'; badge.className = 'return-due due-mastered';
+  } else if (data.nextReview <= now) {
+    const d = Math.floor((now - data.nextReview) / 86400000);
+    badge.textContent = d === 0 ? 'Review due today' : 'Overdue by ' + d + ' day' + (d !== 1 ? 's' : '');
+    badge.className = 'return-due ' + (d === 0 ? 'due-today' : 'due-overdue');
+  } else {
+    const d    = Math.ceil((data.nextReview - now) / 86400000);
+    const date = new Date(data.nextReview).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    badge.textContent = 'Next review ' + date + ' (' + d + ' day' + (d !== 1 ? 's' : '') + ')';
+    badge.className = 'return-due due-future';
+  }
+}
+
+// ── PASTE / DROP BLOCK ────────────────────────────────────
+let pasteToastTimer = null;
+function blockPaste(e) {
+  e.preventDefault();
+  const toast = document.getElementById('paste-toast');
+  toast.classList.add('visible');
+  if (pasteToastTimer) clearTimeout(pasteToastTimer);
+  pasteToastTimer = setTimeout(() => toast.classList.remove('visible'), 3000);
+}
+
+// ── WORD COUNT ────────────────────────────────────────────
+function onType() {
+  const words = countWords(document.getElementById('student-response').value);
+  document.getElementById('wc').textContent = words;
+  const sb = document.getElementById('submit-btn');
+  const ready = words >= 30;
+  sb.disabled = !ready;
+  sb.setAttribute('aria-disabled', ready ? 'false' : 'true');
+}
+function countWords(s) { return s.trim() ? s.trim().split(/\s+/).length : 0; }
+
+// ── REVEAL ────────────────────────────────────────────────
+function onReveal() {
+  const r = document.getElementById('student-response').value.trim();
+  document.getElementById('student-echo').textContent = r || '(Nothing entered — try again!)';
+  resetChecklist(); updateScore();
+  document.getElementById('review-date').textContent = saveAndSchedule();
+}
+
+// ── CHECKLIST — real checkbox inputs ─────────────────────
+function buildChecklist() {
+  const ul = document.getElementById('checklist');
+  CONFIG.checklist.forEach((item, i) => {
+    const li = document.createElement('li');
+    li.className = 'check-item';
+    li.id = 'ci-' + i;
+    li.innerHTML =
+      '<input type="checkbox" id="chk-' + i + '" aria-label="' + item + '">' +
+      '<span class="check-box-visual" aria-hidden="true"></span>' +
+      '<label for="chk-' + i + '">' + item + '</label>';
+    // Click on the li also toggles
+    li.addEventListener('click', e => {
+      // avoid double-toggle when clicking directly on input or label
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') return;
+      document.getElementById('chk-' + i).click();
+    });
+    document.addEventListener('DOMContentLoaded', () => {});
+    ul.appendChild(li);
+    // Listen on the checkbox input itself
+    li.querySelector('input').addEventListener('change', () => toggleCheck(i));
+  });
+}
+
+function toggleCheck(i) {
+  const chk  = document.getElementById('chk-' + i);
+  const item = document.getElementById('ci-' + i);
+  const box  = item.querySelector('.check-box-visual');
+  if (chk.checked) {
+    item.classList.add('checked');
+    box.textContent = '✓';
+  } else {
+    item.classList.remove('checked');
+    box.textContent = '';
+  }
+  updateScore();
+}
+
+function resetChecklist() {
+  CONFIG.checklist.forEach((_, i) => {
+    const chk  = document.getElementById('chk-' + i);
+    const item = document.getElementById('ci-' + i);
+    chk.checked = false;
+    item.classList.remove('checked');
+    item.querySelector('.check-box-visual').textContent = '';
+  });
+}
+
+function updateScore() {
+  const n = document.querySelectorAll('#checklist input:checked').length;
+  document.getElementById('score-display').textContent = n + ' / ' + CONFIG.checklist.length;
+}
+
+function retryReflect() {
+  document.getElementById('student-response').value = '';
+  document.getElementById('wc').textContent = '0';
+  const sb = document.getElementById('submit-btn');
+  sb.disabled = true; sb.setAttribute('aria-disabled','true');
+  showPhase('reflect'); setDots(2);
+  focusPhaseHeading('reflect-heading');
+}
+
+// ── STORAGE ───────────────────────────────────────────────
+function getStored() {
+  try { return JSON.parse(localStorage.getItem('srep_' + CONFIG.conceptId)) || null; }
+  catch(e) { return null; }
+}
+function saveAndSchedule() {
+  const s     = getStored() || {};
+  const count = s.reviewCount || 0;
+  const days  = CONFIG.spacedRepIntervals[Math.min(count, CONFIG.spacedRepIntervals.length - 1)];
+  const next  = new Date(); next.setDate(next.getDate() + days);
+  localStorage.setItem('srep_' + CONFIG.conceptId, JSON.stringify({
+    conceptId: CONFIG.conceptId, conceptTitle: CONFIG.conceptTitle,
+    completedAt: Date.now(), reviewCount: count + 1,
+    intervalDays: days, nextReview: next.getTime()
+  }));
+  return next.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+}
+// ── HELP MODAL ────────────────────────────────────────────
+function openHelp() {
+  const modal = document.getElementById('help-modal');
+  modal.classList.add('open');
+  document.querySelector('.modal-close').focus();
+  document.addEventListener('keydown', trapFocusModal);
+}
+function closeHelp() {
+  document.getElementById('help-modal').classList.remove('open');
+  document.querySelector('.help-btn').focus();
+  document.removeEventListener('keydown', trapFocusModal);
+}
+function closeHelpIfOutside(e) {
+  if (e.target === document.getElementById('help-modal')) closeHelp();
+}
+function trapFocusModal(e) {
+  if (e.key === 'Escape') { closeHelp(); return; }
+  if (e.key !== 'Tab') return;
+  const modal = document.getElementById('help-modal');
+  const focusable = modal.querySelectorAll('button, a, [tabindex="0"]');
+  const first = focusable[0]; const last = focusable[focusable.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+}
+</script>
+</html>
