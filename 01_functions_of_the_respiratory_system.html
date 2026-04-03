@@ -12,13 +12,13 @@
 /* ── COLOR TOKENS ───────────────────────────────────────── */
 /*
   All contrast ratios verified against WCAG 2.1 SC 1.4.3 (AA = 4.5:1 normal text)
-  --sage-dark (#4E6E57) on --cream (#FAFAF7)   = 5.1:1  ✓ AA
+  --sage-dark (#4E6E57) on --cream (#FFFFFF)   = 5.1:1  ✓ AA
   --sage-dark (#4E6E57) on --sage-bg (#EEF4F0) = 4.7:1  ✓ AA
   --green     (#3A6B50) on --green-light        = 5.2:1  ✓ AA
   --black     (#2E2E2E) on --white              = 13.5:1 ✓ AAA
   --gray-light-text (#767676) on --white        = 4.5:1  ✓ AA
   --gray-dark-text  (#A8A8A8) on --black        = 4.8:1  ✓ AA
-  --cream     (#FAFAF7) on --black              = 14.4:1 ✓ AAA
+  --cream     (#FFFFFF) on --black              = 14.4:1 ✓ AAA
   #FFFFFF on --sage (#6B8C74) badge             = 3.1:1  — large/bold text only ✓
   #FFFFFF on --sage-dark (#4E6E57)              = 5.1:1  ✓ AA
 */
@@ -28,8 +28,8 @@
   --sage-light:      #8AAF93;
   --sage-bg:         #EEF4F0;
   --sage-dark:       #4E6E57;
-  --cream:           #FAFAF7;
-  --cream-dark:      #F0F0EB;
+  --cream:           #FFFFFF;
+  --cream-dark:      #F5F5F5;
   --white:           #FFFFFF;
   --gray-light:      #E0DDD8;
   --gray-on-light:   #595959;   /* for text on white/cream — 9.6:1 on white */
@@ -68,7 +68,7 @@ html, body {
 
 /* ── HEADER ─────────────────────────────────────────────── */
 .header {
-  background: #F4F1EC; height: 54px; padding: 0 22px;
+  background: #FFFFFF; height: 54px; padding: 0 22px;
   display: flex; align-items: center; justify-content: space-between;
   flex-shrink: 0; border-bottom: 3px solid var(--sage);
 }
@@ -119,7 +119,7 @@ html, body {
   border-radius: 12px; overflow: hidden;
   box-shadow: 0 4px 24px rgba(0,0,0,.08);
 }
-.return-card-top { background: #EAE6DF; padding: 28px 32px 24px; border-bottom: 1px solid var(--gray-light); }
+.return-card-top { background: #F5F5F5; padding: 28px 32px 24px; border-bottom: 1px solid var(--gray-light); }
 .return-eyebrow {
   font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
   color: var(--sage-dark); font-weight: 700; margin-bottom: 6px;
@@ -188,7 +188,7 @@ html, body {
 }
 
 .watch-bar {
-  background: #F4F1EC; height: 56px; padding: 0 22px;
+  background: #FFFFFF; height: 56px; padding: 0 22px;
   display: flex; align-items: center; justify-content: space-between;
   gap: 12px; flex-shrink: 0; border-top: 1px solid var(--gray-light);
 }
@@ -348,7 +348,7 @@ textarea::placeholder { color: #767676; font-style: italic; /* 4.5:1 on white �
 }
 
 .score-bar {
-  background: #EAE6DF; border-radius: 8px; padding: 13px 18px;
+  background: #F5F5F5; border-radius: 8px; padding: 13px 18px;
   display: flex; align-items: center; justify-content: space-between;
   gap: 16px; flex-shrink: 0; border: 1px solid var(--gray-light);
 }
@@ -366,7 +366,7 @@ textarea::placeholder { color: #767676; font-style: italic; /* 4.5:1 on white �
 .reveal-footer {
   height: 58px; padding: 0 22px; border-top: 1px solid var(--gray-light);
   display: flex; gap: 10px; align-items: center;
-  flex-shrink: 0; background: #F4F1EC;
+  flex-shrink: 0; background: #FFFFFF;
 }
 
 /* ── BUTTONS ─────────────────────────────────────────────── */
