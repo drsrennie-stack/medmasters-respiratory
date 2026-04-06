@@ -1,0 +1,2031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 2 · Integrative Physiology · Grading Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F4EFE6;
+    --cream-mid: #EDE6D9;
+    --cream-dark: #DDD5C5;
+    --sage: #4A6741;
+    --sage-light: #6A8F60;
+    --sage-pale: #D6E4D2;
+    --terra: #B05C38;
+    --terra-light: #E8B09A;
+    --terra-pale: #F5E0D7;
+    --navy: #2B3A5C;
+    --charcoal: #2C2B28;
+    --mid: #6B6760;
+    --light-border: #C8C0B0;
+    --white: #FFFFFF;
+    --checked-bg: #EBF3E8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--charcoal);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  /* ── HEADER ─────────────────────────────────────────── */
+  .page-header {
+    background: var(--navy);
+    color: var(--cream);
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .page-header h1 {
+    font-family: 'Spectral', serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.3;
+  }
+  .page-header .sub {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream-dark);
+    margin-bottom: 4px;
+  }
+  .header-right {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 18px;
+    border-radius: 4px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+  .btn-reset {
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,0.35);
+    color: var(--cream);
+  }
+  .btn-reset:hover { background: rgba(255,255,255,0.1); }
+  .btn-print {
+    background: var(--terra);
+    color: var(--white);
+  }
+  .btn-print:hover { background: #C96B43; }
+
+  /* ── STUDENT BAR ──────────────────────────────────── */
+  .student-bar {
+    background: var(--navy);
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .student-bar label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream-dark);
+    white-space: nowrap;
+  }
+  .student-bar input {
+    flex: 1;
+    max-width: 320px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 3px;
+    padding: 7px 12px;
+    color: var(--white);
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    outline: none;
+  }
+  .student-bar input::placeholder { color: rgba(255,255,255,0.4); }
+  .student-bar input:focus { border-color: var(--terra-light); }
+  .grand-score-display {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .grand-score-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream-dark);
+  }
+  .grand-score-val {
+    font-family: 'Spectral', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--terra-light);
+    min-width: 70px;
+    text-align: right;
+  }
+
+  /* ── TABS ────────────────────────────────────────── */
+  .tabs-bar {
+    background: var(--cream-mid);
+    border-bottom: 2px solid var(--light-border);
+    display: flex;
+    padding: 0 32px;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .tab-btn {
+    padding: 14px 20px 12px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--mid);
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    white-space: nowrap;
+    transition: all 0.15s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .tab-btn .tab-title { font-size: 12px; }
+  .tab-btn .tab-score {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--mid);
+  }
+  .tab-btn:hover { color: var(--sage); }
+  .tab-btn.active {
+    color: var(--navy);
+    border-bottom-color: var(--terra);
+    font-weight: 600;
+  }
+  .tab-btn.active .tab-score { color: var(--terra); font-weight: 500; }
+
+  /* ── MAIN CONTENT ──────────────────────────────── */
+  .main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 40px 60px;
+  }
+
+  .problem-panel { display: none; }
+  .problem-panel.active { display: block; }
+
+  .problem-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1.5px solid var(--light-border);
+    gap: 20px;
+  }
+  .problem-title {
+    font-family: 'Spectral', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 5px;
+  }
+  .problem-subtitle {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+  .problem-score-box {
+    text-align: center;
+    background: var(--white);
+    border: 2px solid var(--light-border);
+    border-radius: 6px;
+    padding: 12px 20px;
+    min-width: 100px;
+    flex-shrink: 0;
+  }
+  .problem-score-box .score-num {
+    font-family: 'Spectral', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--terra);
+    line-height: 1;
+  }
+  .problem-score-box .score-denom {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-top: 3px;
+  }
+
+  /* ── CRITERION SECTION ──────────────────────────── */
+  .criterion {
+    background: var(--white);
+    border: 1.5px solid var(--light-border);
+    border-radius: 6px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .criterion-header {
+    display: flex;
+    align-items: center;
+    padding: 13px 18px;
+    background: var(--cream-mid);
+    border-bottom: 1.5px solid var(--light-border);
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .criterion-header:hover { background: var(--cream-dark); }
+  .criterion-name {
+    font-weight: 600;
+    font-size: 13.5px;
+    letter-spacing: 0.03em;
+    color: var(--navy);
+    flex: 1;
+  }
+  .criterion-tag {
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mid);
+    background: var(--cream-dark);
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+  .criterion-pts {
+    font-family: 'Spectral', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--terra);
+    min-width: 50px;
+    text-align: right;
+  }
+  .criterion-pts span { font-size: 12px; font-weight: 400; color: var(--mid); }
+  .chevron {
+    font-size: 11px;
+    color: var(--mid);
+    transition: transform 0.2s;
+    margin-left: 4px;
+  }
+  .criterion.collapsed .chevron { transform: rotate(-90deg); }
+
+  .criterion-body {
+    padding: 16px 18px;
+  }
+  .criterion.collapsed .criterion-body { display: none; }
+
+  .rubric-hint {
+    font-size: 12px;
+    color: var(--mid);
+    background: var(--cream);
+    border-left: 3px solid var(--sage-pale);
+    padding: 8px 12px;
+    margin-bottom: 14px;
+    border-radius: 0 3px 3px 0;
+    line-height: 1.5;
+  }
+  .rubric-hint strong { color: var(--sage); }
+
+  /* ── CHECKLIST ITEMS ───────────────────────────── */
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 5px;
+    margin-bottom: 6px;
+    border: 1.5px solid var(--cream-dark);
+    background: var(--cream);
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .check-item:hover { border-color: var(--sage-light); background: #F0F5EE; }
+  .check-item.checked { background: var(--checked-bg); border-color: var(--sage); }
+  .check-item.half-credit { background: #FFF8EC; border-color: #C8922A; }
+  .check-item.half-credit .check-label { color: #9A6A1A; }
+  .check-item.half-credit .check-pts { color: #C8922A; }
+  .check-item.half-credit::after { content: '½ pt'; font-size: 11px; font-weight: 700; color: #C8922A; margin-left: 6px; white-space: nowrap; }
+  .check-item input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    accent-color: var(--sage);
+    cursor: pointer;
+  }
+  .check-content { flex: 1; }
+  .check-label {
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--charcoal);
+  }
+  .check-item.checked .check-label { color: var(--sage); }
+  .check-pts {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--terra);
+    white-space: nowrap;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+  .check-item.checked .check-pts { color: var(--sage); }
+
+  /* ── CRITERION COMMENTS ─────────────────────────── */
+  .criterion-comment {
+    margin-top: 10px;
+    border-top: 1px dashed var(--light-border);
+    padding-top: 10px;
+  }
+  .criterion-comment label {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 5px;
+  }
+  .criterion-comment textarea {
+    width: 100%;
+    min-height: 50px;
+    background: var(--cream);
+    border: 1.5px solid var(--light-border);
+    border-radius: 4px;
+    padding: 7px 11px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    color: var(--charcoal);
+    resize: vertical;
+    outline: none;
+    line-height: 1.5;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .criterion-comment textarea:focus { border-color: var(--terra); background: var(--white); }
+  .criterion-comment textarea::placeholder { color: #bbb; font-style: italic; }
+  .criterion-comment textarea:not(:placeholder-shown) { background: var(--white); border-color: var(--terra-light); }
+
+  /* ── NOTES ─────────────────────────────────────── */
+  .notes-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1.5px solid var(--light-border);
+  }
+  .notes-section label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 8px;
+  }
+  .notes-section textarea {
+    width: 100%;
+    min-height: 80px;
+    background: var(--white);
+    border: 1.5px solid var(--light-border);
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13.5px;
+    color: var(--charcoal);
+    resize: vertical;
+    outline: none;
+    line-height: 1.5;
+  }
+  .notes-section textarea:focus { border-color: var(--sage); }
+
+  /* ── SCORE SUMMARY ─────────────────────────────── */
+  .score-summary {
+    background: var(--navy);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin-top: 28px;
+    display: flex;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+  .score-col {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    padding: 8px 12px;
+    border-right: 1px solid rgba(255,255,255,0.12);
+  }
+  .score-col:last-child { border-right: none; }
+  .score-col .crit-name {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 4px;
+  }
+  .score-col .crit-val {
+    font-family: 'Spectral', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--terra-light);
+  }
+  .score-col .crit-max {
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+  }
+
+  /* ── PROGRESS BAR ──────────────────────────────── */
+  .progress-wrap {
+    margin: 10px 0 0;
+    height: 5px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: var(--terra-light);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+
+  /* ── NO SUBMISSION BANNER ───────────────────────── */
+  .no-submit-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    background: var(--cream-mid);
+    border: 2px solid var(--light-border);
+    border-radius: 6px;
+    padding: 13px 18px;
+    margin-bottom: 12px;
+    transition: all 0.2s;
+  }
+  .no-submit-banner.active {
+    background: #2C2B28;
+    border-color: #2C2B28;
+  }
+  .no-submit-toggle {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .no-submit-toggle input[type="checkbox"] {
+    display: none;
+  }
+  .ns-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid var(--light-border);
+    background: var(--white);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: transparent;
+    transition: all 0.15s;
+  }
+  .no-submit-toggle input:checked ~ .ns-box {
+    background: var(--white);
+    border-color: var(--white);
+    color: #2C2B28;
+    content: '✓';
+  }
+  .no-submit-toggle input:checked ~ .ns-box::after {
+    content: '✓';
+    font-weight: 700;
+    color: #2C2B28;
+  }
+  .ns-label {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--charcoal);
+    transition: color 0.2s;
+  }
+  .no-submit-banner.active .ns-label { color: var(--white); }
+  .ns-result {
+    font-family: 'Spectral', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--mid);
+    opacity: 0;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+  .no-submit-banner.active .ns-result {
+    color: var(--white);
+    opacity: 1;
+  }
+
+  /* ── AUTHENTICITY CHECK ─────────────────────────── */
+  .auth-check {
+    background: var(--white);
+    border: 2px solid var(--light-border);
+    border-radius: 6px;
+    margin-bottom: 22px;
+    overflow: hidden;
+  }
+  .auth-check-header {
+    background: var(--navy);
+    color: var(--cream);
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .auth-check-header .auth-icon { font-size: 16px; }
+  .auth-check-header h3 {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    flex: 1;
+  }
+  .auth-status {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.7);
+    transition: all 0.2s;
+  }
+  .auth-status.clear { background: var(--sage); color: white; }
+  .auth-status.flagged { background: var(--terra); color: white; }
+  .auth-body { padding: 16px 18px; }
+  .auth-intro {
+    font-size: 12.5px;
+    color: var(--mid);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .auth-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .auth-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 9px 11px;
+    border-radius: 5px;
+    border: 1.5px solid var(--cream-dark);
+    background: var(--cream);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .auth-item:hover { border-color: var(--terra); background: var(--terra-pale); }
+  .auth-item.flagged-item { background: var(--terra-pale); border-color: var(--terra); }
+  .auth-item input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    accent-color: var(--terra);
+    cursor: pointer;
+  }
+  .auth-item-label {
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--charcoal);
+  }
+  .auth-item.flagged-item .auth-item-label { color: var(--terra); }
+  .auth-warning {
+    display: none;
+    background: var(--terra-pale);
+    border: 1.5px solid var(--terra);
+    border-radius: 5px;
+    padding: 12px 14px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--terra);
+    font-weight: 500;
+    line-height: 1.5;
+  }
+  .auth-warning.visible { display: block; }
+  .auth-warning strong { font-weight: 700; }
+  .auth-comment {
+    margin-top: 12px;
+  }
+  .auth-comment label {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 5px;
+  }
+  .auth-comment textarea {
+    width: 100%;
+    min-height: 50px;
+    background: var(--cream);
+    border: 1.5px solid var(--light-border);
+    border-radius: 4px;
+    padding: 7px 11px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    color: var(--charcoal);
+    resize: vertical;
+    outline: none;
+    line-height: 1.5;
+  }
+  .auth-comment textarea:focus { border-color: var(--terra); background: var(--white); }
+  .auth-comment textarea::placeholder { color: #bbb; font-style: italic; }
+  .auth-check.is-flagged {
+    border-color: var(--terra);
+  }
+  .auth-check.is-flagged .auth-check-header {
+    background: var(--terra);
+  }
+
+  /* ── PRINT STYLES ──────────────────────────────── */
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body { background: white; font-size: 12px; }
+    .page-header { background: var(--navy) !important; padding: 18px 24px; }
+    .page-header h1 { color: var(--cream) !important; }
+    .page-header .sub { color: var(--cream-dark) !important; }
+
+    /* Show student bar in print with clean styling */
+    .student-bar { 
+      display: flex !important; 
+      background: var(--navy) !important;
+      padding: 10px 24px;
+    }
+    .student-bar label { color: var(--cream-dark) !important; }
+    .student-bar input { 
+      color: white !important; 
+      background: transparent !important;
+      border: none !important;
+      font-size: 16px !important;
+      font-weight: 600 !important;
+    }
+    .grand-score-label { color: var(--cream-dark) !important; }
+    .grand-score-val { color: var(--terra-light) !important; }
+
+    /* Hide interactive elements */
+    .tabs-bar { display: none !important; }
+    .header-right { display: none !important; }
+    .chevron { display: none !important; }
+    .criterion-header { cursor: default; }
+    .criterion-header:hover { background: var(--cream-mid) !important; }
+
+    /* Show ALL panels and force expand ALL criteria */
+    .main { padding: 16px 24px; max-width: 100%; }
+    .problem-panel { display: block !important; page-break-before: always; }
+    .problem-panel:first-of-type { page-break-before: avoid; }
+    .criterion { page-break-inside: avoid; border: 1px solid #ccc; }
+    .criterion.collapsed .criterion-body { display: block !important; }
+    .criterion-body { display: block !important; }
+
+    /* Scores and summaries */
+    .problem-title { font-size: 20px; }
+    .score-summary { background: var(--navy) !important; padding: 12px; }
+    .score-summary .crit-name { color: var(--cream-dark) !important; }
+    .score-summary .crit-val { color: var(--terra-light) !important; }
+    .score-summary .crit-max { color: var(--cream-dark) !important; }
+    .problem-score-box .score-num { font-size: 24px; color: var(--terra) !important; }
+
+    /* Checklist items */
+    .check-item { padding: 7px 10px; }
+    .check-item input[type="checkbox"] { display: inline-block; }
+    .check-item.checked { background: var(--checked-bg) !important; border-color: var(--sage) !important; }
+    .check-item.half-credit { background: #FFF8EC !important; border-color: #C8922A !important; }
+    .check-item.checked .check-label { color: var(--sage) !important; }
+    .rubric-hint { background: var(--cream) !important; }
+
+    /* Auth check */
+    .no-submit-banner { margin-bottom: 10px; padding: 10px 14px; }
+    .no-submit-banner.active { background: var(--terra-pale) !important; }
+    .auth-check { border: 2px solid #999; margin-bottom: 14px; page-break-inside: avoid; }
+    .auth-check-header { background: var(--navy) !important; }
+    .auth-check-header h3 { color: white !important; }
+    .auth-check.is-flagged .auth-check-header { background: var(--terra) !important; }
+    .auth-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+    .auth-item { padding: 6px 9px; }
+    .auth-item.flagged-item { background: var(--terra-pale) !important; }
+    .auth-warning.visible { display: block !important; }
+    .criterion-pts { color: var(--terra) !important; }
+
+    /* Textareas */
+    .auth-comment textarea { min-height: 36px; }
+    .criterion-comment textarea { min-height: 36px; font-size: 12px; border-color: #ccc; background: #fafafa; }
+    .notes-section { margin-top: 16px; }
+    .notes-section textarea { min-height: 50px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <div class="sub">Module 2 · Integrative Physiology</div>
+    <h1>Drawing Exam · Scoring Checklist</h1>
+  </div>
+  <div class="header-right">
+    <button class="btn btn-reset" onclick="resetAll()">↺ Reset All</button>
+    <button class="btn btn-print" onclick="window.print()">⤓ Print / Save PDF</button>
+  </div>
+</div>
+
+<div class="student-bar">
+  <label for="studentName">Student Name</label>
+  <input type="text" id="studentName" placeholder="Enter student name…">
+  <div class="grand-score-display">
+    <div class="grand-score-label">Total Score</div>
+    <div class="grand-score-val" id="grandTotal">0 / 100</div>
+  </div>
+</div>
+
+<div class="tabs-bar" id="tabsBar">
+  <button class="tab-btn active" onclick="switchTab(0)" id="tab0">
+    <span class="tab-title">Problem 1</span>
+    <span class="tab-score" id="tabScore0">0 / 20</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab(1)" id="tab1">
+    <span class="tab-title">Problem 2</span>
+    <span class="tab-score" id="tabScore1">0 / 20</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab(2)" id="tab2">
+    <span class="tab-title">Problem 3</span>
+    <span class="tab-score" id="tabScore2">0 / 20</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab(3)" id="tab3">
+    <span class="tab-title">Problem 4</span>
+    <span class="tab-score" id="tabScore3">0 / 20</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab(4)" id="tab4">
+    <span class="tab-title">Problem 5</span>
+    <span class="tab-score" id="tabScore4">0 / 20</span>
+  </button>
+</div>
+
+<div class="main">
+
+<!-- ════════════════════════════════════════════════════════
+     PROBLEM 1: The Actor Who Cannot Finish the Play
+     NMJ · Synaptic Transmission · EC Coupling
+════════════════════════════════════════════════════════ -->
+<div class="problem-panel active" id="panel0">
+  <div class="problem-header">
+    <div>
+      <div class="problem-subtitle">Problem 1 of 5</div>
+      <div class="problem-title">The Actor Who Cannot Finish the Play</div>
+      <div class="problem-subtitle" style="margin-top:6px;">NMJ · Synaptic Transmission · Excitation–Contraction Coupling</div>
+    </div>
+    <div class="problem-score-box">
+      <div class="score-num" id="p0total">0</div>
+      <div class="score-denom">/ 20 pts</div>
+    </div>
+  </div>
+
+  <!-- Criterion 1 -->
+  <div class="criterion" id="c0-0">
+    <div class="criterion-header" onclick="toggleCriterion('c0-0')">
+      <span class="criterion-name">Biological Accuracy</span>
+      <span class="criterion-tag">Content</span>
+      <span class="criterion-pts" id="pts-c0-0">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> All structures, molecules, receptors, and physiological relationships are correct. No fundamental errors in any component.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">AP arrives at motor neuron terminal → voltage-gated Ca²⁺ channels (VGCCs) open → synaptic vesicles fuse → ACh released into synaptic cleft</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">ACh binds nicotinic acetylcholine receptors (nAChR) at motor end plate → Na⁺ influx → end plate potential (EPP) → muscle fiber action potential</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">T-tubule depolarization activates DHPR (dihydropyridine receptor) → mechanically coupled to RyR1 (ryanodine receptor 1) on SR → Ca²⁺ released from sarcoplasmic reticulum</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Ca²⁺ binds troponin C → tropomyosin shifts off actin binding sites → myosin head binds actin → power stroke executes (cross-bridge cycling)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Criterion 2 -->
+  <div class="criterion" id="c0-1">
+    <div class="criterion-header" onclick="toggleCriterion('c0-1')">
+      <span class="criterion-name">Mechanism in Motion</span>
+      <span class="criterion-tag">Causality</span>
+      <span class="criterion-pts" id="pts-c0-1">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> Stimulus produces response through a visible, connected sequence. Cause leads to effect leads to outcome. Reader can see how each step generates the next.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Motor neuron action potential is shown as the initiating event at the presynaptic terminal (not just assumed)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Continuous causal chain shown: ACh release → EPP → muscle AP → T-tubule depolarization (each step visibly causes the next)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Ca²⁺ explicitly shown as the coupling messenger linking T-tubule → SR → troponin (the same ion drawn at multiple steps)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Cross-bridge cycling (attach → power stroke → detach, requiring ATP) shown as the mechanical output that produces shortening</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Criterion 3 -->
+  <div class="criterion" id="c0-2">
+    <div class="criterion-header" onclick="toggleCriterion('c0-2')">
+      <span class="criterion-name">Logical Sequence</span>
+      <span class="criterion-tag">Order</span>
+      <span class="criterion-pts" id="pts-c0-2">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> Pathway flows in correct order from stimulus to response. Every step that produces the next is present and positioned accordingly.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Presynaptic events → synaptic cleft events → postsynaptic events in correct spatial order (no steps reversed across regions)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">All NMJ/synaptic steps entirely precede EC coupling steps (signal clearly passes from nerve to muscle before contraction begins)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Directional arrows connect each step to the next; no orphaned components that could appear anywhere in the sequence</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">AChE cleavage of ACh shown at synaptic cleft as signal termination; or relaxation pathway (Ca²⁺ reuptake via SERCA pump) shown</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Criterion 4 -->
+  <div class="criterion" id="c0-3">
+    <div class="criterion-header" onclick="toggleCriterion('c0-3')">
+      <span class="criterion-name">Complete Labeling</span>
+      <span class="criterion-tag">Identification</span>
+      <span class="criterion-pts" id="pts-c0-3">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> All pertinent structures, molecules, ions, and steps are named. Every arrow indicates what is happening. Nothing left to assumption.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">ACh, nAChR, and AChE labeled at the NMJ; Na⁺ ion labeled at the end plate/postsynaptic membrane</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">T-tubule, DHPR, RyR1 (or ryanodine receptor), and sarcoplasmic reticulum (SR) labeled</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Troponin C, tropomyosin, actin, and myosin labeled at the thin filament/cross-bridge step</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Ca²⁺ explicitly labeled at each location where it acts: presynaptic terminal (VGCC), SR lumen → cytoplasm (RyR1), and troponin C binding</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Criterion 5 -->
+  <div class="criterion" id="c0-4">
+    <div class="criterion-header" onclick="toggleCriterion('c0-4')">
+      <span class="criterion-name">Organization</span>
+      <span class="criterion-tag">Visual Logic</span>
+      <span class="criterion-pts" id="pts-c0-4">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> Drawing is fully self-explanatory. Parts are spatially distinct and clearly connected. Image alone carries the complete answer.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Drawing has at least two spatially distinct zones: NMJ zone (presynaptic/cleft/postsynaptic) and EC coupling zone (T-tubule/SR/myofilaments)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">All arrows are directional; no bidirectional arrows used unless physiologically appropriate (e.g., not used on Ca²⁺ release step)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">No paragraph text or bullet lists; all explanation conveyed through labeled structures and annotated arrows</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">A reader unfamiliar with the topic could follow the pathway from start to end without additional explanation</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="score-summary" id="summary0">
+    <div class="score-col"><div class="crit-name">Bio Accuracy</div><div class="crit-val" id="sv-c0-0">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Mechanism</div><div class="crit-val" id="sv-c0-1">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Sequence</div><div class="crit-val" id="sv-c0-2">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Labeling</div><div class="crit-val" id="sv-c0-3">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Organization</div><div class="crit-val" id="sv-c0-4">0</div><div class="crit-max">/ 4</div></div>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="prog0" style="width:0%"></div></div>
+
+  <div class="notes-section">
+    <label>Grader Notes / Problem 1</label>
+    <textarea placeholder="Additional observations, oral defense notes, exceptions…"></textarea>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════
+     PROBLEM 2: Always Cold, Always Tired
+     Thyroid Axis · Negative Feedback · Cellular Metabolism
+════════════════════════════════════════════════════════ -->
+<div class="problem-panel" id="panel1">
+  <div class="problem-header">
+    <div>
+      <div class="problem-subtitle">Problem 2 of 5</div>
+      <div class="problem-title">Always Cold, Always Tired</div>
+      <div class="problem-subtitle" style="margin-top:6px;">Thyroid Axis · Negative Feedback · Cellular Metabolism</div>
+    </div>
+    <div class="problem-score-box">
+      <div class="score-num" id="p1total">0</div>
+      <div class="score-denom">/ 20 pts</div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c1-0">
+    <div class="criterion-header" onclick="toggleCriterion('c1-0')">
+      <span class="criterion-name">Biological Accuracy</span>
+      <span class="criterion-tag">Content</span>
+      <span class="criterion-pts" id="pts-c1-0">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> All structures, molecules, hormones, receptors, and physiological relationships shown are correct. No fundamental errors.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">TRH (hypothalamus) stimulates TSH release (anterior pituitary); TSH stimulates T3 and T4 production and release from thyroid gland — axis shown in correct direction</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">T4 (thyroxine, prohormone) converted to active T3 (triiodothyronine) by 5'-deiodinase in peripheral tissues; T3 identified as the biologically active form</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">T3 enters target cell nucleus → binds thyroid hormone receptor (TR) → TR-T3 complex binds thyroid response elements (TREs) on DNA → altered gene transcription</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Downstream metabolic effects include ≥2 of: increased Na⁺/K⁺-ATPase expression, mitochondrial biogenesis, increased oxidative phosphorylation, elevated basal metabolic rate (BMR), thermogenesis</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c1-1">
+    <div class="criterion-header" onclick="toggleCriterion('c1-1')">
+      <span class="criterion-name">Mechanism in Motion</span>
+      <span class="criterion-tag">Causality</span>
+      <span class="criterion-pts" id="pts-c1-1">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> The drawing shows the mechanism operating with a visible, connected sequence of events. Cause leads to effect leads to outcome.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Low T3/T4 (or hypothyroid state) shown as initiating stimulus → increased TRH → increased TSH → thyroid stimulation shown as a connected cause-effect sequence</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Negative feedback arrows shown returning from T3/T4 to BOTH hypothalamus (inhibiting TRH) AND anterior pituitary (inhibiting TSH)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Hormonal cascade shown flowing hypothalamus → pituitary → thyroid → blood → peripheral target cell (each step visibly producing the next)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Intracellular nuclear mechanism shown in operation: T3 enters nucleus → binds TR → binds TRE → transcription of metabolic genes → protein production</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c1-2">
+    <div class="criterion-header" onclick="toggleCriterion('c1-2')">
+      <span class="criterion-name">Logical Sequence</span>
+      <span class="criterion-tag">Order</span>
+      <span class="criterion-pts" id="pts-c1-2">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> Pathway flows in correct order from stimulus to response. Every step that produces the next is present and positioned accordingly.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Initiating stimulus (low T3/T4, hypothyroid state, or cold environment) shown clearly at the beginning of the drawing</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Axis flows in correct anatomical hierarchy: hypothalamus → anterior pituitary → thyroid gland → peripheral tissues (not reversed or scrambled)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Negative feedback arrows return to correct targets: T3/T4 inhibits hypothalamus AND pituitary (not the thyroid itself; not only one target)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Final outcomes (increased metabolic rate, heat generation, resolution of hypothyroid symptoms) shown at the end, connected to cellular mechanism</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c1-3">
+    <div class="criterion-header" onclick="toggleCriterion('c1-3')">
+      <span class="criterion-name">Complete Labeling</span>
+      <span class="criterion-tag">Identification</span>
+      <span class="criterion-pts" id="pts-c1-3">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> All pertinent structures, molecules, ions, and process steps are named. Nothing left to assumption.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">TRH, TSH, T3, and T4 all labeled and each associated with its correct source gland (hypothalamus, anterior pituitary, thyroid)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">5'-deiodinase (or "deiodinase") explicitly labeled at the T4 → T3 conversion step in peripheral tissue</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Thyroid hormone receptor (TR) and thyroid response element (TRE) labeled at the nuclear mechanism step</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">At least two specific metabolic targets labeled with their effects (e.g., Na⁺/K⁺-ATPase ↑, mitochondria ↑, BMR ↑, O₂ consumption ↑)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c1-4">
+    <div class="criterion-header" onclick="toggleCriterion('c1-4')">
+      <span class="criterion-name">Organization</span>
+      <span class="criterion-tag">Visual Logic</span>
+      <span class="criterion-pts" id="pts-c1-4">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> Drawing is fully self-explanatory. Systemic axis and cellular mechanism clearly distinguished. Image carries the complete answer.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">HPT axis organs (hypothalamus, pituitary, thyroid) spatially arranged to reflect anatomical hierarchy; not drawn at the same level</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Negative feedback arrows visually distinct from stimulatory arrows (e.g., dashed lines, labeled "–" or "inhibits," different color/weight)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Cellular/nuclear mechanism shown in a separate inset or distinct zone from the systemic axis; the two scales do not overlap confusingly</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">No paragraph text or bullet lists; all explanatory content conveyed through labeled structures and annotated arrows</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="score-summary" id="summary1">
+    <div class="score-col"><div class="crit-name">Bio Accuracy</div><div class="crit-val" id="sv-c1-0">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Mechanism</div><div class="crit-val" id="sv-c1-1">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Sequence</div><div class="crit-val" id="sv-c1-2">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Labeling</div><div class="crit-val" id="sv-c1-3">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Organization</div><div class="crit-val" id="sv-c1-4">0</div><div class="crit-max">/ 4</div></div>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="prog1" style="width:0%"></div></div>
+
+  <div class="notes-section">
+    <label>Grader Notes / Problem 2</label>
+    <textarea placeholder="Additional observations, oral defense notes, exceptions…"></textarea>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════
+     PROBLEM 3: The Ambush
+     Sympathetic NS · Adrenal Medulla · Adrenergic Receptors
+════════════════════════════════════════════════════════ -->
+<div class="problem-panel" id="panel2">
+  <div class="problem-header">
+    <div>
+      <div class="problem-subtitle">Problem 3 of 5</div>
+      <div class="problem-title">The Ambush</div>
+      <div class="problem-subtitle" style="margin-top:6px;">Sympathetic NS · Adrenal Medulla · Adrenergic Receptors</div>
+    </div>
+    <div class="problem-score-box">
+      <div class="score-num" id="p2total">0</div>
+      <div class="score-denom">/ 20 pts</div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c2-0">
+    <div class="criterion-header" onclick="toggleCriterion('c2-0')">
+      <span class="criterion-name">Biological Accuracy</span>
+      <span class="criterion-tag">Content</span>
+      <span class="criterion-pts" id="pts-c2-0">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> All structures, molecules, receptor subtypes, and physiological relationships are correct. No fundamental errors.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Preganglionic sympathetic fiber (cholinergic) releases ACh → binds nicotinic receptors (nAChR) on adrenal chromaffin cells (note: no ganglionic synapse in this pathway — direct preganglionic innervation)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Chromaffin cells of the adrenal medulla secrete epinephrine (Epi, ~80%) and norepinephrine (NE, ~20%) directly into the bloodstream (hormonal, not synaptic release)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Correct receptor subtype–organ pairings: β1 → heart (↑HR, ↑contractility); β2 → bronchi (dilation) and skeletal muscle vessels (dilation); α1 → peripheral vasculature (constriction)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Intracellular second messenger pathway at β-receptors: Gs protein → adenylyl cyclase → ↑cAMP → PKA activation → phosphorylation of effector proteins</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c2-1">
+    <div class="criterion-header" onclick="toggleCriterion('c2-1')">
+      <span class="criterion-name">Mechanism in Motion</span>
+      <span class="criterion-tag">Causality</span>
+      <span class="criterion-pts" id="pts-c2-1">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> The drawing shows the mechanism operating. Cause leads to effect leads to outcome. Reader can see how each step generates the next.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Threat/stressor shown as initiating event → CNS/hypothalamus → sympathetic outflow depicted as the first cause in the sequence</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Causal chain from preganglionic fiber → ACh → nAChR on chromaffin cell → depolarization → catecholamine release shown as connected events</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Epinephrine/NE shown traveling through bloodstream to reach multiple target organs simultaneously (hormonal distribution, not point-to-point neural)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Second messenger cascade (Gs → cAMP → PKA) shown operating at at least one target cell, producing a specific downstream effect</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c2-2">
+    <div class="criterion-header" onclick="toggleCriterion('c2-2')">
+      <span class="criterion-name">Logical Sequence</span>
+      <span class="criterion-tag">Order</span>
+      <span class="criterion-pts" id="pts-c2-2">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> Pathway flows in correct order. Neural signal precedes hormonal signal. Receptor binding precedes intracellular effects.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Neural signal (preganglionic sympathetic fiber) is shown before and causing the hormonal signal (Epi/NE release into blood); not reversed</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Receptor binding at target organ shown before intracellular effects (ligand binds → G protein couples → downstream cascade); not skipping the receptor step</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Multiple parallel effector responses (heart, lungs, vessels, liver) shown as branching from hormone release, not sequentially from each other</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Fight-or-flight integrated outcome (↑HR, ↑BP, bronchodilation, ↑glucose) represented at the end as the coordinated physiological response</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c2-3">
+    <div class="criterion-header" onclick="toggleCriterion('c2-3')">
+      <span class="criterion-name">Complete Labeling</span>
+      <span class="criterion-tag">Identification</span>
+      <span class="criterion-pts" id="pts-c2-3">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> All pertinent structures, molecules, receptor subtypes, and steps named. Nothing left to assumption.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Preganglionic (sympathetic) fiber, ACh, nAChR, and chromaffin cells all labeled; adrenal medulla identified as the source organ</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Epinephrine and norepinephrine both labeled by name; approximate ratio or distinction noted (Epi = primary hormone; NE = minor)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Adrenergic receptor subtypes labeled at each target organ (minimum: α1, β1, β2 present and correctly placed); physiological effect at each organ labeled</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Second messenger components labeled: Gs protein, adenylyl cyclase, cAMP, PKA (at minimum); abbreviated forms acceptable if defined</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c2-4">
+    <div class="criterion-header" onclick="toggleCriterion('c2-4')">
+      <span class="criterion-name">Organization</span>
+      <span class="criterion-tag">Visual Logic</span>
+      <span class="criterion-pts" id="pts-c2-4">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> Drawing is fully self-explanatory. Adrenal medulla as hub, radiating to target organs. Neural and hormonal pathways visually distinct.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Adrenal medulla clearly depicted as the central hub from which hormones radiate outward to multiple target organs</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Target organs spatially distinct with receptor subtype and physiological effect labeled per organ; organs not merged or unlabeled</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Neural pathway (preganglionic fiber) and hormonal pathway (blood-borne Epi/NE) visually distinguishable (e.g., different line types, labeled differently)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">No paragraph text or bullet lists; all explanatory content conveyed through labeled structures and annotated arrows</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="score-summary" id="summary2">
+    <div class="score-col"><div class="crit-name">Bio Accuracy</div><div class="crit-val" id="sv-c2-0">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Mechanism</div><div class="crit-val" id="sv-c2-1">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Sequence</div><div class="crit-val" id="sv-c2-2">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Labeling</div><div class="crit-val" id="sv-c2-3">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Organization</div><div class="crit-val" id="sv-c2-4">0</div><div class="crit-max">/ 4</div></div>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="prog2" style="width:0%"></div></div>
+
+  <div class="notes-section">
+    <label>Grader Notes / Problem 3</label>
+    <textarea placeholder="Additional observations, oral defense notes, exceptions…"></textarea>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════
+     PROBLEM 4: The Moon-Faced Man
+     HPA Axis · Cortisol · Tissue Metabolism
+════════════════════════════════════════════════════════ -->
+<div class="problem-panel" id="panel3">
+  <div class="problem-header">
+    <div>
+      <div class="problem-subtitle">Problem 4 of 5</div>
+      <div class="problem-title">The Moon-Faced Man</div>
+      <div class="problem-subtitle" style="margin-top:6px;">HPA Axis · Cortisol · Tissue Metabolism</div>
+    </div>
+    <div class="problem-score-box">
+      <div class="score-num" id="p3total">0</div>
+      <div class="score-denom">/ 20 pts</div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c3-0">
+    <div class="criterion-header" onclick="toggleCriterion('c3-0')">
+      <span class="criterion-name">Biological Accuracy</span>
+      <span class="criterion-tag">Content</span>
+      <span class="criterion-pts" id="pts-c3-0">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> All structures, molecules, hormones, receptors, and physiological relationships are correct. No fundamental errors.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">CRH (hypothalamus) → ACTH (anterior pituitary) → cortisol (adrenal cortex, specifically zona fasciculata) — axis correct with correct glands and correct zones</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Cortisol (lipid-soluble steroid) crosses cell membrane → binds cytoplasmic glucocorticoid receptor (GR) → GR-cortisol complex translocates from cytoplasm to nucleus</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Nuclear GR-cortisol dimer binds glucocorticoid response elements (GREs) on DNA → altered transcription of target genes (increased or decreased expression)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Tissue-specific catabolic and redistribution effects shown: liver gluconeogenesis ↑, skeletal muscle protein catabolism, adipose lipolysis with central fat redistribution (moon face, buffalo hump)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c3-1">
+    <div class="criterion-header" onclick="toggleCriterion('c3-1')">
+      <span class="criterion-name">Mechanism in Motion</span>
+      <span class="criterion-tag">Causality</span>
+      <span class="criterion-pts" id="pts-c3-1">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> Stressor → cascade → cellular mechanism → tissue effects all shown as a connected causal sequence. Negative feedback visible.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Stressor (or chronic high cortisol state) → CRH release → ACTH release → adrenal stimulation → cortisol secretion shown as a connected causal cascade</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Negative feedback: cortisol shown inhibiting BOTH hypothalamus (CRH) and anterior pituitary (ACTH) with return arrows; feedback pathways labeled as inhibitory</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">GR activation pathway shown as a mechanistic sequence: cortisol binds GR → complex translocates → binds GRE → changes in transcription → altered protein expression</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">At least two tissue metabolic effects shown as downstream outcomes of GRE-driven transcription changes, connected by arrows to the nuclear mechanism</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c3-2">
+    <div class="criterion-header" onclick="toggleCriterion('c3-2')">
+      <span class="criterion-name">Logical Sequence</span>
+      <span class="criterion-tag">Order</span>
+      <span class="criterion-pts" id="pts-c3-2">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> HPA axis in correct order. Intracellular journey in correct order. Negative feedback to correct targets. Clinical signs connected to mechanisms.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">HPA axis flows in correct hierarchical order: hypothalamus → anterior pituitary → adrenal cortex (not reversed, not skipping levels)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Cortisol's intracellular journey in correct order: binds cytoplasmic GR → translocates to nucleus → binds GRE → transcription change → protein produced → effect</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Negative feedback arrows return to correct anatomical targets (hypothalamus and anterior pituitary), not to adrenal gland or elsewhere</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Cushingoid phenotype (moon face, buffalo hump, central obesity, hyperglycemia, immunosuppression) connected to specific upstream metabolic mechanisms by arrows or labeled connections</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c3-3">
+    <div class="criterion-header" onclick="toggleCriterion('c3-3')">
+      <span class="criterion-name">Complete Labeling</span>
+      <span class="criterion-tag">Identification</span>
+      <span class="criterion-pts" id="pts-c3-3">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> All pertinent structures, molecules, hormones, and receptor components named. Nothing left to assumption.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">CRH and ACTH labeled with correct source glands; zona fasciculata labeled as the specific cortical zone producing cortisol (not just "adrenal cortex")</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Glucocorticoid receptor (GR) labeled; GRE (glucocorticoid response element) labeled; cortisol noted as lipid-soluble (crossing membrane without transporter)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Liver, skeletal muscle, and adipose tissue labeled as target tissues with their specific effects labeled (gluconeogenesis ↑, proteolysis, lipolysis / fat redistribution)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Anti-inflammatory/immunosuppressive effect included (e.g., NF-κB inhibition, ↓cytokines, ↓immune cell trafficking) if the clinical scenario involves immune suppression</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c3-4">
+    <div class="criterion-header" onclick="toggleCriterion('c3-4')">
+      <span class="criterion-name">Organization</span>
+      <span class="criterion-tag">Visual Logic</span>
+      <span class="criterion-pts" id="pts-c3-4">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> HPA axis hierarchy clear. Cellular mechanism in distinct zone. Clinical phenotype connected to mechanisms. No paragraph text.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">HPA axis organs spatially arranged to reflect anatomical hierarchy; glands not drawn at same level; cortex vs. medulla distinguished if adrenal is depicted in detail</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Cellular/nuclear mechanism shown in a separate inset or clearly bounded zone, distinct from the systemic HPA axis</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Clinical Cushingoid features (moon face, buffalo hump, striae, hyperglycemia) visually connected to specific upstream mechanisms, not floating disconnected from the pathway</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Negative feedback arrows visually distinct from stimulatory arrows (e.g., dashed, labeled "–" or "inhibits"); no paragraph text or bullet lists</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="score-summary" id="summary3">
+    <div class="score-col"><div class="crit-name">Bio Accuracy</div><div class="crit-val" id="sv-c3-0">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Mechanism</div><div class="crit-val" id="sv-c3-1">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Sequence</div><div class="crit-val" id="sv-c3-2">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Labeling</div><div class="crit-val" id="sv-c3-3">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Organization</div><div class="crit-val" id="sv-c3-4">0</div><div class="crit-max">/ 4</div></div>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="prog3" style="width:0%"></div></div>
+
+  <div class="notes-section">
+    <label>Grader Notes / Problem 4</label>
+    <textarea placeholder="Additional observations, oral defense notes, exceptions…"></textarea>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════
+     PROBLEM 5: The Right Side That Stopped Moving
+     Voluntary Motor Pathway · UMN vs LMN · Spinal Reflex Arc
+════════════════════════════════════════════════════════ -->
+<div class="problem-panel" id="panel4">
+  <div class="problem-header">
+    <div>
+      <div class="problem-subtitle">Problem 5 of 5</div>
+      <div class="problem-title">The Right Side That Stopped Moving</div>
+      <div class="problem-subtitle" style="margin-top:6px;">Voluntary Motor Pathway · UMN vs LMN · Spinal Reflex Arc</div>
+    </div>
+    <div class="problem-score-box">
+      <div class="score-num" id="p4total">0</div>
+      <div class="score-denom">/ 20 pts</div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c4-0">
+    <div class="criterion-header" onclick="toggleCriterion('c4-0')">
+      <span class="criterion-name">Biological Accuracy</span>
+      <span class="criterion-tag">Content</span>
+      <span class="criterion-pts" id="pts-c4-0">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> All structures, pathways, and lesion signs correctly depicted. Laterality correct. UMN and LMN features accurately distinguished.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">UMN: primary motor cortex (M1) → internal capsule → corticospinal tract → decussates at medullary pyramids (pyramidal decussation) → contralateral (opposite) spinal cord → anterior horn</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">LMN: α-motor neuron in anterior horn → exits via ventral root → travels in peripheral nerve → NMJ → skeletal muscle contraction</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">UMN lesion signs correctly listed: spasticity, hyperreflexia, positive Babinski sign, no significant muscle atrophy (UMN above LMN). LMN lesion signs correctly listed: flaccid paralysis, hyporeflexia/areflexia, muscle atrophy, fasciculations</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Spinal reflex arc: Ia afferent from muscle spindle → dorsal root → monosynaptic synapse on α-motor neuron (LMN) in anterior horn → muscle contraction; inhibitory interneuron to antagonist muscle shown</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c4-1">
+    <div class="criterion-header" onclick="toggleCriterion('c4-1')">
+      <span class="criterion-name">Mechanism in Motion</span>
+      <span class="criterion-tag">Causality</span>
+      <span class="criterion-pts" id="pts-c4-1">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> Voluntary pathway shown descending; decussation explains laterality; UMN-LMN relay shown; reflex arc shown as separate loop.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Voluntary motor signal shown descending from M1 through internal capsule and brainstem to spinal cord (top-down directionality clear)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Decussation shown as the mechanism explaining why left cortex controls right side of body; laterality explicitly labeled (e.g., "left M1 → right limbs")</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">UMN-LMN synapse in anterior horn shown as the relay point where upper motor neuron passes signal to lower motor neuron</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Reflex arc shown as a separate loop operating at the spinal level, independent of cortical input; both sensory and motor limbs of the arc visible</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c4-2">
+    <div class="criterion-header" onclick="toggleCriterion('c4-2')">
+      <span class="criterion-name">Logical Sequence</span>
+      <span class="criterion-tag">Order</span>
+      <span class="criterion-pts" id="pts-c4-2">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> Voluntary pathway in correct anatomical order. Correct laterality. UMN/LMN zones delineated. Reflex arc sequence correct.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Voluntary pathway in correct anatomical order: M1 → internal capsule → brainstem → medullary decussation → lateral corticospinal tract → anterior horn → LMN → muscle</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Clinical scenario correctly localized: left cortex/UMN lesion → right-sided deficits shown; decussation used to explain contralateral control</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">UMN and LMN zones clearly delineated with correct anatomical boundary (typically at the anterior horn synapse); lesion signs attributed to the correct level</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Reflex arc sequence in correct order: muscle spindle stretch → Ia afferent → dorsal root ganglion → enters dorsal horn → synapse on α-motor neuron → efferent to muscle</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c4-3">
+    <div class="criterion-header" onclick="toggleCriterion('c4-3')">
+      <span class="criterion-name">Complete Labeling</span>
+      <span class="criterion-tag">Identification</span>
+      <span class="criterion-pts" id="pts-c4-3">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> All structures, tracts, and lesion signs named. UMN and LMN zones labeled. Reflex arc components identified.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">M1 (primary motor cortex), internal capsule, corticospinal tract, and medullary pyramidal decussation all labeled</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Anterior horn, α-motor neuron (LMN), and ventral root labeled; UMN and LMN explicitly identified as zones in the drawing</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">UMN signs listed in the UMN zone (spasticity, hyperreflexia, Babinski +, ↓/no atrophy) and LMN signs listed in the LMN zone (flaccid, atrophy, hyporeflexia, fasciculations)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Reflex arc components labeled: muscle spindle, Ia afferent, dorsal root (ganglion), interneuron, α-motor neuron; sensory and motor limbs identified</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="criterion" id="c4-4">
+    <div class="criterion-header" onclick="toggleCriterion('c4-4')">
+      <span class="criterion-name">Organization</span>
+      <span class="criterion-tag">Visual Logic</span>
+      <span class="criterion-pts" id="pts-c4-4">0 <span>/ 4</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="criterion-body">
+      <div class="rubric-hint"><strong>Full credit (4):</strong> UMN and LMN pathways visually distinct. Decussation at correct anatomical level. Reflex arc separate from voluntary pathway. No paragraph text.</div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">UMN pathway and LMN pathway spatially and visually distinct (different regions, different line weights, or clearly labeled zones)</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Decussation depicted at correct anatomical level (at the medulla/brainstem junction), not in the spinal cord or at the cortex</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Reflex arc depicted as a visually separate loop from the voluntary pathway; not merged with or embedded inside the descending motor pathway</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox">
+        <div class="check-content"><div class="check-label">Clinical scenario (right-sided paralysis from left cortex lesion) visually connected to the anatomical pathway; lesion site marked on the drawing</div></div>
+        <div class="check-pts">1 pt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="score-summary" id="summary4">
+    <div class="score-col"><div class="crit-name">Bio Accuracy</div><div class="crit-val" id="sv-c4-0">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Mechanism</div><div class="crit-val" id="sv-c4-1">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Sequence</div><div class="crit-val" id="sv-c4-2">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Labeling</div><div class="crit-val" id="sv-c4-3">0</div><div class="crit-max">/ 4</div></div>
+    <div class="score-col"><div class="crit-name">Organization</div><div class="crit-val" id="sv-c4-4">0</div><div class="crit-max">/ 4</div></div>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="prog4" style="width:0%"></div></div>
+
+  <div class="notes-section">
+    <label>Grader Notes / Problem 5</label>
+    <textarea placeholder="Additional observations, oral defense notes, exceptions…"></textarea>
+  </div>
+</div>
+
+</div><!-- end .main -->
+
+<script>
+const PROBLEMS = 5;
+const CRITERIA = 5;
+
+// ── ZERO-OUT STATE ────────────────────────────────────────
+// A problem scores 0 if: not submitted OR AI-flagged
+function isProblemZeroed(p) {
+  const noSub = document.getElementById(`noSubmit${p}`);
+  if (noSub && noSub.checked) return 'no-submission';
+  const authEl = document.getElementById(`auth${p}`);
+  if (authEl && authEl.querySelectorAll('.auth-item input:checked').length > 0) return 'ai-flagged';
+  return false;
+}
+
+function getCriterionScore(cId) {
+  const el = document.getElementById(cId);
+  if (!el) return 0;
+  let score = 0;
+  el.querySelectorAll('.check-item').forEach(item => {
+    const state = item.dataset.state || 'unchecked';
+    if (state === 'full') score += 1;
+    else if (state === 'half') score += 0.5;
+  });
+  return score;
+}
+
+function updateAll() {
+  let grand = 0;
+  for (let p = 0; p < PROBLEMS; p++) {
+    const zeroed = isProblemZeroed(p);
+    const panel = document.getElementById(`panel${p}`);
+
+    // Grey out / restore rubric criteria
+    const criteria = panel ? panel.querySelectorAll('.criterion') : [];
+    criteria.forEach(c => {
+      c.style.opacity = zeroed ? '0.35' : '1';
+      c.style.pointerEvents = zeroed ? 'none' : '';
+    });
+    const summary = panel ? panel.querySelector('.score-summary') : null;
+    if (summary) { summary.style.opacity = zeroed ? '0.35' : '1'; }
+
+    let pScore = 0;
+    if (!zeroed) {
+      for (let c = 0; c < CRITERIA; c++) {
+        const score = getCriterionScore(`c${p}-${c}`);
+        const ptsEl = document.getElementById(`pts-c${p}-${c}`);
+        if (ptsEl) {
+          const displayScore = Number.isInteger(score) ? score : score.toFixed(1);
+          ptsEl.innerHTML = `${displayScore} <span>/ 4</span>`;
+          ptsEl.style.color = score === 4 ? 'var(--sage)' : 'var(--terra)';
+        }
+        const svEl = document.getElementById(`sv-c${p}-${c}`);
+        if (svEl) svEl.textContent = Number.isInteger(score) ? score : score.toFixed(1);
+        pScore += score;
+      }
+    } else {
+      // Zero out display
+      for (let c = 0; c < CRITERIA; c++) {
+        const ptsEl = document.getElementById(`pts-c${p}-${c}`);
+        if (ptsEl) { ptsEl.innerHTML = `0 <span>/ 4</span>`; ptsEl.style.color = 'var(--mid)'; }
+        const svEl = document.getElementById(`sv-c${p}-${c}`);
+        if (svEl) svEl.textContent = '0';
+      }
+      pScore = 0;
+    }
+
+    const ptEl = document.getElementById(`p${p}total`);
+    if (ptEl) {
+      ptEl.textContent = Number.isInteger(pScore) ? pScore : pScore.toFixed(1);
+      ptEl.style.color = zeroed ? 'var(--mid)' : 'var(--terra)';
+    }
+
+    const tsEl = document.getElementById(`tabScore${p}`);
+    if (tsEl) {
+      const displayScore = Number.isInteger(pScore) ? pScore : pScore.toFixed(1);
+      const label = zeroed === 'no-submission' ? '— / 20' : zeroed === 'ai-flagged' ? '0* / 20' : `${displayScore} / 20`;
+      tsEl.textContent = label;
+      tsEl.style.color = zeroed ? 'var(--terra)' : '';
+    }
+
+    const progEl = document.getElementById(`prog${p}`);
+    if (progEl) progEl.style.width = `${(pScore / 20) * 100}%`;
+
+    grand += pScore;
+  }
+  const gtEl = document.getElementById('grandTotal');
+  if (gtEl) gtEl.textContent = `${Number.isInteger(grand) ? grand : grand.toFixed(1)} / 100`;
+}
+
+// ── CHECKBOX TOGGLE (3-state: unchecked → full → half → unchecked) ──
+// Click once = full credit (green)
+// Click again = half credit (amber)
+// Click again = unchecked
+function toggleCheck(item) {
+  const cb = item.querySelector('input[type="checkbox"]');
+  const state = item.dataset.state || 'unchecked';
+
+  if (state === 'unchecked') {
+    item.dataset.state = 'full';
+    cb.checked = true;
+    item.classList.add('checked');
+    item.classList.remove('half-credit');
+  } else if (state === 'full') {
+    item.dataset.state = 'half';
+    cb.checked = true;
+    item.classList.add('checked', 'half-credit');
+  } else {
+    item.dataset.state = 'unchecked';
+    cb.checked = false;
+    item.classList.remove('checked', 'half-credit');
+  }
+  updateAll();
+}
+
+// ── CRITERION COLLAPSE ────────────────────────────────────
+function toggleCriterion(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
+// ── TAB SWITCHING ─────────────────────────────────────────
+function switchTab(idx) {
+  document.querySelectorAll('.problem-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
+  document.querySelectorAll('.tab-btn').forEach((t, i) => t.classList.toggle('active', i === idx));
+}
+
+// ── RESET ALL ─────────────────────────────────────────────
+function resetAll() {
+  if (!confirm('Reset all scores and notes for this student?')) return;
+  document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.checked = false;
+    const checkItem = cb.closest('.check-item');
+    if (checkItem) {
+      checkItem.classList.remove('checked', 'half-credit');
+      checkItem.dataset.state = 'unchecked';
+    }
+    cb.closest('.auth-item')?.classList.remove('flagged-item');
+  });
+  document.querySelectorAll('textarea').forEach(ta => ta.value = '');
+  document.getElementById('studentName').value = '';
+  for (let p = 0; p < PROBLEMS; p++) {
+    const authEl = document.getElementById(`auth${p}`);
+    if (authEl) authEl.classList.remove('is-flagged');
+    const statusEl = document.getElementById(`authStatus${p}`);
+    if (statusEl) { statusEl.className = 'auth-status'; statusEl.textContent = 'Not reviewed'; }
+    const warnEl = document.getElementById(`authWarn${p}`);
+    if (warnEl) warnEl.classList.remove('visible');
+    const nsEl = document.getElementById(`noSubmit${p}`);
+    if (nsEl) { nsEl.checked = false; }
+    const nsBanner = document.getElementById(`noSubBanner${p}`);
+    if (nsBanner) nsBanner.classList.remove('active');
+  }
+  updateAll();
+}
+
+// ── NO-SUBMISSION TOGGLE ──────────────────────────────────
+function toggleNoSubmit(pIdx) {
+  const cb = document.getElementById(`noSubmit${pIdx}`);
+  const banner = document.getElementById(`noSubBanner${pIdx}`);
+  const authBlock = document.getElementById(`auth${pIdx}`);
+  const checked = cb.checked;
+  banner.classList.toggle('active', checked);
+  if (authBlock) authBlock.style.opacity = checked ? '0.35' : '1';
+  if (authBlock) authBlock.style.pointerEvents = checked ? 'none' : '';
+  updateAll();
+}
+
+// ── AUTHENTICITY CHECK INJECTION ──────────────────────────
+const authFlags = [
+  { id: 'a1', label: 'Lines and arrows are perfectly smooth or vector-like — not consistent with hand drawing' },
+  { id: 'a2', label: 'Labels appear typed or printed, not handwritten' },
+  { id: 'a3', label: 'Layout is suspiciously symmetrical, grid-aligned, or template-like' },
+  { id: 'a4', label: 'Structures use clip-art-style icons or pre-made anatomical illustrations' },
+  { id: 'a5', label: 'Drawing appears "assembled" from components rather than composed as a whole' },
+  { id: 'a6', label: 'No visible corrections, erasures, or evidence of iterative thinking' },
+  { id: 'a7', label: 'Uniform line weight throughout — no natural variation from a drawing hand' },
+  { id: 'a8', label: 'Suspiciously complete and perfect — every element present with no gaps or hesitation marks' },
+];
+
+document.querySelectorAll('.problem-panel').forEach((panel, pIdx) => {
+  const problemHeader = panel.querySelector('.problem-header');
+
+  // ── No Submission Banner ──
+  const noSubEl = document.createElement('div');
+  noSubEl.className = 'no-submit-banner';
+  noSubEl.id = `noSubBanner${pIdx}`;
+  noSubEl.innerHTML = `
+    <label class="no-submit-toggle" onclick="event.stopPropagation()">
+      <input type="checkbox" id="noSubmit${pIdx}" onchange="toggleNoSubmit(${pIdx})">
+      <span class="ns-box"></span>
+      <span class="ns-label">Did not submit — no work turned in</span>
+    </label>
+    <span class="ns-result">Score: 0 / 20</span>`;
+  panel.insertBefore(noSubEl, problemHeader.nextSibling);
+
+  // ── Auth Check Block ──
+  const authEl = document.createElement('div');
+  authEl.className = 'auth-check';
+  authEl.id = `auth${pIdx}`;
+  authEl.innerHTML = `
+    <div class="auth-check-header">
+      <span class="auth-icon">✎</span>
+      <h3>Authenticity Check — Hand-Drawn Verification</h3>
+      <span class="auth-status" id="authStatus${pIdx}">Not reviewed</span>
+    </div>
+    <div class="auth-body">
+      <p class="auth-intro">Flag any characteristics that suggest this drawing was generated, templated, or assembled rather than drawn by the student. <strong>One or more flags → score = 0 and oral defense required.</strong> Per assignment policy, the grade for this problem will be based entirely on the oral explanation.</p>
+      <div class="auth-grid">
+        ${authFlags.map(f => `
+        <div class="auth-item" onclick="toggleAuthFlag(this, ${pIdx})" id="af-${pIdx}-${f.id}">
+          <input type="checkbox">
+          <span class="auth-item-label">${f.label}</span>
+        </div>`).join('')}
+      </div>
+      <div class="auth-warning" id="authWarn${pIdx}">
+        <strong>⚑ Score = 0. Flagged for Oral Defense.</strong> Per assignment policy, this submission will be set aside. The student will be asked to explain their drawing in person. The grade for this problem will be determined entirely by that oral explanation.
+      </div>
+      <div class="auth-comment">
+        <label>Authenticity notes</label>
+        <textarea placeholder="Describe specific concerns — e.g., 'Labels appear computer-generated; no visible hand marks; layout identical to a known AI output…'"></textarea>
+      </div>
+    </div>`;
+  panel.insertBefore(authEl, noSubEl.nextSibling);
+});
+
+function toggleAuthFlag(item, pIdx) {
+  const cb = item.querySelector('input[type="checkbox"]');
+  if (!event || event.target !== cb) cb.checked = !cb.checked;
+  item.classList.toggle('flagged-item', cb.checked);
+  updateAuthStatus(pIdx);
+  updateAll();
+}
+
+function updateAuthStatus(pIdx) {
+  const authEl = document.getElementById(`auth${pIdx}`);
+  const flagged = authEl.querySelectorAll('.auth-item input:checked').length > 0;
+  const statusEl = document.getElementById(`authStatus${pIdx}`);
+  const warnEl = document.getElementById(`authWarn${pIdx}`);
+  authEl.classList.toggle('is-flagged', flagged);
+  statusEl.className = 'auth-status ' + (flagged ? 'flagged' : 'clear');
+  statusEl.textContent = flagged ? '⚑ Score = 0 · Oral Defense' : '✓ Appears Hand-Drawn';
+  warnEl.classList.toggle('visible', flagged);
+}
+
+// ── INJECT CRITERION COMMENT FIELDS ──────────────────────
+const criterionNames = ['Biological Accuracy','Mechanism in Motion','Logical Sequence','Complete Labeling','Organization'];
+document.querySelectorAll('.criterion-body').forEach((body, idx) => {
+  const critName = criterionNames[idx % 5];
+  const comment = document.createElement('div');
+  comment.className = 'criterion-comment';
+  comment.innerHTML = `<label>Grader comment · ${critName}</label><textarea placeholder="Note any specific errors, missing elements, or justification for partial credit…"></textarea>`;
+  body.appendChild(comment);
+});
+
+// ── INIT ──────────────────────────────────────────────────
+updateAll();
+</script>
+</body>
+</html>
