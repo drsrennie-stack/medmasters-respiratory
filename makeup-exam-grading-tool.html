@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Make-Up Exam · Human Physiology · Grading Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F4EFE6;
+    --cream-mid: #EDE6D9;
+    --cream-dark: #DDD5C5;
+    --sage: #4A6741;
+    --sage-light: #6A8F60;
+    --sage-pale: #D6E4D2;
+    --terra: #B05C38;
+    --terra-light: #E8B09A;
+    --terra-pale: #F5E0D7;
+    --navy: #2B3A5C;
+    --charcoal: #2C2B28;
+    --mid: #6B6760;
+    --light-border: #C8C0B0;
+    --white: #FFFFFF;
+    --checked-bg: #EBF3E8;
+    --gold: #C8922A;
+    --gold-pale: #FFF8EC;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--charcoal);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  /* ── HEADER ─────────────────────────────────────────── */
+  .page-header {
+    background: var(--navy);
+    color: var(--cream);
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .page-header h1 {
+    font-family: 'Spectral', serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.3;
+  }
+  .page-header .sub {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream-dark);
+    margin-bottom: 4px;
+  }
+  .header-right {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 18px;
+    border-radius: 4px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+  .btn-reset {
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,0.35);
+    color: var(--cream);
+  }
+  .btn-reset:hover { background: rgba(255,255,255,0.1); }
+  .btn-print {
+    background: var(--terra);
+    color: var(--white);
+  }
+  .btn-print:hover { background: #C96B43; }
+
+  /* ── STUDENT BAR ──────────────────────────────────── */
+  .student-bar {
+    background: var(--navy);
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .student-bar label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream-dark);
+    white-space: nowrap;
+  }
+  .student-bar input[type="text"] {
+    flex: 1;
+    max-width: 280px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 3px;
+    padding: 7px 12px;
+    color: var(--white);
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    outline: none;
+  }
+  .student-bar input[type="text"]::placeholder { color: rgba(255,255,255,0.4); }
+  .student-bar input[type="text"]:focus { border-color: var(--terra-light); }
+
+  /* ── DAY SELECTOR ─────────────────────────────────── */
+  .day-selector {
+    display: flex;
+    gap: 4px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 5px;
+    padding: 3px;
+  }
+  .day-btn {
+    padding: 6px 16px;
+    border-radius: 3px;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.6);
+    transition: all 0.15s;
+  }
+  .day-btn.active {
+    background: var(--terra);
+    color: var(--white);
+  }
+  .day-btn:not(.active):hover { background: rgba(255,255,255,0.1); color: var(--white); }
+
+  /* ── GRAND SCORE / PASS INDICATOR ─────────────────── */
+  .grand-score-display {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .pass-indicator {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 3px;
+  }
+  .pass-indicator.neutral { color: var(--cream-dark); background: rgba(255,255,255,0.08); }
+  .pass-indicator.pass { color: #fff; background: var(--sage); }
+  .pass-indicator.fail { color: #fff; background: var(--terra); }
+  .grand-score-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream-dark);
+  }
+  .grand-score-val {
+    font-family: 'Spectral', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--terra-light);
+    min-width: 80px;
+    text-align: right;
+  }
+
+  /* ── TABS ────────────────────────────────────────── */
+  .tabs-bar {
+    background: var(--cream-mid);
+    border-bottom: 2px solid var(--light-border);
+    display: flex;
+    padding: 0 32px;
+    overflow-x: auto;
+  }
+  .tab-btn {
+    padding: 14px 24px 12px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--mid);
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    white-space: nowrap;
+    transition: all 0.15s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .tab-btn .tab-title { font-size: 12px; }
+  .tab-btn .tab-score { font-size: 11px; font-weight: 400; color: var(--mid); }
+  .tab-btn:hover { color: var(--sage); }
+  .tab-btn.active { color: var(--navy); border-bottom-color: var(--terra); font-weight: 600; }
+  .tab-btn.active .tab-score { color: var(--terra); font-weight: 500; }
+
+  /* ── MAIN CONTENT ──────────────────────────────── */
+  .main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 40px 60px;
+  }
+  .problem-panel { display: none; }
+  .problem-panel.active { display: block; }
+
+  /* ── PROBLEM HEADER ─────────────────────────────── */
+  .problem-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1.5px solid var(--light-border);
+    gap: 20px;
+  }
+  .problem-title {
+    font-family: 'Spectral', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 5px;
+  }
+  .problem-subtitle {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+  .problem-score-box {
+    text-align: center;
+    background: var(--white);
+    border: 2px solid var(--light-border);
+    border-radius: 6px;
+    padding: 12px 20px;
+    min-width: 110px;
+    flex-shrink: 0;
+  }
+  .problem-score-box .score-num {
+    font-family: 'Spectral', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--terra);
+    line-height: 1;
+  }
+  .problem-score-box .score-denom {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-top: 3px;
+  }
+
+  /* ── CRITERION ───────────────────────────────────── */
+  .criterion {
+    background: var(--white);
+    border: 1.5px solid var(--light-border);
+    border-radius: 6px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .criterion-header {
+    display: flex;
+    align-items: center;
+    padding: 13px 18px;
+    background: var(--cream-mid);
+    border-bottom: 1.5px solid var(--light-border);
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .criterion-header:hover { background: var(--cream-dark); }
+  .criterion-name {
+    font-weight: 600;
+    font-size: 13.5px;
+    letter-spacing: 0.03em;
+    color: var(--navy);
+    flex: 1;
+  }
+  .criterion-tag {
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mid);
+    background: var(--cream-dark);
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+  .criterion-pts {
+    font-family: 'Spectral', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--terra);
+    min-width: 60px;
+    text-align: right;
+  }
+  .criterion-pts span { font-size: 12px; font-weight: 400; color: var(--mid); }
+  .chevron { font-size: 11px; color: var(--mid); transition: transform 0.2s; margin-left: 4px; }
+  .criterion.collapsed .chevron { transform: rotate(-90deg); }
+  .criterion-body { padding: 16px 18px; }
+  .criterion.collapsed .criterion-body { display: none; }
+
+  .rubric-hint {
+    font-size: 12px;
+    color: var(--mid);
+    background: var(--cream);
+    border-left: 3px solid var(--sage-pale);
+    padding: 8px 12px;
+    margin-bottom: 14px;
+    border-radius: 0 3px 3px 0;
+    line-height: 1.5;
+  }
+  .rubric-hint strong { color: var(--sage); }
+
+  /* ── CHECKLIST ITEMS ────────────────────────────── */
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 5px;
+    margin-bottom: 6px;
+    border: 1.5px solid var(--cream-dark);
+    background: var(--cream);
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .check-item:hover { border-color: var(--sage-light); background: #F0F5EE; }
+  .check-item.checked { background: var(--checked-bg); border-color: var(--sage); }
+  .check-item.half-credit { background: var(--gold-pale); border-color: var(--gold); }
+  .check-item.half-credit .check-label { color: #9A6A1A; }
+  .check-item.half-credit .check-pts { color: var(--gold); }
+  .check-item.half-credit::after { content: '½ · 2.5 pt'; font-size: 11px; font-weight: 700; color: var(--gold); margin-left: 6px; white-space: nowrap; align-self: center; }
+  .check-item input[type="checkbox"] {
+    width: 17px; height: 17px; flex-shrink: 0; margin-top: 1px;
+    accent-color: var(--sage); cursor: pointer;
+  }
+  .check-content { flex: 1; }
+  .check-label { font-size: 13.5px; line-height: 1.5; color: var(--charcoal); }
+  .check-item.checked .check-label { color: var(--sage); }
+  .check-pts { font-size: 12px; font-weight: 600; color: var(--terra); white-space: nowrap; margin-top: 1px; flex-shrink: 0; }
+  .check-item.checked .check-pts { color: var(--sage); }
+
+  /* ── CRITERION COMMENTS ─────────────────────────── */
+  .criterion-comment { margin-top: 10px; border-top: 1px dashed var(--light-border); padding-top: 10px; }
+  .criterion-comment label {
+    display: block; font-size: 10.5px; font-weight: 500;
+    letter-spacing: 0.09em; text-transform: uppercase; color: var(--mid); margin-bottom: 5px;
+  }
+  .criterion-comment textarea {
+    width: 100%; min-height: 50px; background: var(--cream);
+    border: 1.5px solid var(--light-border); border-radius: 4px;
+    padding: 7px 11px; font-family: 'Jost', sans-serif; font-size: 13px;
+    color: var(--charcoal); resize: vertical; outline: none; line-height: 1.5;
+  }
+  .criterion-comment textarea:focus { border-color: var(--terra-light); }
+
+  /* ── SCORE SUMMARY ───────────────────────────────── */
+  .score-summary {
+    display: flex; gap: 8px; margin: 20px 0 10px;
+    background: var(--white); border: 1.5px solid var(--light-border);
+    border-radius: 6px; padding: 16px; flex-wrap: wrap;
+  }
+  .score-col { flex: 1; text-align: center; min-width: 60px; }
+  .crit-name { font-size: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mid); margin-bottom: 4px; }
+  .crit-val { font-family: 'Spectral', serif; font-size: 22px; font-weight: 700; color: var(--terra); }
+  .crit-max { font-size: 11px; color: var(--mid); }
+
+  /* ── PROGRESS BAR ────────────────────────────────── */
+  .progress-wrap { height: 4px; background: var(--cream-dark); border-radius: 2px; margin-bottom: 24px; }
+  .progress-bar { height: 100%; background: var(--sage); border-radius: 2px; transition: width 0.3s ease; }
+
+  /* ── NOTES SECTION ───────────────────────────────── */
+  .notes-section { margin-top: 20px; }
+  .notes-section label {
+    display: block; font-size: 10.5px; font-weight: 500;
+    letter-spacing: 0.09em; text-transform: uppercase; color: var(--mid); margin-bottom: 6px;
+  }
+  .notes-section textarea {
+    width: 100%; min-height: 70px; background: var(--white);
+    border: 1.5px solid var(--light-border); border-radius: 4px;
+    padding: 9px 13px; font-family: 'Jost', sans-serif; font-size: 13px;
+    color: var(--charcoal); resize: vertical; outline: none; line-height: 1.5;
+  }
+  .notes-section textarea:focus { border-color: var(--terra-light); }
+
+  /* ── NO-SUBMIT BANNER ────────────────────────────── */
+  .no-submit-banner {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--cream); border: 1.5px solid var(--light-border);
+    border-radius: 5px; padding: 10px 16px; margin-bottom: 14px; gap: 12px;
+  }
+  .no-submit-banner.active { background: var(--terra-pale); border-color: var(--terra); }
+  .no-submit-toggle { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .ns-box {
+    width: 18px; height: 18px; border: 2px solid var(--light-border);
+    border-radius: 3px; display: inline-block; flex-shrink: 0;
+    background: var(--white); transition: all 0.15s;
+  }
+  .no-submit-banner.active .ns-box { background: var(--terra); border-color: var(--terra); }
+  .ns-label { font-size: 13px; font-weight: 500; color: var(--mid); }
+  .no-submit-banner.active .ns-label { color: var(--terra); font-weight: 600; }
+  .ns-result { font-size: 12px; font-weight: 600; color: var(--mid); }
+  .no-submit-banner.active .ns-result { color: var(--terra); }
+
+  /* ── AUTH CHECK ──────────────────────────────────── */
+  .auth-check {
+    background: var(--white); border: 1.5px solid var(--light-border);
+    border-radius: 6px; margin-bottom: 20px; overflow: hidden;
+  }
+  .auth-check-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 18px; background: var(--cream-mid);
+    border-bottom: 1.5px solid var(--light-border);
+  }
+  .auth-icon { font-size: 16px; color: var(--mid); }
+  .auth-check-header h3 { flex: 1; font-size: 13px; font-weight: 600; color: var(--navy); }
+  .auth-status { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mid); padding: 3px 8px; border-radius: 3px; background: var(--cream-dark); }
+  .auth-status.flagged { background: var(--terra); color: var(--white); }
+  .auth-status.clear { background: var(--sage-pale); color: var(--sage); }
+  .auth-body { padding: 14px 18px; }
+  .auth-intro { font-size: 12.5px; color: var(--mid); margin-bottom: 12px; line-height: 1.5; }
+  .auth-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px; }
+  .auth-item {
+    display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px;
+    border-radius: 4px; border: 1.5px solid var(--cream-dark);
+    background: var(--cream); cursor: pointer; transition: all 0.15s;
+  }
+  .auth-item:hover { border-color: var(--terra-light); }
+  .auth-item.flagged-item { background: var(--terra-pale); border-color: var(--terra); }
+  .auth-item input[type="checkbox"] { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; accent-color: var(--terra); cursor: pointer; }
+  .auth-item-label { font-size: 12px; color: var(--charcoal); line-height: 1.4; }
+  .auth-item.flagged-item .auth-item-label { color: var(--terra); }
+  .auth-warning {
+    display: none; background: var(--terra); color: var(--white);
+    border-radius: 4px; padding: 10px 14px; font-size: 12.5px;
+    font-weight: 600; margin-bottom: 10px; line-height: 1.4;
+  }
+  .auth-warning.visible { display: block; }
+  .auth-check.is-flagged .auth-check-header { background: var(--terra-pale); border-bottom-color: var(--terra); }
+  .auth-comment label { display: block; font-size: 10.5px; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; color: var(--mid); margin-bottom: 5px; }
+  .auth-comment textarea {
+    width: 100%; min-height: 50px; background: var(--cream);
+    border: 1.5px solid var(--light-border); border-radius: 4px;
+    padding: 7px 11px; font-family: 'Jost', sans-serif; font-size: 13px;
+    color: var(--charcoal); resize: vertical; outline: none;
+  }
+
+  /* ── THRESHOLD NOTICE ────────────────────────────── */
+  .threshold-notice {
+    background: var(--cream-mid); border: 1.5px solid var(--light-border);
+    border-radius: 5px; padding: 10px 16px; margin-bottom: 20px;
+    font-size: 12px; color: var(--mid); display: flex; align-items: center; gap: 10px;
+  }
+  .threshold-notice strong { color: var(--navy); }
+
+  /* ── AUTO DEDUCTIONS PANEL ───────────────────────── */
+  .deductions-panel {
+    background: var(--white); border: 1.5px solid var(--light-border);
+    border-radius: 6px; margin-bottom: 20px; overflow: hidden;
+  }
+  .deductions-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 18px; background: var(--cream-mid);
+    border-bottom: 1.5px solid var(--light-border); cursor: pointer; user-select: none;
+  }
+  .deductions-header:hover { background: var(--cream-dark); }
+  .deductions-header h3 { flex: 1; font-size: 13px; font-weight: 600; color: var(--navy); }
+  .deductions-header .chevron { font-size: 11px; color: var(--mid); transition: transform 0.2s; }
+  .deductions-panel.collapsed .deductions-header .chevron { transform: rotate(-90deg); }
+  .deductions-body { padding: 14px 18px; }
+  .deductions-panel.collapsed .deductions-body { display: none; }
+  .deduction-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 12px; border-radius: 4px; margin-bottom: 6px;
+    border: 1.5px solid var(--cream-dark); background: var(--cream); cursor: pointer;
+    transition: all 0.15s;
+  }
+  .deduction-item:hover { border-color: var(--terra-light); }
+  .deduction-item.active { background: var(--terra-pale); border-color: var(--terra); }
+  .deduction-item input[type="checkbox"] { width: 16px; height: 16px; flex-shrink: 0; accent-color: var(--terra); }
+  .deduction-item-label { flex: 1; font-size: 13px; color: var(--charcoal); }
+  .deduction-item.active .deduction-item-label { color: var(--terra); font-weight: 500; }
+  .deduction-pts { font-size: 12px; font-weight: 600; color: var(--terra); }
+
+  @media (max-width: 700px) {
+    .page-header { padding: 20px; flex-direction: column; align-items: flex-start; }
+    .main { padding: 20px; }
+    .auth-grid { grid-template-columns: 1fr; }
+    .student-bar { padding: 12px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════ PAGE HEADER -->
+<div class="page-header">
+  <div>
+    <div class="sub">Human Physiology · Make-Up Exam</div>
+    <h1>Drawing Exam · Grading Tool</h1>
+  </div>
+  <div class="header-right">
+    <button class="btn btn-reset" onclick="resetAll()">↺ Reset</button>
+    <button class="btn btn-print" onclick="smartPrint()">�쇄 Print / Save PDF</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ STUDENT BAR -->
+<div class="student-bar">
+  <label>Student</label>
+  <input type="text" id="studentName" placeholder="Enter student name…">
+
+  <label style="margin-left:12px;">Exam Day</label>
+  <div class="day-selector">
+    <button class="day-btn active" id="dayBtnSunday" onclick="switchDay('sunday')">Sunday</button>
+    <button class="day-btn" id="dayBtnSaturday" onclick="switchDay('saturday')">Saturday</button>
+  </div>
+
+  <div class="grand-score-display">
+    <span class="pass-indicator neutral" id="passIndicator">80% req. to pass</span>
+    <span class="grand-score-label">Total</span>
+    <span class="grand-score-val" id="grandTotal">0 / 300</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ TABS BAR -->
+<div class="tabs-bar" id="tabsBar">
+  <!-- Populated by JS -->
+</div>
+
+<!-- ══════════════════════════════════════ MAIN -->
+<div class="main" id="mainContent">
+  <!-- Populated by JS -->
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  CONSTANTS
+// ══════════════════════════════════════════════════════
+const PROBLEMS = 3;
+const CRITERIA = 5;
+const ITEM_PTS = 5;
+const CRIT_MAXES = [25, 30, 20, 15, 10];
+const CRIT_NAMES_DISPLAY = ['Build', 'Explain', 'Modify', 'Predict', 'Depth'];
+let currentDay = 'sunday';
+
+// ══════════════════════════════════════════════════════
+//  AUTHENTICITY FLAGS
+// ══════════════════════════════════════════════════════
+const authFlags = [
+  { id: 'a1', label: 'Lines and arrows are perfectly smooth or vector-like — not consistent with hand drawing' },
+  { id: 'a2', label: 'Labels appear typed or printed, not handwritten' },
+  { id: 'a3', label: 'Layout is suspiciously symmetrical, grid-aligned, or template-like' },
+  { id: 'a4', label: 'Structures use clip-art-style icons or pre-made anatomical illustrations' },
+  { id: 'a5', label: 'Drawing appears "assembled" from components rather than composed as a whole' },
+  { id: 'a6', label: 'No visible corrections, erasures, or evidence of iterative thinking' },
+  { id: 'a7', label: 'Uniform line weight throughout — no natural variation from a drawing hand' },
+  { id: 'a8', label: 'Suspiciously complete and perfect — every element present with no gaps or hesitation marks' },
+];
+
+// ══════════════════════════════════════════════════════
+//  AUTOMATIC DEDUCTIONS (per question)
+// ══════════════════════════════════════════════════════
+const autoDeductions = [
+  { id: 'd1', label: 'Paragraph text written instead of diagram-based explanation', pts: -15, range: '−10 to −20' },
+  { id: 'd2', label: 'Did not fill one full page', pts: -7, range: '−5 to −10' },
+  { id: 'd3', label: 'Missing a required section (Build / Explain / Modify / Predict)', pts: -10, range: '−10+ per section' },
+  { id: 'd4', label: 'Illegible or disorganized — cannot follow the diagram', pts: -10, range: '−5 to −15' },
+];
+
+// ══════════════════════════════════════════════════════
+//  EXAM DATA
+// ══════════════════════════════════════════════════════
+const examData = {
+  sunday: [
+    {
+      title: "Primary Active Transport",
+      subtitle: "Na⁺/K⁺ ATPase · Resting Membrane Potential · Ischemia",
+      criteria: [
+        {
+          name: "Build", tag: "Structure", max: 25,
+          hint: "Exemplary (25): All required structures correct and labeled. Spatial relationships accurate. Ion directionality shown. No required element missing.",
+          items: [
+            "Na⁺/K⁺-ATPase drawn and labeled; membrane orientation correct; intracellular (ICF) vs. extracellular (ECF) space clearly distinguished and labeled on diagram",
+            "3 Na⁺ ions shown exiting (ICF → ECF) and 2 K⁺ ions entering (ECF → ICF) per cycle; directional arrows correct for each ion species",
+            "ATP hydrolysis labeled at pump: ATP → ADP + Pᵢ shown; phosphorylation of the pump shown as the energy step driving conformational change",
+            "Resulting ion gradients annotated: high [Na⁺] outside / low inside; high [K⁺] inside / low outside; net negative charge inside cell noted",
+            "All required labels present: Na⁺/K⁺-ATPase (or Na⁺/K⁺ pump), ATP, ADP, Na⁺, K⁺, ICF, ECF; no required structure or molecule left unlabeled"
+          ]
+        },
+        {
+          name: "Explain", tag: "Mechanism", max: 30,
+          hint: "Exemplary (30): Explanation fully embedded in diagram. Full pump cycle annotated. Electrogenic contribution explained. Resting membrane potential mechanism shown. Cause-and-effect chain visible.",
+          items: [
+            "Primary active transport defined on diagram: ATP used directly to move ions against their concentration gradients (uphill, energy-requiring transport)",
+            "Full pump cycle annotated: Na⁺ binds intracellular face → ATP hydrolysis / phosphorylation → conformational change → Na⁺ released extracellularly → K⁺ binds extracellular face → dephosphorylation → K⁺ released intracellularly",
+            "Electrogenic nature of pump explained: 3 Na⁺ out / 2 K⁺ in = net 1 positive charge exported per cycle; contribution to negative resting membrane potential annotated",
+            "Resting membrane potential explained on diagram: pump + K⁺ leak channels together establish ~−70 mV; both contributions labeled with their roles",
+            "Electrical disequilibrium annotated: ions are actively maintained at unequal concentrations across the membrane; active pumping constantly counteracts passive leak; this is a stable non-equilibrium steady state",
+            "Cause-and-effect chain fully visible and connected with arrows: pump activity → ion gradient → membrane potential → electrical disequilibrium; each step leads logically to the next"
+          ]
+        },
+        {
+          name: "Modify", tag: "Perturbation", max: 20,
+          hint: "Exemplary (20): ATP removal clearly marked. Pump halted and labeled. Ion gradient collapse shown for both Na⁺ and K⁺. Membrane potential change and osmotic swelling annotated step-by-step.",
+          items: [
+            "ATP removal clearly marked on diagram; pump shown as halted and non-functional (crossed out, labeled 'pump stops,' or equivalent notation)",
+            "Ion gradient collapse traced with arrows: Na⁺ leaks into cell via Na⁺ channels (shown); K⁺ leaks out via K⁺ leak channels (shown); intracellular ion concentrations change labeled",
+            "Membrane potential change annotated: depolarization occurs as gradients collapse; membrane potential moves toward 0 mV or positive values; change labeled on diagram",
+            "Osmotic consequence shown: intracellular Na⁺ accumulation → increased intracellular osmolarity → water enters by osmosis → cell swelling depicted and labeled"
+          ]
+        },
+        {
+          name: "Predict", tag: "Consequences", max: 15,
+          hint: "Exemplary (15): Ischemic context established. Sequential cellular consequences shown step-by-step. Final cell death outcome connected to molecular cascade.",
+          items: [
+            "Ischemic context established: blood flow/O₂ loss → oxidative phosphorylation fails → ATP depleted → pump failure; initiating cascade annotated on diagram",
+            "Sequential cellular consequences shown step-by-step: Na⁺ and Ca²⁺ accumulate intracellularly → sustained membrane depolarization → water influx → cellular swelling → mitochondrial dysfunction → organelle failure",
+            "Final functional outcome annotated and connected: progression to cell death/necrosis traced from molecular cascade to tissue-level loss of function; all steps connected by arrows"
+          ]
+        },
+        {
+          name: "Depth", tag: "Precision", max: 10,
+          hint: "Exemplary (10): ALL four sections addressed. Demonstrates conceptual depth. Pump's role in electrochemical homeostasis and cell volume regulation shown, not just memorized.",
+          items: [
+            "All four sections (Build / Explain / Modify / Predict) fully completed with no missing component; one full page used",
+            "Understanding demonstrated beyond diagram recall: pump's essential role in maintaining electrochemical homeostasis and cell volume regulation clearly demonstrated conceptually"
+          ]
+        }
+      ]
+    },
+    {
+      title: "Vesicular Transport",
+      subtitle: "Endocytosis · Exocytosis · Lysosomal Failure",
+      criteria: [
+        {
+          name: "Build", tag: "Structure", max: 25,
+          hint: "Exemplary (25): All three endocytosis forms correctly depicted. Vesicle maturation pathway shown. Lysosome, vesicle-lysosome fusion, and exocytosis all labeled and spatially accurate.",
+          items: [
+            "Plasma membrane drawn; phagocytosis shown with pseudopod engulfment of large solid particle → phagosome formation labeled",
+            "Pinocytosis shown (fluid-phase uptake, small membrane invagination → pinocytic vesicle); receptor-mediated endocytosis shown (ligand-receptor binding → clathrin-coated pit → clathrin-coated vesicle); both labeled and visually distinct",
+            "Vesicle maturation pathway shown: early endosome → late endosome labeled; membrane invagination and vesicle pinching off depicted with directional arrows",
+            "Lysosome drawn and labeled with acid hydrolases noted inside; vesicle-lysosome fusion shown; degradation products labeled as recycled back to cytoplasm",
+            "Exocytosis shown: secretory vesicle → docking at plasma membrane → membrane fusion → contents released extracellularly; all components labeled"
+          ]
+        },
+        {
+          name: "Explain", tag: "Mechanism", max: 30,
+          hint: "Exemplary (30): Molecules requiring vesicular transport explained. All three endocytosis forms distinguished mechanistically (not just named). Lysosomal enzyme function annotated. Exocytosis mechanism shown.",
+          items: [
+            "Molecules requiring vesicular transport annotated on diagram: large macromolecules, pathogens, polar/charged molecules, lipids — substances that cannot directly cross the phospholipid bilayer",
+            "Phagocytosis mechanistically described on diagram: actin-driven pseudopod extension, large solid particles (bacteria, dead cells, debris), primarily immune-cell function",
+            "Pinocytosis mechanistically described: fluid-phase, non-specific uptake of extracellular fluid; small membrane invagination; distinct from phagocytosis in cargo size and specificity",
+            "Receptor-mediated endocytosis mechanistically described: ligand-receptor specificity required, clathrin coat formation, efficient targeted uptake; example cargo labeled (e.g., LDL, transferrin, hormones)",
+            "Lysosomal enzyme function annotated: acid hydrolases active at pH ~4.5–5; degrade proteins, lipids, carbohydrates, nucleic acids; degradation products recycled to cytoplasm for reuse",
+            "Exocytosis mechanism annotated: SNARE-protein-mediated vesicle docking and membrane fusion; cargo released extracellularly; constitutive vs. regulated secretion noted or implied on diagram"
+          ]
+        },
+        {
+          name: "Modify", tag: "Perturbation", max: 20,
+          hint: "Exemplary (20): Mutation clearly applied to lysosome. Glycolipid accumulation shown progressively. Cellular consequences (enlarged lysosomes, crowded cytoplasm) depicted. Lysosomal storage concept shown.",
+          items: [
+            "Mutation shown on diagram: lysosomal glycolipid-degrading enzyme absent or non-functional; labeled directly on the lysosome structure",
+            "Consequence shown: glycolipids arrive in lysosome → cannot be degraded → accumulate inside → lysosome enlarges; depicted visually with before/after or progressive state",
+            "Progressive accumulation depicted: multiple enlarged lysosomes shown; cytoplasm increasingly crowded with undegraded glycolipid material; labeled as building up over time",
+            "Cellular dysfunction annotated: impaired organelle trafficking, lysosomal pathway disrupted; connection to lysosomal storage disease concept labeled on diagram"
+          ]
+        },
+        {
+          name: "Predict", tag: "Consequences", max: 15,
+          hint: "Exemplary (15): Neuron-specific vulnerability established. Step-by-step sequence from intracellular accumulation to physiological outcome traced on diagram.",
+          items: [
+            "Neuron-specific vulnerability established on diagram: neurons are non-dividing (cannot dilute material), long-lived, have high membrane lipid turnover and extensive axonal/dendritic membrane to maintain",
+            "Step-by-step sequence shown: glycolipid accumulation → lysosome swelling → impaired axonal and dendritic transport → disrupted neurotransmission → synaptic failure and neuronal dysfunction",
+            "Physiological consequence at organ level annotated and connected: progressive neurological deterioration, neuronal death, and loss of motor/sensory/cognitive function traced from intracellular cascade to clinical outcome"
+          ]
+        },
+        {
+          name: "Depth", tag: "Precision", max: 10,
+          hint: "Exemplary (10): All three endocytosis forms genuinely distinguished (not just named). Lysosomal storage concept demonstrated with mechanistic depth. All four sections complete on one page.",
+          items: [
+            "All three endocytosis forms distinguished mechanistically on diagram with distinct labeled components; phagocytosis, pinocytosis, and RME each show their unique mechanistic elements (not just names written)",
+            "All four sections fully completed; no section omitted; explanation embedded throughout diagram (no paragraph text visible); one full page used"
+          ]
+        }
+      ]
+    },
+    {
+      title: "GPCR Signaling",
+      subtitle: "cAMP Cascade · G Protein Activation · Amplification",
+      criteria: [
+        {
+          name: "Build", tag: "Structure", max: 25,
+          hint: "Exemplary (25): All required GPCR pathway components drawn and labeled. G protein subunits shown. Adenylyl cyclase and cAMP labeled. PKA activation shown. Amplification cascade depicted.",
+          items: [
+            "Cell membrane drawn; first messenger (ligand/hormone) labeled extracellularly; GPCR drawn spanning membrane with extracellular binding domain and intracellular coupling domain shown",
+            "Heterotrimeric G protein (Gα, Gβ, Gγ subunits) drawn on cytoplasmic face of membrane; GDP bound to Gα in inactive state labeled",
+            "Adenylyl cyclase drawn as membrane-associated enzyme; cAMP shown as product of ATP → cAMP conversion; pyrophosphate or reaction arrow labeled",
+            "PKA structure shown: inactive (regulatory R + catalytic C subunits bound) → cAMP binds R subunits → C subunits released and active; each state labeled",
+            "Amplification cascade drawn: 1 receptor → multiple G protein activations → multiple adenylyl cyclase activations → large cAMP pool → many PKA molecules → multiple phosphorylation targets; branching expansion visible on diagram"
+          ]
+        },
+        {
+          name: "Explain", tag: "Mechanism", max: 30,
+          hint: "Exemplary (30): Signal transduction defined. Full cAMP pathway step-by-step annotated. Signal termination (GTPase and PDE) shown. Amplification quantitatively or visually demonstrated.",
+          items: [
+            "Signal transduction defined on diagram: extracellular first messenger converted to intracellular response through receptor-mediated cascade without the signal molecule entering the cell",
+            "Full cAMP pathway annotated step-by-step: ligand binds GPCR → GPCR activates Gα (GDP → GTP exchange) → Gα-GTP dissociates from Gβγ → Gα-GTP activates adenylyl cyclase → ATP → cAMP",
+            "PKA activation annotated: cAMP binds regulatory subunits of PKA → regulatory-catalytic association breaks → free catalytic subunits phosphorylate target proteins on serine/threonine residues",
+            "Signal termination annotated: intrinsic GTPase activity of Gα hydrolyzes GTP → GDP (Gα self-inactivates and re-associates with Gβγ); phosphodiesterase (PDE) degrades cAMP → AMP; both mechanisms labeled",
+            "Amplification concept demonstrated: 1 activated receptor → many G proteins → many AC activations → large cAMP pool → many PKA activations → many phosphorylated targets; scale shown numerically or as branching cascade",
+            "Complete cause-and-effect chain visible and connected by arrows: first messenger → GPCR → G protein → AC → cAMP → PKA → phosphorylation → physiological effect; no step missing"
+          ]
+        },
+        {
+          name: "Modify", tag: "Perturbation", max: 20,
+          hint: "Exemplary (20): Constitutively active Gα shown and labeled. Consequences to AC, cAMP, and PKA traced step-by-step. Physiological implication or disease connection annotated.",
+          items: [
+            "Constitutively active Gα shown: GTPase activity lost; Gα locked in GTP-bound active state; labeled on diagram (e.g., 'cannot self-inactivate,' 'GTP permanently bound')",
+            "Adenylyl cyclase consequence shown: permanently activated → continuous ATP → cAMP conversion; cAMP levels shown as continuously and abnormally elevated",
+            "PKA consequence annotated: catalytic subunits constitutively active → persistent and unregulated phosphorylation of target proteins; downstream effectors maximally activated",
+            "Physiological implication annotated: uncontrolled downstream signaling noted; disease connection labeled if present (e.g., cholera toxin ADP-ribosylates Gα, thyroid adenoma, constitutive receptor activation)"
+          ]
+        },
+        {
+          name: "Predict", tag: "Consequences", max: 15,
+          hint: "Exemplary (15): Non-degraded cAMP scenario established. Full pathway traced from altered second messenger levels to physiological consequence. Outcome annotated on diagram.",
+          items: [
+            "Non-degraded cAMP scenario established: PDE absent or inhibited; cAMP accumulation shown and labeled as the initiating perturbation",
+            "Pathway traced step-by-step: cAMP ↑↑ → PKA constitutively active → target proteins continuously phosphorylated → downstream effectors maximally and persistently activated; each step connected by arrows",
+            "Physiological consequence annotated at end of chain: sustained/unregulated cellular response named and connected to molecular cascade (e.g., sustained lipolysis, secretory diarrhea, prolonged cardiac stimulation, or equivalent tissue-appropriate outcome)"
+          ]
+        },
+        {
+          name: "Depth", tag: "Precision", max: 10,
+          hint: "Exemplary (10): Amplification demonstrated beyond just labeling it. GPCR cycle, second messenger role, and cascade termination all shown. All four sections complete on one page.",
+          items: [
+            "Amplification demonstrated quantitatively or visually beyond just the word 'amplification' written: numbers annotated at each step or branching cascade shows multiplicative effect (e.g., 1 → 10 → 100 → 1000)",
+            "All four sections fully addressed on one page; GPCR activation cycle, second messenger role, and signal termination (GTPase + PDE) all present; no section incomplete"
+          ]
+        }
+      ]
+    }
+  ],
+
+  saturday: [
+    {
+      title: "Osmolarity & Tonicity",
+      subtitle: "Red Blood Cells · Water Movement · Osmotic Consequences",
+      criteria: [
+        {
+          name: "Build", tag: "Structure", max: 25,
+          hint: "Exemplary (25): All three RBC scenarios accurately drawn with correct shapes. Solute concentrations depicted correctly for each scenario. Water movement direction shown. All labeled.",
+          items: [
+            "Three red blood cells drawn with correct and distinct shapes: isotonic (normal biconcave disc shape), hypertonic (crenated/shrunken/spiky), hypotonic (swollen/spherical or lysed)",
+            "Solute concentration differences annotated for each scenario: isotonic (solute equal inside and outside), hypertonic (higher concentration outside than inside), hypotonic (lower concentration outside than inside); solute particles drawn in correct relative quantities",
+            "Direction of water movement shown with arrows for each cell: isotonic (no net movement), hypertonic (water exits → ECF direction), hypotonic (water enters → from ECF into cell)",
+            "Semipermeable membrane drawn on each cell; water labeled as the permeant molecule that moves freely; solutes shown as non-permeant (cannot cross the membrane)",
+            "All three cells clearly labeled with solution type; osmolarity values or relative notation included (e.g., ~300 mOsm isotonic, >300 hypertonic, <300 hypotonic)"
+          ]
+        },
+        {
+          name: "Explain", tag: "Mechanism", max: 30,
+          hint: "Exemplary (30): All required terms (solvent, solute, solution, osmolarity, osmolality, isotonic, hypertonic, hypotonic) defined and demonstrated on diagram. Water movement determinant explained mechanistically.",
+          items: [
+            "Solvent, solute, and solution defined and labeled on diagram: water = solvent; dissolved particles = solutes; mixture = solution; each term demonstrated visually",
+            "Osmolarity defined and demonstrated: number of osmoles of solute per liter of solution; osmolality defined: osmoles per kilogram of solvent; distinction between the two noted on diagram",
+            "Isotonic defined and demonstrated: solution osmolarity equals cell osmolarity (~300 mOsm); no net water movement; cell maintains normal shape; mechanism annotated",
+            "Hypertonic defined and demonstrated: solution osmolarity exceeds cell osmolarity; water exits cell by osmosis; cell shrinks and crenates; cause-and-effect annotated",
+            "Hypotonic defined and demonstrated: solution osmolarity less than cell osmolarity; water enters cell by osmosis; cell swells; potential lysis shown and explained",
+            "Determinant of water movement explained on diagram: water moves by osmosis from region of lower solute concentration (higher water activity) to higher solute concentration; osmotic pressure concept labeled"
+          ]
+        },
+        {
+          name: "Modify", tag: "Perturbation", max: 20,
+          hint: "Exemplary (20): Extracellular solute increase clearly shown. Water movement direction annotated. Cell volume decrease and crenation depicted. Cell shape consequences labeled.",
+          items: [
+            "Dramatic increase in extracellular solute concentration shown on diagram: additional solute particles drawn outside cell; ECF osmolarity labeled as increased",
+            "Water movement direction annotated: water exits cell following osmotic gradient (from low solute concentration inside → high solute outside); directional arrows updated on diagram",
+            "Cell volume decrease labeled: cell shrinks; crenation/spiky surface depicted visually; intracellular fluid concentration rises as water is lost from cell",
+            "Cell shape and functional consequences noted: RBC crenation accurately drawn; impact on RBC deformability or ability to carry O₂ through narrow capillaries annotated"
+          ]
+        },
+        {
+          name: "Predict", tag: "Consequences", max: 15,
+          hint: "Exemplary (15): 3% saline RBC consequence shown with mechanism. Brain tissue consequence shown with mechanism. Both predictions traced step-by-step on diagram.",
+          items: [
+            "3% saline effect on RBCs shown: 3% NaCl is strongly hypertonic (~1,026 mOsm); water exits RBCs → crenation → reduced cell volume and deformability; functional impairment labeled and connected to mechanism",
+            "Rapid hypotonic IV fluid effect on brain shown step-by-step: plasma osmolarity drops → ECF osmolarity < ICF osmolarity → water moves into brain cells by osmosis → cerebral edema → increased intracranial pressure (ICP)",
+            "Brain-specific mechanism explained: skull is a rigid bony vault; cerebral edema cannot expand outward → pressure rises inside cranium → brain tissue compressed → herniation risk; consequence stated and connected to osmotic mechanism on diagram"
+          ]
+        },
+        {
+          name: "Depth", tag: "Precision", max: 10,
+          hint: "Exemplary (10): Osmolarity vs. osmolality distinction made. Tonicity distinguished from osmolarity. All terms demonstrated. All four sections complete on one page.",
+          items: [
+            "Osmolarity vs. osmolality distinction made on diagram; tonicity distinguished from osmolarity (tonicity considers only effective/non-permeant solutes; permeant solute like urea is osmotically active but not tonic)",
+            "All four sections completed fully; all three RBC scenarios depicted accurately with correct shapes; explanation embedded in diagram throughout (no paragraph text outside diagram)"
+          ]
+        }
+      ]
+    },
+    {
+      title: "Fluid Compartments & Ion Distribution",
+      subtitle: "ICF vs. ECF · Ion Gradients · Law of Mass Balance",
+      criteria: [
+        {
+          name: "Build", tag: "Structure", max: 25,
+          hint: "Exemplary (25): ICF and ECF clearly drawn as distinct compartments. Major ions correctly placed in each. Ion asymmetry visually clear. Na⁺/K⁺-ATPase shown. Relative volumes suggested.",
+          items: [
+            "ICF and ECF drawn as distinct compartments; cell membrane shown as the boundary; relative volumes suggested (ICF ≈ 2/3, ECF ≈ 1/3 of total body water)",
+            "Major ECF ions labeled: Na⁺ as predominant cation, Cl⁻ and HCO₃⁻ as major anions; approximate concentrations noted (Na⁺ ~145 mEq/L or labeled as 'high')",
+            "Major ICF ions labeled: K⁺ as predominant cation, phosphate (PO₄³⁻) and proteins as major anions; approximate concentrations noted (K⁺ ~140 mEq/L or labeled as 'high')",
+            "Ion asymmetry visually clear across membrane: Na⁺ high outside/low inside; K⁺ high inside/low outside; concentration gradient arrows shown crossing the membrane in correct directions",
+            "Na⁺/K⁺-ATPase shown on the cell membrane as the active mechanism maintaining ion distribution; 3 Na⁺ out / 2 K⁺ in labeled with directional arrows"
+          ]
+        },
+        {
+          name: "Explain", tag: "Mechanism", max: 30,
+          hint: "Exemplary (30): Na⁺ ECF predominance explained. K⁺ ICF predominance explained. Law of mass balance explained. ICF-ECF disequilibrium explained. Cause-and-effect visible throughout.",
+          items: [
+            "Na⁺ ECF predominance explained on diagram: Na⁺/K⁺-ATPase continuously pumps Na⁺ out; Na⁺ has limited resting membrane permeability; both the chemical gradient and pump maintain Na⁺ outside",
+            "K⁺ ICF predominance explained: pump actively brings K⁺ in; K⁺ has higher resting permeability (leak channels exist) but the electrical gradient (negative inside) retards K⁺ exit; net result keeps K⁺ concentrated inside",
+            "Law of mass balance explained on diagram: for any substance, total input = total output at steady state; body adjusts intake and excretion to maintain stable fluid and ion composition; annotated with arrows",
+            "ICF-ECF disequilibrium explained: ion concentrations are actively maintained at unequal values across membrane; pump constantly works against passive leak; this is a steady state maintained by energy input, not a passive equilibrium",
+            "Osmotic force across membrane noted: large negatively charged proteins trapped in ICF (impermeant) create oncotic/osmotic pressure; this is counteracted by active pumping and the resulting electrical gradient",
+            "Combined effect annotated: pump activity + protein impermeability + electrical gradient all work together to maintain stable ion asymmetry; cause-and-effect chain visible connecting all three factors"
+          ]
+        },
+        {
+          name: "Modify", tag: "Perturbation", max: 20,
+          hint: "Exemplary (20): Hypertonic saline added to ECF shown. Water shift direction annotated. Both ICF and ECF volume changes labeled. New equilibrium state described.",
+          items: [
+            "Hypertonic saline added to ECF shown on diagram: Na⁺ concentration in ECF rises; ECF osmolarity labeled as increased above normal",
+            "Water shift shown with arrows: water moves from ICF → ECF by osmosis (following higher osmolarity in ECF); directional arrows cross membrane in correct direction",
+            "Volume changes annotated: ICF volume decreases (cell shrinks, shown); ECF volume increases (expands, shown); both compartment changes labeled",
+            "New ionic equilibrium state described: intracellular concentrations rise as cell loses water; osmotic equilibrium eventually reached at new higher osmolarity; labeled on diagram"
+          ]
+        },
+        {
+          name: "Predict", tag: "Consequences", max: 15,
+          hint: "Exemplary (15): Dehydration fluid shifts shown. Rapid hypotonic IV infusion shifts shown. Brain/tissue consequences connected to osmotic mechanism step-by-step.",
+          items: [
+            "Dehydration prediction shown on diagram: water lost from ECF → ECF osmolarity rises → water shifts from ICF to ECF by osmosis → ICF volume decreases; sequence annotated step-by-step",
+            "Rapid IV hypotonic infusion prediction: ECF osmolarity drops below normal → water moves into cells from ECF → ICF expands → cellular swelling shown on diagram",
+            "Brain consequence annotated and connected to mechanism: neuronal swelling inside rigid cranial vault → cerebral edema → raised intracranial pressure → compression and herniation risk; traced from osmotic mechanism to physiological consequence"
+          ]
+        },
+        {
+          name: "Depth", tag: "Precision", max: 10,
+          hint: "Exemplary (10): Law of mass balance correctly applied. Pump's role in compartment identity explained. Both ICF and ECF used through all four sections. No section missing.",
+          items: [
+            "Law of mass balance correctly applied to fluid compartment regulation; Na⁺/K⁺-ATPase's role in maintaining compartment identity (not just ion gradient) explained — the pump is why compartments have different compositions",
+            "Both ICF and ECF compartments built, labeled, and used throughout all four sections; explanation embedded in diagram throughout; no section left incomplete; one full page used"
+          ]
+        }
+      ]
+    },
+    {
+      title: "Hormone Signaling Pathways",
+      subtitle: "Intracellular vs. Membrane Receptors · Genomic vs. Second Messenger Signaling",
+      criteria: [
+        {
+          name: "Build", tag: "Structure", max: 25,
+          hint: "Exemplary (25): Both pathways correctly drawn. Pathway 1 shows lipid-soluble hormone crossing membrane, intracellular receptor, nuclear binding. Pathway 2 shows membrane receptor, second messenger cascade. All structures labeled.",
+          items: [
+            "Pathway 1 (lipid-soluble hormone): hormone shown crossing plasma membrane; intracellular receptor drawn in cytoplasm; hormone-receptor complex shown translocating to nucleus; DNA response element (GRE/TRE/HRE) labeled",
+            "Pathway 2 (water-soluble hormone): hormone shown binding extracellular domain of membrane receptor; receptor drawn spanning membrane; intracellular domain on cytoplasmic side; hormone cannot cross membrane (shown or annotated)",
+            "Pathway 2 intracellular cascade: G protein or receptor-linked kinase shown; second messenger (cAMP, IP₃, Ca²⁺, or DAG) labeled; downstream kinase (PKA, PKC, or equivalent) activation shown",
+            "Both pathways drawn on the same cell or clearly side-by-side; visually distinct and independently followable from start to final effect",
+            "All key structures labeled: plasma membrane, hormone (labeled generically — class not yet named per instructions), intracellular receptor, nucleus, membrane receptor, second messenger, kinase, target proteins"
+          ]
+        },
+        {
+          name: "Explain", tag: "Mechanism", max: 30,
+          hint: "Exemplary (30): Hormone classes identified with justification. Membrane crossing explained. Membrane receptor requirement explained. Intracellular receptor pathway explained. Second messenger role explained. Pathway comparison shown.",
+          items: [
+            "Hormone classes identified in Explain section: Pathway 1 = steroid or thyroid hormone (lipid-soluble); Pathway 2 = peptide/protein hormone (water-soluble); class assignment justified on diagram with reasoning",
+            "Reason lipid-soluble hormone crosses membrane explained: non-polar and uncharged → dissolves through phospholipid bilayer; no transporter or surface receptor required; annotated on diagram",
+            "Reason peptide hormone requires membrane receptor explained: polar/hydrophilic/charged → cannot pass through lipid bilayer; must bind extracellular surface receptor to initiate intracellular signal; annotated",
+            "Intracellular receptor pathway mechanism explained: hormone-receptor complex acts as transcription factor → translocates to nucleus → binds DNA response element → alters gene transcription → mRNA produced → new protein synthesized → cellular effect",
+            "Second messenger role explained: membrane receptor activation → second messenger generated (cAMP, IP₃, Ca²⁺) → amplifies and distributes signal inside cell without hormone entering → activates downstream kinases → rapid cellular response",
+            "Pathway comparison annotated on diagram: steroid = direct nuclear effect, slow onset (hours–days), long duration; peptide = membrane receptor, fast onset (seconds–minutes), shorter duration; both onset and duration labeled"
+          ]
+        },
+        {
+          name: "Modify", tag: "Perturbation", max: 20,
+          hint: "Exemplary (20): Nuclear transcription block shown on diagram. Consequences to steroid pathway traced step-by-step. Contrast with unaffected peptide pathway shown. Mechanistic interruption clearly localized.",
+          items: [
+            "Nuclear transcription block shown on diagram: inhibition applied at the nuclear step of the steroid/lipid-soluble pathway (RNA polymerase blocked, response element blocked, or chromatin inaccessible); labeled and localized",
+            "Consequences to steroid pathway traced step-by-step: no mRNA produced → no new protein synthesized → no genomic/steroid response; each step in the interrupted cascade annotated",
+            "Contrast with peptide pathway shown: peptide/water-soluble hormone pathway (membrane receptor → second messenger) is NOT blocked by nuclear transcription inhibition; it continues to function; this distinction is visible on the diagram",
+            "Mechanistic consequences of transcription block fully traced: blocked transcription → absence of hormone-responsive target proteins → loss of downstream cellular response → functional deficit labeled at the end of the chain"
+          ]
+        },
+        {
+          name: "Predict", tag: "Consequences", max: 15,
+          hint: "Exemplary (15): Slow onset of steroid effects explained mechanistically. Long duration explained. Physiological consequence of transcription inhibition traced step-by-step to functional outcome.",
+          items: [
+            "Slow genomic onset explained on diagram: steroid → intracellular receptor → DNA binding → mRNA transcription → ribosomal translation → protein production → cellular effect; each step takes time; hours-to-days timeline annotated",
+            "Long duration explained: newly synthesized proteins have long half-lives; effect persists well after the hormone has been cleared from circulation; annotated as a contrast to rapid-but-brief peptide effects",
+            "Transcription inhibition physiological consequence traced: target cells cannot produce hormone-responsive proteins → loss of steroid-driven cellular function → organ-level consequence stated; specific examples annotated (e.g., no cortisol-responsive gluconeogenic enzymes, no thyroid hormone-responsive metabolic proteins)"
+          ]
+        },
+        {
+          name: "Depth", tag: "Precision", max: 10,
+          hint: "Exemplary (10): Both pathways meaningfully distinguished mechanistically. Genomic vs. non-genomic signaling concept demonstrated. All four sections complete on one page.",
+          items: [
+            "Both pathways meaningfully distinguished mechanistically (not just labeled 'fast' vs. 'slow'): mechanism of membrane crossing, receptor location, second messenger use, and nuclear vs. cytoplasmic site of action all demonstrated",
+            "All four sections completed with no omissions; one full page used; explanations embedded throughout the diagram (no paragraph text written outside the diagram context)"
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+// ══════════════════════════════════════════════════════
+//  RENDER PANELS
+// ══════════════════════════════════════════════════════
+function renderPanels(day) {
+  const data = examData[day];
+  const main = document.getElementById('mainContent');
+  const tabsBar = document.getElementById('tabsBar');
+
+  main.innerHTML = '';
+  tabsBar.innerHTML = '';
+
+  data.forEach((q, pIdx) => {
+    // Tab button
+    const tab = document.createElement('button');
+    tab.className = 'tab-btn' + (pIdx === 0 ? ' active' : '');
+    tab.id = `tab${pIdx}`;
+    tab.onclick = () => switchTab(pIdx);
+    tab.innerHTML = `<span class="tab-title">Question ${pIdx + 1}: ${q.title}</span><span class="tab-score" id="tabScore${pIdx}">0 / 100</span>`;
+    tabsBar.appendChild(tab);
+
+    // Panel
+    const panel = document.createElement('div');
+    panel.className = 'problem-panel' + (pIdx === 0 ? ' active' : '');
+    panel.id = `panel${pIdx}`;
+
+    // Problem header
+    const header = document.createElement('div');
+    header.className = 'problem-header';
+    header.innerHTML = `
+      <div>
+        <div class="problem-subtitle">Question ${pIdx + 1} of 3 · ${currentDay === 'sunday' ? 'Sunday' : 'Saturday'} Exam</div>
+        <div class="problem-title">${q.title}</div>
+        <div class="problem-subtitle" style="margin-top:6px;">${q.subtitle}</div>
+      </div>
+      <div class="problem-score-box">
+        <div class="score-num" id="p${pIdx}total">0</div>
+        <div class="score-denom">/ 100 pts</div>
+      </div>`;
+    panel.appendChild(header);
+
+    // No submit banner
+    const noSubBanner = document.createElement('div');
+    noSubBanner.className = 'no-submit-banner';
+    noSubBanner.id = `noSubBanner${pIdx}`;
+    noSubBanner.innerHTML = `
+      <label class="no-submit-toggle" onclick="event.stopPropagation()">
+        <input type="checkbox" id="noSubmit${pIdx}" onchange="toggleNoSubmit(${pIdx})">
+        <span class="ns-box"></span>
+        <span class="ns-label">Did not submit — no work turned in</span>
+      </label>
+      <span class="ns-result">Score: 0 / 100</span>`;
+    panel.appendChild(noSubBanner);
+
+    // Auth check
+    const authEl = document.createElement('div');
+    authEl.className = 'auth-check';
+    authEl.id = `auth${pIdx}`;
+    authEl.innerHTML = `
+      <div class="auth-check-header">
+        <span class="auth-icon">✎</span>
+        <h3>Authenticity Check — Hand-Drawn Verification</h3>
+        <span class="auth-status" id="authStatus${pIdx}">Not reviewed</span>
+      </div>
+      <div class="auth-body">
+        <p class="auth-intro">Flag any characteristics suggesting this drawing was generated, templated, or assembled rather than hand-drawn. <strong>One or more flags → score = 0 and oral defense required.</strong></p>
+        <div class="auth-grid">
+          ${authFlags.map(f => `
+          <div class="auth-item" onclick="toggleAuthFlag(this, ${pIdx})" id="af-${pIdx}-${f.id}">
+            <input type="checkbox">
+            <span class="auth-item-label">${f.label}</span>
+          </div>`).join('')}
+        </div>
+        <div class="auth-warning" id="authWarn${pIdx}">
+          <strong>⚑ Score = 0. Flagged for Oral Defense.</strong> Per assignment policy, this submission will be set aside. The student will be asked to explain their drawing in person.
+        </div>
+        <div class="auth-comment">
+          <label>Authenticity notes</label>
+          <textarea placeholder="Describe specific concerns…"></textarea>
+        </div>
+      </div>`;
+    panel.appendChild(authEl);
+
+    // Threshold notice
+    const threshold = document.createElement('div');
+    threshold.className = 'threshold-notice';
+    threshold.innerHTML = `<strong>Grading threshold:</strong>&nbsp; Student must earn ≥ 80% (240 / 300 total across all 3 questions) to receive credit. Score below 80% → 0 recorded for this 10% of course grade.`;
+    panel.appendChild(threshold);
+
+    // Deductions panel
+    const dedPanel = document.createElement('div');
+    dedPanel.className = 'deductions-panel collapsed';
+    dedPanel.id = `dedPanel${pIdx}`;
+    const dedItems = autoDeductions.map((d, di) => `
+      <div class="deduction-item" onclick="toggleDeduction(this, ${pIdx}, ${di})" id="ded-${pIdx}-${di}">
+        <input type="checkbox" onclick="event.stopPropagation()">
+        <span class="deduction-item-label">${d.label} <em style="font-size:11px;color:var(--mid)">(${d.range})</em></span>
+        <span class="deduction-pts">${d.pts} pts</span>
+      </div>`).join('');
+    dedPanel.innerHTML = `
+      <div class="deductions-header" onclick="toggleDeductionsPanel(${pIdx})">
+        <span class="auth-icon">⚠</span>
+        <h3>Automatic Deductions — Policy Violations</h3>
+        <span class="auth-status" id="dedStatus${pIdx}">None applied</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="deductions-body">
+        <p class="auth-intro" style="margin-bottom:10px;">Flag any formatting violations per assignment policy. Deductions applied to this question's total.</p>
+        ${dedItems}
+        <div class="criterion-comment" style="margin-top:10px;">
+          <label>Deduction notes</label>
+          <textarea id="dedNotes${pIdx}" placeholder="Describe violations…"></textarea>
+        </div>
+      </div>`;
+    panel.appendChild(dedPanel);
+
+    // Criteria
+    q.criteria.forEach((crit, cIdx) => {
+      const critEl = document.createElement('div');
+      critEl.className = 'criterion';
+      critEl.id = `c${pIdx}-${cIdx}`;
+
+      const items = crit.items.map(label => `
+        <div class="check-item" onclick="toggleCheck(this)" data-pts="${ITEM_PTS}">
+          <input type="checkbox">
+          <div class="check-content"><div class="check-label">${label}</div></div>
+          <div class="check-pts">${ITEM_PTS} pts</div>
+        </div>`).join('');
+
+      critEl.innerHTML = `
+        <div class="criterion-header" onclick="toggleCriterion('c${pIdx}-${cIdx}')">
+          <span class="criterion-name">${crit.name}</span>
+          <span class="criterion-tag">${crit.tag}</span>
+          <span class="criterion-pts" id="pts-c${pIdx}-${cIdx}">0 <span>/ ${crit.max}</span></span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="criterion-body">
+          <div class="rubric-hint"><strong>${crit.hint}</strong></div>
+          ${items}
+        </div>`;
+      panel.appendChild(critEl);
+    });
+
+    // Score summary
+    const summary = document.createElement('div');
+    summary.className = 'score-summary';
+    summary.id = `summary${pIdx}`;
+    summary.innerHTML = CRIT_NAMES_DISPLAY.map((n, i) => `
+      <div class="score-col">
+        <div class="crit-name">${n}</div>
+        <div class="crit-val" id="sv-c${pIdx}-${i}">0</div>
+        <div class="crit-max">/ ${CRIT_MAXES[i]}</div>
+      </div>`).join('');
+    panel.appendChild(summary);
+
+    // Progress bar
+    const progWrap = document.createElement('div');
+    progWrap.className = 'progress-wrap';
+    progWrap.innerHTML = `<div class="progress-bar" id="prog${pIdx}" style="width:0%"></div>`;
+    panel.appendChild(progWrap);
+
+    // Criterion comment fields
+    // (injected after panel is in DOM)
+
+    // Notes
+    const notes = document.createElement('div');
+    notes.className = 'notes-section';
+    notes.innerHTML = `<label>Grader Notes · Question ${pIdx + 1}</label><textarea placeholder="Additional observations, oral defense notes, exceptions…"></textarea>`;
+    panel.appendChild(notes);
+
+    main.appendChild(panel);
+  });
+
+  // Inject criterion comment fields
+  const criterionTagLabels = ['Build', 'Explain', 'Modify', 'Predict', 'Depth'];
+  document.querySelectorAll('.criterion-body').forEach((body, idx) => {
+    const critName = criterionTagLabels[idx % 5];
+    const comment = document.createElement('div');
+    comment.className = 'criterion-comment';
+    comment.innerHTML = `<label>Grader comment · ${critName}</label><textarea placeholder="Note any specific errors, missing elements, or justification for partial credit…"></textarea>`;
+    body.appendChild(comment);
+  });
+
+  updateAll();
+}
+
+// ══════════════════════════════════════════════════════
+//  SCORING
+// ══════════════════════════════════════════════════════
+function getCriterionScore(cId) {
+  const el = document.getElementById(cId);
+  if (!el) return 0;
+  let score = 0;
+  el.querySelectorAll('.check-item').forEach(item => {
+    const state = item.dataset.state || 'unchecked';
+    const pts = parseFloat(item.dataset.pts) || ITEM_PTS;
+    if (state === 'full') score += pts;
+    else if (state === 'half') score += pts / 2;
+  });
+  return score;
+}
+
+function getDeductionTotal(pIdx) {
+  let total = 0;
+  autoDeductions.forEach((d, di) => {
+    const item = document.getElementById(`ded-${pIdx}-${di}`);
+    if (item && item.classList.contains('active')) total += d.pts;
+  });
+  return total;
+}
+
+function isProblemZeroed(p) {
+  const noSub = document.getElementById(`noSubmit${p}`);
+  if (noSub && noSub.checked) return 'no-submission';
+  const authEl = document.getElementById(`auth${p}`);
+  if (authEl && authEl.querySelectorAll('.auth-item input:checked').length > 0) return 'ai-flagged';
+  return false;
+}
+
+function updateAll() {
+  let grand = 0;
+  for (let p = 0; p < PROBLEMS; p++) {
+    const zeroed = isProblemZeroed(p);
+    const panel = document.getElementById(`panel${p}`);
+    if (!panel) continue;
+
+    // Dim criteria if zeroed
+    panel.querySelectorAll('.criterion').forEach(c => {
+      c.style.opacity = zeroed ? '0.35' : '1';
+      c.style.pointerEvents = zeroed ? 'none' : '';
+    });
+    panel.querySelectorAll('.deductions-panel').forEach(d => {
+      d.style.opacity = zeroed ? '0.35' : '1';
+      d.style.pointerEvents = zeroed ? 'none' : '';
+    });
+    const summary = document.getElementById(`summary${p}`);
+    if (summary) summary.style.opacity = zeroed ? '0.35' : '1';
+
+    let pScore = 0;
+    for (let c = 0; c < CRITERIA; c++) {
+      const score = zeroed ? 0 : getCriterionScore(`c${p}-${c}`);
+      const max = CRIT_MAXES[c];
+
+      const ptsEl = document.getElementById(`pts-c${p}-${c}`);
+      if (ptsEl) {
+        const display = Number.isInteger(score) ? score : score.toFixed(1);
+        ptsEl.innerHTML = `${display} <span>/ ${max}</span>`;
+        ptsEl.style.color = score === max ? 'var(--sage)' : 'var(--terra)';
+      }
+      const svEl = document.getElementById(`sv-c${p}-${c}`);
+      if (svEl) svEl.textContent = Number.isInteger(score) ? score : score.toFixed(1);
+
+      pScore += score;
+    }
+
+    // Apply deductions
+    const deductionTotal = zeroed ? 0 : getDeductionTotal(p);
+    pScore = Math.max(0, pScore + deductionTotal);
+
+    const ptEl = document.getElementById(`p${p}total`);
+    if (ptEl) {
+      ptEl.textContent = Number.isInteger(pScore) ? pScore : pScore.toFixed(1);
+      ptEl.style.color = zeroed ? 'var(--mid)' : 'var(--terra)';
+    }
+
+    const tsEl = document.getElementById(`tabScore${p}`);
+    if (tsEl) {
+      const display = Number.isInteger(pScore) ? pScore : pScore.toFixed(1);
+      const label = zeroed === 'no-submission' ? '— / 100'
+                  : zeroed === 'ai-flagged' ? '0* / 100'
+                  : `${display} / 100`;
+      tsEl.textContent = label;
+      tsEl.style.color = zeroed ? 'var(--terra)' : '';
+    }
+
+    const progEl = document.getElementById(`prog${p}`);
+    if (progEl) progEl.style.width = `${(pScore / 100) * 100}%`;
+
+    grand += pScore;
+  }
+
+  const grandDisplay = Number.isInteger(grand) ? grand : grand.toFixed(1);
+  const gtEl = document.getElementById('grandTotal');
+  if (gtEl) gtEl.textContent = `${grandDisplay} / 300`;
+
+  // Pass / fail indicator
+  const passEl = document.getElementById('passIndicator');
+  if (passEl) {
+    const pct = grand > 0 ? ((grand / 300) * 100).toFixed(1) : null;
+    if (grand === 0) {
+      passEl.textContent = '≥ 240 pts to pass';
+      passEl.className = 'pass-indicator neutral';
+    } else if (grand >= 240) {
+      passEl.textContent = `${pct}% — PASS`;
+      passEl.className = 'pass-indicator pass';
+    } else {
+      passEl.textContent = `${pct}% — FAIL`;
+      passEl.className = 'pass-indicator fail';
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  INTERACTION HANDLERS
+// ══════════════════════════════════════════════════════
+function toggleCheck(item) {
+  const cb = item.querySelector('input[type="checkbox"]');
+  const state = item.dataset.state || 'unchecked';
+  if (state === 'unchecked') {
+    item.dataset.state = 'full';
+    cb.checked = true;
+    item.classList.add('checked');
+    item.classList.remove('half-credit');
+  } else if (state === 'full') {
+    item.dataset.state = 'half';
+    cb.checked = true;
+    item.classList.add('checked', 'half-credit');
+  } else {
+    item.dataset.state = 'unchecked';
+    cb.checked = false;
+    item.classList.remove('checked', 'half-credit');
+  }
+  updateAll();
+}
+
+function toggleCriterion(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
+function toggleDeductionsPanel(pIdx) {
+  document.getElementById(`dedPanel${pIdx}`).classList.toggle('collapsed');
+}
+
+function toggleDeduction(item, pIdx, di) {
+  const cb = item.querySelector('input[type="checkbox"]');
+  if (event && event.target === cb) {
+    item.classList.toggle('active', cb.checked);
+  } else {
+    const newState = !item.classList.contains('active');
+    item.classList.toggle('active', newState);
+    cb.checked = newState;
+  }
+  const anyActive = autoDeductions.some((d, i) => {
+    const el = document.getElementById(`ded-${pIdx}-${i}`);
+    return el && el.classList.contains('active');
+  });
+  const statusEl = document.getElementById(`dedStatus${pIdx}`);
+  if (statusEl) {
+    const total = getDeductionTotal(pIdx);
+    statusEl.textContent = anyActive ? `${total} pts applied` : 'None applied';
+    statusEl.style.background = anyActive ? 'var(--terra)' : '';
+    statusEl.style.color = anyActive ? 'var(--white)' : '';
+  }
+  updateAll();
+}
+
+function switchTab(idx) {
+  document.querySelectorAll('.problem-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
+  document.querySelectorAll('.tab-btn').forEach((t, i) => t.classList.toggle('active', i === idx));
+}
+
+function switchDay(day) {
+  if (day === currentDay) return;
+  if (!confirm('Switch exam day? This will reset all current scores and notes.')) return;
+  currentDay = day;
+  document.getElementById('dayBtnSunday').classList.toggle('active', day === 'sunday');
+  document.getElementById('dayBtnSaturday').classList.toggle('active', day === 'saturday');
+  renderPanels(day);
+}
+
+function toggleNoSubmit(pIdx) {
+  const cb = document.getElementById(`noSubmit${pIdx}`);
+  const banner = document.getElementById(`noSubBanner${pIdx}`);
+  const authBlock = document.getElementById(`auth${pIdx}`);
+  banner.classList.toggle('active', cb.checked);
+  if (authBlock) {
+    authBlock.style.opacity = cb.checked ? '0.35' : '1';
+    authBlock.style.pointerEvents = cb.checked ? 'none' : '';
+  }
+  updateAll();
+}
+
+function toggleAuthFlag(item, pIdx) {
+  const cb = item.querySelector('input[type="checkbox"]');
+  if (!event || event.target !== cb) cb.checked = !cb.checked;
+  item.classList.toggle('flagged-item', cb.checked);
+  updateAuthStatus(pIdx);
+  updateAll();
+}
+
+function updateAuthStatus(pIdx) {
+  const authEl = document.getElementById(`auth${pIdx}`);
+  const flagged = authEl.querySelectorAll('.auth-item input:checked').length > 0;
+  const statusEl = document.getElementById(`authStatus${pIdx}`);
+  const warnEl = document.getElementById(`authWarn${pIdx}`);
+  authEl.classList.toggle('is-flagged', flagged);
+  statusEl.className = 'auth-status ' + (flagged ? 'flagged' : 'clear');
+  statusEl.textContent = flagged ? '⚑ Score = 0 · Oral Defense' : '✓ Appears Hand-Drawn';
+  warnEl.classList.toggle('visible', flagged);
+}
+
+function resetAll() {
+  if (!confirm('Reset all scores and notes for this student?')) return;
+  document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.checked = false;
+    const checkItem = cb.closest('.check-item');
+    if (checkItem) {
+      checkItem.classList.remove('checked', 'half-credit');
+      checkItem.dataset.state = 'unchecked';
+    }
+    cb.closest('.auth-item')?.classList.remove('flagged-item');
+    cb.closest('.deduction-item')?.classList.remove('active');
+  });
+  document.querySelectorAll('textarea').forEach(ta => ta.value = '');
+  document.getElementById('studentName').value = '';
+  for (let p = 0; p < PROBLEMS; p++) {
+    const authEl = document.getElementById(`auth${p}`);
+    if (authEl) authEl.classList.remove('is-flagged');
+    const statusEl = document.getElementById(`authStatus${p}`);
+    if (statusEl) { statusEl.className = 'auth-status'; statusEl.textContent = 'Not reviewed'; }
+    const warnEl = document.getElementById(`authWarn${p}`);
+    if (warnEl) warnEl.classList.remove('visible');
+    const nsEl = document.getElementById(`noSubmit${p}`);
+    if (nsEl) nsEl.checked = false;
+    const nsBanner = document.getElementById(`noSubBanner${p}`);
+    if (nsBanner) nsBanner.classList.remove('active');
+    const dedStatus = document.getElementById(`dedStatus${p}`);
+    if (dedStatus) { dedStatus.textContent = 'None applied'; dedStatus.style.background = ''; dedStatus.style.color = ''; }
+  }
+  updateAll();
+}
+
+// ══════════════════════════════════════════════════════
+//  SMART PRINT
+// ══════════════════════════════════════════════════════
+function smartPrint() {
+  const studentName = document.getElementById('studentName').value || 'Student';
+  const grandTotal = document.getElementById('grandTotal').textContent;
+  const passText = document.getElementById('passIndicator').textContent;
+  const examDay = currentDay === 'sunday' ? 'Sunday Exam' : 'Saturday Exam';
+  const examTopics = currentDay === 'sunday'
+    ? 'Primary Active Transport · Vesicular Transport · GPCR Signaling'
+    : 'Osmolarity & Tonicity · Fluid Compartments · Hormone Signaling';
+
+  let questionsHTML = '';
+  for (let p = 0; p < PROBLEMS; p++) {
+    const panel = document.getElementById(`panel${p}`);
+    const title = panel.querySelector('.problem-title')?.textContent || '';
+    const subtitle = panel.querySelectorAll('.problem-subtitle')[1]?.textContent || '';
+    const total = document.getElementById(`p${p}total`)?.textContent || '0';
+    const zeroed = isProblemZeroed(p);
+
+    let criteriaHTML = '';
+    for (let c = 0; c < CRITERIA; c++) {
+      const cEl = document.getElementById(`c${p}-${c}`);
+      if (!cEl) continue;
+      const cName = cEl.querySelector('.criterion-name')?.textContent || '';
+      const cScore = document.getElementById(`pts-c${p}-${c}`)?.textContent || '0';
+      const comment = cEl.querySelector('.criterion-comment textarea')?.value || '';
+
+      let itemsHTML = '';
+      cEl.querySelectorAll('.check-item').forEach(item => {
+        const state = item.dataset.state || 'unchecked';
+        const label = item.querySelector('.check-label')?.textContent || '';
+        const pts = item.querySelector('.check-pts')?.textContent || '';
+        const sym = state === 'full' ? '✓' : state === 'half' ? '½' : '○';
+        const col = state === 'full' ? '#4A6741' : state === 'half' ? '#C8922A' : '#bbb';
+        const bg = state === 'full' ? '#EBF3E8' : state === 'half' ? '#FFF8EC' : '#fafafa';
+        itemsHTML += `<div style="display:flex;gap:10px;padding:6px 8px;margin-bottom:4px;border:1px solid #ddd;border-radius:4px;background:${bg}">
+          <span style="color:${col};font-weight:700;min-width:16px">${sym}</span>
+          <span style="flex:1;font-size:11.5px;color:#2C2B28">${label}</span>
+          <span style="font-size:11px;font-weight:600;color:${col}">${state === 'full' ? '5' : state === 'half' ? '2.5' : ''}</span>
+        </div>`;
+      });
+
+      criteriaHTML += `
+        <div style="border:1.5px solid #C8C0B0;border-radius:6px;margin-bottom:12px;overflow:hidden">
+          <div style="background:#EDE6D9;padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
+            <span style="font-weight:600;color:#2B3A5C">${cName}</span>
+            <span style="font-weight:700;color:#B05C38;font-size:16px">${cScore}</span>
+          </div>
+          <div style="padding:12px 14px">
+            ${itemsHTML}
+            ${comment ? `<div style="margin-top:8px;padding:8px;background:#f5f5f5;border-radius:4px;font-size:11.5px;color:#444;border-left:3px solid #B05C38"><strong>Comment:</strong> ${comment}</div>` : ''}
+          </div>
+        </div>`;
+    }
+
+    // Deductions
+    let deductionsHTML = '';
+    autoDeductions.forEach((d, di) => {
+      const item = document.getElementById(`ded-${p}-${di}`);
+      if (item && item.classList.contains('active')) {
+        deductionsHTML += `<div style="padding:5px 8px;background:#F5E0D7;border-radius:4px;margin-bottom:4px;font-size:11.5px;color:#B05C38;font-weight:500;">⚠ ${d.label} (${d.pts} pts)</div>`;
+      }
+    });
+    const dedNotes = document.getElementById(`dedNotes${p}`)?.value || '';
+    const notesTA = panel.querySelector('.notes-section textarea');
+    const notes = notesTA ? notesTA.value : '';
+    const authComment = panel.querySelector('.auth-comment textarea')?.value || '';
+    const isFlagged = document.getElementById(`auth${p}`)?.classList.contains('is-flagged');
+    const noSubmit = document.getElementById(`noSubmit${p}`)?.checked;
+
+    questionsHTML += `
+      <div style="page-break-before:${p === 0 ? 'avoid' : 'always'};padding:20px 0">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #C8C0B0;padding-bottom:16px;margin-bottom:20px">
+          <div>
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#6B6760">Question ${p+1} of 3 · ${examDay}</div>
+            <div style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:#2B3A5C">${title}</div>
+            <div style="font-size:11px;text-transform:uppercase;color:#6B6760;margin-top:4px">${subtitle}</div>
+          </div>
+          <div style="text-align:center;border:2px solid #C8C0B0;border-radius:6px;padding:10px 18px;min-width:90px">
+            <div style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:${zeroed ? '#6B6760' : '#B05C38'}">${zeroed ? (zeroed === 'no-submission' ? '—' : '0*') : total}</div>
+            <div style="font-size:11px;color:#6B6760">/ 100 pts</div>
+          </div>
+        </div>
+        ${noSubmit ? '<div style="background:#F5E0D7;border:1.5px solid #B05C38;border-radius:4px;padding:10px 14px;margin-bottom:16px;color:#B05C38;font-weight:600">Did not submit — Score: 0 / 100</div>' : ''}
+        ${isFlagged ? `<div style="background:#B05C38;color:white;border-radius:4px;padding:10px 14px;margin-bottom:16px;font-weight:600">⚑ Flagged for AI / Authenticity — Score = 0 · Oral Defense Required${authComment ? '<br><span style="font-weight:400;font-size:12px">' + authComment + '</span>' : ''}</div>` : ''}
+        ${criteriaHTML}
+        ${deductionsHTML ? `<div style="margin-bottom:12px">${deductionsHTML}${dedNotes ? `<div style="margin-top:4px;font-size:11px;color:#6B6760;padding-left:4px">Notes: ${dedNotes}</div>` : ''}</div>` : ''}
+        ${notes ? `<div style="margin-top:12px;padding:10px 14px;background:#f9f9f9;border:1px solid #ddd;border-radius:4px;font-size:12px"><strong>Grader Notes:</strong> ${notes}</div>` : ''}
+      </div>`;
+  }
+
+  const printHTML = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Make-Up Exam · Grading Report · ${studentName}</title>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Jost', sans-serif; margin: 0; padding: 0; background: white; color: #2C2B28; }
+  @media print { body { font-size: 11px; } }
+</style>
+</head>
+<body>
+  <div style="background:#2B3A5C;color:#F4EFE6;padding:20px 32px;display:flex;justify-content:space-between;align-items:center">
+    <div>
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#DDD5C5">Human Physiology · Make-Up Exam · ${examDay}</div>
+      <div style="font-family:Georgia,serif;font-size:20px;font-weight:700">Drawing Exam · Scoring Report</div>
+      <div style="font-size:11px;color:#DDD5C5;margin-top:3px">${examTopics}</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#DDD5C5">Student</div>
+      <div style="font-size:18px;font-weight:600">${studentName}</div>
+    </div>
+  </div>
+  <div style="background:#1e2d4a;color:#F4EFE6;padding:12px 32px;display:flex;justify-content:space-between;align-items:center">
+    <div style="font-size:13px;color:#DDD5C5">
+      Q1: ${document.getElementById('tabScore0')?.textContent} &nbsp;|&nbsp;
+      Q2: ${document.getElementById('tabScore1')?.textContent} &nbsp;|&nbsp;
+      Q3: ${document.getElementById('tabScore2')?.textContent}
+    </div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <div style="font-size:12px;font-weight:600;color:${grand >= 240 ? '#6A8F60' : '#E8B09A'};text-transform:uppercase;letter-spacing:0.06em">${passText}</div>
+      <div style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:#E8B09A">${grandTotal}</div>
+    </div>
+  </div>
+  <div style="padding:0 32px 40px">
+    ${questionsHTML}
+  </div>
+  <script>
+    const grand = ${document.getElementById('grandTotal')?.textContent?.split(' ')[0] || 0};
+    window.onload = function(){ window.print(); };
+  <\/script>
+</body>
+</html>`;
+
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write(printHTML);
+  printWindow.document.close();
+}
+
+// ══════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════
+renderPanels('sunday');
+</script>
+</body>
+</html>
