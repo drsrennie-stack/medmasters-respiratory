@@ -1790,10 +1790,9 @@ function getCriterionScore(cId) {
   if (!el) return 0;
   let score = 0;
   el.querySelectorAll('.check-item').forEach(item => {
-    const cb = item.querySelector('input[type="checkbox"]');
-    if (cb && cb.checked) {
-      score += item.classList.contains('half-credit') ? 0.5 : 1;
-    }
+    const state = item.dataset.state || 'unchecked';
+    if (state === 'full') score += 1;
+    else if (state === 'half') score += 0.5;
   });
   return score;
 }
@@ -1862,31 +1861,26 @@ function updateAll() {
 }
 
 // ── CHECKBOX TOGGLE (3-state: unchecked → full → half → unchecked) ──
+// Click once = full credit (green)
+// Click again = half credit (amber)
+// Click again = unchecked
 function toggleCheck(item) {
   const cb = item.querySelector('input[type="checkbox"]');
-  const isChecked = cb.checked;
-  const isHalf = item.classList.contains('half-credit');
+  const state = item.dataset.state || 'unchecked';
 
-  if (event && event.target === cb) {
-    // Direct checkbox click — go to full credit
+  if (state === 'unchecked') {
+    item.dataset.state = 'full';
+    cb.checked = true;
+    item.classList.add('checked');
     item.classList.remove('half-credit');
-    item.classList.toggle('checked', cb.checked);
+  } else if (state === 'full') {
+    item.dataset.state = 'half';
+    cb.checked = true;
+    item.classList.add('checked', 'half-credit');
   } else {
-    // Clicking the item row — cycle through states
-    if (!isChecked) {
-      // unchecked → full credit
-      cb.checked = true;
-      item.classList.add('checked');
-      item.classList.remove('half-credit');
-    } else if (!isHalf) {
-      // full credit → half credit
-      item.classList.add('half-credit');
-    } else {
-      // half credit → unchecked
-      cb.checked = false;
-      item.classList.remove('checked');
-      item.classList.remove('half-credit');
-    }
+    item.dataset.state = 'unchecked';
+    cb.checked = false;
+    item.classList.remove('checked', 'half-credit');
   }
   updateAll();
 }
@@ -1907,7 +1901,11 @@ function resetAll() {
   if (!confirm('Reset all scores and notes for this student?')) return;
   document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
     cb.checked = false;
-    cb.closest('.check-item')?.classList.remove('checked');
+    const checkItem = cb.closest('.check-item');
+    if (checkItem) {
+      checkItem.classList.remove('checked', 'half-credit');
+      checkItem.dataset.state = 'unchecked';
+    }
     cb.closest('.auth-item')?.classList.remove('flagged-item');
   });
   document.querySelectorAll('textarea').forEach(ta => ta.value = '');
