@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NMJ Drawing Assignment · Grading Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F4EFE6;
+    --cream-mid: #EDE6D9;
+    --cream-dark: #DDD5C5;
+    --sage: #4A6741;
+    --sage-light: #6A8F60;
+    --sage-pale: #D6E4D2;
+    --terra: #B05C38;
+    --terra-light: #E8B09A;
+    --terra-pale: #F5E0D7;
+    --navy: #2B3A5C;
+    --charcoal: #2C2B28;
+    --mid: #6B6760;
+    --light-border: #C8C0B0;
+    --white: #FFFFFF;
+    --checked-bg: #EBF3E8;
+    --gold: #C8922A;
+    --gold-pale: #FFF8EC;
+    --red-zero: #8B1A1A;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--charcoal);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  /* ── HEADER ─────────────────────────────────────── */
+  .page-header {
+    background: var(--navy);
+    color: var(--cream);
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .page-header h1 {
+    font-family: 'Spectral', serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.3;
+  }
+  .page-header .sub {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream-dark);
+    margin-bottom: 4px;
+  }
+  .header-right {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 18px;
+    border-radius: 4px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+  .btn-reset { background: transparent; border: 1.5px solid rgba(255,255,255,0.35); color: var(--cream); }
+  .btn-reset:hover { background: rgba(255,255,255,0.1); }
+  .btn-print { background: var(--terra); color: var(--white); }
+  .btn-print:hover { background: #C96B43; }
+
+  /* ── STUDENT BAR ─────────────────────────────────── */
+  .student-bar {
+    background: var(--navy);
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .student-bar label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream-dark);
+    white-space: nowrap;
+  }
+  .student-bar input {
+    flex: 1;
+    max-width: 320px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 3px;
+    padding: 7px 12px;
+    color: var(--white);
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    outline: none;
+  }
+  .student-bar input::placeholder { color: rgba(255,255,255,0.4); }
+  .student-bar input:focus { border-color: var(--terra-light); }
+  .grand-score-display {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .grand-score-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream-dark);
+  }
+  .grand-score-val {
+    font-family: 'Spectral', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--terra-light);
+    min-width: 70px;
+    text-align: right;
+  }
+  .grand-score-val.zeroed { color: #e88; }
+
+  /* ── MAIN ────────────────────────────────────────── */
+  .main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 40px 80px;
+  }
+
+  /* ── SECTION DIVIDERS ────────────────────────────── */
+  .section-block {
+    margin-bottom: 36px;
+  }
+  .section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--navy);
+    gap: 16px;
+  }
+  .section-heading-left { flex: 1; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 3px;
+  }
+  .section-title {
+    font-family: 'Spectral', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.2;
+  }
+  .section-score-box {
+    text-align: center;
+    background: var(--white);
+    border: 2px solid var(--light-border);
+    border-radius: 6px;
+    padding: 10px 18px;
+    min-width: 90px;
+    flex-shrink: 0;
+  }
+  .section-score-box .score-num {
+    font-family: 'Spectral', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--terra);
+    line-height: 1;
+  }
+  .section-score-box .score-denom {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-top: 2px;
+  }
+
+  /* ── CRITERION (used for each panel section) ─────── */
+  .criterion {
+    background: var(--white);
+    border: 1.5px solid var(--light-border);
+    border-radius: 6px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .criterion-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 18px;
+    background: var(--cream-mid);
+    border-bottom: 1.5px solid var(--light-border);
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .criterion-header:hover { background: var(--cream-dark); }
+  .criterion-name { font-weight: 600; font-size: 13.5px; letter-spacing: 0.03em; color: var(--navy); flex: 1; }
+  .criterion-tag {
+    font-size: 10.5px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--mid); background: var(--cream-dark); padding: 2px 8px; border-radius: 10px;
+  }
+  .criterion-pts { font-family: 'Spectral', serif; font-size: 18px; font-weight: 700; color: var(--terra); min-width: 50px; text-align: right; }
+  .criterion-pts span { font-size: 12px; font-weight: 400; color: var(--mid); }
+  .chevron { font-size: 11px; color: var(--mid); transition: transform 0.2s; margin-left: 4px; }
+  .criterion.collapsed .chevron { transform: rotate(-90deg); }
+  .criterion-body { padding: 14px 18px; }
+  .criterion.collapsed .criterion-body { display: none; }
+
+  .rubric-hint {
+    font-size: 12px; color: var(--mid); background: var(--cream);
+    border-left: 3px solid var(--sage-pale); padding: 8px 12px;
+    margin-bottom: 12px; border-radius: 0 3px 3px 0; line-height: 1.5;
+  }
+  .rubric-hint strong { color: var(--sage); }
+
+  /* ── CHECKLIST ITEMS ─────────────────────────────── */
+  .check-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 12px; border-radius: 5px; margin-bottom: 6px;
+    border: 1.5px solid var(--cream-dark); background: var(--cream);
+    transition: all 0.15s; cursor: pointer;
+  }
+  .check-item:hover { border-color: var(--sage-light); background: #F0F5EE; }
+  .check-item.checked { background: var(--checked-bg); border-color: var(--sage); }
+  .check-item.half-credit { background: var(--gold-pale); border-color: var(--gold); }
+  .check-item.half-credit .check-label { color: #9A6A1A; }
+  .check-item.half-credit .check-pts { color: var(--gold); }
+  .check-item.half-credit::after { content: '½ pt'; font-size: 11px; font-weight: 700; color: var(--gold); margin-left: 6px; white-space: nowrap; align-self: center; }
+  .check-item input[type="checkbox"] { width: 17px; height: 17px; flex-shrink: 0; margin-top: 1px; accent-color: var(--sage); cursor: pointer; }
+  .check-content { flex: 1; }
+  .check-label { font-size: 13.5px; line-height: 1.5; color: var(--charcoal); }
+  .check-item.checked .check-label { color: var(--sage); }
+  .check-pts { font-size: 12px; font-weight: 600; color: var(--terra); white-space: nowrap; margin-top: 1px; flex-shrink: 0; }
+  .check-item.checked .check-pts { color: var(--sage); }
+
+  /* ── CRITERION COMMENT ───────────────────────────── */
+  .criterion-comment { margin-top: 10px; border-top: 1px dashed var(--light-border); padding-top: 10px; }
+  .criterion-comment label { display: block; font-size: 10.5px; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; color: var(--mid); margin-bottom: 5px; }
+  .criterion-comment textarea {
+    width: 100%; min-height: 48px; background: var(--cream); border: 1.5px solid var(--light-border);
+    border-radius: 4px; padding: 7px 11px; font-family: 'Jost', sans-serif; font-size: 13px;
+    color: var(--charcoal); resize: vertical; outline: none; line-height: 1.5;
+  }
+  .criterion-comment textarea:focus { border-color: var(--terra-light); }
+
+  /* ── SCORE SUMMARY BAR ───────────────────────────── */
+  .score-summary {
+    display: flex; gap: 0; background: var(--navy); border-radius: 6px;
+    padding: 16px 20px; margin-top: 20px; flex-wrap: wrap;
+  }
+  .score-col { flex: 1; text-align: center; min-width: 80px; padding: 6px 12px; border-right: 1px solid rgba(255,255,255,0.12); }
+  .score-col:last-child { border-right: none; }
+  .crit-name { font-size: 10px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+  .crit-val { font-family: 'Spectral', serif; font-size: 22px; font-weight: 700; color: var(--terra-light); }
+  .crit-max { font-size: 11px; color: rgba(255,255,255,0.35); }
+
+  /* ── PROGRESS BAR ────────────────────────────────── */
+  .progress-wrap { height: 4px; background: var(--cream-dark); border-radius: 2px; margin: 10px 0 0; }
+  .progress-bar { height: 100%; background: var(--sage); border-radius: 2px; transition: width 0.3s ease; }
+
+  /* ── NOTES ───────────────────────────────────────── */
+  .notes-section { margin-top: 20px; }
+  .notes-section label { display: block; font-size: 10.5px; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; color: var(--mid); margin-bottom: 6px; }
+  .notes-section textarea {
+    width: 100%; min-height: 80px; background: var(--white); border: 1.5px solid var(--light-border);
+    border-radius: 4px; padding: 9px 13px; font-family: 'Jost', sans-serif; font-size: 13px;
+    color: var(--charcoal); resize: vertical; outline: none; line-height: 1.5;
+  }
+  .notes-section textarea:focus { border-color: var(--terra-light); }
+
+  /* ── ZERO-GRADE TRIGGERS ─────────────────────────── */
+  .zero-block {
+    background: var(--white); border: 2px solid var(--light-border);
+    border-radius: 6px; margin-bottom: 28px; overflow: hidden;
+  }
+  .zero-block.triggered { border-color: var(--red-zero); }
+  .zero-block-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 13px 18px; background: var(--cream-mid);
+    border-bottom: 1.5px solid var(--light-border);
+    cursor: pointer; user-select: none;
+  }
+  .zero-block-header:hover { background: var(--cream-dark); }
+  .zero-block.triggered .zero-block-header { background: var(--red-zero); }
+  .zero-block-header h3 { flex: 1; font-size: 13px; font-weight: 600; color: var(--navy); }
+  .zero-block.triggered .zero-block-header h3 { color: var(--white); }
+  .zero-status {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 3px; background: var(--cream-dark); color: var(--mid);
+  }
+  .zero-status.active { background: var(--red-zero); color: var(--white); }
+  .zero-block-body { padding: 14px 18px; }
+  .zero-block.collapsed .zero-block-body { display: none; }
+  .zero-block.collapsed .chevron { transform: rotate(-90deg); }
+  .zero-intro { font-size: 12.5px; color: var(--mid); margin-bottom: 12px; line-height: 1.5; }
+  .zero-intro strong { color: var(--red-zero); }
+  .zero-item {
+    display: flex; align-items: flex-start; gap: 10px; padding: 9px 12px;
+    border-radius: 4px; margin-bottom: 6px; border: 1.5px solid var(--cream-dark);
+    background: var(--cream); cursor: pointer; transition: all 0.15s;
+  }
+  .zero-item:hover { border-color: #c44; }
+  .zero-item.flagged { background: #fff0f0; border-color: var(--red-zero); }
+  .zero-item input[type="checkbox"] { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; accent-color: var(--red-zero); cursor: pointer; }
+  .zero-item-label { font-size: 13px; color: var(--charcoal); line-height: 1.4; flex: 1; }
+  .zero-item.flagged .zero-item-label { color: var(--red-zero); font-weight: 500; }
+  .zero-warning {
+    display: none; background: var(--red-zero); color: var(--white);
+    border-radius: 4px; padding: 11px 14px; margin-top: 10px;
+    font-size: 13px; font-weight: 600; line-height: 1.5;
+  }
+  .zero-warning.visible { display: block; }
+  .zero-comment { margin-top: 10px; }
+  .zero-comment label { display: block; font-size: 10.5px; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; color: var(--mid); margin-bottom: 5px; }
+  .zero-comment textarea {
+    width: 100%; min-height: 48px; background: var(--cream); border: 1.5px solid var(--light-border);
+    border-radius: 4px; padding: 7px 11px; font-family: 'Jost', sans-serif; font-size: 13px;
+    color: var(--charcoal); resize: vertical; outline: none;
+  }
+
+  /* ── AUTH CHECK ──────────────────────────────────── */
+  .auth-check {
+    background: var(--white); border: 1.5px solid var(--light-border);
+    border-radius: 6px; margin-bottom: 20px; overflow: hidden;
+  }
+  .auth-check-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 18px; background: var(--cream-mid);
+    border-bottom: 1.5px solid var(--light-border);
+  }
+  .auth-check-header h3 { flex: 1; font-size: 13px; font-weight: 600; color: var(--navy); }
+  .auth-icon { font-size: 16px; color: var(--mid); }
+  .auth-status { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; background: var(--cream-dark); color: var(--mid); }
+  .auth-status.flagged { background: var(--terra); color: var(--white); }
+  .auth-status.clear { background: var(--sage-pale); color: var(--sage); }
+  .auth-body { padding: 14px 18px; }
+  .auth-intro { font-size: 12.5px; color: var(--mid); margin-bottom: 12px; line-height: 1.5; }
+  .auth-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px; }
+  .auth-item {
+    display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px;
+    border-radius: 4px; border: 1.5px solid var(--cream-dark); background: var(--cream);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .auth-item:hover { border-color: var(--terra-light); }
+  .auth-item.flagged-item { background: var(--terra-pale); border-color: var(--terra); }
+  .auth-item input[type="checkbox"] { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; accent-color: var(--terra); cursor: pointer; }
+  .auth-item-label { font-size: 12px; color: var(--charcoal); line-height: 1.4; }
+  .auth-item.flagged-item .auth-item-label { color: var(--terra); }
+  .auth-warning { display: none; background: var(--terra); color: var(--white); border-radius: 4px; padding: 10px 14px; font-size: 12.5px; font-weight: 600; margin-bottom: 10px; }
+  .auth-warning.visible { display: block; }
+  .auth-check.is-flagged .auth-check-header { background: var(--terra-pale); border-bottom-color: var(--terra); }
+  .auth-comment label { display: block; font-size: 10.5px; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; color: var(--mid); margin-bottom: 5px; }
+  .auth-comment textarea {
+    width: 100%; min-height: 48px; background: var(--cream); border: 1.5px solid var(--light-border);
+    border-radius: 4px; padding: 7px 11px; font-family: 'Jost', sans-serif; font-size: 13px;
+    color: var(--charcoal); resize: vertical; outline: none;
+  }
+
+  /* ── DIMMED WHEN ZEROED ──────────────────────────── */
+  .rubric-content { transition: opacity 0.2s; }
+  .rubric-content.dimmed { opacity: 0.3; pointer-events: none; }
+
+  /* ── STUDENT FEEDBACK ────────────────────────────── */
+  .feedback-section {
+    margin-top: 32px;
+    border: 2px solid var(--navy);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .feedback-header {
+    background: var(--navy);
+    color: var(--cream);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .feedback-header h2 {
+    font-family: 'Spectral', serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    flex: 1;
+  }
+  .feedback-header .feedback-sub {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cream-dark);
+  }
+  .feedback-body {
+    background: var(--white);
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 680px) { .feedback-body { grid-template-columns: 1fr; } }
+  .feedback-field label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .feedback-field.strengths label { color: var(--sage); }
+  .feedback-field.improve label { color: var(--terra); }
+  .feedback-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-style: normal;
+    flex-shrink: 0;
+  }
+  .feedback-field.strengths .feedback-icon { background: var(--sage-pale); color: var(--sage); }
+  .feedback-field.improve .feedback-icon { background: var(--terra-pale); color: var(--terra); }
+  .feedback-field textarea {
+    width: 100%;
+    min-height: 110px;
+    border-radius: 5px;
+    padding: 10px 13px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    color: var(--charcoal);
+    resize: vertical;
+    outline: none;
+    line-height: 1.6;
+    border: 1.5px solid var(--light-border);
+  }
+  .feedback-field.strengths textarea { background: #F6FAF5; }
+  .feedback-field.strengths textarea:focus { border-color: var(--sage); }
+  .feedback-field.improve textarea { background: var(--terra-pale); }
+  .feedback-field.improve textarea:focus { border-color: var(--terra); }
+  .feedback-note {
+    font-size: 11px;
+    color: var(--mid);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 680px) {
+    .page-header { padding: 20px; flex-direction: column; align-items: flex-start; }
+    .main { padding: 20px; }
+    .auth-grid { grid-template-columns: 1fr; }
+    .student-bar { padding: 12px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════ HEADER ══════════════════════════════════ -->
+<div class="page-header">
+  <div>
+    <div class="sub">Neuromuscular Physiology · Three-Panel Drawing Assignment</div>
+    <h1>NMJ Drawing · Scoring Checklist</h1>
+  </div>
+  <div class="header-right">
+    <button class="btn btn-reset" onclick="resetAll()">↺ Reset</button>
+    <button class="btn btn-print" onclick="smartPrint()">⤓ Print / Save PDF</button>
+  </div>
+</div>
+
+<!-- ══════ STUDENT BAR ══════════════════════════════ -->
+<div class="student-bar">
+  <label>Student</label>
+  <input type="text" id="studentName" placeholder="Enter student name…">
+  <div class="grand-score-display">
+    <span class="grand-score-label">Total Score</span>
+    <span class="grand-score-val" id="grandTotal">0 / 25</span>
+  </div>
+</div>
+
+<!-- ══════ MAIN ══════════════════════════════════════ -->
+<div class="main">
+
+  <!-- ══ AUTHENTICITY CHECK ═══════════════════════════ -->
+  <div class="auth-check" id="authCheck">
+    <div class="auth-check-header">
+      <span class="auth-icon">✎</span>
+      <h3>Authenticity Check: Hand-Drawn Verification</h3>
+      <span class="auth-status" id="authStatus">Not reviewed</span>
+    </div>
+    <div class="auth-body">
+      <p class="auth-intro">Flag any characteristics suggesting this was generated, templated, or assembled rather than hand-drawn. <strong>One or more flags → suspected AI misuse → required live Zoom session to redraw and verbally explain.</strong></p>
+      <div class="auth-grid" id="authGrid"></div>
+      <div class="auth-warning" id="authWarn">
+        <strong>⚑ Suspected AI Misuse : Live Zoom Session Required.</strong> Per assignment policy, the student must redraw the assignment on Zoom and verbally explain their understanding as they draw. The instructor only needs to suspect AI misuse to require this session.
+      </div>
+      <div class="auth-comment">
+        <label>Authenticity notes</label>
+        <textarea placeholder="Describe specific concerns: lines, layout, label consistency, symmetry, lack of corrections…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ZERO-GRADE TRIGGERS ══════════════════════════ -->
+  <div class="zero-block collapsed" id="zeroBlock">
+    <div class="zero-block-header" onclick="toggleZeroBlock()">
+      <span class="auth-icon">⚠</span>
+      <h3>Zero-Grade Policy Violations</h3>
+      <span class="zero-status" id="zeroStatus">None flagged</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="zero-block-body">
+      <p class="zero-intro">Any one of these violations results in an <strong>automatic grade of zero</strong> for the entire assignment, regardless of content quality.</p>
+      <div id="zeroGrid"></div>
+      <div class="zero-warning" id="zeroWarn">
+        <strong>⚑ Grade = 0.</strong> One or more automatic zero conditions have been flagged. Per assignment policy, the only path to credit recovery is a required live Zoom session with the instructor, during which the student must redraw and verbally explain their work.
+      </div>
+      <div class="zero-comment">
+        <label>Violation notes</label>
+        <textarea id="zeroNotes" placeholder="Describe the specific violation observed…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       PANEL 1 - NORMAL NMJ PHYSIOLOGY  (7 pts)
+  ══════════════════════════════════════════════════ -->
+  <div class="section-block" id="block0">
+    <div class="section-heading">
+      <div class="section-heading-left">
+        <div class="section-label">Panel 1 · 7 Points</div>
+        <div class="section-title">Normal Neuromuscular Junction Physiology</div>
+      </div>
+      <div class="section-score-box">
+        <div class="score-num" id="s0total">0</div>
+        <div class="score-denom">/ 7 pts</div>
+      </div>
+    </div>
+    <div class="rubric-content" id="rubric0">
+
+      <!-- Criterion 1a -->
+      <div class="criterion" id="c0-0">
+        <div class="criterion-header" onclick="toggleCriterion('c0-0')">
+          <span class="criterion-name">Neural Signaling & ACh Release</span>
+          <span class="criterion-tag">Structure + Sequence</span>
+          <span class="criterion-pts" id="pts-c0-0">0 <span>/ 2</span></span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="criterion-body">
+          <div class="rubric-hint"><strong>Full credit (2):</strong> Neuron → axon → axon terminal drawn and labeled. Synaptic vesicles with ACh shown. Ca²⁺ entry and vesicle fusion shown. ACh released into synaptic cleft with directional arrows.</div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">Neuron/axon, axon terminal, and synaptic vesicles drawn and labeled; action potential transmission down the neuron shown with directional arrows</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">ACh (acetylcholine) labeled in vesicles; Ca²⁺ influx shown triggering vesicle fusion; ACh released into synaptic cleft shown with arrows pointing across the cleft</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="criterion-comment">
+            <label>Grader comment</label>
+            <textarea placeholder="Note any labeling errors, missing structures, or partial credit justification…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Criterion 1b -->
+      <div class="criterion" id="c0-1">
+        <div class="criterion-header" onclick="toggleCriterion('c0-1')">
+          <span class="criterion-name">Synaptic Cleft & Receptor Activation</span>
+          <span class="criterion-tag">Transmission</span>
+          <span class="criterion-pts" id="pts-c0-1">0 <span>/ 2</span></span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="criterion-body">
+          <div class="rubric-hint"><strong>Full credit (2):</strong> Synaptic cleft labeled. Receptors on muscle membrane drawn and labeled. ACh binding shown. Muscle cell depolarization shown as the consequence of binding.</div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">Synaptic cleft labeled; nicotinic ACh receptors (nAChR) on muscle membrane drawn and labeled; ACh binding to receptor shown</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">Muscle cell membrane labeled; ion influx (Na⁺) or membrane depolarization shown as consequence of receptor activation; muscle action potential indicated</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="criterion-comment">
+            <label>Grader comment</label>
+            <textarea placeholder="Note any labeling errors, missing structures, or partial credit justification…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Criterion 1c -->
+      <div class="criterion" id="c0-2">
+        <div class="criterion-header" onclick="toggleCriterion('c0-2')">
+          <span class="criterion-name">Intracellular Signaling & Muscle Contraction</span>
+          <span class="criterion-tag">EC Coupling</span>
+          <span class="criterion-pts" id="pts-c0-2">0 <span>/ 2</span></span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="criterion-body">
+          <div class="rubric-hint"><strong>Full credit (2):</strong> Intracellular signaling pathway shown (T-tubule, SR, Ca²⁺ release, troponin/tropomyosin, or equivalent). Muscle contraction shown as the endpoint. Sequence flows in correct order.</div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">Intracellular signaling shown: T-tubule depolarization → SR Ca²⁺ release → Ca²⁺ binds troponin → tropomyosin shifts → myosin-actin cross-bridge (at least 2 of these steps shown and labeled)</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">Muscle contraction shown as final endpoint; complete sequence flows in correct order from neural signal to contraction; arrows and/or numbered steps used throughout</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="criterion-comment">
+            <label>Grader comment</label>
+            <textarea placeholder="Note any labeling errors, missing structures, or partial credit justification…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Criterion 1d -->
+      <div class="criterion" id="c0-3">
+        <div class="criterion-header" onclick="toggleCriterion('c0-3')">
+          <span class="criterion-name">Completeness & Required Structures</span>
+          <span class="criterion-tag">Checklist</span>
+          <span class="criterion-pts" id="pts-c0-3">0 <span>/ 1</span></span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="criterion-body">
+          <div class="rubric-hint"><strong>Full credit (1):</strong> All 7 required structures from the assignment instructions are present and labeled: neuron/axon, axon terminal, synaptic vesicles, ACh, synaptic cleft, muscle receptors, muscle cell membrane, and structures involved in contraction.</div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">All required structures present and labeled: neuron/axon, axon terminal, synaptic vesicles, ACh, synaptic cleft, receptors on muscle membrane, muscle cell membrane, and contraction-related structures (all 7 categories met)</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="criterion-comment">
+            <label>Grader comment</label>
+            <textarea placeholder="List any missing required structures…"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end rubric-content -->
+    <div class="progress-wrap"><div class="progress-bar" id="prog0" style="width:0%"></div></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       PANEL 2 - MYASTHENIA GRAVIS  (7 pts)
+  ══════════════════════════════════════════════════ -->
+  <div class="section-block" id="block1">
+    <div class="section-heading">
+      <div class="section-heading-left">
+        <div class="section-label">Panel 2 · 7 Points</div>
+        <div class="section-title">Myasthenia Gravis: Disease Snapshot</div>
+      </div>
+      <div class="section-score-box">
+        <div class="score-num" id="s1total">0</div>
+        <div class="score-denom">/ 7 pts</div>
+      </div>
+    </div>
+    <div class="rubric-content" id="rubric1">
+
+      <!-- Criterion 2a -->
+      <div class="criterion" id="c1-0">
+        <div class="criterion-header" onclick="toggleCriterion('c1-0')">
+          <span class="criterion-name">Focused Snapshot Drawing</span>
+          <span class="criterion-tag">Structure</span>
+          <span class="criterion-pts" id="pts-c1-0">0 <span>/ 1</span></span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="criterion-body">
+          <div class="rubric-hint"><strong>Full credit (1):</strong> Panel 2 is a new focused snapshot (not a copied version of Panel 1). It shows the specific disrupted region (NMJ junction / receptor site) as its own drawing.</div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">Panel 2 is a new drawing, not a modified copy of Panel 1; clearly focused on the specific disruption site (neuromuscular junction / motor end plate region)</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="criterion-comment">
+            <label>Grader comment</label>
+            <textarea placeholder="Note if Panel 2 appears to be a copied/modified Panel 1 or is a genuinely new focused drawing…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Criterion 2b -->
+      <div class="criterion" id="c1-1">
+        <div class="criterion-header" onclick="toggleCriterion('c1-1')">
+          <span class="criterion-name">Disease Mechanism: Antibody Action</span>
+          <span class="criterion-tag">Pathophysiology</span>
+          <span class="criterion-pts" id="pts-c1-1">0 <span>/ 2</span></span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="criterion-body">
+          <div class="rubric-hint"><strong>Full credit (2):</strong> Autoimmune antibodies drawn at the nAChR site. Antibodies shown blocking or destroying receptors. Mechanism of receptor loss or blockade labeled. Reduced ACh binding shown as the consequence.</div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">Autoimmune antibodies drawn and labeled at the nAChR (nicotinic acetylcholine receptor) location on the muscle membrane; antibodies shown attacking, blocking, or degrading receptors</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">Mechanism of receptor blockade or loss labeled: fewer functional nAChR → reduced ACh binding → impaired signal transmission shown as a connected consequence</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="criterion-comment">
+            <label>Grader comment</label>
+            <textarea placeholder="Note accuracy of antibody mechanism, receptor labeling, and consequence tracing…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Criterion 2c -->
+      <div class="criterion" id="c1-2">
+        <div class="criterion-header" onclick="toggleCriterion('c1-2')">
+          <span class="criterion-name">Physiological Consequence & Symptom Connection</span>
+          <span class="criterion-tag">Cause-and-Effect</span>
+          <span class="criterion-pts" id="pts-c1-2">0 <span>/ 2</span></span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="criterion-body">
+          <div class="rubric-hint"><strong>Full credit (2):</strong> Physiological consequence shown (reduced end plate potential / failed muscle activation). Clinical symptoms connected by cause-and-effect: structural change → physiological disruption → symptom. No paragraph text; use bullets, arrows, or short phrases only.</div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">Physiological consequence annotated: fewer receptors → reduced or failed end plate potential → muscle activation fails; consequence is shown as a result of the structural disruption, not stated separately</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">Clinical symptoms connected: muscle weakness and/or fatigable weakness labeled; cause-and-effect chain visible (antibody → receptor loss → failed signal → weakness); no paragraph text used</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="criterion-comment">
+            <label>Grader comment</label>
+            <textarea placeholder="Note accuracy of symptom connection, whether paragraph text was used, and completeness of cause-effect chain…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Criterion 2d -->
+      <div class="criterion" id="c1-3">
+        <div class="criterion-header" onclick="toggleCriterion('c1-3')">
+          <span class="criterion-name">Accessible Explanation</span>
+          <span class="criterion-tag">Clarity</span>
+          <span class="criterion-pts" id="pts-c1-3">0 <span>/ 2</span></span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="criterion-body">
+          <div class="rubric-hint"><strong>Full credit (2):</strong> Panel 2 could be understood by someone without prior MG knowledge. Disruption is clearly located in the diagram. Explanation is visual (arrows, labels, short phrases), not written as prose.</div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">A viewer without prior myasthenia gravis knowledge could follow what is happening from the diagram alone: disruption location is clear, antibody role is labeled, consequence is shown</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">Explanation is fully visual: short phrases, arrows, or bullet points used; no paragraph-style writing in Panel 2</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="criterion-comment">
+            <label>Grader comment</label>
+            <textarea placeholder="Note whether a naive viewer could understand the panel; flag any paragraph text…"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="progress-wrap"><div class="progress-bar" id="prog1" style="width:0%"></div></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       PANEL 3 - NEOSTIGMINE DRUG MECHANISM  (5 pts)
+  ══════════════════════════════════════════════════ -->
+  <div class="section-block" id="block2">
+    <div class="section-heading">
+      <div class="section-heading-left">
+        <div class="section-label">Panel 3 · 5 Points</div>
+        <div class="section-title">Drug Treatment Mechanism: Neostigmine</div>
+      </div>
+      <div class="section-score-box">
+        <div class="score-num" id="s2total">0</div>
+        <div class="score-denom">/ 5 pts</div>
+      </div>
+    </div>
+    <div class="rubric-content" id="rubric2">
+
+      <!-- Criterion 3a -->
+      <div class="criterion" id="c2-0">
+        <div class="criterion-header" onclick="toggleCriterion('c2-0')">
+          <span class="criterion-name">Drug Location & Target Identified</span>
+          <span class="criterion-tag">Structure</span>
+          <span class="criterion-pts" id="pts-c2-0">0 <span>/ 1</span></span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="criterion-body">
+          <div class="rubric-hint"><strong>Full credit (1):</strong> Synaptic cleft region drawn as a new focused snapshot. Acetylcholinesterase (AChE) enzyme drawn and labeled at the synaptic cleft. Neostigmine shown interacting with AChE.</div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">Panel 3 is a new snapshot drawing of the synaptic cleft; acetylcholinesterase (AChE) enzyme labeled; neostigmine shown at the correct location interacting with AChE</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="criterion-comment">
+            <label>Grader comment</label>
+            <textarea placeholder="Note accuracy of drug location, AChE labeling, neostigmine interaction…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Criterion 3b -->
+      <div class="criterion" id="c2-1">
+        <div class="criterion-header" onclick="toggleCriterion('c2-1')">
+          <span class="criterion-name">Mechanism of Action</span>
+          <span class="criterion-tag">Pharmacology</span>
+          <span class="criterion-pts" id="pts-c2-1">0 <span>/ 2</span></span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="criterion-body">
+          <div class="rubric-hint"><strong>Full credit (2):</strong> AChE inhibition by neostigmine shown and labeled. Consequence shown: ACh not broken down → ACh accumulates in synaptic cleft → more ACh available to bind remaining receptors. Mechanism is shown as a connected sequence.</div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">Neostigmine shown inhibiting/blocking AChE; AChE inhibition labeled clearly; ACh not broken down shown as the direct consequence</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">ACh accumulation in synaptic cleft shown; more ACh available → more receptor binding → stronger or more sustained end plate potential; connected as a sequence</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="criterion-comment">
+            <label>Grader comment</label>
+            <textarea placeholder="Note accuracy of mechanism and whether the consequence chain is correctly traced…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Criterion 3c -->
+      <div class="criterion" id="c2-2">
+        <div class="criterion-header" onclick="toggleCriterion('c2-2')">
+          <span class="criterion-name">Improved Signaling & Cause-Effect Chain</span>
+          <span class="criterion-tag">Treatment Outcome</span>
+          <span class="criterion-pts" id="pts-c2-2">0 <span>/ 2</span></span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="criterion-body">
+          <div class="rubric-hint"><strong>Full credit (2):</strong> Full cause-effect chain visible: drug → AChE inhibition → ↑ACh → more receptor binding → stronger contraction. Expected improvement in function annotated. Diagram alone tells the treatment story.</div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">Full cause-and-effect chain visible on diagram: neostigmine → AChE inhibited → ACh accumulates → more nAChR binding → stronger end plate potential → stronger muscle contraction</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">Expected functional improvement annotated: reduced weakness, improved neuromuscular signaling, or stronger contraction labeled as the treatment outcome; diagram alone communicates what the drug is doing</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="criterion-comment">
+            <label>Grader comment</label>
+            <textarea placeholder="Note whether the treatment outcome is clear from the diagram alone…"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="progress-wrap"><div class="progress-bar" id="prog2" style="width:0%"></div></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       VISUAL CLARITY & LABELING  (3 pts)
+  ══════════════════════════════════════════════════ -->
+  <div class="section-block" id="block3">
+    <div class="section-heading">
+      <div class="section-heading-left">
+        <div class="section-label">Global Criteria · 3 Points</div>
+        <div class="section-title">Visual Clarity, Labeling & Organization</div>
+      </div>
+      <div class="section-score-box">
+        <div class="score-num" id="s3total">0</div>
+        <div class="score-denom">/ 3 pts</div>
+      </div>
+    </div>
+    <div class="rubric-content" id="rubric3">
+
+      <div class="criterion" id="c3-0">
+        <div class="criterion-header" onclick="toggleCriterion('c3-0')">
+          <span class="criterion-name">Visual Legend</span>
+          <span class="criterion-tag">Required Element</span>
+          <span class="criterion-pts" id="pts-c3-0">0 <span>/ 1</span></span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="criterion-body">
+          <div class="rubric-hint"><strong>Full credit (1):</strong> Visual legend present on the same sheet. Symbols and/or colors defined. Legend elements used consistently across all three panels.</div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">Visual legend present on same sheet; symbols and/or colors defined (e.g., neurotransmitters, receptors, antibodies, drug molecules); legend elements used consistently across all three panels</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="criterion-comment">
+            <label>Grader comment</label>
+            <textarea placeholder="Note whether legend is present, complete, and consistently applied…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="criterion" id="c3-1">
+        <div class="criterion-header" onclick="toggleCriterion('c3-1')">
+          <span class="criterion-name">Panel Separation & Directional Flow</span>
+          <span class="criterion-tag">Organization</span>
+          <span class="criterion-pts" id="pts-c3-1">0 <span>/ 1</span></span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="criterion-body">
+          <div class="rubric-hint"><strong>Full credit (1):</strong> Three panels clearly separated and labeled. Arrows and/or numbered steps show direction of events throughout. Panels are visually distinguishable from each other.</div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">Three panels clearly separated, labeled ("Panel 1," "Panel 2," "Panel 3" or equivalent), and visually distinguishable; directional arrows or numbered steps used throughout all panels</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="criterion-comment">
+            <label>Grader comment</label>
+            <textarea placeholder="Note panel separation quality and whether directional flow is clear…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="criterion" id="c3-2">
+        <div class="criterion-header" onclick="toggleCriterion('c3-2')">
+          <span class="criterion-name">Legibility & Label Accuracy</span>
+          <span class="criterion-tag">Clarity</span>
+          <span class="criterion-pts" id="pts-c3-2">0 <span>/ 1</span></span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="criterion-body">
+          <div class="rubric-hint"><strong>Full credit (1):</strong> Diagrams are legible and organized. Labels are attached to correct structures. A viewer unfamiliar with the student's handwriting can follow the diagram.</div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">All three panels are legible and organized; labels point to correct structures; diagram can be followed by a viewer without the student present to explain it</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="criterion-comment">
+            <label>Grader comment</label>
+            <textarea placeholder="Note any legibility issues or mislabeled structures…"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="progress-wrap"><div class="progress-bar" id="prog3" style="width:0%"></div></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       FORMAT & DIRECTIONS  (3 pts)
+  ══════════════════════════════════════════════════ -->
+  <div class="section-block" id="block4">
+    <div class="section-heading">
+      <div class="section-heading-left">
+        <div class="section-label">Global Criteria · 3 Points</div>
+        <div class="section-title">Following Directions & Format Requirements</div>
+      </div>
+      <div class="section-score-box">
+        <div class="score-num" id="s4total">0</div>
+        <div class="score-denom">/ 3 pts</div>
+      </div>
+    </div>
+    <div class="rubric-content" id="rubric4">
+
+      <div class="criterion" id="c4-0">
+        <div class="criterion-header" onclick="toggleCriterion('c4-0')">
+          <span class="criterion-name">Paper & Materials Compliance</span>
+          <span class="criterion-tag">Format</span>
+          <span class="criterion-pts" id="pts-c4-0">0 <span>/ 1</span></span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="criterion-body">
+          <div class="rubric-hint"><strong>Full credit (1):</strong> One sheet of paper. Correct size (8.5×11 or 11×18). One-sided only. Drawing tools used (pencil/pen/colored pencil). No typed or printed text. No pasted images.</div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">One sheet, correct size, one-sided; drawing tools used throughout; no typed/printed text; no pasted images anywhere on the page</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="criterion-comment">
+            <label>Grader comment</label>
+            <textarea placeholder="Note any format violations…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="criterion" id="c4-1">
+        <div class="criterion-header" onclick="toggleCriterion('c4-1')">
+          <span class="criterion-name">Three Panels Present & Labeled</span>
+          <span class="criterion-tag">Completeness</span>
+          <span class="criterion-pts" id="pts-c4-1">0 <span>/ 1</span></span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="criterion-body">
+          <div class="rubric-hint"><strong>Full credit (1):</strong> All three panels are present, clearly labeled, and clearly separated. Panel 1 = Normal NMJ, Panel 2 = MG Disease Snapshot, Panel 3 = Neostigmine Mechanism.</div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">All three panels present, clearly labeled (Panel 1 = Normal NMJ, Panel 2 = Myasthenia Gravis, Panel 3 = Neostigmine), and clearly separated on the page</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="criterion-comment">
+            <label>Grader comment</label>
+            <textarea placeholder="Note any missing or unlabeled panels…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="criterion" id="c4-2">
+        <div class="criterion-header" onclick="toggleCriterion('c4-2')">
+          <span class="criterion-name">AI Use Disclosure (if applicable)</span>
+          <span class="criterion-tag">Integrity</span>
+          <span class="criterion-pts" id="pts-c4-2">0 <span>/ 1</span></span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="criterion-body">
+          <div class="rubric-hint"><strong>Full credit (1):</strong> If AI was used during learning, the AI Use Worksheet was submitted alongside this assignment. If AI was not used, this point is awarded by default. Failure to disclose AI use when it was used = zero for entire assignment.</div>
+          <div class="check-item" onclick="toggleCheck(this)" data-pts="1">
+            <input type="checkbox">
+            <div class="check-content"><div class="check-label">AI Use Worksheet submitted (if AI was used), OR no AI use is indicated and there is no evidence of AI reliance in the work; disclosure requirement satisfied</div></div>
+            <div class="check-pts">1 pt</div>
+          </div>
+          <div class="criterion-comment">
+            <label>Grader comment</label>
+            <textarea placeholder="Note whether worksheet was submitted, and any concerns about undisclosed AI use…"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="progress-wrap"><div class="progress-bar" id="prog4" style="width:0%"></div></div>
+  </div>
+
+  <!-- ══ SCORE SUMMARY ══════════════════════════════════ -->
+  <div class="score-summary" id="scoreSummary">
+    <div class="score-col">
+      <div class="crit-name">Panel 1 · NMJ</div>
+      <div class="crit-val" id="sv0">0</div>
+      <div class="crit-max">/ 7</div>
+    </div>
+    <div class="score-col">
+      <div class="crit-name">Panel 2 · MG</div>
+      <div class="crit-val" id="sv1">0</div>
+      <div class="crit-max">/ 7</div>
+    </div>
+    <div class="score-col">
+      <div class="crit-name">Panel 3 · Drug</div>
+      <div class="crit-val" id="sv2">0</div>
+      <div class="crit-max">/ 5</div>
+    </div>
+    <div class="score-col">
+      <div class="crit-name">Visual Clarity</div>
+      <div class="crit-val" id="sv3">0</div>
+      <div class="crit-max">/ 3</div>
+    </div>
+    <div class="score-col">
+      <div class="crit-name">Format</div>
+      <div class="crit-val" id="sv4">0</div>
+      <div class="crit-max">/ 3</div>
+    </div>
+    <div class="score-col" style="border-right:none">
+      <div class="crit-name">Total</div>
+      <div class="crit-val" id="svTotal" style="color:#E8B09A">0</div>
+      <div class="crit-max">/ 25</div>
+    </div>
+  </div>
+  <div class="progress-wrap" style="margin-top:8px"><div class="progress-bar" id="progTotal" style="width:0%"></div></div>
+
+  <!-- ══ GENERAL NOTES ══════════════════════════════════ -->
+  <div class="notes-section" style="margin-top:28px;">
+    <label>General Grader Notes (internal only)</label>
+    <textarea placeholder="Overall observations, oral session notes, academic integrity concerns, exceptions…"></textarea>
+  </div>
+
+  <!-- ══ STUDENT FEEDBACK ═══════════════════════════════ -->
+  <div class="feedback-section">
+    <div class="feedback-header">
+      <h2>Student Feedback</h2>
+      <span class="feedback-sub">Shared with student</span>
+    </div>
+    <div class="feedback-body">
+      <div class="feedback-field strengths">
+        <label>
+          <span class="feedback-icon">+</span>
+          What you did well
+        </label>
+        <textarea id="feedbackStrengths" placeholder="Write one paragraph highlighting what the student demonstrated clearly. Reference specific panels or criteria where credit was earned. Keep it specific and genuine."></textarea>
+        <div class="feedback-note">One paragraph. Reference the work directly. Be specific about what was done well and why it met the standard.</div>
+      </div>
+      <div class="feedback-field improve">
+        <label>
+          <span class="feedback-icon">!</span>
+          What you can do to improve
+        </label>
+        <textarea id="feedbackImprove" placeholder="Write one paragraph describing the most important gaps. Connect missed criteria to specific physiology concepts. Focus on what would have earned the missing points."></textarea>
+        <div class="feedback-note">One paragraph. Be direct and constructive. Tell the student exactly what was missing and how to fix it. See the checklist above for specific point losses.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end .main -->
+
+<script>
+// ══════════════════════════════════════════════════════
+//  CONSTANTS & DATA
+// ══════════════════════════════════════════════════════
+const SECTION_MAXES = [7, 7, 5, 3, 3];
+const SECTION_CRIT_COUNTS = [4, 4, 3, 3, 3]; // criteria per section
+const SECTION_CRIT_MAXES = [
+  [2, 2, 2, 1],       // Panel 1
+  [1, 2, 2, 2],       // Panel 2
+  [1, 2, 2],          // Panel 3
+  [1, 1, 1],          // Visual clarity
+  [1, 1, 1]           // Format
+];
+
+const authFlags = [
+  { id: 'a1', label: 'Lines and arrows are perfectly smooth or vector-like; not consistent with hand drawing' },
+  { id: 'a2', label: 'Labels appear typed or printed, not handwritten' },
+  { id: 'a3', label: 'Layout is suspiciously symmetrical, grid-aligned, or template-like' },
+  { id: 'a4', label: 'Structures use clip-art-style icons or pre-made anatomical illustrations' },
+  { id: 'a5', label: 'Drawing appears assembled from components rather than composed as a whole' },
+  { id: 'a6', label: 'No visible corrections, erasures, or evidence of iterative thinking' },
+  { id: 'a7', label: 'Uniform line weight throughout; no natural variation from a drawing hand' },
+  { id: 'a8', label: 'Suspiciously complete and perfect; every element present with no gaps or hesitation' },
+];
+
+const zeroTriggers = [
+  'Typed or printed text appears anywhere on the paper',
+  'Assignment is not hand-drawn (appears digital, traced, or computer-assisted)',
+  'More than one sheet of paper used',
+  'Paper is double-sided',
+  'AI was used but no AI Use Worksheet was submitted',
+  'Suspected AI misuse or AI-generated content identified',
+];
+
+// ══════════════════════════════════════════════════════
+//  INJECT AUTH FLAGS & ZERO TRIGGERS
+// ══════════════════════════════════════════════════════
+document.getElementById('authGrid').innerHTML = authFlags.map(f => `
+  <div class="auth-item" onclick="toggleAuthFlag(this)" id="af-${f.id}">
+    <input type="checkbox">
+    <span class="auth-item-label">${f.label}</span>
+  </div>`).join('');
+
+document.getElementById('zeroGrid').innerHTML = zeroTriggers.map((t, i) => `
+  <div class="zero-item" onclick="toggleZeroItem(this, ${i})" id="zi-${i}">
+    <input type="checkbox" onclick="event.stopPropagation()">
+    <span class="zero-item-label">${t}</span>
+  </div>`).join('');
+
+// ══════════════════════════════════════════════════════
+//  SCORING
+// ══════════════════════════════════════════════════════
+function isZeroed() {
+  return document.querySelectorAll('.zero-item.flagged').length > 0;
+}
+
+function isAuthFlagged() {
+  return document.querySelectorAll('.auth-item.flagged-item').length > 0;
+}
+
+function getSectionScore(sIdx) {
+  const cCount = SECTION_CRIT_COUNTS[sIdx];
+  let total = 0;
+  for (let c = 0; c < cCount; c++) {
+    const cEl = document.getElementById(`c${sIdx}-${c}`);
+    if (!cEl) continue;
+    cEl.querySelectorAll('.check-item').forEach(item => {
+      const state = item.dataset.state || 'unchecked';
+      const pts = parseFloat(item.dataset.pts) || 1;
+      if (state === 'full') total += pts;
+      else if (state === 'half') total += pts / 2;
+    });
+  }
+  return total;
+}
+
+function updateAll() {
+  const zeroed = isZeroed() || isAuthFlagged();
+  let grand = 0;
+
+  // Dim rubric content if zeroed
+  document.querySelectorAll('.rubric-content').forEach(rc => {
+    rc.classList.toggle('dimmed', zeroed);
+  });
+
+  for (let s = 0; s < 5; s++) {
+    const raw = getSectionScore(s);
+    const score = zeroed ? 0 : raw;
+    const max = SECTION_MAXES[s];
+
+    // Section total
+    const stEl = document.getElementById(`s${s}total`);
+    if (stEl) {
+      stEl.textContent = Number.isInteger(score) ? score : score.toFixed(1);
+      stEl.style.color = zeroed ? 'var(--mid)' : score === max ? 'var(--sage)' : 'var(--terra)';
+    }
+
+    // Per-criterion pts display
+    const cCount = SECTION_CRIT_COUNTS[s];
+    for (let c = 0; c < cCount; c++) {
+      const cEl = document.getElementById(`c${s}-${c}`);
+      if (!cEl) continue;
+      let cScore = 0;
+      cEl.querySelectorAll('.check-item').forEach(item => {
+        const state = item.dataset.state || 'unchecked';
+        const pts = parseFloat(item.dataset.pts) || 1;
+        if (state === 'full') cScore += pts;
+        else if (state === 'half') cScore += pts / 2;
+      });
+      const cMax = SECTION_CRIT_MAXES[s][c];
+      const ptsEl = document.getElementById(`pts-c${s}-${c}`);
+      if (ptsEl) {
+        const display = zeroed ? 0 : (Number.isInteger(cScore) ? cScore : cScore.toFixed(1));
+        ptsEl.innerHTML = `${display} <span>/ ${cMax}</span>`;
+        ptsEl.style.color = (!zeroed && cScore === cMax) ? 'var(--sage)' : 'var(--terra)';
+      }
+    }
+
+    // Summary val
+    const svEl = document.getElementById(`sv${s}`);
+    if (svEl) svEl.textContent = zeroed ? 0 : (Number.isInteger(score) ? score : score.toFixed(1));
+
+    // Progress bar
+    const progEl = document.getElementById(`prog${s}`);
+    if (progEl) progEl.style.width = `${(score / max) * 100}%`;
+
+    grand += score;
+  }
+
+  // Grand total
+  const grandDisplay = zeroed ? 0 : (Number.isInteger(grand) ? grand : grand.toFixed(1));
+  const gtEl = document.getElementById('grandTotal');
+  if (gtEl) {
+    gtEl.textContent = `${grandDisplay} / 25`;
+    gtEl.classList.toggle('zeroed', zeroed);
+  }
+
+  const svTotal = document.getElementById('svTotal');
+  if (svTotal) svTotal.textContent = grandDisplay;
+
+  const progTotal = document.getElementById('progTotal');
+  if (progTotal) progTotal.style.width = `${(grand / 25) * 100}%`;
+}
+
+// ══════════════════════════════════════════════════════
+//  INTERACTION HANDLERS
+// ══════════════════════════════════════════════════════
+function toggleCheck(item) {
+  const cb = item.querySelector('input[type="checkbox"]');
+  const state = item.dataset.state || 'unchecked';
+  if (state === 'unchecked') {
+    item.dataset.state = 'full'; cb.checked = true;
+    item.classList.add('checked'); item.classList.remove('half-credit');
+  } else if (state === 'full') {
+    item.dataset.state = 'half'; cb.checked = true;
+    item.classList.add('checked', 'half-credit');
+  } else {
+    item.dataset.state = 'unchecked'; cb.checked = false;
+    item.classList.remove('checked', 'half-credit');
+  }
+  updateAll();
+}
+
+function toggleCriterion(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
+function toggleZeroBlock() {
+  document.getElementById('zeroBlock').classList.toggle('collapsed');
+}
+
+function toggleZeroItem(item, idx) {
+  const cb = item.querySelector('input[type="checkbox"]');
+  if (event && event.target === cb) {
+    item.classList.toggle('flagged', cb.checked);
+  } else {
+    const newState = !item.classList.contains('flagged');
+    item.classList.toggle('flagged', newState);
+    cb.checked = newState;
+  }
+  const anyFlagged = document.querySelectorAll('.zero-item.flagged').length > 0;
+  const zeroBlock = document.getElementById('zeroBlock');
+  const zeroStatus = document.getElementById('zeroStatus');
+  const zeroWarn = document.getElementById('zeroWarn');
+  zeroBlock.classList.toggle('triggered', anyFlagged);
+  zeroStatus.textContent = anyFlagged ? '⚑ Grade = 0' : 'None flagged';
+  zeroStatus.classList.toggle('active', anyFlagged);
+  zeroWarn.classList.toggle('visible', anyFlagged);
+  updateAll();
+}
+
+function toggleAuthFlag(item) {
+  const cb = item.querySelector('input[type="checkbox"]');
+  if (!event || event.target !== cb) cb.checked = !cb.checked;
+  item.classList.toggle('flagged-item', cb.checked);
+  const flagged = document.querySelectorAll('.auth-item.flagged-item').length > 0;
+  const statusEl = document.getElementById('authStatus');
+  const warnEl = document.getElementById('authWarn');
+  document.getElementById('authCheck').classList.toggle('is-flagged', flagged);
+  statusEl.className = 'auth-status ' + (flagged ? 'flagged' : 'clear');
+  statusEl.textContent = flagged ? '⚑ Suspected AI : Zoom Required' : '✓ Appears Hand-Drawn';
+  warnEl.classList.toggle('visible', flagged);
+  updateAll();
+}
+
+function resetAll() {
+  if (!confirm('Reset all scores and notes?')) return;
+  document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.checked = false;
+    cb.closest('.check-item')?.classList.remove('checked', 'half-credit');
+    if (cb.closest('.check-item')) cb.closest('.check-item').dataset.state = 'unchecked';
+    cb.closest('.auth-item')?.classList.remove('flagged-item');
+    cb.closest('.zero-item')?.classList.remove('flagged');
+  });
+  document.querySelectorAll('textarea').forEach(ta => ta.value = '');
+  document.getElementById('studentName').value = '';
+  document.getElementById('authCheck').classList.remove('is-flagged');
+  document.getElementById('authStatus').className = 'auth-status';
+  document.getElementById('authStatus').textContent = 'Not reviewed';
+  document.getElementById('authWarn').classList.remove('visible');
+  document.getElementById('zeroBlock').classList.remove('triggered');
+  document.getElementById('zeroStatus').textContent = 'None flagged';
+  document.getElementById('zeroStatus').classList.remove('active');
+  document.getElementById('zeroWarn').classList.remove('visible');
+  updateAll();
+}
+
+// ══════════════════════════════════════════════════════
+//  SMART PRINT
+// ══════════════════════════════════════════════════════
+function smartPrint() {
+  const studentName = document.getElementById('studentName').value || 'Student';
+  const grandTotal = document.getElementById('grandTotal').textContent;
+  const zeroed = isZeroed() || isAuthFlagged();
+  const authFlagged = isAuthFlagged();
+  const zeroFlagged = isZeroed();
+  const authComment = document.querySelector('.auth-comment textarea')?.value || '';
+  const zeroNotes = document.getElementById('zeroNotes')?.value || '';
+  const generalNotes = document.querySelector('.notes-section textarea')?.value || '';
+  const feedbackStrengths = document.getElementById('feedbackStrengths')?.value || '';
+  const feedbackImprove = document.getElementById('feedbackImprove')?.value || '';
+
+  const sectionTitles = [
+    'Panel 1: Normal NMJ Physiology',
+    'Panel 2: Myasthenia Gravis',
+    'Panel 3: Neostigmine',
+    'Visual Clarity & Labeling',
+    'Format & Directions'
+  ];
+
+  let sectionsHTML = '';
+  for (let s = 0; s < 5; s++) {
+    const score = zeroed ? 0 : getSectionScore(s);
+    const max = SECTION_MAXES[s];
+    const displayScore = Number.isInteger(score) ? score : score.toFixed(1);
+    const cCount = SECTION_CRIT_COUNTS[s];
+
+    let criteriaHTML = '';
+    for (let c = 0; c < cCount; c++) {
+      const cEl = document.getElementById(`c${s}-${c}`);
+      if (!cEl) continue;
+      const cName = cEl.querySelector('.criterion-name')?.textContent || '';
+      const cMax = SECTION_CRIT_MAXES[s][c];
+      const cScore = document.getElementById(`pts-c${s}-${c}`)?.textContent?.split(' ')[0] || '0';
+      const comment = cEl.querySelector('.criterion-comment textarea')?.value || '';
+
+      let itemsHTML = '';
+      cEl.querySelectorAll('.check-item').forEach(item => {
+        const state = item.dataset.state || 'unchecked';
+        const label = item.querySelector('.check-label')?.textContent || '';
+        const sym = state === 'full' ? '✓' : state === 'half' ? '½' : '○';
+        const col = state === 'full' ? '#4A6741' : state === 'half' ? '#C8922A' : '#bbb';
+        const bg = state === 'full' ? '#EBF3E8' : state === 'half' ? '#FFF8EC' : '#fafafa';
+        itemsHTML += `<div style="display:flex;gap:10px;padding:5px 8px;margin-bottom:3px;border:1px solid #ddd;border-radius:3px;background:${bg}">
+          <span style="color:${col};font-weight:700;min-width:14px;font-size:12px">${sym}</span>
+          <span style="flex:1;font-size:11.5px;color:#2C2B28">${label}</span>
+        </div>`;
+      });
+
+      criteriaHTML += `<div style="border:1px solid #C8C0B0;border-radius:4px;margin-bottom:8px;overflow:hidden">
+        <div style="background:#EDE6D9;padding:7px 12px;display:flex;justify-content:space-between">
+          <span style="font-weight:600;color:#2B3A5C;font-size:12px">${cName}</span>
+          <span style="font-weight:700;color:#B05C38;font-size:13px">${cScore} / ${cMax}</span>
+        </div>
+        <div style="padding:8px 12px">${itemsHTML}${comment ? `<div style="margin-top:6px;padding:6px 8px;background:#f5f5f5;border-radius:3px;font-size:11px;color:#444;border-left:2px solid #B05C38"><strong>Comment:</strong> ${comment}</div>` : ''}</div>
+      </div>`;
+    }
+
+    sectionsHTML += `<div style="margin-bottom:24px;page-break-inside:avoid">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #2B3A5C;padding-bottom:8px;margin-bottom:12px">
+        <div style="font-family:Georgia,serif;font-size:17px;font-weight:700;color:#2B3A5C">${sectionTitles[s]}</div>
+        <div style="font-family:Georgia,serif;font-size:20px;font-weight:700;color:${zeroed ? '#999' : '#B05C38'}">${displayScore} / ${max}</div>
+      </div>
+      ${criteriaHTML}
+    </div>`;
+  }
+
+  const printHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>NMJ Assignment · Grading Report · ${studentName}</title>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>body{font-family:'Jost',sans-serif;margin:0;padding:0;background:white;color:#2C2B28;}@media print{body{font-size:11px;}}</style>
+</head><body>
+<div style="background:#2B3A5C;color:#F4EFE6;padding:18px 32px;display:flex;justify-content:space-between;align-items:center">
+  <div>
+    <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#DDD5C5">Neuromuscular Physiology · Three-Panel Drawing Assignment</div>
+    <div style="font-family:Georgia,serif;font-size:19px;font-weight:700">NMJ Drawing · Scoring Report</div>
+  </div>
+  <div style="text-align:right">
+    <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#DDD5C5">Student</div>
+    <div style="font-size:17px;font-weight:600">${studentName}</div>
+  </div>
+</div>
+<div style="background:#1e2d4a;color:#F4EFE6;padding:10px 32px;display:flex;justify-content:space-between;align-items:center">
+  <div style="font-size:12px;color:#DDD5C5">P1: ${document.getElementById('sv0')?.textContent}/7 &nbsp;|&nbsp; P2: ${document.getElementById('sv1')?.textContent}/7 &nbsp;|&nbsp; P3: ${document.getElementById('sv2')?.textContent}/5 &nbsp;|&nbsp; Clarity: ${document.getElementById('sv3')?.textContent}/3 &nbsp;|&nbsp; Format: ${document.getElementById('sv4')?.textContent}/3</div>
+  <div style="font-family:Georgia,serif;font-size:20px;font-weight:700;color:${zeroed ? '#e88' : '#E8B09A'}">${grandTotal}</div>
+</div>
+${zeroed ? `<div style="background:#8B1A1A;color:white;padding:10px 32px;font-weight:600;font-size:13px">⚑ Grade = 0 | ${authFlagged ? 'Suspected AI Misuse / Authenticity Flag' : ''}${zeroFlagged ? 'Policy Violation' : ''}${zeroNotes ? ' | ' + zeroNotes : ''}</div>` : ''}
+${authFlagged ? `<div style="background:#B05C38;color:white;padding:8px 32px;font-size:12px"><strong>Authenticity concern:</strong> ${authComment || 'Flagged for review'}</div>` : ''}
+<div style="padding:20px 32px 40px">
+${(feedbackStrengths || feedbackImprove) ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;page-break-inside:avoid">
+  ${feedbackStrengths ? `<div style="background:#F6FAF5;border:1.5px solid #6A8F60;border-radius:6px;padding:14px 16px"><div style="font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#4A6741;margin-bottom:8px">What you did well</div><div style="font-size:12.5px;color:#2C2B28;line-height:1.6">${feedbackStrengths}</div></div>` : ''}
+  ${feedbackImprove ? `<div style="background:#F5E0D7;border:1.5px solid #B05C38;border-radius:6px;padding:14px 16px"><div style="font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#B05C38;margin-bottom:8px">What you can do to improve</div><div style="font-size:12.5px;color:#2C2B28;line-height:1.6">${feedbackImprove}</div></div>` : ''}
+</div>` : ''}
+${sectionsHTML}${generalNotes ? `<div style="margin-top:16px;padding:10px 14px;background:#f9f9f9;border:1px solid #ddd;border-radius:4px;font-size:12px"><strong>Grader Notes:</strong> ${generalNotes}</div>` : ''}</div>
+<script>window.onload=function(){window.print();}<\/script>
+</body></html>`;
+
+  const w = window.open('', '_blank');
+  w.document.write(printHTML);
+  w.document.close();
+}
+
+// ══════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════
+updateAll();
+</script>
+</body>
+</html>
