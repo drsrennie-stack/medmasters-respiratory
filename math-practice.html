@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A&P Math Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy:       #0f1e30;
+    --navy-mid:   #1a2e4a;
+    --navy-light: #2a4a6e;
+    --cream:      #f7f3ec;
+    --cream-dark: #ede8de;
+    --amber:      #b8860b;
+    --amber-lt:   #e8c96a;
+    --amber-pale: #fdf6e3;
+    --border:     #d8d0bc;
+    --muted:      #5a6070;
+    --text:       #1a2030;
+    --err-bg:     #fdf3f0;
+    --err-border: #c05030;
+    --err-text:   #5c1a00;
+  }
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #f4f0e8;
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+
+  /* Header */
+  .hdr {
+    background: var(--navy);
+    padding: 20px 24px 18px;
+    border-bottom: 3px solid var(--amber);
+  }
+  .hdr h1 {
+    font-family: 'Lora', serif;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--cream);
+    letter-spacing: -0.3px;
+  }
+  .hdr p {
+    font-size: 12px;
+    color: var(--amber-lt);
+    margin-top: 3px;
+    font-weight: 500;
+  }
+
+  /* Wrapper */
+  .wrap { max-width: 680px; margin: 0 auto; padding: 0 16px; }
+
+  /* Topic cards */
+  .topic-row { display: flex; gap: 12px; padding: 20px 0 4px; flex-wrap: wrap; }
+  .topic-card {
+    flex: 1; min-width: 200px;
+    padding: 14px 16px; border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: #fff; cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    text-align: left;
+  }
+  .topic-card:hover { border-color: var(--navy-light); }
+  .topic-card.active { border-color: var(--navy-mid); background: var(--cream); }
+  .topic-icon { font-size: 18px; margin-bottom: 5px; display: block; }
+  .topic-label {
+    font-family: 'Lora', serif;
+    font-size: 14px; font-weight: 700;
+    color: var(--navy-mid); margin: 0 0 3px;
+  }
+  .topic-desc { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+  /* Cards */
+  .card {
+    background: #fff; border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 22px 24px; margin-top: 16px;
+  }
+
+  /* Badges */
+  .badge {
+    display: inline-block; font-size: 10px; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 20px; margin-bottom: 10px;
+  }
+  .badge-worked { background: var(--navy); color: var(--cream); }
+  .badge-yours  { background: var(--amber); color: #fff; }
+
+  .card-title {
+    font-family: 'Lora', serif; font-size: 17px; font-weight: 700;
+    color: var(--navy); margin: 0 0 8px;
+  }
+  .card-subtitle { font-size: 11px; color: var(--muted); }
+
+  .scenario {
+    font-size: 13px; color: var(--muted); line-height: 1.6;
+    padding: 10px 14px; background: var(--cream); border-radius: 8px;
+    border-left: 3px solid var(--amber-lt); margin-bottom: 16px;
+  }
+  .sec-lbl {
+    font-size: 10px; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--navy-light); margin-bottom: 8px;
+  }
+
+  /* Given grid */
+  .given-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .given-item {
+    background: var(--cream); border: 1px solid var(--border);
+    border-radius: 8px; padding: 7px 12px;
+  }
+  .given-lbl { font-size: 10px; color: var(--muted); font-weight: 500; display: block; }
+  .given-val  { font-size: 14px; font-weight: 600; color: var(--navy); }
+  .given-unit { font-size: 11px; font-weight: 400; color: var(--muted); }
+
+  /* Steps */
+  .steps-wrap { border-left: 2px solid var(--amber-lt); padding-left: 16px; margin-bottom: 16px; }
+  .step { margin-bottom: 12px; }
+  .step-expl { font-size: 12px; color: var(--muted); margin-bottom: 3px; }
+  .step-math {
+    font-size: 14px; font-weight: 600; color: var(--navy);
+    background: var(--cream); padding: 5px 10px; border-radius: 6px;
+    display: inline-block; font-family: 'Lora', serif;
+  }
+
+  /* Answer box */
+  .ans-box {
+    background: var(--amber-pale); border: 2px solid var(--amber);
+    border-radius: 8px; padding: 12px 16px;
+  }
+  .ans-lbl  { font-size: 11px; color: var(--muted); font-weight: 500; margin-bottom: 2px; }
+  .ans-val  { font-family: 'Lora', serif; font-size: 22px; font-weight: 700; color: var(--amber); }
+  .ans-unit { font-size: 12px; font-weight: 400; color: var(--muted); }
+
+  /* Divider */
+  .divider { height: 1px; background: var(--border); margin: 14px 0; }
+
+  /* Input row */
+  .input-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .ans-input {
+    border: 2px solid var(--border); border-radius: 8px;
+    padding: 10px 14px; font-size: 15px; font-weight: 600;
+    font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text);
+    width: 130px; outline: none; background: #fff;
+    transition: border-color 0.15s;
+  }
+  .ans-input:focus { border-color: var(--navy); }
+  .unit-lbl { font-size: 13px; color: var(--muted); font-weight: 500; }
+
+  /* Buttons */
+  .btn {
+    border: none; border-radius: 8px; padding: 11px 22px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: opacity 0.15s;
+  }
+  .btn-navy { background: var(--navy-mid); color: var(--cream); }
+  .btn-navy:hover { opacity: 0.88; }
+  .btn-outline {
+    background: transparent; border: 1.5px solid var(--navy-mid);
+    color: var(--navy-mid); border-radius: 8px; padding: 9px 18px;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: background 0.15s;
+  }
+  .btn-outline:hover { background: var(--cream); }
+  .btn:disabled { opacity: 0.45; cursor: default; }
+
+  /* Feedback */
+  .feedback {
+    border-radius: 10px; padding: 14px 18px; margin-top: 14px;
+  }
+  .feedback.ok  { background: var(--amber-pale); border: 2px solid var(--amber); }
+  .feedback.err { background: var(--err-bg);     border: 2px solid var(--err-border); }
+  .fb-label-ok  { font-size: 13px; font-weight: 600; color: var(--amber); margin-bottom: 4px; }
+  .fb-label-err { font-size: 13px; font-weight: 600; color: var(--err-border); margin-bottom: 4px; }
+  .fb-msg       { font-size: 13px; line-height: 1.5; color: var(--text); }
+  .fb-msg.err   { color: var(--err-text); }
+
+  /* Spinner */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    width: 24px; height: 24px;
+    border: 2.5px solid var(--cream-dark);
+    border-top-color: var(--navy-mid);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 10px;
+  }
+  .spinner-sm {
+    width: 18px; height: 18px;
+    border: 2px solid var(--cream-dark);
+    border-top-color: var(--navy-mid);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: inline-block; vertical-align: middle;
+    margin-left: 8px;
+  }
+  .loading { padding: 36px 0; text-align: center; color: var(--muted); font-size: 13px; }
+
+  /* Progress pips */
+  .progress-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .progress-label { font-size: 11px; color: var(--muted); font-weight: 500; }
+  .pips { display: flex; gap: 4px; }
+  .pip {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--cream-dark); border: 1.5px solid var(--border);
+    transition: all 0.2s;
+  }
+  .pip.done { background: var(--amber); border-color: var(--amber); }
+  .progress-count { font-size: 11px; color: var(--muted); }
+
+  /* Intro */
+  .intro { text-align: center; padding-top: 20px; }
+  .intro p { color: var(--muted); font-size: 13px; margin-bottom: 6px; line-height: 1.5; }
+  .cta { margin-top: 18px; }
+  .action-row { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; align-items: center; }
+
+  /* Error bar */
+  .error-bar {
+    background: var(--err-bg); border: 2px solid var(--err-border);
+    border-radius: 10px; padding: 12px 16px; margin-top: 12px;
+    font-size: 13px; color: var(--err-text); display: none;
+  }
+
+  .card-header-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px; flex-wrap: wrap; gap: 8px;
+  }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>A&amp;P Math Practice</h1>
+  <p>Worked examples + guided practice for quantitative physiology</p>
+</div>
+
+<div class="wrap">
+
+  <div class="topic-row">
+    <div class="topic-card active" id="card-spiro" onclick="selectTopic('spirometry')">
+      <span class="topic-icon">🫁</span>
+      <p class="topic-label">Spirometry &amp; Lung Volumes</p>
+      <p class="topic-desc">8 problem types in rotation</p>
+    </div>
+    <div class="topic-card" id="card-gas" onclick="selectTopic('gasexchange')">
+      <span class="topic-icon">🔬</span>
+      <p class="topic-label">Gas Exchange &amp; Transport</p>
+      <p class="topic-desc">6 problem types in rotation</p>
+    </div>
+  </div>
+
+  <div class="error-bar" id="error-bar"></div>
+
+  <!-- INTRO -->
+  <div class="intro" id="phase-intro">
+    <p>Each session cycles through all problem types in random order before repeating any.</p>
+    <div class="progress-row" id="intro-progress" style="justify-content:center;"></div>
+    <div class="cta">
+      <button class="btn btn-navy" onclick="generateProblem()">Generate a Problem Set &rarr;</button>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading hidden" id="phase-loading">
+    <div class="spinner"></div>
+    Building your problem set...
+  </div>
+
+  <!-- WORKED EXAMPLE CARD -->
+  <div class="card hidden" id="card-worked">
+    <div class="card-header-row">
+      <span class="badge badge-worked">Worked Example</span>
+      <span class="card-subtitle" id="type-hint"></span>
+    </div>
+    <h2 class="card-title" id="worked-title"></h2>
+    <p class="scenario" id="worked-scenario"></p>
+    <p class="sec-lbl">Given</p>
+    <div class="given-grid" id="worked-given"></div>
+    <p class="sec-lbl">Step-by-Step Solution</p>
+    <div class="steps-wrap" id="worked-steps"></div>
+    <div class="ans-box">
+      <div class="ans-lbl" id="worked-ans-label"></div>
+      <div class="ans-val" id="worked-ans-value"></div>
+    </div>
+    <div class="cta hidden" id="try-cta">
+      <button class="btn btn-navy" style="margin-top:18px" onclick="showPractice()">Now You Try One &rarr;</button>
+    </div>
+  </div>
+
+  <!-- PRACTICE CARD -->
+  <div class="card hidden" id="card-practice">
+    <span class="badge badge-yours">Your Turn</span>
+    <h2 class="card-title" id="prac-title"></h2>
+    <p class="scenario" id="prac-scenario"></p>
+    <p class="sec-lbl">Given</p>
+    <div class="given-grid" id="prac-given"></div>
+    <div class="divider"></div>
+    <p class="sec-lbl" id="prac-question-label" style="font-size:13px;font-weight:600;color:var(--text);text-transform:none;letter-spacing:0"></p>
+    <div class="input-row">
+      <input type="number" class="ans-input" id="user-answer" placeholder="Your answer" onkeydown="if(event.key==='Enter') checkAnswer()">
+      <span class="unit-lbl" id="prac-unit"></span>
+      <button class="btn btn-navy" id="check-btn" onclick="checkAnswer()">Check Answer</button>
+      <span class="spinner-sm hidden" id="check-spinner"></span>
+    </div>
+
+    <!-- Feedback -->
+    <div class="feedback hidden" id="feedback-box">
+      <div id="fb-label"></div>
+      <p class="fb-msg" id="fb-msg"></p>
+    </div>
+    <div class="hidden" id="correction-wrap">
+      <p class="sec-lbl" style="margin-top:14px">Correct Solution</p>
+      <div class="steps-wrap" id="correction-steps"></div>
+    </div>
+    <div class="action-row hidden" id="action-row">
+      <button class="btn btn-navy" onclick="generateProblem()">Next Problem &rarr;</button>
+      <button class="btn-outline" onclick="showExample()">&#8592; Review Example</button>
+      <div class="progress-row" id="done-progress"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const PROBLEM_TYPES = {
+  spirometry: [
+    { id:'tlc',  label:'Calculate Total Lung Capacity',        desc:'TLC = TV + IRV + ERV + RV' },
+    { id:'frc',  label:'Calculate Functional Residual Capacity', desc:'FRC = ERV + RV' },
+    { id:'vc',   label:'Calculate Vital Capacity',             desc:'VC = TV + IRV + ERV' },
+    { id:'ic',   label:'Calculate Inspiratory Capacity',       desc:'IC = TV + IRV' },
+    { id:'rv',   label:'Calculate Residual Volume',            desc:'RV = TLC - VC' },
+    { id:'erv',  label:'Calculate Expiratory Reserve Volume',  desc:'ERV = FRC - RV' },
+    { id:'mv',   label:'Calculate Minute Ventilation',         desc:'MV = TV x RR' },
+    { id:'va',   label:'Calculate Alveolar Ventilation',       desc:'VA = (TV - dead space) x RR' },
+  ],
+  gasexchange: [
+    { id:'pao2',     label:'Alveolar Gas Equation',          desc:'PAO2 = FiO2 x (Pb - 47) - (PaCO2 / RQ)' },
+    { id:'dalton',   label:'Dalton\'s Law Partial Pressure', desc:'PP = fraction x total pressure' },
+    { id:'cao2',     label:'Oxygen Content (CaO2)',          desc:'CaO2 = (Hgb x 1.34 x SaO2) + (0.003 x PaO2)' },
+    { id:'aa',       label:'A-a Gradient',                   desc:'A-a = PAO2 - PaO2' },
+    { id:'dissolved',label:'Dissolved Oxygen',               desc:'dissolved O2 = 0.003 x PaO2' },
+    { id:'do2',      label:'Oxygen Delivery (DO2)',          desc:'DO2 = CO x CaO2 x 10' },
+  ]
+};
+
+const SCHEMA = `Return ONLY valid JSON - no markdown, no extra text:
+{"worked":{"title":"string","scenario":"string","given":[{"label":"string","value":"string","unit":"string"}],"steps":[{"explanation":"string","math":"string"}],"answer":{"label":"string","value":"string","unit":"string"}},"practice":{"title":"string","scenario":"string","given":[{"label":"string","value":"string","unit":"string"}],"questions":[{"id":"q1","label":"string","answer":"string","unit":"string","tolerance":5}]}}
+Rules: 3-5 steps. One question id q1. Practice must use different numbers than worked. Clinically plausible values.`;
+
+// State
+let topic = 'spirometry';
+let currentData = null;
+let currentType = null;
+let queues = {
+  spirometry: shuffle([...PROBLEM_TYPES.spirometry]),
+  gasexchange: shuffle([...PROBLEM_TYPES.gasexchange])
+};
+let completed = { spirometry: 0, gasexchange: 0 };
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function getNextType() {
+  if (queues[topic].length === 0) {
+    queues[topic] = shuffle([...PROBLEM_TYPES[topic]]);
+    completed[topic] = 0;
+  }
+  const type = queues[topic].shift();
+  completed[topic]++;
+  return type;
+}
+
+function selectTopic(t) {
+  topic = t;
+  document.getElementById('card-spiro').className = 'topic-card' + (t === 'spirometry' ? ' active' : '');
+  document.getElementById('card-gas').className   = 'topic-card' + (t === 'gasexchange' ? ' active' : '');
+  currentData = null;
+  showPhase('intro');
+  renderProgress('intro-progress');
+}
+
+// ---- API ----
+async function callAPI(system, userMsg) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system,
+      messages: [{ role: 'user', content: userMsg }]
+    })
+  });
+  const json = await res.json();
+  const text = (json.content || []).map(b => b.text || '').join('');
+  return JSON.parse(text.replace(/```json|```/g, '').trim());
+}
+
+// ---- Generate ----
+async function generateProblem() {
+  hideError();
+  showPhase('loading');
+  currentType = getNextType();
+
+  const sys = `You generate A&P pre-professional math problems.
+You MUST generate a problem specifically about: ${currentType.label} (${currentType.desc})
+Use realistic clinical values. Vary the patient scenario (age, sex, clinical context).
+${SCHEMA}`;
+
+  try {
+    currentData = await callAPI(sys, 'Generate a worked example and practice problem for this specific type. Use fresh numbers.');
+    populateWorked();
+    showPhase('example');
+  } catch(e) {
+    showError('Could not generate problem - please try again.');
+    showPhase('intro');
+  }
+}
+
+// ---- Check answer ----
+async function checkAnswer() {
+  const val = document.getElementById('user-answer').value.trim();
+  if (!val) return;
+  hideError();
+  setChecking(true);
+
+  const q = currentData.practice.questions[0];
+  const sys = `Evaluate a student answer to a physiology math problem.
+Problem: ${currentData.practice.title}
+Scenario: ${currentData.practice.scenario}
+Given: ${currentData.practice.given.map(g => g.label + ': ' + g.value + ' ' + g.unit).join(', ')}
+Question: ${q.label}
+Correct answer: ${q.answer} ${q.unit} (tolerance +-${q.tolerance})
+Student answer: ${val} ${q.unit}
+Return ONLY valid JSON: {"correct":boolean,"message":"string - warm direct 1-2 sentence response","solution":[{"explanation":"string","math":"string"}]}
+If correct: affirm clearly. If wrong: explain error and show correct steps. Tone: encouraging but precise.`;
+
+  try {
+    const fb = await callAPI(sys, 'Evaluate.');
+    showFeedback(fb);
+  } catch(e) {
+    showError('Could not check answer - please try again.');
+    setChecking(false);
+  }
+}
+
+// ---- Populate worked example ----
+function populateWorked() {
+  const w = currentData.worked;
+  document.getElementById('worked-title').textContent    = w.title;
+  document.getElementById('worked-scenario').textContent = w.scenario;
+  document.getElementById('type-hint').textContent       = currentType.desc;
+  document.getElementById('worked-given').innerHTML      = givenHTML(w.given);
+  document.getElementById('worked-steps').innerHTML      = stepsHTML(w.steps);
+  document.getElementById('worked-ans-label').textContent = w.answer.label;
+  document.getElementById('worked-ans-value').innerHTML  = w.answer.value + ' <span class="ans-unit">' + w.answer.unit + '</span>';
+
+  const p = currentData.practice;
+  const q = p.questions[0];
+  document.getElementById('prac-title').textContent    = p.title;
+  document.getElementById('prac-scenario').textContent = p.scenario;
+  document.getElementById('prac-given').innerHTML      = givenHTML(p.given);
+  document.getElementById('prac-question-label').textContent = q.label;
+  document.getElementById('prac-unit').textContent     = q.unit;
+  document.getElementById('user-answer').value         = '';
+  document.getElementById('user-answer').disabled      = false;
+  document.getElementById('check-btn').disabled        = false;
+  document.getElementById('feedback-box').className    = 'feedback hidden';
+  document.getElementById('correction-wrap').className = 'hidden';
+  document.getElementById('action-row').className      = 'action-row hidden';
+}
+
+function showFeedback(fb) {
+  setChecking(false);
+  document.getElementById('user-answer').disabled = true;
+  document.getElementById('check-btn').disabled   = true;
+
+  const box = document.getElementById('feedback-box');
+  box.className = 'feedback ' + (fb.correct ? 'ok' : 'err');
+  document.getElementById('fb-label').className   = fb.correct ? 'fb-label-ok' : 'fb-label-err';
+  document.getElementById('fb-label').textContent = fb.correct ? 'Correct' : 'Incorrect';
+  const msgEl = document.getElementById('fb-msg');
+  msgEl.className   = 'fb-msg' + (fb.correct ? '' : ' err');
+  msgEl.textContent = fb.message;
+
+  if (!fb.correct && fb.solution) {
+    document.getElementById('correction-steps').innerHTML = stepsHTML(fb.solution);
+    document.getElementById('correction-wrap').className  = '';
+  }
+
+  document.getElementById('action-row').className = 'action-row';
+  renderProgress('done-progress');
+}
+
+// ---- Phases ----
+function showPhase(p) {
+  document.getElementById('phase-intro').classList.toggle('hidden',   p !== 'intro');
+  document.getElementById('phase-loading').classList.toggle('hidden', p !== 'loading');
+  document.getElementById('card-worked').classList.toggle('hidden',   p !== 'example' && p !== 'practice');
+  document.getElementById('card-practice').classList.toggle('hidden', p !== 'practice');
+  document.getElementById('try-cta').classList.toggle('hidden',       p !== 'example');
+  if (p === 'intro') renderProgress('intro-progress');
+}
+
+function showPractice() { showPhase('practice'); }
+function showExample()  { showPhase('example');  }
+
+// ---- Progress pips ----
+function renderProgress(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const types = PROBLEM_TYPES[topic];
+  const total = types.length;
+  const done  = completed[topic] % (total + 1);
+  const remaining = total - queues[topic].length;
+  const pips = Array.from({ length: total }, (_, i) =>
+    `<div class="pip${i < remaining ? ' done' : ''}"></div>`
+  ).join('');
+  el.innerHTML = `
+    <span class="progress-label">Round progress:</span>
+    <div class="pips">${pips}</div>
+    <span class="progress-count">${remaining}/${total} types covered</span>`;
+}
+
+// ---- Helpers ----
+function givenHTML(given) {
+  return given.map(g =>
+    `<div class="given-item">
+       <span class="given-lbl">${g.label}</span>
+       <span class="given-val">${g.value} <span class="given-unit">${g.unit}</span></span>
+     </div>`
+  ).join('');
+}
+
+function stepsHTML(steps) {
+  return steps.map((s, i) =>
+    `<div class="step">
+       <div class="step-expl">Step ${i + 1}: ${s.explanation}</div>
+       <div class="step-math">${s.math}</div>
+     </div>`
+  ).join('');
+}
+
+function setChecking(on) {
+  document.getElementById('check-btn').classList.toggle('hidden', on);
+  document.getElementById('check-spinner').classList.toggle('hidden', !on);
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-bar');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+function hideError() {
+  document.getElementById('error-bar').style.display = 'none';
+}
+
+// Init
+showPhase('intro');
+renderProgress('intro-progress');
+</script>
+</body>
+</html>
