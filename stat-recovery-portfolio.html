@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STAT Success Cohort | Recovery Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cc-navy: #0A1F3D;
+  --cc-navy-soft: #1A3258;
+  --cc-navy-hover: #0D2950;
+  --cc-gold: #B8904D;
+  --cc-gold-deep: #8F6E38;
+  --cc-gold-bright: #D4A962;
+  --cc-white: #FAFAF7;
+  --cc-surface: #FFFFFF;
+  --cc-tint-navy: #F4F6FA;
+  --cc-tint-gold: #FAF6ED;
+  --cc-border: #E5E7EB;
+  --cc-border-strong: #D1D5DB;
+  --cc-text: #1F2937;
+  --cc-text-secondary: #374151;
+  --cc-text-muted: #4B5563;
+  --cc-text-inverse: #FAFAF7;
+  --cc-success: #047857;
+  --cc-warning: #B45309;
+  --cc-danger: #B91C1C;
+  --cc-tint-success: #ECFDF5;
+  --cc-tint-warning: #FEF3C7;
+  --cc-tint-danger: #FEE2E2;
+
+  --cc-font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--cc-font);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--cc-text);
+  background: var(--cc-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.shell {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ============================================
+   MASTHEAD
+   ============================================ */
+.masthead { margin-bottom: 2rem; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cc-gold-deep);
+  margin-bottom: 0.75rem;
+}
+.eyebrow::before {
+  content: "";
+  width: 24px;
+  height: 2px;
+  background: var(--cc-gold);
+  display: inline-block;
+}
+
+h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--cc-navy);
+  margin-bottom: 1rem;
+}
+
+.lead {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--cc-text-secondary);
+  max-width: 62ch;
+  margin-bottom: 1.5rem;
+}
+
+.how-to {
+  padding: 20px 26px;
+  border-radius: 0 12px 12px 0;
+  border-left: 3px solid var(--cc-gold);
+  margin: 1.5rem 0 2.5rem;
+  background: var(--cc-tint-gold);
+}
+
+.how-to__title {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cc-gold-deep);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.how-to__title::before {
+  content: "i";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--cc-gold);
+  color: var(--cc-navy);
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.how-to__text {
+  font-size: 0.9375rem;
+  color: var(--cc-text-secondary);
+  line-height: 1.7;
+}
+.how-to__text strong { color: var(--cc-navy); font-weight: 700; }
+
+/* ============================================
+   SECTIONS
+   ============================================ */
+.section {
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-border);
+  border-radius: 16px;
+  padding: 2rem 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.section__header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--cc-border);
+}
+
+.section__number {
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: var(--cc-gold-deep);
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+}
+
+.section__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--cc-navy);
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.section__intro {
+  font-size: 0.9375rem;
+  color: var(--cc-text-muted);
+  line-height: 1.65;
+  margin-bottom: 1.5rem;
+  margin-top: 0.75rem;
+}
+
+.section__intro strong { color: var(--cc-navy); }
+
+/* ============================================
+   BLOCKERS (Step 1)
+   ============================================ */
+.blockers-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.blocker-row {
+  display: grid;
+  grid-template-columns: 40px 1fr 32px;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.blocker-row__num {
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--cc-gold-deep);
+  text-align: center;
+}
+
+.blocker-row__input {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  font-family: var(--cc-font);
+  font-size: 0.9375rem;
+  color: var(--cc-text);
+  background: var(--cc-surface);
+  border: 1.5px solid var(--cc-border);
+  border-radius: 8px;
+  transition: border-color 0.15s ease;
+}
+
+.blocker-row__input:focus {
+  outline: none;
+  border-color: var(--cc-gold);
+}
+
+.remove-btn {
+  background: transparent;
+  border: 1.5px solid var(--cc-border);
+  color: var(--cc-text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-btn:hover:not(:disabled) {
+  border-color: var(--cc-danger);
+  color: var(--cc-danger);
+}
+
+.remove-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.add-btn {
+  background: transparent;
+  border: 1.5px dashed var(--cc-border-strong);
+  color: var(--cc-navy);
+  padding: 0.625rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: var(--cc-font);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  margin-top: 0.5rem;
+}
+
+.add-btn:hover:not(:disabled) {
+  border-color: var(--cc-gold);
+  color: var(--cc-gold-deep);
+  background: var(--cc-tint-gold);
+}
+
+.add-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   PREREQUISITES LIBRARY (Step 2)
+   ============================================ */
+.empty-note {
+  background: var(--cc-tint-navy);
+  border-left: 3px solid var(--cc-navy-soft);
+  padding: 1rem 1.25rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.9375rem;
+  color: var(--cc-text-secondary);
+  line-height: 1.6;
+}
+
+.blocker-group {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--cc-border);
+}
+
+.blocker-group:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.blocker-group__topic {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--cc-navy);
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.625rem;
+}
+
+.blocker-group__topic::before {
+  content: "BLOCKER";
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 0.6875rem;
+  color: var(--cc-gold-deep);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+}
+
+.blocker-group__help {
+  font-size: 0.8125rem;
+  color: var(--cc-text-muted);
+  margin-bottom: 1rem;
+}
+
+.prereq-category {
+  margin-bottom: 1rem;
+}
+
+.prereq-category__label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cc-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.prereq-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.prereq-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--cc-surface);
+  border: 1.5px solid var(--cc-border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 0.8125rem;
+  color: var(--cc-text-secondary);
+  font-weight: 500;
+  user-select: none;
+}
+
+.prereq-chip:hover {
+  border-color: var(--cc-gold);
+  color: var(--cc-gold-deep);
+}
+
+.prereq-chip.checked {
+  background: var(--cc-navy);
+  color: var(--cc-text-inverse);
+  border-color: var(--cc-navy);
+}
+
+.prereq-chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.custom-prereq {
+  margin-top: 1rem;
+}
+
+.custom-prereq__label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--cc-text-muted);
+  margin-bottom: 0.375rem;
+  display: block;
+}
+
+.custom-prereq__input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--cc-font);
+  font-size: 0.875rem;
+  color: var(--cc-text);
+  background: var(--cc-surface);
+  border: 1.5px solid var(--cc-border);
+  border-radius: 8px;
+}
+
+.custom-prereq__input:focus {
+  outline: none;
+  border-color: var(--cc-gold);
+}
+
+/* ============================================
+   RATING CARDS (Step 3)
+   ============================================ */
+.rating-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.rating-card {
+  background: var(--cc-surface);
+  border: 1.5px solid var(--cc-border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+}
+
+.rating-card__label {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--cc-navy);
+  margin-bottom: 0.75rem;
+}
+
+.rating-card__options {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .rating-card__options { grid-template-columns: 1fr 1fr; }
+}
+
+.rating-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.625rem 0.5rem;
+  background: var(--cc-tint-navy);
+  border: 1.5px solid var(--cc-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.rating-option:hover {
+  border-color: var(--cc-gold);
+}
+
+.rating-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.rating-option__letter {
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--cc-gold-deep);
+  letter-spacing: 0.05em;
+}
+
+.rating-option__text {
+  font-size: 0.75rem;
+  color: var(--cc-text-secondary);
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.rating-option.selected--solid {
+  background: var(--cc-tint-success);
+  border-color: var(--cc-success);
+}
+.rating-option.selected--solid .rating-option__letter,
+.rating-option.selected--solid .rating-option__text { color: var(--cc-success); }
+
+.rating-option.selected--understand {
+  background: #F0FDFA;
+  border-color: #0E7490;
+}
+.rating-option.selected--understand .rating-option__letter,
+.rating-option.selected--understand .rating-option__text { color: #0E7490; }
+
+.rating-option.selected--fuzzy {
+  background: var(--cc-tint-warning);
+  border-color: var(--cc-warning);
+}
+.rating-option.selected--fuzzy .rating-option__letter,
+.rating-option.selected--fuzzy .rating-option__text { color: var(--cc-warning); }
+
+.rating-option.selected--missing {
+  background: var(--cc-tint-danger);
+  border-color: var(--cc-danger);
+}
+.rating-option.selected--missing .rating-option__letter,
+.rating-option.selected--missing .rating-option__text { color: var(--cc-danger); }
+
+/* ============================================
+   PRIORITIES (Step 4)
+   ============================================ */
+.priority-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.priority-card {
+  background: var(--cc-surface);
+  border-left: 4px solid;
+  border-radius: 0 12px 12px 0;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--cc-border);
+  border-right: 1px solid var(--cc-border);
+  border-bottom: 1px solid var(--cc-border);
+}
+
+.priority-card--missing { border-left-color: var(--cc-danger); background: var(--cc-tint-danger); }
+.priority-card--fuzzy { border-left-color: var(--cc-warning); background: var(--cc-tint-warning); }
+
+.priority-card__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.priority-card__label {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--cc-navy);
+}
+
+.priority-card__severity {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.1875rem 0.625rem;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.priority-card__severity--missing {
+  background: var(--cc-danger);
+  color: white;
+}
+
+.priority-card__severity--fuzzy {
+  background: var(--cc-warning);
+  color: white;
+}
+
+.priority-card__affects {
+  font-size: 0.8125rem;
+  color: var(--cc-text-secondary);
+  line-height: 1.5;
+}
+
+.priority-card__affects strong { color: var(--cc-navy); font-weight: 700; }
+
+.no-priorities {
+  background: var(--cc-tint-success);
+  border-left: 3px solid var(--cc-success);
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.25rem;
+  font-size: 0.9375rem;
+  color: #065F46;
+  line-height: 1.6;
+}
+
+.no-priorities strong { font-weight: 700; }
+
+/* ============================================
+   REPAIR PLAN (Step 5)
+   ============================================ */
+.repair-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.repair-card {
+  background: var(--cc-surface);
+  border: 1.5px solid var(--cc-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+}
+
+.repair-card__label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--cc-navy);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.repair-card__label::before {
+  content: attr(data-num);
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+  color: var(--cc-gold-deep);
+  background: var(--cc-tint-gold);
+  padding: 0.1875rem 0.5rem;
+  border-radius: 4px;
+}
+
+.repair-fields {
+  display: grid;
+  grid-template-columns: 1fr 160px 120px;
+  gap: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .repair-fields { grid-template-columns: 1fr; }
+}
+
+.repair-fields input,
+.repair-fields select {
+  padding: 0.5rem 0.75rem;
+  font-family: var(--cc-font);
+  font-size: 0.875rem;
+  color: var(--cc-text);
+  background: var(--cc-surface);
+  border: 1.5px solid var(--cc-border);
+  border-radius: 8px;
+}
+
+.repair-fields input:focus,
+.repair-fields select:focus {
+  outline: none;
+  border-color: var(--cc-gold);
+}
+
+/* ============================================
+   ACTION BUTTONS
+   ============================================ */
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  font-family: var(--cc-font);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1.5px solid;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn--primary {
+  background: var(--cc-navy);
+  color: var(--cc-text-inverse);
+  border-color: var(--cc-navy);
+}
+.btn--primary:hover {
+  background: var(--cc-navy-hover);
+  border-color: var(--cc-navy-hover);
+}
+
+.btn--secondary {
+  background: var(--cc-surface);
+  color: var(--cc-navy);
+  border-color: var(--cc-border-strong);
+}
+.btn--secondary:hover {
+  border-color: var(--cc-navy);
+  background: var(--cc-tint-navy);
+}
+
+.btn--danger {
+  background: var(--cc-surface);
+  color: var(--cc-danger);
+  border-color: var(--cc-border-strong);
+  margin-left: auto;
+}
+.btn--danger:hover {
+  border-color: var(--cc-danger);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--cc-gold);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   SAVE INDICATOR
+   ============================================ */
+.save-indicator {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--cc-success);
+  color: white;
+  padding: 0.625rem 1rem;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: all 0.25s ease;
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);
+}
+
+.save-indicator.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  body { background: white; font-size: 10.5pt; }
+  .shell { max-width: 100%; padding: 0; }
+  .actions, .save-indicator, .how-to, .add-btn, .remove-btn { display: none !important; }
+  .section {
+    box-shadow: none;
+    border: 1px solid #999;
+    page-break-inside: avoid;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  .masthead { margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #333; }
+  h1 { font-size: 18pt; margin-bottom: 0.5rem; }
+  .lead { font-size: 10pt; margin-bottom: 0.5rem; }
+  .section__title { font-size: 12pt; }
+  .blocker-row__input, .custom-prereq__input, .repair-fields input, .repair-fields select {
+    border: none;
+    border-bottom: 1px solid #666;
+    border-radius: 0;
+    padding: 0.25rem 0;
+    background: transparent;
+  }
+  .prereq-chip { border: 1px solid #999; }
+  .prereq-chip.checked { background: #333 !important; color: white !important; }
+  .rating-option { border: 1px solid #999; background: white !important; }
+  .rating-option.selected--solid,
+  .rating-option.selected--understand,
+  .rating-option.selected--fuzzy,
+  .rating-option.selected--missing {
+    background: white !important;
+    border: 2px solid #333 !important;
+  }
+  h2, h3, .section__header { page-break-after: avoid; }
+}
+
+@media (max-width: 560px) {
+  h1 { font-size: 1.75rem; }
+  .lead { font-size: 0.9375rem; }
+  .shell { padding: 1.5rem 1rem; }
+  .section { padding: 1.5rem 1.25rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <div class="masthead">
+    <div class="eyebrow">STAT Success Cohort · Week 8 Tool</div>
+    <h1>Recovery portfolio.</h1>
+    <p class="lead">
+      Eight weeks of work in one document, written in your own words. The act of writing it is the work; the document is what is left over. Takes 45 to 60 minutes done well. Do not rush. <strong>This is the artifact you keep.</strong> Your work auto-saves as you go.
+    </p>
+  </div>
+
+  <div class="how-to">
+    <div class="how-to__title">How to use this tool</div>
+    <p class="how-to__text">
+      Ten prompts, written for the version of you that has just finished the program. Each prompt asks you to pull from work you have already done in earlier tools (Week 1 audit, failure mode diagnostic, Point recovery inventory, Discharge plan, etc.). <strong>You are not creating new content. You are synthesizing what you already wrote into a single coherent document about your recovery.</strong> Save, print, download. Keep this somewhere you can find again.
+    </p>
+  </div>
+
+  <section class="section">
+    <div class="section__header">
+      <span class="section__number">01</span>
+      <h2 class="section__title">Identity statement (start)</h2>
+    </div>
+    <div class="reflect-section">
+      <p class="reflect-section__prompt">In one or two sentences, who were you as a student in Week 1? <strong>Use the third person if it helps.</strong> "A pre-nursing student in their second attempt at A&P 2, sitting at 47% with shame about the previous withdrawal, anxiety so severe that opening the textbook produced physical symptoms." That kind of specificity. Match Taylor's case if it helps you write yours.</p>
+      <textarea id="p1" rows="5" placeholder="Your synthesis. Pull from earlier work."></textarea>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section__header">
+      <span class="section__number">02</span>
+      <h2 class="section__title">Where you started</h2>
+    </div>
+    <div class="reflect-section">
+      <p class="reflect-section__prompt">Pull from your Week 1 audit. What was your course grade. What was your trajectory. What did your week look like in numbers (study hours, sleep, exams scheduled). <strong>The data, not the story you tell about it.</strong></p>
+      <textarea id="p2" rows="5" placeholder="Your synthesis. Pull from earlier work."></textarea>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section__header">
+      <span class="section__number">03</span>
+      <h2 class="section__title">Your failure mode</h2>
+    </div>
+    <div class="reflect-section">
+      <p class="reflect-section__prompt">From the Week 1 failure mode diagnostic. What was your dominant failure mode. <strong>Method, content, exam strategy, or affective.</strong> If Week 6 revealed a second failure mode you missed in Week 1, name that here too.</p>
+      <textarea id="p3" rows="5" placeholder="Your synthesis. Pull from earlier work."></textarea>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section__header">
+      <span class="section__number">04</span>
+      <h2 class="section__title">Your team</h2>
+    </div>
+    <div class="reflect-section">
+      <p class="reflect-section__prompt">Who were the people in your team. <strong>What did each of them teach you, by being who they were?</strong> Not what they said in any specific session. The cumulative effect of working alongside each of them for eight weeks.</p>
+      <textarea id="p4" rows="5" placeholder="Your synthesis. Pull from earlier work."></textarea>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section__header">
+      <span class="section__number">05</span>
+      <h2 class="section__title">The case that hit closest</h2>
+    </div>
+    <div class="reflect-section">
+      <p class="reflect-section__prompt">Of the cases your team worked through (Morgan, Jordan, Alex, Riley, Sam, Casey, Taylor), which one resembled you most? <strong>What did you see in that case that you could not see directly in yourself?</strong> The case is a mirror; describe what you saw in it.</p>
+      <textarea id="p5" rows="5" placeholder="Your synthesis. Pull from earlier work."></textarea>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section__header">
+      <span class="section__number">06</span>
+      <h2 class="section__title">Your biggest leading indicator gain</h2>
+    </div>
+    <div class="reflect-section">
+      <p class="reflect-section__prompt">From the Point recovery inventory in Week 5, or from your own observation. <strong>The single change in how you operate that you trust most.</strong> The thing that, even if your grade had not moved at all, would still be evidence that recovery happened.</p>
+      <textarea id="p6" rows="5" placeholder="Your synthesis. Pull from earlier work."></textarea>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section__header">
+      <span class="section__number">07</span>
+      <h2 class="section__title">Your final exam, or where you ended</h2>
+    </div>
+    <div class="reflect-section">
+      <p class="reflect-section__prompt">What was your final exam outcome. What was your final course grade. <strong>How does the experience of your final compare to the experience of your Week 1 exams?</strong> If your final has not yet happened, write where you are heading and what you predict.</p>
+      <textarea id="p7" rows="5" placeholder="Your synthesis. Pull from earlier work."></textarea>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section__header">
+      <span class="section__number">08</span>
+      <h2 class="section__title">Your discharge plan summary</h2>
+    </div>
+    <div class="reflect-section">
+      <p class="reflect-section__prompt">From the Discharge Planning tool. <strong>The three categories: what survives without effort, what requires maintenance, what would fade unless replaced.</strong> Brief, one to two sentences per category. The full plan lives in the tool; this is the summary you carry with you.</p>
+      <textarea id="p8" rows="5" placeholder="Your synthesis. Pull from earlier work."></textarea>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section__header">
+      <span class="section__number">09</span>
+      <h2 class="section__title">Your commitments for the next eight weeks</h2>
+    </div>
+    <div class="reflect-section">
+      <p class="reflect-section__prompt">Three commitments. <strong>Without STAT.</strong> Realistic without the cohort holding you to them. Specific enough that you can tell at the end of each week whether you did them or not.</p>
+      <textarea id="p9" rows="5" placeholder="Your synthesis. Pull from earlier work."></textarea>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section__header">
+      <span class="section__number">10</span>
+      <h2 class="section__title">Identity statement (end)</h2>
+    </div>
+    <div class="reflect-section">
+      <p class="reflect-section__prompt">Now, who are you as a student? <strong>Same form as your starting identity statement.</strong> One or two sentences. Third person if it helps. The contrast between your starting and ending statements is the whole portfolio in one comparison.</p>
+      <textarea id="p10" rows="5" placeholder="Your synthesis. Pull from earlier work."></textarea>
+    </div>
+  </section>
+
+  <div class="actions">
+    <button type="button" class="btn btn--primary" id="printBtn">Print</button>
+    <button type="button" class="btn btn--secondary" id="downloadBtn">Download</button>
+    <button type="button" class="btn btn--danger" id="clearBtn">Clear all</button>
+  </div>
+
+</div>
+
+
+<style>
+.reflect-section {
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-border);
+  border-radius: 12px;
+  padding: 1.125rem 1.25rem;
+  margin-bottom: 1rem;
+}
+.reflect-section__prompt {
+  font-size: 0.9375rem;
+  color: var(--cc-text-secondary);
+  margin: 0 0 0.75rem;
+  line-height: 1.6;
+}
+.reflect-section textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.6;
+  padding: 0.75rem 0.875rem;
+  border: 1px solid var(--cc-border);
+  border-radius: 8px;
+  background: var(--cc-surface);
+  color: var(--cc-text);
+  resize: vertical;
+  min-height: 5.5rem;
+  box-sizing: border-box;
+}
+.reflect-section textarea:focus {
+  outline: 2px solid var(--cc-gold);
+  outline-offset: 2px;
+  border-color: var(--cc-gold);
+}
+.field-row {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.field-row label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--cc-navy);
+}
+.field-row input[type="text"],
+.field-row input[type="number"] {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--cc-border);
+  border-radius: 8px;
+  background: var(--cc-surface);
+  color: var(--cc-text);
+  box-sizing: border-box;
+  width: 100%;
+}
+.field-row input:focus {
+  outline: 2px solid var(--cc-gold);
+  outline-offset: 2px;
+  border-color: var(--cc-gold);
+}
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.875rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 640px) {
+  .compare-grid { grid-template-columns: 1fr; }
+}
+.compare-cell {
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-border);
+  border-radius: 10px;
+  padding: 0.875rem 1rem;
+}
+.compare-cell--week1 {
+  background: var(--cc-tint-navy);
+  border-left: 3px solid var(--cc-navy);
+}
+.compare-cell--today {
+  background: var(--cc-tint-gold);
+  border-left: 3px solid var(--cc-gold);
+}
+.compare-cell__label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cc-text-muted);
+  margin-bottom: 0.5rem;
+}
+.compare-cell__text {
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--cc-text);
+  min-height: 2.5rem;
+}
+.domain-block {
+  margin-bottom: 1.25rem;
+  padding: 1rem 1.125rem;
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-border);
+  border-radius: 12px;
+}
+.domain-block__title {
+  font-weight: 700;
+  color: var(--cc-navy);
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+.domain-block__hint {
+  font-size: 0.8125rem;
+  color: var(--cc-text-muted);
+  margin-bottom: 0.875rem;
+  line-height: 1.5;
+}
+.indicator-list {
+  display: grid;
+  gap: 0.625rem;
+  margin: 1rem 0 0;
+}
+.indicator-pick {
+  background: var(--cc-tint-navy);
+  border-left: 3px solid var(--cc-navy);
+  border-radius: 0 12px 12px 0;
+  padding: 0.875rem 1.125rem;
+}
+.indicator-pick__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.625rem;
+  height: 1.625rem;
+  border-radius: 50%;
+  background: var(--cc-navy);
+  color: var(--cc-gold-bright);
+  font-weight: 800;
+  font-size: 0.875rem;
+  margin-right: 0.625rem;
+  vertical-align: middle;
+}
+.indicator-pick label {
+  font-weight: 700;
+  color: var(--cc-navy);
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9375rem;
+}
+.indicator-pick textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--cc-border);
+  border-radius: 8px;
+  background: var(--cc-surface);
+  color: var(--cc-text);
+  resize: vertical;
+  min-height: 4rem;
+  box-sizing: border-box;
+}
+.indicator-pick textarea:focus {
+  outline: 2px solid var(--cc-gold);
+  outline-offset: 2px;
+  border-color: var(--cc-gold);
+}
+.grade-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1rem 0 1.25rem;
+}
+@media (max-width: 560px) {
+  .grade-grid { grid-template-columns: 1fr; }
+}
+.grade-conclusion {
+  padding: 1rem 1.25rem;
+  background: var(--cc-tint-gold);
+  border-left: 3px solid var(--cc-gold);
+  border-radius: 0 12px 12px 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--cc-text-secondary);
+}
+.grade-conclusion strong { color: var(--cc-navy); }
+
+/* Teach-back specific */
+.teachback-level {
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-border);
+  border-radius: 12px;
+  padding: 1.125rem 1.25rem;
+  margin-bottom: 1rem;
+}
+.teachback-level__audience {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cc-gold-deep);
+  margin-bottom: 0.375rem;
+}
+.teachback-level__title {
+  font-weight: 700;
+  color: var(--cc-navy);
+  margin-bottom: 0.5rem;
+}
+.teachback-level__hint {
+  font-size: 0.8125rem;
+  color: var(--cc-text-muted);
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+/* Recovery portfolio specific */
+.portfolio-step {
+  margin-bottom: 1.25rem;
+}
+.portfolio-step__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--cc-navy);
+  color: var(--cc-gold-bright);
+  font-weight: 800;
+  font-size: 0.9375rem;
+  margin-right: 0.625rem;
+  vertical-align: middle;
+}
+
+@media print {
+  .actions, .save-indicator, .how-to, .add-btn, .row-remove, .topic-row__remove { display: none !important; }
+  .reflect-section, .domain-block, .compare-cell, .indicator-pick, .teachback-level, .grade-conclusion {
+    page-break-inside: avoid;
+    border: 1px solid #ccc !important;
+    background: white !important;
+    box-shadow: none !important;
+  }
+  textarea { border: 1px solid #ddd !important; min-height: auto; }
+}
+</style>
+
+<script>
+(function() {
+  'use strict';
+  var STORAGE_KEY = 'stat_portfolio_v1';
+  var FIELDS = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10'];
+  var TITLES = {'p1': 'Identity statement (start)', 'p2': 'Where you started', 'p3': 'Your failure mode', 'p4': 'Your team', 'p5': 'The case that hit closest', 'p6': 'Your biggest leading indicator gain', 'p7': 'Your final exam, or where you ended', 'p8': 'Your discharge plan summary', 'p9': 'Your commitments for the next eight weeks', 'p10': 'Identity statement (end)'};
+  var state = {};
+  FIELDS.forEach(function(f) { state[f] = ''; });
+
+  function el(tag, attrs, children) {
+    var e = document.createElement(tag);
+    if (attrs) for (var k in attrs) {
+      if (k === 'className') e.className = attrs[k];
+      else if (k === 'text') e.textContent = attrs[k];
+      else if (k === 'html') e.innerHTML = attrs[k];
+      else if (k.indexOf('on') === 0) e.addEventListener(k.slice(2), attrs[k]);
+      else e.setAttribute(k, attrs[k]);
+    }
+    if (children) children.forEach(function(c) { if (c) e.appendChild(c); });
+    return e;
+  }
+  function debounce(fn, ms) {
+    var t; return function() {
+      var args = arguments, ctx = this;
+      clearTimeout(t);
+      t = setTimeout(function() { fn.apply(ctx, args); }, ms);
+    };
+  }
+
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return false;
+      var p = JSON.parse(raw);
+      FIELDS.forEach(function(f) {
+        if (typeof p[f] === 'string') state[f] = p[f];
+      });
+      return true;
+    } catch (e) { return false; }
+  }
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      if (window.flashSaved) window.flashSaved();
+    } catch (e) {}
+  }
+  var saveDebounced = debounce(saveState, 250);
+
+  loadState();
+  FIELDS.forEach(function(f) {
+    var elInput = document.getElementById(f);
+    if (!elInput) return;
+    elInput.value = state[f] || '';
+    elInput.addEventListener('input', function(e) {
+      state[f] = e.target.value;
+      saveDebounced();
+    });
+  });
+
+  document.getElementById('printBtn').addEventListener('click', function() {
+    setTimeout(function() { window.print(); }, 100);
+  });
+
+  document.getElementById('downloadBtn').addEventListener('click', function() {
+    var lines = [];
+    lines.push('RECOVERY PORTFOLIO');
+    lines.push('STAT Success Cohort');
+    lines.push('Generated: ' + new Date().toLocaleString());
+    lines.push('');
+    FIELDS.forEach(function(f) {
+      lines.push(TITLES[f].toUpperCase());
+      lines.push(state[f] || '(not entered)');
+      lines.push('');
+    });
+    lines.push('Generated by the STAT Success Cohort Recovery Portfolio tool.');
+    var blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'recovery-portfolio.txt';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', function() {
+    if (!confirm('Clear all your work? This cannot be undone.')) return;
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    FIELDS.forEach(function(f) {
+      state[f] = '';
+      var elInput = document.getElementById(f);
+      if (elInput) elInput.value = '';
+    });
+  });
+})();
+</script>
+
+
+<div class="save-indicator" id="saveIndicator">Saved</div>
+
+<script>
+(function() {
+  'use strict';
+  var saveIndicator = document.getElementById('saveIndicator');
+  var saveTimer = null;
+  function flashSaved() {
+    if (!saveIndicator) return;
+    saveIndicator.classList.add('save-indicator--visible');
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(function() {
+      saveIndicator.classList.remove('save-indicator--visible');
+    }, 1200);
+  }
+  window.flashSaved = flashSaved;
+
+  var frameId = window.name || 'stat_recovery_portfolio';
+  function sendHeight() {
+    var height = Math.max(
+      document.body.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.scrollHeight,
+      document.documentElement.offsetHeight
+    );
+    if (window.parent !== window) {
+      window.parent.postMessage({ type: 'iframe-height', id: frameId, height: height }, '*');
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(sendHeight).observe(document.body);
+  }
+  window.addEventListener('load', sendHeight);
+  window.addEventListener('resize', sendHeight);
+  setTimeout(sendHeight, 200);
+})();
+</script>
+
+</body>
+</html>
