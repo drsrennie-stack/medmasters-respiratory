@@ -1,0 +1,1931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memory Match · BIO 004 Human Anatomy</title>
+<meta name="description" content="Two-board memory match for histology slides and body regions. Play on screen, present to the room, or print as cut-apart cards.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#08101F;
+  --navy-tint:#ECEFF4;
+  --navy-mid:#1E2A47;
+  --maroon:#7A2A22;
+  --maroon-dark:#5E201A;
+  --terra:#8B1D1D;
+  --terra-dark:#6B1616;
+  --gold:#DCB45C;
+  --gold-text:#6E5018;
+  --straw:#E8CE85;
+  --page:#FAFAF9;
+  --card:#FFFFFF;
+  --border:#8C90A0;
+  --border-soft:#DCE0E6;
+  --ink-muted:#3D4860;
+  --offwhite-text:#F4EFE8;
+  --shadow-rest:0 1px 3px rgba(11,21,48,.10);
+  --shadow-lift:0 12px 26px rgba(11,21,48,.16);
+  --shadow-on-dark:0 2px 6px rgba(0,0,0,.28);
+  --shadow-on-dark-lift:0 16px 34px rgba(0,0,0,.34);
+  --r-block:8px;
+  --r-card:16px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--page);color:var(--navy);
+  font-family:"Figtree","Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:16px;line-height:1.55;
+}
+em,i,cite,dfn,var,address{font-style:normal}
+h1,h2,h3,h4{font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-weight:800;line-height:1.15;margin:0}
+h2{font-size:1.3rem;font-weight:800}
+h3{font-size:1rem;font-weight:700}
+p{margin:0 0 .7rem}
+button,input,select{font:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:5px}
+.wrap{max-width:1300px;margin:0 auto;padding:0 22px}
+.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip{position:absolute;left:-9999px;top:0;background:var(--gold);color:var(--navy);padding:.65rem 1.1rem;z-index:99;font-weight:700}
+.skip:focus{left:0}
+
+/* ---------- top band ---------- */
+.topband{background:var(--navy);color:#fff;padding:16px 0}
+.topband .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brandline{display:flex;flex-direction:column;line-height:1.15}
+.brandline .a{font-family:"Plus Jakarta Sans";font-weight:800;font-size:1.02rem}
+.brandline .b{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--straw)}
+.topband .spacer{flex:1}
+.topband .tag{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--straw)}
+
+/* ---------- hero ---------- */
+.hero{padding:34px 0 8px}
+.eyebrow{font-family:"Plus Jakarta Sans";font-weight:700;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--terra-dark);margin:0 0 .5rem}
+.hero h1{font-size:clamp(2rem,5vw,3.1rem);letter-spacing:-.02em}
+.hero h1 .dot{color:var(--terra)}
+.hero .sub{color:var(--ink-muted);max-width:64ch;margin-top:.6rem;font-size:1.02rem}
+
+/* ---------- subject tiles ---------- */
+.subjects{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:26px 0 6px}
+.subject{
+  position:relative;text-align:left;background:var(--card);border:0;border-radius:var(--r-card);
+  box-shadow:var(--shadow-rest);padding:20px 22px;cursor:pointer;display:flex;gap:16px;align-items:center;
+  transition:transform 200ms ease,box-shadow 200ms ease,background 200ms ease,color 200ms ease;
+}
+.subject:hover{transform:translateY(-2px);box-shadow:var(--shadow-lift)}
+.subject .ico{
+  flex:0 0 auto;width:56px;height:56px;border-radius:14px;background:var(--navy-tint);
+  display:flex;align-items:center;justify-content:center;transition:background 200ms ease;
+}
+.subject .lbl{font-family:"Plus Jakarta Sans";font-weight:800;font-size:1.12rem;display:block}
+.subject .meta{font-size:.85rem;color:var(--ink-muted);display:block;margin-top:2px}
+.subject[aria-pressed="true"]{background:var(--navy);color:#fff}
+.subject[aria-pressed="true"] .meta{color:var(--straw)}
+.subject[aria-pressed="true"] .ico{background:rgba(220,180,92,.18)}
+
+/* ---------- panels ---------- */
+.panel{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow-rest);padding:22px 24px;margin:18px 0}
+.panel .hint{color:var(--ink-muted);font-size:.9rem;margin:.15rem 0 1.1rem}
+.setup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:22px}
+fieldset{border:0;padding:0;margin:0;min-width:0}
+legend{font-family:"Plus Jakarta Sans";font-weight:700;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--terra-dark);padding:0;margin-bottom:.6rem}
+.choices{display:flex;flex-wrap:wrap;gap:8px}
+.choice{position:relative}
+.choice input{position:absolute;opacity:0;width:1px;height:1px}
+.choice span{
+  display:inline-block;padding:.48rem .9rem;border:1px solid var(--border);border-radius:99px;
+  background:var(--card);font-size:.9rem;font-weight:600;cursor:pointer;
+  transition:background 160ms ease,border-color 160ms ease,color 160ms ease;
+}
+.choice input:checked + span{background:var(--navy);border-color:var(--navy);color:#fff}
+.choice input:focus-visible + span{outline:3px solid var(--gold);outline-offset:3px}
+.choice input:disabled + span{opacity:.38;cursor:not-allowed}
+.choice:hover input:not(:disabled) + span{border-color:var(--navy)}
+
+.btn{
+  display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.25rem;border-radius:var(--r-block);
+  border:1px solid var(--navy);background:var(--navy);color:#fff;font-weight:700;
+  font-family:"Plus Jakarta Sans";cursor:pointer;box-shadow:var(--shadow-rest);
+  transition:transform 180ms ease,box-shadow 180ms ease,background 180ms ease;
+}
+.btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:var(--shadow-lift)}
+.btn.ghost{background:var(--card);color:var(--navy)}
+.btn.ghost:hover:not(:disabled){background:var(--navy-tint)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+.btn.gold:hover:not(:disabled){background:var(--straw);border-color:var(--straw)}
+.btn.small{padding:.4rem .8rem;font-size:.84rem}
+.btn:disabled{opacity:.42;cursor:not-allowed;transform:none}
+.btn-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;align-items:center}
+.notice{background:var(--navy-tint);border-radius:var(--r-block);padding:12px 15px;font-size:.9rem;margin-top:14px}
+
+/* ---------- teams ---------- */
+.teamrows{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:10px;margin-top:4px}
+.teamrow{display:flex;gap:10px;align-items:center;background:var(--page);border-radius:var(--r-block);padding:9px 12px}
+.teamrow .swatch{width:22px;height:22px;border-radius:6px;flex:0 0 auto}
+.teamrow input[type="text"]{
+  flex:1;min-width:0;border:1px solid var(--border);border-radius:6px;padding:.4rem .6rem;
+  background:var(--card);color:var(--navy);font-weight:600;
+}
+.teamrow input[type="text"]::placeholder{color:#8C93A1;font-weight:400}
+.iconbtn{background:none;border:1px solid var(--border);border-radius:6px;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.iconbtn:hover{border-color:var(--terra);background:var(--navy-tint)}
+.themerow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.themerow .lab{font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--terra-dark);font-family:"Plus Jakarta Sans"}
+
+/* ---------- game surface: white cards on maroon ---------- */
+.surface{background:var(--maroon);padding:30px 0 34px;margin-top:26px}
+.surface h2,.surface h3{color:#fff}
+.surface .surfhead{display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;justify-content:space-between;margin-bottom:18px}
+.surface .surfhead .t{font-family:"Plus Jakarta Sans";font-weight:800;font-size:1.35rem;color:#fff}
+.surface .surfhead .s{color:var(--offwhite-text);font-size:.88rem;font-weight:600}
+
+.scorebar{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+.stat{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow-on-dark);padding:12px 18px;min-width:106px}
+.stat .k{display:block;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--ink-muted);font-family:"Plus Jakarta Sans";margin-bottom:3px}
+.stat .v{display:block;font-family:"Plus Jakarta Sans";font-weight:800;font-size:1.5rem;line-height:1.1;color:var(--navy)}
+.stat.emph{background:var(--navy)}
+.stat.emph .k{color:var(--straw)}
+.stat.emph .v{color:#fff}
+
+.teamstrip{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.tchip{
+  background:var(--card);border-radius:99px;box-shadow:var(--shadow-on-dark);
+  padding:.42rem .5rem .42rem .5rem;display:flex;align-items:center;gap:.55rem;font-weight:700;font-size:.9rem;
+}
+.tchip .dot{width:16px;height:16px;border-radius:5px;flex:0 0 auto}
+.tchip .sc{background:var(--navy-tint);border-radius:99px;padding:.05rem .5rem;font-family:"Plus Jakarta Sans";font-weight:800;min-width:26px;text-align:center}
+.tchip[data-active="true"]{background:var(--navy);color:#fff;box-shadow:0 0 0 3px var(--gold),var(--shadow-on-dark)}
+.tchip[data-active="true"] .sc{background:var(--gold);color:var(--navy)}
+
+.boards{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+@media (max-width:960px){.boards{grid-template-columns:1fr}}
+.board{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow-on-dark);padding:18px 18px 20px}
+.board h3{font-size:1.05rem;color:var(--navy)}
+.board .bhint{font-size:.82rem;color:var(--ink-muted);margin:.15rem 0 .9rem}
+.grid{display:grid;gap:10px}
+.grid.img{grid-template-columns:repeat(auto-fill,minmax(116px,1fr))}
+.grid.txt{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+
+.tile{
+  position:relative;width:100%;aspect-ratio:1/1;border:1px solid var(--border);border-radius:var(--r-block);
+  background:var(--card);cursor:pointer;padding:0;overflow:hidden;box-shadow:var(--shadow-rest);color:var(--navy);
+  transition:transform 180ms ease,box-shadow 180ms ease,border-color 180ms ease,background 180ms ease;
+  display:flex;align-items:center;justify-content:center;text-align:center;
+}
+.grid.txt .tile{aspect-ratio:4/3}
+.tile:hover:not(:disabled){transform:translateY(-2px);box-shadow:var(--shadow-lift)}
+.tile:disabled{cursor:default}
+.tile[data-state="down"]{background:var(--navy);border-color:var(--navy)}
+.tile[data-state="down"] .fd{display:flex}
+.tile[data-state="down"] .fu{display:none}
+.fd{display:none;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:var(--straw);width:100%;height:100%}
+.fd .code{font-family:"Plus Jakarta Sans";font-weight:800;font-size:.9rem;letter-spacing:.1em}
+.fu{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;padding:10px}
+.fu img{width:100%;height:100%;object-fit:cover;border-radius:5px;display:block}
+/* gold alone is 1.96:1 on white, so the selected ring adds a navy outline */
+.tile[data-state="up"]{border-color:var(--gold);border-width:2px;box-shadow:0 0 0 2px var(--navy),var(--shadow-lift)}
+.tile[data-state="wrong"]{border-color:var(--terra);border-width:2px;box-shadow:0 0 0 2px var(--terra-dark)}
+.tile[data-state="matched"]{border-color:var(--navy);border-width:2px;background:var(--navy-tint);cursor:default}
+.tile .scode{position:absolute;left:6px;top:6px;background:rgba(8,16,31,.85);color:#fff;font-family:"Plus Jakarta Sans";font-weight:700;font-size:.64rem;letter-spacing:.08em;padding:2px 6px;border-radius:99px}
+.tile .txt{font-family:"Figtree";font-weight:500;font-size:.86rem;line-height:1.32}
+.tile[data-kind="term"] .txt{font-family:"Plus Jakarta Sans";font-weight:700;font-size:.95rem}
+.tile .noimg{display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;width:100%;height:100%;background:var(--navy-tint);border-radius:5px;color:var(--ink-muted);font-size:.7rem;font-weight:600;padding:8px}
+.tile .owner{position:absolute;right:6px;bottom:6px;width:16px;height:16px;border-radius:5px}
+.tile .tickwrap{position:absolute;left:6px;bottom:6px}
+
+.surfbtns{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.surface .btn.ghost{background:var(--card)}
+
+/* ---------- log + tournament ---------- */
+.log{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.log li{background:var(--card);border-radius:var(--r-block);box-shadow:var(--shadow-rest);padding:12px 15px}
+.log .nm{font-family:"Plus Jakarta Sans";font-weight:800;display:block;margin-bottom:.15rem}
+.log .by{font-size:.72rem;font-weight:700;color:var(--maroon);letter-spacing:.06em;text-transform:uppercase}
+.log dl{margin:.25rem 0 0;display:grid;grid-template-columns:auto 1fr;gap:2px 12px;font-size:.86rem}
+.log dt{font-weight:700;color:var(--terra-dark);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;padding-top:3px}
+.log dd{margin:0;color:var(--ink-muted)}
+.emptylog{color:var(--ink-muted);font-size:.9rem}
+
+table.plain{width:100%;border-collapse:collapse;font-size:.9rem}
+table.plain th{text-align:left;font-family:"Plus Jakarta Sans";font-size:.68rem;letter-spacing:.11em;text-transform:uppercase;color:var(--terra-dark);padding:8px 10px;border-bottom:1px solid var(--border-soft)}
+table.plain td{padding:9px 10px;border-bottom:1px solid var(--border-soft);vertical-align:top;color:var(--ink-muted)}
+table.plain td.lead{color:var(--navy);font-weight:700;font-family:"Plus Jakarta Sans"}
+table.plain td .dot{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:8px;vertical-align:-1px}
+
+/* ---------- library ---------- */
+details.lib{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow-rest);margin:18px 0;overflow:hidden}
+details.lib > summary{list-style:none;cursor:pointer;padding:20px 24px;font-family:"Plus Jakarta Sans";font-weight:800;font-size:1.08rem;display:flex;justify-content:space-between;align-items:center;gap:12px}
+details.lib > summary::-webkit-details-marker{display:none}
+details.lib > summary .chev{transition:transform 220ms ease;flex:0 0 auto}
+details.lib[open] > summary .chev{transform:rotate(180deg)}
+.libbody{padding:0 24px 24px}
+.libgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:12px;margin-top:14px}
+.librow{display:flex;gap:10px;align-items:center;background:var(--page);border-radius:var(--r-block);padding:8px 10px}
+.librow .thumb{width:52px;height:52px;flex:0 0 auto;border-radius:6px;background:var(--navy-tint);display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:.62rem;color:var(--ink-muted);font-weight:700;text-align:center}
+.librow .thumb img{width:100%;height:100%;object-fit:cover}
+.librow .meta{min-width:0}
+.librow .meta b{display:block;font-family:"Plus Jakarta Sans";font-size:.82rem;line-height:1.2;overflow-wrap:anywhere}
+.librow .meta code{font-size:.7rem;color:var(--ink-muted);overflow-wrap:anywhere}
+.filebtn{margin-top:3px;font-size:.72rem;font-weight:700;color:var(--maroon);text-decoration:underline;cursor:pointer;background:none;border:0;padding:0}
+.dropzone{border:2px dashed var(--border);border-radius:var(--r-block);padding:22px;text-align:center;background:var(--page);color:var(--ink-muted);font-size:.9rem}
+.dropzone.over{border-color:var(--maroon);background:var(--navy-tint);color:var(--navy)}
+.libstat{font-weight:700;font-size:.84rem;color:var(--maroon)}
+.pathbox{background:var(--navy-tint);border-radius:var(--r-block);padding:12px 15px;font-size:.88rem;margin-bottom:14px}
+.pathbox code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;background:var(--card);padding:1px 5px;border-radius:4px}
+
+/* ---------- frame grabber ---------- */
+.grab{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(240px,1fr);gap:20px;align-items:start}
+@media (max-width:860px){.grab{grid-template-columns:1fr}}
+.vidwrap{background:var(--navy);border-radius:var(--r-block);overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:190px}
+.vidwrap video{width:100%;display:block;max-height:52vh}
+.vidwrap .empty{color:var(--straw);font-size:.88rem;font-weight:600;padding:34px 18px;text-align:center}
+.nudge{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.nudge .btn{padding:.42rem .7rem;font-size:.82rem}
+.grabside label.fld{display:block;font-family:"Plus Jakarta Sans";font-weight:700;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--terra-dark);margin:0 0 .45rem}
+.grabside select{width:100%;border:1px solid var(--border);border-radius:6px;padding:.5rem .6rem;background:var(--card);color:var(--navy);font-weight:600}
+.grabside .row{margin-bottom:16px}
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:8px;margin-top:12px}
+.shot{position:relative;border-radius:6px;overflow:hidden;background:var(--navy-tint);aspect-ratio:1/1}
+.shot img{width:100%;height:100%;object-fit:cover;display:block}
+.shot span{position:absolute;left:0;right:0;bottom:0;background:rgba(8,16,31,.85);color:#fff;font-size:.58rem;font-weight:700;padding:2px 4px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.toggle{display:inline-flex;align-items:center;gap:.5rem;font-size:.86rem;font-weight:600;cursor:pointer}
+.toggle input{width:18px;height:18px;accent-color:#7A2A22}
+
+/* ---------- footer ---------- */
+.site-footer{background:var(--navy);color:#fff;margin-top:34px;padding:28px 0}
+.site-footer .wrap{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center}
+.site-footer .who{font-family:"Plus Jakarta Sans";font-weight:800}
+.site-footer .meta{color:var(--straw);font-size:.85rem}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important;animation:none !important}
+  .btn:hover,.tile:hover,.subject:hover{transform:none}
+}
+
+/* ================= PRINT ================= */
+#printRoot{display:none}
+@media print{
+  @page{size:letter portrait;margin:0.4in}
+  body{background:#fff}
+  .topband,.hero,.site-footer,.screen-only,.panel,.surface,details.lib,.subjects{display:none !important}
+  #printRoot{display:block}
+  .sheet{page-break-after:always;break-after:page}
+  .sheet:last-child{page-break-after:auto;break-after:auto}
+  .sheet-title{font-family:"Plus Jakarta Sans";font-weight:800;font-size:11pt;margin:0 0 5pt;color:#08101F}
+  .sheet-note{font-size:8pt;color:#3D4860;margin:0 0 8pt}
+  .pgrid{display:grid;grid-template-columns:repeat(3,2.35in);grid-auto-rows:2.35in;gap:0.06in;justify-content:start}
+  .pcard{border:1.25pt solid #08101F;border-radius:4pt;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;padding:7pt}
+  .pcard.img{padding:0}
+  .pcard.img img{width:100%;height:100%;object-fit:cover;display:block}
+  .pcard .pcode{position:absolute;left:4pt;top:4pt;background:#08101F;color:#fff;font-family:"Plus Jakarta Sans";font-weight:700;font-size:6.5pt;letter-spacing:.06em;padding:1.5pt 4pt;border-radius:99pt}
+  .pcard .ptxt{font-family:"Figtree";font-size:9pt;line-height:1.28;color:#08101F}
+  .pcard.term .ptxt{font-family:"Plus Jakarta Sans";font-weight:700;font-size:11pt}
+  .pcard.long .ptxt{font-size:8pt}
+  .pcard.verylong .ptxt{font-size:7pt}
+  .pcard .noimgp{font-size:8pt;color:#3D4860;font-family:"Plus Jakarta Sans";font-weight:700;padding:8pt}
+  .pback{border:1.25pt solid #08101F;border-radius:4pt;background:#08101F;display:flex;align-items:center;justify-content:center}
+  .keytable{width:100%;border-collapse:collapse;font-size:8.5pt}
+  .keytable th{text-align:left;font-family:"Plus Jakarta Sans";font-size:7pt;letter-spacing:.08em;text-transform:uppercase;color:#6B1616;border-bottom:.75pt solid #8C90A0;padding:4pt 5pt}
+  .keytable td{border-bottom:.5pt solid #DCE0E6;padding:5pt;vertical-align:top;color:#08101F}
+  .keytable td.c{font-family:"Plus Jakarta Sans";font-weight:700;white-space:nowrap;width:.5in}
+  .keytable td.n{font-family:"Plus Jakarta Sans";font-weight:700;width:1.5in}
+  .keyfoot{margin-top:10pt;font-size:7.5pt;color:#3D4860}
+  .scoresheet{width:100%;border-collapse:collapse;font-size:9pt}
+  .scoresheet th,.scoresheet td{border:.75pt solid #8C90A0;padding:8pt 6pt;text-align:center}
+  .scoresheet th{font-family:"Plus Jakarta Sans";font-size:8pt;text-transform:uppercase;letter-spacing:.06em;color:#08101F;background:#ECEFF4}
+  .scoresheet td{height:.42in}
+  .rules{font-size:9.5pt;line-height:1.5;color:#08101F;max-width:6.6in}
+  .rules h3{font-family:"Plus Jakarta Sans";font-size:10pt;margin:12pt 0 4pt;color:#7A2A22}
+  .rules ol{padding-left:16pt;margin:0}
+  .rules li{margin-bottom:4pt}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the game</a>
+
+<div class="topband">
+  <div class="wrap">
+    <svg width="40" height="40" viewBox="0 0 42 42" role="img" aria-label="BIO 004 course mark">
+      <circle cx="12" cy="11" r="5.4" fill="#FFFFFF"></circle>
+      <path d="M4.6 34c0-4.6 3.3-8.2 7.4-8.2s7.4 3.6 7.4 8.2z" fill="#FFFFFF"></path>
+      <circle cx="26" cy="13" r="4.4" fill="#DCB45C"></circle>
+      <path d="M19.9 34c0-3.9 2.7-7 6.1-7s6.1 3.1 6.1 7z" fill="#DCB45C"></path>
+      <circle cx="36" cy="15.5" r="3.4" fill="#E8CE85"></circle>
+      <path d="M31.3 34c0-3.1 2.1-5.6 4.7-5.6s4.7 2.5 4.7 5.6z" fill="#E8CE85"></path>
+    </svg>
+    <div class="brandline"><span class="a">Human Anatomy</span><span class="b">BIO 004</span></div>
+    <span class="spacer"></span>
+    <span class="tag">Team game</span>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="wrap">
+    <p class="eyebrow" id="heroEyebrow">Module 1</p>
+    <h1>Memory Match<span class="dot">.</span></h1>
+    <p class="sub">Two boards. Images on one side, words on the other. Turn over one card from each side and find out whether they belong together. Play it at a bench, project it to the room, or print it and cut it up.</p>
+
+    <div class="subjects" role="group" aria-label="Choose a subject">
+      <button type="button" class="subject" id="subjHistology" data-subject="histology" aria-pressed="true">
+        <span class="ico" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 30 30">
+            <rect x="3.5" y="7" width="23" height="16" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <circle cx="15" cy="15" r="5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <circle cx="15" cy="15" r="1.7" fill="currentColor"/>
+            <line x1="8" y1="7" x2="8" y2="23" stroke="currentColor" stroke-width="1.4"/>
+            <line x1="22" y1="7" x2="22" y2="23" stroke="currentColor" stroke-width="1.4"/>
+          </svg>
+        </span>
+        <span><span class="lbl">Histology</span><span class="meta">49 tissues, cells and skin structures</span></span>
+      </button>
+      <button type="button" class="subject" id="subjRegions" data-subject="regions" aria-pressed="false">
+        <span class="ico" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 30 30">
+            <circle cx="15" cy="6.4" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M15 10.2v9.4M15 10.6 8.2 14.4M15 10.6l6.8 3.8M15 19.6l-4.2 6.6M15 19.6l4.2 6.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span><span class="lbl">Body regions</span><span class="meta">56 regional terms and their common names</span></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<main id="main">
+
+  <div class="wrap">
+    <!-- ===== SETUP ===== -->
+    <section class="panel screen-only" aria-labelledby="setup-h">
+      <h2 id="setup-h">Set up the round</h2>
+      <p class="hint">Pick what sits on each board, choose your groups, then deal.</p>
+
+      <div class="setup-grid">
+        <fieldset>
+          <legend>Left board holds</legend>
+          <div class="choices" id="leftChoices" role="radiogroup" aria-label="Left board content"></div>
+        </fieldset>
+        <fieldset>
+          <legend>Right board holds</legend>
+          <div class="choices" id="rightChoices" role="radiogroup" aria-label="Right board content"></div>
+        </fieldset>
+        <fieldset>
+          <legend>Pairs on the table</legend>
+          <div class="choices" role="radiogroup" aria-label="Number of pairs">
+            <label class="choice"><input type="radio" name="pairs" value="6"><span>6</span></label>
+            <label class="choice"><input type="radio" name="pairs" value="8" checked><span>8</span></label>
+            <label class="choice"><input type="radio" name="pairs" value="10"><span>10</span></label>
+            <label class="choice"><input type="radio" name="pairs" value="12"><span>12</span></label>
+            <label class="choice"><input type="radio" name="pairs" value="15"><span>15</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Scoring</legend>
+          <div class="choices" role="radiogroup" aria-label="Scoring style">
+            <label class="choice"><input type="radio" name="scoring" value="flat" checked><span>1 point a match</span></label>
+            <label class="choice"><input type="radio" name="scoring" value="streak"><span>Streak bonus</span></label>
+          </div>
+        </fieldset>
+      </div>
+
+      <fieldset style="margin-top:22px">
+        <legend id="deckLegend">Groups in play</legend>
+        <div class="choices" id="deckChoices"></div>
+      </fieldset>
+
+      <div class="btn-row">
+        <button type="button" class="btn" id="dealBtn">Deal the boards</button>
+        <button type="button" class="btn gold" id="presentBtn">Present</button>
+        <button type="button" class="btn ghost" id="printBtn">Build print cards</button>
+        <button type="button" class="btn ghost" id="studyBtn" aria-expanded="false" aria-controls="studyPanel">Study sheet</button>
+      </div>
+      <p class="notice" id="setupNote"></p>
+    </section>
+
+    <!-- ===== TEAMS ===== -->
+    <section class="panel screen-only" aria-labelledby="teams-h">
+      <h2 id="teams-h">Teams</h2>
+      <p class="hint">Name the teams yourself, or fill them from one of your section themes. Solo play just means one team.</p>
+      <div class="teamrows" id="teamRows"></div>
+      <div class="themerow">
+        <span class="lab">Fill from</span>
+        <button type="button" class="btn ghost small" data-theme="space">Space</button>
+        <button type="button" class="btn ghost small" data-theme="leaves">Leaves</button>
+        <button type="button" class="btn ghost small" data-theme="success">Success</button>
+        <button type="button" class="btn ghost small" id="addTeamBtn">Add a team</button>
+        <button type="button" class="btn ghost small" id="soloBtn">Back to solo</button>
+      </div>
+    </section>
+
+    <!-- ===== STUDY ===== -->
+    <section class="panel screen-only" id="studyPanel" hidden aria-labelledby="study-h">
+      <h2 id="study-h">Study sheet</h2>
+      <p class="hint">Everything in the groups you have selected. Read it before you play, not during.</p>
+      <div style="overflow-x:auto"><table class="plain" id="studyTable"></table></div>
+    </section>
+  </div>
+
+  <!-- ===== GAME SURFACE ===== -->
+  <section class="surface screen-only" id="surface" hidden aria-labelledby="game-h">
+    <div class="wrap">
+      <div class="surfhead">
+        <div>
+          <h2 id="game-h" class="t">Round</h2>
+          <span class="s" id="roundSub"></span>
+        </div>
+      </div>
+
+      <div class="teamstrip" id="teamStrip"></div>
+
+      <div class="scorebar">
+        <div class="stat emph" id="turnStat"><span class="k">Now playing</span><span class="v" id="turnVal">You</span></div>
+        <div class="stat"><span class="k">Matched</span><span class="v" id="matchedVal">0 / 0</span></div>
+        <div class="stat"><span class="k">Flips</span><span class="v" id="flipVal">0</span></div>
+        <div class="stat"><span class="k">Accuracy</span><span class="v" id="accVal">—</span></div>
+        <div class="stat"><span class="k">Time</span><span class="v" id="timeVal">0:00</span></div>
+      </div>
+
+      <p class="visually-hidden" id="liveRegion" role="status" aria-live="polite"></p>
+
+      <div class="boards">
+        <div class="board">
+          <h3 id="leftBoardH">Left board</h3>
+          <p class="bhint" id="leftBoardHint"></p>
+          <div class="grid img" id="leftGrid" role="group" aria-labelledby="leftBoardH"></div>
+        </div>
+        <div class="board">
+          <h3 id="rightBoardH">Right board</h3>
+          <p class="bhint" id="rightBoardHint">Then turn over the card you think goes with it.</p>
+          <div class="grid txt" id="rightGrid" role="group" aria-labelledby="rightBoardH"></div>
+        </div>
+      </div>
+
+      <div class="surfbtns">
+        <button type="button" class="btn ghost" id="redealBtn">Deal a new round</button>
+        <button type="button" class="btn ghost" id="revealBtn">Show the rest</button>
+        <button type="button" class="btn gold" id="presentBtn2">Present</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <section class="panel screen-only" aria-labelledby="log-h">
+      <h2 id="log-h">What has been matched</h2>
+      <p class="hint">Every pair opens up with the full record, so a picture match still teaches the words that go with it.</p>
+      <ul class="log" id="matchLog"><li class="emptylog">Nothing matched yet.</li></ul>
+    </section>
+
+    <section class="panel screen-only" id="tournyPanel" hidden aria-labelledby="tourny-h">
+      <h2 id="tourny-h">Tournament</h2>
+      <p class="hint">Running totals for this session, across every round you deal.</p>
+      <div style="overflow-x:auto"><table class="plain" id="tournyTable"></table></div>
+      <div class="btn-row"><button type="button" class="btn ghost small" id="resetTournyBtn">Clear the tournament</button></div>
+    </section>
+
+    <details class="lib screen-only" id="grabPanel">
+      <summary>
+        <span>Grab frames from a video <span class="libstat" id="grabStat"></span></span>
+        <svg class="chev" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M4 6.5 9 11.5 14 6.5" fill="none" stroke="#08101F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </summary>
+      <div class="libbody">
+        <p class="hint" style="margin-bottom:16px">Open one of your Loops videos, park it on the frame you want, pick which item it belongs to, and capture. Every frame you take goes straight onto the boards, and the download button hands them back named correctly for the repo folder.</p>
+        <div class="grab">
+          <div>
+            <div class="vidwrap" id="vidWrap"><p class="empty">No video open yet. Choose a video file to start.</p></div>
+            <div class="nudge">
+              <button type="button" class="btn ghost" id="vidPick">Choose a video file</button>
+              <button type="button" class="btn ghost" id="bk1s" disabled>Back 1 second</button>
+              <button type="button" class="btn ghost" id="bkF" disabled>Back a frame</button>
+              <button type="button" class="btn ghost" id="fwF" disabled>Forward a frame</button>
+              <button type="button" class="btn ghost" id="fw1s" disabled>Forward 1 second</button>
+              <input type="file" id="vidInput" accept="video/*" class="visually-hidden">
+            </div>
+          </div>
+          <div class="grabside">
+            <div class="row">
+              <label class="fld" for="grabTarget">This frame is</label>
+              <select id="grabTarget"></select>
+            </div>
+            <div class="row">
+              <label class="toggle"><input type="checkbox" id="squareCrop" checked> Crop to a square</label>
+            </div>
+            <div class="row">
+              <button type="button" class="btn" id="captureBtn" disabled>Capture this frame</button>
+            </div>
+            <div class="row">
+              <button type="button" class="btn ghost" id="downloadBtn" disabled>Download the captured images</button>
+            </div>
+            <p class="hint" id="grabNote" style="margin:0">Nothing captured yet.</p>
+          </div>
+        </div>
+        <div class="shots" id="shots"></div>
+      </div>
+    </details>
+
+    <details class="lib screen-only" id="libPanel">
+      <summary>
+        <span>Image library <span class="libstat" id="libStat"></span></span>
+        <svg class="chev" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M4 6.5 9 11.5 14 6.5" fill="none" stroke="#08101F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </summary>
+      <div class="libbody">
+        <p class="pathbox" id="sourceBox"></p>
+        <fieldset style="margin-bottom:16px">
+          <legend>Where images come from</legend>
+          <div class="choices" role="radiogroup" aria-label="Image source">
+            <label class="choice"><input type="radio" name="imgsrc" value="loop" checked><span>My Loops repo</span></label>
+            <label class="choice"><input type="radio" name="imgsrc" value="local"><span>This repo's images folder</span></label>
+          </div>
+        </fieldset>
+        <p class="hint" style="margin-bottom:14px">Whichever you pick, the other one is the fallback, and anything you load or capture in this session beats both. Drop a whole folder on the box and it matches files to items by filename. <button type="button" class="filebtn" id="copyNamesBtn">Copy the filename list for the folder</button></p>
+        <div class="dropzone" id="dropzone">
+          <p style="margin:0 0 8px"><strong>Drop images here</strong></p>
+          <p style="margin:0 0 10px">A file named <code id="egName">simple-squamous.jpg</code> matches on its own.</p>
+          <button type="button" class="btn ghost" id="pickBtn">Choose files</button>
+          <input type="file" id="bulkInput" accept="image/*" multiple class="visually-hidden">
+        </div>
+        <div class="libgrid" id="libGrid"></div>
+      </div>
+    </details>
+  </div>
+</main>
+
+<footer class="site-footer screen-only">
+  <div class="wrap">
+    <span class="who">Dr. Sharilyn Rennie</span>
+    <span class="meta">BIO 004 Human Anatomy · Solano College</span>
+  </div>
+</footer>
+
+<div id="printRoot" aria-hidden="true"></div>
+
+<script>
+/* ============================================================
+   DATA
+   ============================================================ */
+var TEAM_COLORS = ["#DCB45C","#8B1D1D","#1E2A47","#E8CE85","#5E201A","#3D4860"];
+
+var TEAM_THEMES = {
+  space:   ["Nebula","Pulsar","Quasar","Neptune","Orion","Romulan"],
+  leaves:  ["Ginkgo","Maple","Aspen","Birch","Elm","Hickory"],
+  success: ["Ambition","Momentum","Impact","Discovery","Peak Performers","Collaborators"]
+};
+
+var HISTOLOGY = [
+  {id:"simple-squamous", deck:"epi", name:"Simple squamous epithelium",
+   fn:"Lets material pass quickly by diffusion and filtration across a very thin barrier.",
+   loc:"Air sacs of the lungs, the filtration membrane of the kidney, and the lining of blood vessels and serous membranes."},
+  {id:"simple-cuboidal", deck:"epi", name:"Simple cuboidal epithelium",
+   fn:"Secretes and absorbs.", gFn:"secrete-absorb",
+   loc:"Kidney tubules, thyroid follicles, the ducts of small glands, and the surface of the ovary."},
+  {id:"simple-columnar", deck:"epi", name:"Simple columnar epithelium",
+   fn:"Absorbs nutrients and secretes mucus and digestive enzymes.", gFn:"secrete-absorb",
+   loc:"Lining of the stomach, small intestine, and large intestine."},
+  {id:"ciliated-columnar", deck:"epi", name:"Ciliated simple columnar epithelium",
+   fn:"Moves material along the surface with beating cilia.", gFn:"cilia",
+   loc:"Lining of the uterine tubes, the uterus, and the smaller bronchi."},
+  {id:"pseudostratified", deck:"epi", name:"Pseudostratified ciliated columnar epithelium",
+   fn:"Secretes mucus and sweeps it back out of the airway with cilia.", gFn:"cilia",
+   loc:"Lining of the trachea and most of the upper respiratory tract."},
+  {id:"strat-squam-kerat", deck:"epi", name:"Keratinized stratified squamous epithelium",
+   fn:"Protects against abrasion and water loss with a tough surface of dead cells.", gFn:"protect",
+   loc:"Epidermis of the skin."},
+  {id:"strat-squam-nonkerat", deck:"epi", name:"Nonkeratinized stratified squamous epithelium",
+   fn:"Protects surfaces that take heavy abrasion but have to stay moist.", gFn:"protect",
+   loc:"Lining of the mouth, esophagus, and vagina."},
+  {id:"transitional", deck:"epi", name:"Transitional epithelium",
+   fn:"Stretches flat as the organ fills and rounds back up as it empties.",
+   loc:"Lining of the urinary bladder, the ureters, and part of the urethra."},
+  {id:"strat-cuboidal", deck:"epi", name:"Stratified cuboidal epithelium",
+   fn:"Protects the walls of the larger gland ducts.", gFn:"protect",
+   loc:"Ducts of sweat glands, mammary glands, and salivary glands."},
+
+  {id:"areolar", deck:"con", name:"Areolar connective tissue",
+   fn:"Wraps and cushions organs, holds tissue fluid, and houses defense cells.",
+   loc:"Under every epithelium as the lamina propria, in the papillary dermis, and packaging around organs.", gLoc:"areolar"},
+  {id:"adipose", deck:"con", name:"Adipose tissue",
+   fn:"Stores energy, insulates against heat loss, and pads structures.",
+   loc:"Under the skin, around the kidneys and eyes, inside the abdomen, and in the breasts.", gLoc:"fat"},
+  {id:"reticular", deck:"con", name:"Reticular connective tissue",
+   fn:"Forms a soft internal framework that supports free blood cells.",
+   loc:"Lymph nodes, spleen, and red bone marrow."},
+  {id:"dense-regular", deck:"con", name:"Dense regular connective tissue",
+   fn:"Resists a strong pull coming from one direction.",
+   loc:"Tendons, ligaments, and aponeuroses."},
+  {id:"dense-irregular", deck:"con", name:"Dense irregular connective tissue",
+   fn:"Resists pull arriving from many directions at once.",
+   loc:"Reticular layer of the dermis, joint capsules, and the fibrous capsules around organs.", gLoc:"deep-dermis"},
+  {id:"elastic-ct", deck:"con", name:"Elastic connective tissue",
+   fn:"Lets a structure stretch and then recoil to its original shape.",
+   loc:"Walls of the large arteries and the ligamenta flava between vertebrae."},
+
+  {id:"hyaline", deck:"sup", name:"Hyaline cartilage",
+   fn:"Gives firm but flexible support and a smooth low friction surface.",
+   loc:"Ends of long bones at joints, costal cartilages, the nose, the rings of the trachea, and the larynx."},
+  {id:"elastic-cartilage", deck:"sup", name:"Elastic cartilage",
+   fn:"Holds a definite shape while still bending easily.",
+   loc:"External ear and the epiglottis."},
+  {id:"fibrocartilage", deck:"sup", name:"Fibrocartilage",
+   fn:"Absorbs shock and resists heavy compression.",
+   loc:"Intervertebral discs, the pubic symphysis, and the menisci of the knee."},
+  {id:"compact-bone", deck:"sup", name:"Compact bone",
+   fn:"Supports and protects, gives muscles a lever to pull on, and stores calcium.",
+   loc:"Shaft of a long bone and the outer shell of every bone.", gLoc:"bone"},
+  {id:"spongy-bone", deck:"sup", name:"Spongy bone",
+   fn:"Gives strength at much lower weight and holds red bone marrow.",
+   loc:"Ends of long bones and the inside of flat bones such as the sternum and hip bone.", gLoc:"bone"},
+  {id:"blood", deck:"sup", name:"Blood",
+   fn:"Carries gases, nutrients, and wastes around the body.",
+   loc:"Inside the heart chambers and the blood vessels."},
+
+  {id:"skeletal-muscle", deck:"mus", name:"Skeletal muscle tissue",
+   fn:"Moves the skeleton under voluntary control.",
+   loc:"Attached to bones, plus a few muscles attached to the skin of the face."},
+  {id:"cardiac-muscle", deck:"mus", name:"Cardiac muscle tissue",
+   fn:"Pumps blood, involuntarily and rhythmically.",
+   loc:"Wall of the heart."},
+  {id:"smooth-muscle", deck:"mus", name:"Smooth muscle tissue",
+   fn:"Squeezes hollow organs to move their contents along, involuntarily.",
+   loc:"Walls of the digestive tract, blood vessels, airways, bladder, and uterus."},
+  {id:"nervous-tissue", deck:"mus", name:"Nervous tissue",
+   fn:"Senses changes and carries electrical signals that control body activity.",
+   loc:"Brain, spinal cord, and nerves."},
+
+  {id:"stratum-basale", deck:"skin", name:"Stratum basale",
+   fn:"The one cell layer that keeps dividing and replacing the whole epidermis.",
+   loc:"Deepest layer of the epidermis, sitting on the basement membrane.", gLoc:"basale"},
+  {id:"stratum-spinosum", deck:"skin", name:"Stratum spinosum",
+   fn:"Holds the epidermis together against pulling, using desmosomes between cells.",
+   loc:"Several cell layers thick, directly above the stratum basale.", gLoc:"spinosum"},
+  {id:"stratum-granulosum", deck:"skin", name:"Stratum granulosum",
+   fn:"Where keratinocytes fill with granules, waterproof themselves, and start to die.",
+   loc:"Middle of the epidermis, above the stratum spinosum."},
+  {id:"stratum-lucidum", deck:"skin", name:"Stratum lucidum",
+   fn:"A clear extra layer that adds protection where friction is heaviest.",
+   loc:"Thick skin only, on the palms and the soles."},
+  {id:"stratum-corneum", deck:"skin", name:"Stratum corneum",
+   fn:"Forms the tough waterproof surface out of dead keratin filled cells.",
+   loc:"Outermost layer of the epidermis."},
+  {id:"papillary-dermis", deck:"skin", name:"Papillary layer of the dermis",
+   fn:"Feeds the epidermis and carries touch receptors up into the dermal papillae.",
+   loc:"Upper part of the dermis, just under the epidermis.", gLoc:"areolar"},
+  {id:"reticular-dermis", deck:"skin", name:"Reticular layer of the dermis",
+   fn:"Gives skin its strength and its resistance to stretching.",
+   loc:"Deep part of the dermis, making up most of its thickness.", gLoc:"deep-dermis"},
+  {id:"eccrine-gland", deck:"skin", name:"Eccrine sweat gland",
+   fn:"Releases watery sweat onto the skin surface to cool the body.", gFn:"sweat",
+   loc:"Coiled in the dermis, most dense on the palms, soles, and forehead."},
+  {id:"apocrine-gland", deck:"skin", name:"Apocrine sweat gland",
+   fn:"Releases a thicker sweat into a hair follicle, which skin bacteria then break down.", gFn:"sweat",
+   loc:"Dermis of the axilla and the anogenital region."},
+  {id:"sebaceous-gland", deck:"skin", name:"Sebaceous gland",
+   fn:"Releases oily sebum that softens the skin and the hair.",
+   loc:"Dermis, opening into hair follicles, absent from the palms and soles."},
+  {id:"hair-follicle", deck:"skin", name:"Hair follicle",
+   fn:"Produces a hair and anchors it in the skin.",
+   loc:"Runs from the epidermis down into the dermis and hypodermis."},
+  {id:"meissner", deck:"skin", name:"Tactile corpuscle",
+   fn:"Detects light touch.", gFn:"touch",
+   loc:"Dermal papillae of hairless skin such as fingertips, lips, and nipples."},
+  {id:"pacinian", deck:"skin", name:"Lamellar corpuscle",
+   fn:"Detects deep pressure and vibration.", gFn:"touch",
+   loc:"Deep dermis and hypodermis."},
+
+  {id:"goblet-cell", deck:"cell", name:"Goblet cell",
+   fn:"A single cell gland that makes and releases mucus.",
+   loc:"Scattered through the epithelium of the intestines and the respiratory tract."},
+  {id:"fibroblast", deck:"cell", name:"Fibroblast",
+   fn:"Makes the fibers and the ground substance of connective tissue.",
+   loc:"Connective tissue proper, both loose and dense.", gLoc:"areolar"},
+  {id:"adipocyte", deck:"cell", name:"Adipocyte",
+   fn:"Stores fat in one large droplet that pushes the nucleus out to the edge.",
+   loc:"Adipose tissue.", gLoc:"fat"},
+  {id:"macrophage", deck:"cell", name:"Macrophage",
+   fn:"Engulfs debris, dead cells, and pathogens.",
+   loc:"Areolar tissue and the lymphoid organs.", gLoc:"areolar"},
+  {id:"mast-cell", deck:"cell", name:"Mast cell",
+   fn:"Releases histamine and heparin to start an inflammatory response.",
+   loc:"Areolar tissue, clustered along the small blood vessels.", gLoc:"areolar"},
+  {id:"chondrocyte", deck:"cell", name:"Chondrocyte",
+   fn:"Maintains the cartilage matrix around it.",
+   loc:"Inside a lacuna within cartilage."},
+  {id:"osteocyte", deck:"cell", name:"Osteocyte",
+   fn:"Maintains bone matrix and senses stress placed on the bone.",
+   loc:"Inside a lacuna within compact and spongy bone.", gLoc:"bone"},
+  {id:"melanocyte", deck:"cell", name:"Melanocyte",
+   fn:"Makes melanin, which shields cell DNA from ultraviolet damage.",
+   loc:"Stratum basale of the epidermis.", gLoc:"basale"},
+  {id:"keratinocyte", deck:"cell", name:"Keratinocyte",
+   fn:"Makes keratin, the protein that toughens and waterproofs the epidermis.",
+   loc:"Every layer of the epidermis."},
+  {id:"merkel-cell", deck:"cell", name:"Tactile epithelial cell",
+   fn:"Pairs with a nerve ending to act as a receptor for light touch.", gFn:"touch",
+   loc:"Stratum basale of the epidermis.", gLoc:"basale"},
+  {id:"dendritic-cell", deck:"cell", name:"Dendritic cell of the epidermis",
+   fn:"Captures invaders in the skin and presents them to the immune system.",
+   loc:"Stratum spinosum of the epidermis.", gLoc:"spinosum"}
+];
+
+var REGIONS = [
+  /* head and neck */
+  {id:"cephalic", deck:"head", name:"Cephalic", alt:"head", loc:"The whole head.", gAlt:"head"},
+  {id:"cranial", deck:"head", name:"Cranial", alt:"skull", loc:"The part of the head that encloses the brain.", gAlt:"head"},
+  {id:"facial", deck:"head", name:"Facial", alt:"face", loc:"The front of the head."},
+  {id:"frontal", deck:"head", name:"Frontal", alt:"forehead", loc:"The forehead, above the eyes."},
+  {id:"orbital", deck:"head", name:"Orbital", alt:"eye socket", loc:"The bony socket that holds the eye.", gAlt:"eye", gLoc:"eye"},
+  {id:"ocular", deck:"head", name:"Ocular", alt:"eye", loc:"The eye itself.", gAlt:"eye", gLoc:"eye"},
+  {id:"otic", deck:"head", name:"Otic", alt:"ear", loc:"The ear."},
+  {id:"nasal", deck:"head", name:"Nasal", alt:"nose", loc:"The nose."},
+  {id:"buccal", deck:"head", name:"Buccal", alt:"cheek", loc:"The cheek, beside the mouth.", gAlt:"cheek", gLoc:"cheek"},
+  {id:"zygomatic", deck:"head", name:"Zygomatic", alt:"cheekbone", loc:"The bony ridge below and to the side of the eye.", gAlt:"cheek", gLoc:"cheek"},
+  {id:"oral", deck:"head", name:"Oral", alt:"mouth", loc:"The mouth and the lips."},
+  {id:"mental", deck:"head", name:"Mental", alt:"chin", loc:"The chin."},
+  {id:"occipital", deck:"head", name:"Occipital", alt:"back of the head", loc:"The back of the head, at the base of the skull.", gLoc:"posterior-head"},
+  {id:"cervical", deck:"head", name:"Cervical", alt:"neck", loc:"The neck.", gLoc:"neck"},
+  {id:"nuchal", deck:"head", name:"Nuchal", alt:"back of the neck", loc:"The back surface of the neck.", gLoc:"neck"},
+
+  /* anterior trunk */
+  {id:"thoracic", deck:"trunk", name:"Thoracic", alt:"chest", loc:"The chest, between the neck and the diaphragm.", gAlt:"chest", gLoc:"chest"},
+  {id:"sternal", deck:"trunk", name:"Sternal", alt:"breastbone", loc:"The middle of the chest, over the sternum.", gAlt:"chest", gLoc:"chest"},
+  {id:"pectoral", deck:"trunk", name:"Pectoral", alt:"front of the chest", loc:"The chest wall over the pectoralis muscles.", gAlt:"chest", gLoc:"chest"},
+  {id:"mammary", deck:"trunk", name:"Mammary", alt:"breast", loc:"The breast."},
+  {id:"axillary", deck:"trunk", name:"Axillary", alt:"armpit", loc:"The armpit."},
+  {id:"abdominal", deck:"trunk", name:"Abdominal", alt:"belly", loc:"The front of the trunk between the diaphragm and the hips.", gLoc:"abdomen"},
+  {id:"umbilical", deck:"trunk", name:"Umbilical", alt:"navel", loc:"The navel, at the center of the abdomen.", gLoc:"abdomen"},
+  {id:"coxal", deck:"trunk", name:"Coxal", alt:"hip", loc:"The hip."},
+  {id:"pelvic", deck:"trunk", name:"Pelvic", alt:"pelvis", loc:"The region inside the bony pelvis, below the abdomen.", gAlt:"pelvis", gLoc:"pelvis"},
+  {id:"pubic", deck:"trunk", name:"Pubic", alt:"pubic region", loc:"The front of the pelvis, below the abdomen.", gAlt:"pelvis", gLoc:"pelvis"},
+  {id:"inguinal", deck:"trunk", name:"Inguinal", alt:"groin", loc:"The crease where the thigh meets the trunk."},
+  {id:"perineal", deck:"trunk", name:"Perineal", alt:"perineum", loc:"The area between the anus and the external genitals."},
+
+  /* posterior trunk */
+  {id:"dorsal", deck:"back", name:"Dorsal", alt:"back", loc:"The back.", gLoc:"back"},
+  {id:"scapular", deck:"back", name:"Scapular", alt:"shoulder blade", loc:"The shoulder blade region of the upper back.", gLoc:"back"},
+  {id:"vertebral", deck:"back", name:"Vertebral", alt:"spinal column", loc:"The line of the spine down the middle of the back.", gLoc:"back"},
+  {id:"lumbar", deck:"back", name:"Lumbar", alt:"lower back", loc:"The lower back, between the ribs and the hips."},
+  {id:"sacral", deck:"back", name:"Sacral", alt:"tailbone area", loc:"The area between the hips at the base of the spine."},
+  {id:"gluteal", deck:"back", name:"Gluteal", alt:"buttock", loc:"The buttock."},
+
+  /* upper limb */
+  {id:"acromial", deck:"upper", name:"Acromial", alt:"point of the shoulder", loc:"The bony tip at the top of the shoulder.", gAlt:"shoulder", gLoc:"shoulder"},
+  {id:"deltoid", deck:"upper", name:"Deltoid", alt:"curve of the shoulder", loc:"The rounded muscle over the shoulder joint.", gAlt:"shoulder", gLoc:"shoulder"},
+  {id:"brachial", deck:"upper", name:"Brachial", alt:"upper arm", loc:"The arm between the shoulder and the elbow."},
+  {id:"cubital", deck:"upper", name:"Cubital", alt:"elbow", loc:"The elbow.", gAlt:"elbow", gLoc:"elbow"},
+  {id:"antecubital", deck:"upper", name:"Antecubital", alt:"front of the elbow", loc:"The hollow on the front of the elbow.", gAlt:"elbow", gLoc:"elbow"},
+  {id:"olecranal", deck:"upper", name:"Olecranal", alt:"back of the elbow", loc:"The point on the back of the elbow.", gAlt:"elbow", gLoc:"elbow"},
+  {id:"antebrachial", deck:"upper", name:"Antebrachial", alt:"forearm", loc:"The forearm, between the elbow and the wrist."},
+  {id:"carpal", deck:"upper", name:"Carpal", alt:"wrist", loc:"The wrist."},
+  {id:"manus", deck:"upper", name:"Manus", alt:"hand", loc:"The hand.", gAlt:"hand", gLoc:"hand"},
+  {id:"palmar", deck:"upper", name:"Palmar", alt:"palm", loc:"The front surface of the hand.", gAlt:"hand", gLoc:"hand"},
+  {id:"pollex", deck:"upper", name:"Pollex", alt:"thumb", loc:"The thumb."},
+  {id:"digital", deck:"upper", name:"Digital", alt:"fingers and toes", loc:"The fingers, or the toes."},
+
+  /* lower limb */
+  {id:"femoral", deck:"lower", name:"Femoral", alt:"thigh", loc:"The thigh, between the hip and the knee."},
+  {id:"patellar", deck:"lower", name:"Patellar", alt:"kneecap", loc:"The front of the knee, over the patella.", gAlt:"knee", gLoc:"knee"},
+  {id:"popliteal", deck:"lower", name:"Popliteal", alt:"back of the knee", loc:"The hollow on the back of the knee.", gAlt:"knee", gLoc:"knee"},
+  {id:"crural", deck:"lower", name:"Crural", alt:"shin region", loc:"The leg between the knee and the ankle.", gLoc:"leg"},
+  {id:"sural", deck:"lower", name:"Sural", alt:"calf", loc:"The back surface of the leg.", gLoc:"leg"},
+  {id:"fibular", deck:"lower", name:"Fibular", alt:"side of the leg", loc:"The outer side of the leg.", gLoc:"leg"},
+  {id:"tarsal", deck:"lower", name:"Tarsal", alt:"ankle", loc:"The ankle."},
+  {id:"pedal", deck:"lower", name:"Pedal", alt:"foot", loc:"The foot.", gAlt:"foot", gLoc:"foot"},
+  {id:"plantar", deck:"lower", name:"Plantar", alt:"sole", loc:"The undersurface of the foot.", gAlt:"foot", gLoc:"foot"},
+  {id:"calcaneal", deck:"lower", name:"Calcaneal", alt:"heel", loc:"The heel."},
+  {id:"hallux", deck:"lower", name:"Hallux", alt:"great toe", loc:"The big toe."}
+];
+
+var SUBJECTS = {
+  histology: {
+    id:"histology",
+    label:"Histology",
+    eyebrow:"Module 1 · Histology",
+    imageBase:"images/histology/",
+    imageExt:".jpg",
+    items:HISTOLOGY,
+    deckLegend:"Tissue groups in play",
+    decks:[
+      {id:"epi",  label:"Epithelial tissue", on:true},
+      {id:"con",  label:"Connective tissue proper", on:true},
+      {id:"sup",  label:"Cartilage, bone, blood"},
+      {id:"mus",  label:"Muscle and nervous"},
+      {id:"skin", label:"Skin layers and structures"},
+      {id:"cell", label:"Special cells"}
+    ],
+    leftFields:[{key:"image",label:"Slide images",board:"Slide board",hint:"Turn over one slide."},
+                {key:"name", label:"Tissue names", board:"Tissue board",hint:"Turn over one tissue name."}],
+    rightFields:[{key:"name",label:"Tissue name",board:"Name board"},
+                 {key:"fn",  label:"Function",   board:"Function board"},
+                 {key:"loc", label:"Location",   board:"Location board"}],
+    studyCols:["Tissue","What it does","Where you find it"],
+    studyKeys:["name","fn","loc"],
+    unit:"tissue"
+  },
+  regions: {
+    id:"regions",
+    label:"Body regions",
+    eyebrow:"Module 1 · Regional terms",
+    imageBase:"images/regions/",
+    imageExt:".jpg",
+    items:REGIONS,
+    deckLegend:"Region groups in play",
+    decks:[
+      {id:"head",  label:"Head and neck", on:true},
+      {id:"trunk", label:"Trunk, front", on:true},
+      {id:"back",  label:"Trunk, back"},
+      {id:"upper", label:"Upper limb"},
+      {id:"lower", label:"Lower limb"}
+    ],
+    leftFields:[{key:"image",label:"Region images",board:"Region board",hint:"Turn over one body diagram."},
+                {key:"name", label:"Regional terms",board:"Term board",hint:"Turn over one regional term."}],
+    rightFields:[{key:"name",label:"Regional term",board:"Term board"},
+                 {key:"alt", label:"Common name",  board:"Common name board"},
+                 {key:"loc", label:"Where it is",  board:"Location board"}],
+    studyCols:["Regional term","Common name","Where it is"],
+    studyKeys:["name","alt","loc"],
+    unit:"region"
+  }
+};
+
+/* ------------------------------------------------------------
+   LOOPS REPO IMAGES
+   Your Loops practice tool already holds labelled station slides at
+   drsrennie-stack.github.io/loops/images/<dir>/sNN.jpg. Both repos serve
+   from the same drsrennie-stack.github.io origin, so this page can point
+   straight at them with nothing copied and nothing to keep in sync.
+   Each entry below is the Loops station whose answer matches the item.
+   ------------------------------------------------------------ */
+var LOOPS_BASE = "https://drsrennie-stack.github.io/loops/images/";
+
+var LOOP_MAP = {
+  histology: {
+    "strat-squam-kerat":"tissues/s01", "strat-cuboidal":"tissues/s02",
+    "transitional":"tissues/s03",      "simple-squamous":"tissues/s04",
+    "simple-cuboidal":"tissues/s06",   "pseudostratified":"tissues/s07",
+    "goblet-cell":"tissues/s09",       "strat-squam-nonkerat":"tissues/s10",
+    "simple-columnar":"tissues/s11",   "ciliated-columnar":"tissues/s12",
+    "fibroblast":"tissues/s13",        "reticular":"tissues/s14",
+    "compact-bone":"tissues/s15",      "dense-irregular":"tissues/s16",
+    "elastic-ct":"tissues/s18",        "dense-regular":"tissues/s19",
+    "adipose":"tissues/s20",           "areolar":"tissues/s21",
+    "nervous-tissue":"tissues/s24",    "skeletal-muscle":"tissues/s28",
+    "smooth-muscle":"tissues/s29",     "cardiac-muscle":"tissues/s30",
+    "pacinian":"skin/s01",             "sebaceous-gland":"skin/s02",
+    "meissner":"skin/s03",             "apocrine-gland":"skin/s05",
+    "hair-follicle":"skin/s06",        "stratum-corneum":"skin/s07",
+    "stratum-lucidum":"skin/s09",      "eccrine-gland":"skin/s10",
+    "reticular-dermis":"skin/s11"
+  },
+  regions: {
+    "patellar":"intro/s01",  "lumbar":"intro/s02",       "calcaneal":"intro/s04",
+    "mammary":"intro/s05",   "scapular":"intro/s06",     "brachial":"intro/s07",
+    "sternal":"intro/s08",   "axillary":"intro/s09",     "popliteal":"intro/s10",
+    "antebrachial":"intro/s11", "otic":"intro/s12",      "pubic":"intro/s13",
+    "crural":"intro/s15",    "olecranal":"intro/s16",    "acromial":"intro/s17",
+    "cervical":"intro/s18",  "antecubital":"intro/s24",  "vertebral":"intro/s26",
+    "occipital":"intro/s27", "umbilical":"intro/s29",    "sural":"intro/s30",
+    "pollex":"intro/s31",    "plantar":"intro/s32",      "buccal":"intro/s34",
+    "femoral":"intro/s36",   "orbital":"intro/s37",      "sacral":"intro/s38",
+    "gluteal":"intro/s39",   "hallux":"intro/s40"
+  }
+};
+
+/* fill in defaults */
+Object.keys(SUBJECTS).forEach(function(sk){
+  var s = SUBJECTS[sk];
+  s.items.forEach(function(it){
+    it.subject = sk;
+    it.file = it.id + s.imageExt;
+    it.loop = (LOOP_MAP[sk] && LOOP_MAP[sk][it.id]) ? LOOPS_BASE + LOOP_MAP[sk][it.id] + ".jpg" : null;
+    it.groups = {
+      name: it.id,
+      fn:   it.gFn  || ("fn-"  + it.id),
+      loc:  it.gLoc || ("loc-" + it.id),
+      alt:  it.gAlt || ("alt-" + it.id)
+    };
+  });
+});
+
+/* ============================================================
+   STATE
+   ============================================================ */
+var subject = "histology";
+var loadedImages = {};     // "subject:id" -> object URL loaded this session
+var failedSrc = {};        // "subject:id|kind" -> true, a source that came back 404
+var imageSource = "loop";  // "loop" tries the Loops repo first, "local" tries this repo's folder first
+var teams = [{ name:"You", color:TEAM_COLORS[0], score:0, rounds:0, total:0 }];
+var tourny = [];           // round results
+var game = null;
+var timerId = null;
+var presentWin = null;
+
+var $  = function(s,r){ return (r||document).querySelector(s); };
+var $$ = function(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+function S(){ return SUBJECTS[subject]; }
+function keyOf(it){ return it.subject + ":" + it.id; }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function slug(s){ return String(s).toLowerCase().replace(/\.[a-z0-9]+$/,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""); }
+function shuffle(a){ var r=a.slice(); for(var i=r.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=r[i]; r[i]=r[j]; r[j]=t; } return r; }
+/* candidates, in the order this item should be tried */
+function srcCandidates(it){
+  var k = keyOf(it), out = [];
+  if(loadedImages[k]) out.push({ kind:"session", url:loadedImages[k] });
+  var loop  = it.loop ? { kind:"loop",  url:it.loop } : null;
+  var local = { kind:"local", url:SUBJECTS[it.subject].imageBase + it.file };
+  var order = (imageSource === "local") ? [local, loop] : [loop, local];
+  order.forEach(function(c){ if(c && !failedSrc[k + "|" + c.kind]) out.push(c); });
+  return out;
+}
+function imgSrc(it){
+  var c = srcCandidates(it);
+  return c.length ? c[0].url : null;
+}
+function imgKind(it){
+  var c = srcCandidates(it);
+  return c.length ? c[0].kind : null;
+}
+function hasLoopSlide(it){ return !!it.loop && !failedSrc[keyOf(it) + "|loop"]; }
+function radioVal(n){ var e=document.querySelector('input[name="'+n+'"]:checked'); return e?e.value:null; }
+function selectedDecks(){ return $$('input[name="deck"]:checked').map(function(i){ return i.value; }); }
+function pool(){ var d=selectedDecks(); return S().items.filter(function(i){ return d.indexOf(i.deck)!==-1; }); }
+function fieldLabel(side,key){
+  var list = side==="left" ? S().leftFields : S().rightFields;
+  for(var i=0;i<list.length;i++) if(list[i].key===key) return list[i];
+  return list[0];
+}
+
+/* ============================================================
+   SUBJECT + SETUP RENDERING
+   ============================================================ */
+function renderSubjectControls(){
+  var s = S();
+  $("#heroEyebrow").textContent = s.eyebrow;
+  $("#deckLegend").textContent = s.deckLegend;
+  $("#egName").textContent = s.items[0].file;
+
+  $("#leftChoices").innerHTML = s.leftFields.map(function(f,i){
+    return '<label class="choice"><input type="radio" name="left" value="'+f.key+'"'+(i===0?" checked":"")+'><span>'+esc(f.label)+'</span></label>';
+  }).join("");
+  $("#rightChoices").innerHTML = s.rightFields.map(function(f,i){
+    return '<label class="choice"><input type="radio" name="right" value="'+f.key+'"'+(i===0?" checked":"")+'><span>'+esc(f.label)+'</span></label>';
+  }).join("");
+  $("#deckChoices").innerHTML = s.decks.map(function(d){
+    return '<label class="choice"><input type="checkbox" name="deck" value="'+d.id+'"'+(d.on?" checked":"")+'><span>'+esc(d.label)+'</span></label>';
+  }).join("");
+
+  $$('input[name="left"]').forEach(function(i){ i.addEventListener("change", syncModeRules); });
+  $$('input[name="right"]').forEach(function(i){ i.addEventListener("change", updateSetupNote); });
+  $$('input[name="deck"]').forEach(function(i){ i.addEventListener("change", function(){ renderLibrary(); updateSetupNote(); }); });
+
+  $$(".subject").forEach(function(b){
+    b.setAttribute("aria-pressed", String(b.getAttribute("data-subject") === subject));
+  });
+  syncModeRules();
+  renderLibrary();
+  renderGrabTarget();
+  renderShots();
+}
+
+function syncModeRules(){
+  var left = radioVal("left");
+  var nameOpt = document.querySelector('input[name="right"][value="name"]');
+  if(nameOpt){
+    if(left === "name"){
+      nameOpt.disabled = true;
+      if(nameOpt.checked) document.querySelector('input[name="right"]:not([value="name"])').checked = true;
+    } else {
+      nameOpt.disabled = false;
+    }
+  }
+  updateSetupNote();
+}
+
+function updateSetupNote(){
+  var p = pool(), want = parseInt(radioVal("pairs"),10);
+  var lf = fieldLabel("left", radioVal("left")), rf = fieldLabel("right", radioVal("right"));
+  var msg;
+  if(p.length === 0){
+    msg = "Pick at least one group.";
+  } else {
+    msg = "Matching " + lf.label.toLowerCase() + " to " + rf.label.toLowerCase() + ", from " + p.length + " " + S().unit + (p.length===1?"":"s") + ".";
+    if(p.length < want) msg += " That is fewer than " + want + " pairs, so the round will deal " + p.length + ".";
+    if(radioVal("left") === "image"){
+      var known = p.filter(function(t){ return loadedImages[keyOf(t)] || hasLoopSlide(t); }).length;
+      if(known === p.length){
+        msg += " Every one of them has a slide in your Loops repo.";
+      } else {
+        msg += " " + known + " of them have a Loops slide; the other " + (p.length - known)
+             + " will look in this repo's images folder, or you can grab frames for them below.";
+      }
+    }
+  }
+  $("#setupNote").textContent = msg;
+  $("#dealBtn").disabled = p.length === 0;
+}
+
+/* ============================================================
+   TEAMS
+   ============================================================ */
+function renderTeamRows(){
+  $("#teamRows").innerHTML = teams.map(function(t,i){
+    return '<div class="teamrow">'
+      + '<span class="swatch" style="background:'+t.color+'" aria-hidden="true"></span>'
+      + '<label class="visually-hidden" for="team'+i+'">Team '+(i+1)+' name</label>'
+      + '<input type="text" id="team'+i+'" data-i="'+i+'" value="'+esc(t.name)+'" placeholder="Examples: Nebula, Ginkgo, Momentum">'
+      + (teams.length > 1
+          ? '<button type="button" class="iconbtn" data-remove="'+i+'" aria-label="Remove '+esc(t.name)+'">'
+            + '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 3l8 8M11 3l-8 8" stroke="#6B1616" stroke-width="2" stroke-linecap="round"/></svg></button>'
+          : '')
+      + '</div>';
+  }).join("");
+  $("#addTeamBtn").disabled = teams.length >= 6;
+}
+
+function fillTheme(key){
+  var names = TEAM_THEMES[key];
+  var n = Math.max(teams.length, 4);
+  var next = [];
+  for(var i=0;i<n && i<names.length;i++){
+    next.push({ name:names[i], color:TEAM_COLORS[i%TEAM_COLORS.length],
+                score:0, rounds:(teams[i]?teams[i].rounds:0), total:(teams[i]?teams[i].total:0) });
+  }
+  teams = next;
+  renderTeamRows();
+  if(game){ reseatTeams(); }
+}
+function reseatTeams(){
+  game.turn = 0;
+  teams.forEach(function(t){ t.score = 0; });
+  renderTeamStrip(); updateStats(); renderPresent();
+}
+
+/* ============================================================
+   ROUND
+   ============================================================ */
+function pickRound(n, groupKey){
+  var cands = shuffle(pool()), used = {}, out = [];
+  cands.forEach(function(t){
+    if(out.length >= n) return;
+    var g = t.groups[groupKey];
+    if(used[g]) return;
+    used[g] = true; out.push(t);
+  });
+  if(out.length < n){
+    cands.forEach(function(t){ if(out.length < n && out.indexOf(t) === -1) out.push(t); });
+  }
+  return out;
+}
+
+function deal(){
+  var left = radioVal("left"), right = radioVal("right");
+  var want = Math.min(parseInt(radioVal("pairs"),10), pool().length);
+  var chosen = pickRound(want, right);
+  var codes = {};
+  chosen.forEach(function(t,i){ codes[t.id] = "C" + String(i+1).padStart(2,"0"); });
+
+  teams.forEach(function(t){ t.score = 0; });
+
+  game = {
+    subject: subject, left: left, right: right,
+    items: chosen, codes: codes,
+    leftOrder: shuffle(chosen), rightOrder: shuffle(chosen),
+    matched: {}, owner: {},
+    selLeft: null, selRight: null, lock: false,
+    flips: 0, hits: 0, streak: 0, turn: 0,
+    scoring: radioVal("scoring"),
+    started: Date.now(), over: false
+  };
+
+  var lf = fieldLabel("left", left), rf = fieldLabel("right", right);
+  $("#surface").hidden = false;
+  $("#game-h").textContent = S().label + " round";
+  $("#roundSub").textContent = lf.label + " to " + rf.label.toLowerCase() + " · " + chosen.length + " pairs";
+  $("#leftBoardH").textContent = lf.board;
+  $("#leftBoardHint").textContent = lf.hint;
+  $("#rightBoardH").textContent = rf.board;
+  $("#leftGrid").className = "grid " + (left === "image" ? "img" : "txt");
+
+  $("#matchLog").innerHTML = '<li class="emptylog">Nothing matched yet.</li>';
+  renderBoards(); renderTeamStrip(); updateStats();
+  announce("Boards dealt. " + chosen.length + " pairs.");
+  if(timerId) clearInterval(timerId);
+  timerId = setInterval(updateStats, 1000);
+  renderPresent();
+  $("#surface").scrollIntoView({ behavior:"smooth", block:"start" });
+}
+
+function stateOf(id, side){
+  if(game.matched[id]) return "matched";
+  if(side === "left"  && game.selLeft  === id) return game.wrongFlash ? "wrong" : "up";
+  if(side === "right" && game.selRight === id) return game.wrongFlash ? "wrong" : "up";
+  return "down";
+}
+function rightText(it){ return it[game.right]; }
+function leftFaceHTML(it){
+  if(game.left !== "image"){
+    return '<span class="fu"><span class="txt">' + esc(it.name) + '</span></span>';
+  }
+  var src = imgSrc(it), code = game.codes[it.id];
+  if(!src) return '<span class="fu"><span class="noimg"><strong>'+code+'</strong><span>No image file yet</span></span></span>';
+  return '<span class="fu"><img src="'+esc(src)+'" alt="Unlabeled image '+code+'" data-k="'+keyOf(it)+'" data-kind="'+imgKind(it)+'"></span><span class="scode">'+code+'</span>';
+}
+function ownerDot(id){
+  var oi = game.owner[id];
+  if(oi === undefined || teams.length < 2) return "";
+  return '<span class="owner" style="background:'+teams[oi].color+'" title="'+esc(teams[oi].name)+'"></span>';
+}
+function tick(){
+  return '<span class="tickwrap"><svg width="17" height="17" viewBox="0 0 18 18" aria-hidden="true">'
+    + '<circle cx="9" cy="9" r="8" fill="#08101F"/><path d="M5 9.2 7.7 12 13 6.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+}
+function glyph(kind){
+  if(kind === "slide"){
+    return '<svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">'
+      + '<rect x="3.5" y="6" width="19" height="14" rx="2" fill="none" stroke="#DCB45C" stroke-width="1.6"/>'
+      + '<circle cx="13" cy="13" r="4.2" fill="none" stroke="#DCB45C" stroke-width="1.6"/>'
+      + '<line x1="7" y1="6" x2="7" y2="20" stroke="#DCB45C" stroke-width="1.2"/>'
+      + '<line x1="19" y1="6" x2="19" y2="20" stroke="#DCB45C" stroke-width="1.2"/></svg>';
+  }
+  return '<svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">'
+    + '<rect x="4" y="4" width="18" height="18" rx="2.5" fill="none" stroke="#DCB45C" stroke-width="1.6"/>'
+    + '<line x1="8" y1="10" x2="18" y2="10" stroke="#DCB45C" stroke-width="1.6" stroke-linecap="round"/>'
+    + '<line x1="8" y1="13.5" x2="18" y2="13.5" stroke="#DCB45C" stroke-width="1.6" stroke-linecap="round"/>'
+    + '<line x1="8" y1="17" x2="14" y2="17" stroke="#DCB45C" stroke-width="1.6" stroke-linecap="round"/></svg>';
+}
+
+function renderBoards(){
+  var lg = $("#leftGrid"), rg = $("#rightGrid");
+  lg.innerHTML = game.leftOrder.map(function(it,i){
+    var st = stateOf(it.id, "left");
+    return '<button type="button" class="tile" data-side="left" data-kind="'+(game.left==="image"?"img":"term")+'" data-id="'+it.id+'" data-state="'+st+'"'
+      + (st==="matched"?" disabled":"") + '>'
+      + '<span class="fd">'+glyph(game.left==="image"?"slide":"text")+'<span class="code">'+(game.left==="image"?game.codes[it.id]:("Card "+(i+1)))+'</span></span>'
+      + leftFaceHTML(it) + (st==="matched"?tick()+ownerDot(it.id):"") + '</button>';
+  }).join("");
+  rg.innerHTML = game.rightOrder.map(function(it,i){
+    var st = stateOf(it.id, "right");
+    return '<button type="button" class="tile" data-side="right" data-kind="'+(game.right==="name"?"term":"text")+'" data-id="'+it.id+'" data-state="'+st+'"'
+      + (st==="matched"?" disabled":"") + '>'
+      + '<span class="fd">'+glyph("text")+'<span class="code">Card '+(i+1)+'</span></span>'
+      + '<span class="fu"><span class="txt">'+esc(rightText(it))+'</span></span>'
+      + (st==="matched"?tick()+ownerDot(it.id):"") + '</button>';
+  }).join("");
+
+  if(game.left === "image"){
+    var pending = false;
+    $$("img[data-k]", lg).forEach(function(im){
+      im.addEventListener("error", function(){
+        failedSrc[im.getAttribute("data-k") + "|" + im.getAttribute("data-kind")] = true;
+        if(pending) return;
+        pending = true;
+        requestAnimationFrame(function(){ pending = false; renderLibrary(); renderBoards(); updateSetupNote(); renderPresent(); });
+      });
+    });
+    var none = game.items.every(function(t){ return !imgSrc(t); });
+    $("#leftBoardHint").textContent = none
+      ? "No image files found yet. Open the image library below and load them, or switch the left board to words."
+      : fieldLabel("left","image").hint;
+  }
+}
+
+function renderTeamStrip(){
+  var strip = $("#teamStrip");
+  if(!game || teams.length < 2){ strip.innerHTML = ""; return; }
+  strip.innerHTML = teams.map(function(t,i){
+    return '<span class="tchip" data-active="'+(i===game.turn)+'">'
+      + '<span class="dot" style="background:'+t.color+'"></span>'
+      + esc(t.name) + '<span class="sc">' + t.score + '</span></span>';
+  }).join("");
+}
+
+function updateStats(){
+  if(!game) return;
+  var done = Object.keys(game.matched).length;
+  $("#matchedVal").textContent = done + " / " + game.items.length;
+  $("#flipVal").textContent = game.flips;
+  $("#accVal").textContent = game.flips ? Math.round((game.hits/game.flips)*100) + "%" : "—";
+  $("#turnVal").textContent = teams[game.turn] ? teams[game.turn].name : "You";
+  $("#turnStat").hidden = teams.length < 2;
+  var s = Math.floor((Date.now() - game.started)/1000);
+  if(!game.over) $("#timeVal").textContent = Math.floor(s/60) + ":" + String(s%60).padStart(2,"0");
+  renderPresentStats();
+}
+
+function announce(m){ $("#liveRegion").textContent = m; }
+
+function play(side, id){
+  if(!game || game.lock || game.matched[id]) return;
+  if(side === "left")  game.selLeft  = (game.selLeft  === id) ? null : id;
+  else                 game.selRight = (game.selRight === id) ? null : id;
+  game.wrongFlash = false;
+  renderBoards(); renderPresent();
+
+  if(game.selLeft && game.selRight){
+    game.lock = true; game.flips++;
+    if(game.selLeft === game.selRight){
+      var it = game.items.filter(function(x){ return x.id === game.selLeft; })[0];
+      game.matched[it.id] = true;
+      game.owner[it.id] = game.turn;
+      game.hits++; game.streak++;
+      var pts = (game.scoring === "streak") ? game.streak : 1;
+      teams[game.turn].score += pts;
+      logMatch(it, game.turn, pts);
+      announce("Match. " + it.name + ". " + teams[game.turn].name + " scores " + pts + ".");
+      game.selLeft = null; game.selRight = null; game.lock = false;
+      renderBoards(); renderTeamStrip(); updateStats(); renderPresent();
+      if(Object.keys(game.matched).length === game.items.length) finish();
+    } else {
+      game.wrongFlash = true; game.streak = 0;
+      renderBoards(); renderPresent();
+      announce("Not a match.");
+      updateStats();
+      setTimeout(function(){
+        game.selLeft = null; game.selRight = null; game.lock = false; game.wrongFlash = false;
+        if(teams.length > 1) game.turn = (game.turn + 1) % teams.length;
+        renderBoards(); renderTeamStrip(); updateStats(); renderPresent();
+      }, 1050);
+    }
+  }
+}
+
+function onTileClick(e){
+  var b = e.target.closest(".tile");
+  if(!b) return;
+  play(b.getAttribute("data-side"), b.getAttribute("data-id"));
+}
+
+function logMatch(it, teamIdx, pts){
+  var ul = $("#matchLog"), empty = ul.querySelector(".emptylog");
+  if(empty) empty.remove();
+  var s = SUBJECTS[it.subject];
+  var li = document.createElement("li");
+  var by = teams.length > 1 ? '<span class="by">' + esc(teams[teamIdx].name) + " · " + pts + (pts===1?" point":" points") + '</span><br>' : "";
+  var rows = "";
+  if(s.id === "histology"){
+    rows = '<dt>Does</dt><dd>'+esc(it.fn)+'</dd><dt>Found</dt><dd>'+esc(it.loc)+'</dd>';
+  } else {
+    rows = '<dt>Means</dt><dd>'+esc(it.alt)+'</dd><dt>Where</dt><dd>'+esc(it.loc)+'</dd>';
+  }
+  li.innerHTML = by + '<span class="nm">'+esc(it.name)+'</span><dl>'+rows+'</dl>';
+  ul.insertBefore(li, ul.firstChild);
+}
+
+function finish(){
+  game.over = true;
+  if(timerId) clearInterval(timerId);
+  var msg = "Board cleared in " + game.flips + " flips.";
+  if(teams.length > 1){
+    var top = Math.max.apply(null, teams.map(function(t){ return t.score; }));
+    var winners = teams.filter(function(t){ return t.score === top; });
+    winners.forEach(function(t){ t.rounds += 1 / winners.length; });
+    teams.forEach(function(t){ t.total += t.score; });
+    msg += winners.length > 1
+      ? " Tied at " + top + ": " + winners.map(function(t){ return t.name; }).join(" and ") + "."
+      : " " + winners[0].name + " takes the round with " + top + ".";
+    tourny.push({
+      subject: S().label,
+      mode: fieldLabel("left",game.left).label + " to " + fieldLabel("right",game.right).label.toLowerCase(),
+      scores: teams.map(function(t){ return { name:t.name, score:t.score }; })
+    });
+    renderTourny();
+  } else {
+    teams[0].total += teams[0].score;
+  }
+  announce(msg);
+  $("#setupNote").textContent = msg;
+  renderPresent();
+}
+
+function revealRest(){
+  if(!game) return;
+  game.items.forEach(function(it){
+    if(!game.matched[it.id]){ game.matched[it.id] = true; logMatch(it, game.turn, 0); }
+  });
+  game.selLeft = null; game.selRight = null; game.over = true;
+  if(timerId) clearInterval(timerId);
+  renderBoards(); updateStats(); renderPresent();
+  announce("All remaining pairs revealed.");
+}
+
+function renderTourny(){
+  if(tourny.length === 0){ $("#tournyPanel").hidden = true; return; }
+  $("#tournyPanel").hidden = false;
+  var ranked = teams.slice().sort(function(a,b){ return (b.rounds - a.rounds) || (b.total - a.total); });
+  $("#tournyTable").innerHTML =
+    '<thead><tr><th scope="col">Team</th><th scope="col">Rounds won</th><th scope="col">Total matches</th></tr></thead><tbody>'
+    + ranked.map(function(t){
+        return '<tr><td class="lead"><span class="dot" style="background:'+t.color+'"></span>'+esc(t.name)+'</td>'
+             + '<td>'+(Math.round(t.rounds*10)/10)+'</td><td>'+t.total+'</td></tr>';
+      }).join("")
+    + '</tbody>';
+}
+
+/* ============================================================
+   STUDY SHEET
+   ============================================================ */
+function renderStudy(){
+  var s = S();
+  var rows = pool().map(function(it){
+    return '<tr><td class="lead">'+esc(it[s.studyKeys[0]])+'</td><td>'+esc(it[s.studyKeys[1]])+'</td><td>'+esc(it[s.studyKeys[2]])+'</td></tr>';
+  }).join("");
+  $("#studyTable").innerHTML =
+    '<caption class="visually-hidden">'+esc(s.studyCols.join(", "))+'</caption><thead><tr>'
+    + s.studyCols.map(function(c){ return '<th scope="col">'+esc(c)+'</th>'; }).join("")
+    + '</tr></thead><tbody>'+rows+'</tbody>';
+}
+
+/* ============================================================
+   IMAGE LIBRARY
+   ============================================================ */
+function renderLibrary(){
+  var s = S(), all = s.items;
+  var list = pool(); if(list.length === 0) list = all;
+  var loopCount = all.filter(hasLoopSlide).length;
+  var sessCount = all.filter(function(t){ return loadedImages[keyOf(t)]; }).length;
+  $("#libStat").textContent = "· " + loopCount + " from Loops, " + sessCount + " loaded this session";
+
+  $("#sourceBox").innerHTML =
+    "Your Loops repo already holds labelled station slides at <code>" + esc(LOOPS_BASE) + "&lt;set&gt;/sNN.jpg</code>, "
+    + "and " + loopCount + " of the " + all.length + " " + s.unit + "s in this subject are matched to one. "
+    + "Both repos serve from the same drsrennie-stack.github.io address, so this page reads them straight across with nothing copied. "
+    + "Anything with no Loops slide looks in <code>" + esc(s.imageBase) + "&lt;name&gt;" + esc(s.imageExt) + "</code> inside this repo instead. "
+    + '<button type="button" class="filebtn" id="copyNamesBtn2">Copy the filename list</button>';
+
+  $("#libGrid").innerHTML = list.map(function(t){
+    var sess = loadedImages[keyOf(t)];
+    var src = imgSrc(t), kind = imgKind(t);
+    var thumb = src ? '<span class="thumb"><img src="'+esc(src)+'" alt="" loading="lazy"></span>' : '<span class="thumb">no image</span>';
+    var where = sess ? "captured this session"
+              : (kind === "loop") ? "Loops · " + esc(LOOP_MAP[s.id][t.id])
+              : (kind === "local") ? esc(t.file)
+              : "nothing found";
+    return '<div class="librow">'+thumb+'<span class="meta"><b>'+esc(t.name)+'</b><code>'+where+'</code>'
+      + '<button type="button" class="filebtn" data-assign="'+t.id+'">'+(sess?"replace":"load a file")+'</button></span></div>';
+  }).join("");
+}
+function filenameList(){
+  return S().items.map(function(t){ return t.file; }).join("\n");
+}
+function copyNames(){
+  var txt = filenameList();
+  function fallback(){
+    var ta = document.createElement("textarea");
+    ta.value = txt;
+    ta.style.position = "fixed"; ta.style.left = "-9999px";
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch(e){}
+    ta.remove();
+    announce(ok ? "Filename list copied." : "Copying was blocked, the names are listed in the rows below.");
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){ announce("Filename list copied."); }, fallback);
+  } else {
+    fallback();
+  }
+}
+function assignFile(id, file){
+  if(!file || !/^image\//.test(file.type)) return;
+  setImage(id, URL.createObjectURL(file), file);
+}
+function setImage(id, url, blob){
+  var k = subject + ":" + id;
+  if(loadedImages[k]) URL.revokeObjectURL(loadedImages[k]);
+  loadedImages[k] = url;
+  if(blob) capturedBlobs[k] = blob;
+  renderLibrary(); updateSetupNote(); renderShots();
+  if(game){ renderBoards(); renderPresent(); }
+}
+function ingestFiles(files){
+  var items = S().items, matched = 0, un = 0;
+  Array.prototype.forEach.call(files, function(f){
+    var s = slug(f.name);
+    var hit = items.filter(function(t){ return t.id === s; })[0]
+           || items.filter(function(t){ return slug(t.name) === s; })[0]
+           || items.filter(function(t){ return s.indexOf(t.id) !== -1; })[0];
+    if(hit){ assignFile(hit.id, f); matched++; } else { un++; }
+  });
+  var msg = matched + " image" + (matched===1?"":"s") + " matched by filename.";
+  if(un) msg += " " + un + " did not match, load those one at a time below.";
+  $("#setupNote").textContent = msg;
+  announce(msg);
+}
+
+/* ============================================================
+   FRAME GRABBER
+   Pull a still out of a Loops video and name it for the repo.
+   ============================================================ */
+var capturedBlobs = {};   // "subject:id" -> Blob
+var vidEl = null;
+var vidUrl = null;
+
+function renderGrabTarget(){
+  var s = S();
+  var sel = $("#grabTarget");
+  var groups = s.decks.map(function(d){
+    var opts = s.items.filter(function(it){ return it.deck === d.id; }).map(function(it){
+      var mark = loadedImages[keyOf(it)] ? "captured" : (hasLoopSlide(it) ? "has a Loops slide" : "no image");
+      return '<option value="'+it.id+'">'+esc(it.name)+' — '+mark+'</option>';
+    }).join("");
+    return '<optgroup label="'+esc(d.label)+'">'+opts+'</optgroup>';
+  }).join("");
+  var keep = sel.value;
+  sel.innerHTML = groups;
+  if(keep) sel.value = keep;
+}
+
+function openVideo(file){
+  if(!file) return;
+  if(vidUrl) URL.revokeObjectURL(vidUrl);
+  vidUrl = URL.createObjectURL(file);
+  var wrap = $("#vidWrap");
+  wrap.innerHTML = '<video id="grabVideo" controls preload="metadata" playsinline></video>';
+  vidEl = $("#grabVideo");
+  vidEl.src = vidUrl;
+  ["bk1s","bkF","fwF","fw1s"].forEach(function(id){ $("#"+id).disabled = false; });
+  $("#captureBtn").disabled = false;
+  $("#grabNote").textContent = "Video open. Park it on the frame you want, pick the item, then capture.";
+  announce("Video opened.");
+}
+function nudge(sec){
+  if(!vidEl) return;
+  vidEl.pause();
+  vidEl.currentTime = Math.max(0, Math.min(vidEl.duration || 0, vidEl.currentTime + sec));
+}
+function capture(){
+  if(!vidEl || !vidEl.videoWidth){ $("#grabNote").textContent = "Give the video a moment to load, then try again."; return; }
+  var id = $("#grabTarget").value;
+  if(!id) return;
+  var vw = vidEl.videoWidth, vh = vidEl.videoHeight;
+  var sx = 0, sy = 0, sw = vw, sh = vh;
+  if($("#squareCrop").checked){
+    var side = Math.min(vw, vh);
+    sx = Math.round((vw - side) / 2); sy = Math.round((vh - side) / 2);
+    sw = side; sh = side;
+  }
+  var cap = 1100;
+  var scale = Math.min(1, cap / Math.max(sw, sh));
+  var cv = document.createElement("canvas");
+  cv.width = Math.round(sw * scale); cv.height = Math.round(sh * scale);
+  cv.getContext("2d").drawImage(vidEl, sx, sy, sw, sh, 0, 0, cv.width, cv.height);
+  cv.toBlob(function(blob){
+    if(!blob){ $("#grabNote").textContent = "That frame could not be captured. Try nudging one frame and capturing again."; return; }
+    setImage(id, URL.createObjectURL(blob), blob);
+    var it = S().items.filter(function(x){ return x.id === id; })[0];
+    $("#grabNote").textContent = "Captured " + it.file + ". It is on the boards now.";
+    announce("Captured " + it.name + ".");
+    renderGrabTarget();
+    // step to the next item with no image, so you can work straight down the video
+    var next = S().items.filter(function(x){ return !loadedImages[keyOf(x)] && !hasLoopSlide(x); })[0];
+    if(next) $("#grabTarget").value = next.id;
+  }, "image/jpeg", 0.88);
+}
+function renderShots(){
+  var s = S();
+  var shots = s.items.filter(function(it){ return capturedBlobs[keyOf(it)]; });
+  $("#grabStat").textContent = shots.length ? "· " + shots.length + " captured" : "";
+  $("#downloadBtn").disabled = shots.length === 0;
+  $("#shots").innerHTML = shots.map(function(it){
+    return '<span class="shot"><img src="'+esc(loadedImages[keyOf(it)])+'" alt="Captured frame for '+esc(it.name)+'"><span>'+esc(it.file)+'</span></span>';
+  }).join("");
+}
+function downloadCaptured(){
+  var s = S();
+  var shots = s.items.filter(function(it){ return capturedBlobs[keyOf(it)]; });
+  if(!shots.length) return;
+  shots.forEach(function(it, i){
+    setTimeout(function(){
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(capturedBlobs[keyOf(it)]);
+      a.download = it.file;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+    }, i * 320);
+  });
+  $("#grabNote").textContent = "Downloading " + shots.length + " file" + (shots.length===1?"":"s")
+    + ". Move them into " + s.imageBase + " in the repo and they will load on their own next time.";
+}
+
+/* ============================================================
+   PRESENT MODE  (separate window)
+   ============================================================ */
+var PRESENT_CSS = ""
+ + ":root{--navy:#08101F;--maroon:#7A2A22;--gold:#DCB45C;--straw:#E8CE85;--card:#fff;--tint:#ECEFF4;--terra:#8B1D1D;--muted:#3D4860}"
+ + "*{box-sizing:border-box}"
+ + "html,body{margin:0;height:100%;overflow:hidden;background:var(--navy);color:#fff;"
+ + "font-family:'Figtree','Plus Jakarta Sans',system-ui,sans-serif}"
+ + "em,i{font-style:normal}"
+ + "#shell{height:100vh;display:flex;flex-direction:column;padding:1.4vh 1.6vw}"
+ + "#bar{flex:0 0 auto;display:flex;align-items:center;gap:1.2vw;flex-wrap:wrap;padding-bottom:1.2vh}"
+ + "#ttl{font-family:'Plus Jakarta Sans';font-weight:800;font-size:clamp(15px,2.2vh,30px);letter-spacing:-.01em}"
+ + "#sub{color:var(--straw);font-weight:600;font-size:clamp(11px,1.5vh,18px)}"
+ + "#chips{margin-left:auto;display:flex;gap:.7vw;flex-wrap:wrap}"
+ + ".pchip{background:var(--card);color:var(--navy);border-radius:99px;padding:.5vh 1vh;display:flex;align-items:center;gap:.6vh;"
+ + "font-weight:700;font-size:clamp(11px,1.7vh,20px)}"
+ + ".pchip .d{width:1.4vh;height:1.4vh;min-width:10px;min-height:10px;border-radius:4px}"
+ + ".pchip .s{background:var(--tint);border-radius:99px;padding:0 .8vh;font-family:'Plus Jakarta Sans';font-weight:800;min-width:3vh;text-align:center}"
+ + ".pchip[data-a='true']{background:var(--gold);box-shadow:0 0 0 .5vh rgba(232,206,133,.35)}"
+ + ".pchip[data-a='true'] .s{background:var(--navy);color:#fff}"
+ + "#stage{flex:1 1 auto;display:grid;grid-template-columns:1fr 1fr;gap:1.2vw;min-height:0}"
+ + ".pboard{background:var(--maroon);border-radius:14px;padding:1.2vh 1vw;display:flex;flex-direction:column;min-height:0}"
+ + ".pbh{flex:0 0 auto;font-family:'Plus Jakarta Sans';font-weight:800;font-size:clamp(11px,1.8vh,22px);color:#fff;padding-bottom:.9vh}"
+ + ".pgrid{flex:1 1 auto;display:grid;gap:.8vh;min-height:0}"
+ + ".pt{position:relative;border:2px solid var(--gold);border-radius:10px;background:var(--navy);color:var(--straw);cursor:pointer;"
+ + "display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:.6vh;min-height:0;"
+ + "box-shadow:0 2px 6px rgba(0,0,0,.3);font-family:'Plus Jakarta Sans';font-weight:800}"
+ + ".pt .c{font-size:clamp(10px,1.7vh,20px);letter-spacing:.08em}"
+ + ".pt[data-s='up'],.pt[data-s='matched'],.pt[data-s='wrong']{background:var(--card);color:var(--navy)}"
+ + ".pt[data-s='up']{box-shadow:0 0 0 .55vh var(--gold),0 2px 6px rgba(0,0,0,.3)}"
+ + ".pt[data-s='wrong']{box-shadow:0 0 0 .55vh var(--terra),0 2px 6px rgba(0,0,0,.3)}"
+ + ".pt[data-s='matched']{background:var(--tint);border-color:var(--navy);opacity:.95;cursor:default}"
+ + ".pt[data-s='wrong']{border-color:var(--terra)}"
+ + ".pt .t{font-family:'Figtree';font-weight:500;font-size:clamp(10px,1.75vh,21px);line-height:1.25;padding:.4vh}"
+ + ".pt .t.term{font-family:'Plus Jakarta Sans';font-weight:800;font-size:clamp(11px,2vh,26px)}"
+ + ".pt img{width:100%;height:100%;object-fit:cover;border-radius:8px}"
+ + ".pt .ni{font-size:clamp(9px,1.5vh,16px);color:var(--muted);font-weight:700}"
+ + ".pt .ow{position:absolute;right:.5vh;bottom:.5vh;width:1.5vh;height:1.5vh;min-width:11px;min-height:11px;border-radius:4px}"
+ + ".pt .sc{position:absolute;left:.5vh;top:.5vh;background:rgba(8,16,31,.85);color:#fff;font-size:clamp(8px,1.2vh,13px);"
+ + "padding:.15vh .7vh;border-radius:99px;letter-spacing:.06em}"
+ + "#foot{flex:0 0 auto;padding-top:1vh;display:flex;gap:1.2vw;align-items:center;color:var(--straw);"
+ + "font-size:clamp(10px,1.5vh,17px);font-weight:600}"
+ + "#banner{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(8,16,31,.94);"
+ + "text-align:center;padding:4vw}"
+ + "#banner.on{display:flex}"
+ + "#banner .in{max-width:80vw}"
+ + "#banner h2{font-family:'Plus Jakarta Sans';font-weight:800;font-size:clamp(22px,7vh,86px);margin:0 0 2vh;color:var(--gold)}"
+ + "#banner p{font-size:clamp(13px,2.6vh,34px);margin:0;color:#fff}"
+ + "@media (prefers-reduced-motion:reduce){*{transition:none!important}}";
+
+function openPresent(){
+  if(presentWin && !presentWin.closed){ presentWin.focus(); renderPresent(); return; }
+  var w = window.open("", "bio004present", "width=1280,height=800");
+  if(!w){ $("#setupNote").textContent = "The browser blocked the present window. Allow pop-ups for this page and press Present again."; return; }
+  presentWin = w;
+  var d = w.document;
+  d.open();
+  d.write('<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Memory Match · Present</title>'
+    + '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+    + '<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">'
+    + '<style>' + PRESENT_CSS + '</style></head><body>'
+    + '<div id="shell">'
+    + '<div id="bar"><div><div id="ttl"></div><div id="sub"></div></div><div id="chips"></div></div>'
+    + '<div id="stage">'
+    + '<div class="pboard"><div class="pbh" id="lh"></div><div class="pgrid" id="lg"></div></div>'
+    + '<div class="pboard"><div class="pbh" id="rh"></div><div class="pgrid" id="rg"></div></div>'
+    + '</div>'
+    + '<div id="foot"><span id="fstat"></span><span id="fhint">F for full screen · Esc to close</span></div>'
+    + '</div><div id="banner"><div class="in"><h2 id="bh"></h2><p id="bp"></p></div></div>'
+    + '</body></html>');
+  d.close();
+
+  d.addEventListener("click", function(e){
+    var t = e.target.closest(".pt");
+    if(t) play(t.getAttribute("data-side"), t.getAttribute("data-id"));
+  });
+  d.addEventListener("keydown", function(e){
+    if(e.key === "Escape"){ w.close(); }
+    if(e.key === "f" || e.key === "F"){
+      if(d.fullscreenElement) d.exitFullscreen(); else d.documentElement.requestFullscreen();
+    }
+  });
+  w.addEventListener("resize", renderPresent);
+  renderPresent();
+  w.focus();
+}
+
+function gridShape(n){
+  // pick the column count that leaves the fewest empty cells, then the squarest shape
+  var best = null;
+  for(var c = 2; c <= 6; c++){
+    var rows = Math.ceil(n / c);
+    var score = (c * rows - n) + 1.2 * Math.abs(c - rows);
+    if(!best || score < best.score) best = { cols:c, rows:rows, score:score };
+  }
+  return best;
+}
+
+function renderPresent(){
+  if(!presentWin || presentWin.closed) return;
+  var d = presentWin.document;
+  if(!d.getElementById("lg")) return;
+
+  if(!game){
+    d.getElementById("ttl").textContent = "Memory Match";
+    d.getElementById("sub").textContent = "Deal a round in the control window.";
+    d.getElementById("lg").innerHTML = ""; d.getElementById("rg").innerHTML = "";
+    return;
+  }
+  var lf = fieldLabel("left", game.left), rf = fieldLabel("right", game.right);
+  d.getElementById("ttl").textContent = SUBJECTS[game.subject].label + " Memory Match";
+  d.getElementById("sub").textContent = lf.label + " to " + rf.label.toLowerCase();
+  d.getElementById("lh").textContent = lf.board;
+  d.getElementById("rh").textContent = rf.board;
+
+  var shape = gridShape(game.items.length);
+  ["lg","rg"].forEach(function(gid){
+    var el = d.getElementById(gid);
+    el.style.gridTemplateColumns = "repeat(" + shape.cols + ",1fr)";
+    el.style.gridTemplateRows = "repeat(" + shape.rows + ",1fr)";
+  });
+
+  d.getElementById("lg").innerHTML = game.leftOrder.map(function(it,i){
+    var st = stateOf(it.id, "left");
+    var inner;
+    if(st === "down"){
+      inner = '<span class="c">' + (game.left === "image" ? game.codes[it.id] : ("Card " + (i+1))) + '</span>';
+    } else if(game.left === "image"){
+      var src = imgSrc(it);
+      inner = src ? '<img src="'+esc(src)+'" alt=""><span class="sc">'+game.codes[it.id]+'</span>'
+                  : '<span class="ni">'+game.codes[it.id]+'</span>';
+    } else {
+      inner = '<span class="t term">'+esc(it.name)+'</span>';
+    }
+    return '<button class="pt" data-side="left" data-id="'+it.id+'" data-s="'+st+'"'+(st==="matched"?" disabled":"")+'>'
+      + inner + (st==="matched" ? pOwner(it.id) : "") + '</button>';
+  }).join("");
+
+  d.getElementById("rg").innerHTML = game.rightOrder.map(function(it,i){
+    var st = stateOf(it.id, "right");
+    var inner = (st === "down")
+      ? '<span class="c">Card ' + (i+1) + '</span>'
+      : '<span class="t'+(game.right==="name"?" term":"")+'">'+esc(rightText(it))+'</span>';
+    return '<button class="pt" data-side="right" data-id="'+it.id+'" data-s="'+st+'"'+(st==="matched"?" disabled":"")+'>'
+      + inner + (st==="matched" ? pOwner(it.id) : "") + '</button>';
+  }).join("");
+
+  renderPresentStats();
+
+  var banner = d.getElementById("banner");
+  if(game.over){
+    var top = Math.max.apply(null, teams.map(function(t){ return t.score; }));
+    var win = teams.filter(function(t){ return t.score === top; });
+    d.getElementById("bh").textContent = teams.length > 1
+      ? (win.length > 1 ? "Tied at " + top : win[0].name + " wins")
+      : "Board cleared";
+    d.getElementById("bp").textContent = game.flips + " flips · " + game.hits + " matches";
+    banner.classList.add("on");
+    banner.onclick = function(){ banner.classList.remove("on"); };
+  } else {
+    banner.classList.remove("on");
+    banner.onclick = null;
+  }
+}
+function pOwner(id){
+  var oi = game.owner[id];
+  if(oi === undefined || teams.length < 2) return "";
+  return '<span class="ow" style="background:'+teams[oi].color+'"></span>';
+}
+function renderPresentStats(){
+  if(!presentWin || presentWin.closed || !game) return;
+  var d = presentWin.document;
+  var chips = d.getElementById("chips");
+  if(!chips) return;
+  chips.innerHTML = (teams.length > 1 ? teams : []).map(function(t,i){
+    return '<span class="pchip" data-a="'+(i===game.turn)+'"><span class="d" style="background:'+t.color+'"></span>'
+      + esc(t.name) + '<span class="s">'+t.score+'</span></span>';
+  }).join("");
+  var done = Object.keys(game.matched).length;
+  var s = Math.floor((Date.now() - game.started)/1000);
+  d.getElementById("fstat").textContent =
+    done + " of " + game.items.length + " matched · " + game.flips + " flips · "
+    + Math.floor(s/60) + ":" + String(s%60).padStart(2,"0");
+}
+
+/* ============================================================
+   PRINT
+   ============================================================ */
+function sizeClass(str){
+  var n = String(str).length;
+  if(n > 150) return " verylong";
+  if(n > 80)  return " long";
+  return "";
+}
+function buildPrint(){
+  var s = S(), left = radioVal("left"), right = radioVal("right");
+  var list = pool(); if(list.length === 0) return;
+  var codes = {};
+  list.forEach(function(t,i){ codes[t.id] = "C" + String(i+1).padStart(2,"0"); });
+
+  var lf = fieldLabel("left",left), rf = fieldLabel("right",right);
+  var setName = lf.label + " to " + rf.label.toLowerCase();
+  var html = "";
+  function pages(a,n){ var o=[]; for(var i=0;i<a.length;i+=n) o.push(a.slice(i,i+n)); return o; }
+
+  var aCards = list.map(function(t){
+    if(left !== "image") return '<div class="pcard term"><span class="ptxt">'+esc(t.name)+'</span></div>';
+    var src = imgSrc(t);
+    if(!src) return '<div class="pcard"><span class="pcode">'+codes[t.id]+'</span><span class="noimgp">Paste image '+codes[t.id]+'</span></div>';
+    return '<div class="pcard img"><span class="pcode">'+codes[t.id]+'</span><img src="'+esc(src)+'" alt=""></div>';
+  });
+  pages(aCards,12).forEach(function(pg,i){
+    html += '<section class="sheet"><h2 class="sheet-title">'+esc(s.label)+' · Board A · '+esc(setName)+' · sheet '+(i+1)+'</h2>'
+      + '<p class="sheet-note">Print on card stock. Cut on the card borders. Codes print on this side only, so the word cards give nothing away.</p>'
+      + '<div class="pgrid">'+pg.join("")+'</div></section>';
+  });
+
+  var bCards = list.map(function(t){
+    var txt = t[right];
+    var cls = (right === "name") ? " term" : sizeClass(txt);
+    return '<div class="pcard'+cls+'"><span class="ptxt">'+esc(txt)+'</span></div>';
+  });
+  pages(bCards,12).forEach(function(pg,i){
+    html += '<section class="sheet"><h2 class="sheet-title">'+esc(s.label)+' · Board B · '+esc(rf.label)+' · sheet '+(i+1)+'</h2>'
+      + '<p class="sheet-note">Print on a second color of card stock so the two boards stay separate in the box.</p>'
+      + '<div class="pgrid">'+pg.join("")+'</div></section>';
+  });
+
+  var backs = [];
+  for(var b=0;b<12;b++) backs.push('<div class="pback">'+backMark()+'</div>');
+  html += '<section class="sheet"><h2 class="sheet-title">Card backs</h2>'
+    + '<p class="sheet-note">Optional. Run the card sheets through again to back them, or print on pre-colored stock and skip this.</p>'
+    + '<div class="pgrid">'+backs.join("")+'</div></section>';
+
+  var k = s.studyKeys;
+  html += '<section class="sheet"><h2 class="sheet-title">Answer key · '+esc(s.label)+'</h2>'
+    + '<p class="sheet-note">Instructor copy. This one does not go in the card box.</p>'
+    + '<table class="keytable"><thead><tr><th>Code</th><th>'+esc(s.studyCols[0])+'</th><th>'+esc(s.studyCols[1])+'</th><th>'+esc(s.studyCols[2])+'</th></tr></thead><tbody>'
+    + list.map(function(t){
+        return '<tr><td class="c">'+codes[t.id]+'</td><td class="n">'+esc(t[k[0]])+'</td><td>'+esc(t[k[1]])+'</td><td>'+esc(t[k[2]])+'</td></tr>';
+      }).join("")
+    + '</tbody></table><p class="keyfoot">Dr. Sharilyn Rennie · BIO 004 Human Anatomy · Solano College</p></section>';
+
+  html += '<section class="sheet"><h2 class="sheet-title">Table rules and team score sheet</h2>'
+    + '<div class="rules">'
+    + '<h3>How the two boards work</h3><ol>'
+    + '<li>Lay Board A cards face down on the left of the table and Board B cards face down on the right. Keep the two piles apart.</li>'
+    + '<li>On your turn, turn over one card from the left and one card from the right.</li>'
+    + '<li>If they belong together, say out loud why before you keep them. Keep the pair, score a point, and go again.</li>'
+    + '<li>If they do not belong together, turn both back face down in the same spots and play passes to the next team.</li>'
+    + '<li>When every pair is gone, the team holding the most pairs wins the round.</li>'
+    + '</ol>'
+    + '<h3>Streak scoring, optional</h3><ol>'
+    + '<li>First match in a turn is worth 1 point, the second in a row is worth 2, the third in a row is worth 3, and so on.</li>'
+    + '<li>A miss resets the streak and passes the turn.</li>'
+    + '</ol>'
+    + '<h3>Rule that makes it teach</h3><ol>'
+    + '<li>A pair only counts if the team says the reason out loud. Another team may challenge it, and the instructor settles it from the answer key.</li>'
+    + '</ol></div>'
+    + '<table class="scoresheet" style="margin-top:14pt"><thead><tr><th style="width:1.7in">Team</th><th>Round 1</th><th>Round 2</th><th>Round 3</th><th>Round 4</th><th>Total</th></tr></thead><tbody>'
+    + '<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+    + '<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+    + '<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+    + '<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+    + '<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+    + '<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+    + '</tbody></table>'
+    + '<p class="keyfoot">Dr. Sharilyn Rennie · BIO 004 Human Anatomy · Solano College</p></section>';
+
+  $("#printRoot").innerHTML = html;
+  window.print();
+}
+function backMark(){
+  return '<svg width="70" height="70" viewBox="0 0 70 70" aria-hidden="true">'
+    + '<circle cx="35" cy="35" r="24" fill="none" stroke="#DCB45C" stroke-width="2"/>'
+    + '<circle cx="35" cy="35" r="14" fill="none" stroke="#DCB45C" stroke-width="1.4"/>'
+    + '<circle cx="35" cy="35" r="5" fill="#DCB45C"/>'
+    + '<line x1="35" y1="4" x2="35" y2="14" stroke="#DCB45C" stroke-width="2" stroke-linecap="round"/>'
+    + '<line x1="35" y1="56" x2="35" y2="66" stroke="#DCB45C" stroke-width="2" stroke-linecap="round"/>'
+    + '<line x1="4" y1="35" x2="14" y2="35" stroke="#DCB45C" stroke-width="2" stroke-linecap="round"/>'
+    + '<line x1="56" y1="35" x2="66" y2="35" stroke="#DCB45C" stroke-width="2" stroke-linecap="round"/></svg>';
+}
+
+/* ============================================================
+   WIRING
+   ============================================================ */
+renderSubjectControls();
+renderTeamRows();
+updateSetupNote();
+
+$$(".subject").forEach(function(b){
+  b.addEventListener("click", function(){
+    subject = b.getAttribute("data-subject");
+    game = null;
+    if(timerId) clearInterval(timerId);
+    $("#surface").hidden = true;
+    $("#studyPanel").hidden = true;
+    $("#studyBtn").setAttribute("aria-expanded","false");
+    $("#studyBtn").textContent = "Study sheet";
+    renderSubjectControls();
+    renderPresent();
+    announce(S().label + " selected.");
+  });
+});
+
+$$('input[name="pairs"], input[name="scoring"]').forEach(function(i){ i.addEventListener("change", updateSetupNote); });
+$("#dealBtn").addEventListener("click", deal);
+$("#redealBtn").addEventListener("click", deal);
+$("#revealBtn").addEventListener("click", revealRest);
+$("#printBtn").addEventListener("click", buildPrint);
+$("#presentBtn").addEventListener("click", openPresent);
+$("#presentBtn2").addEventListener("click", openPresent);
+$("#resetTournyBtn").addEventListener("click", function(){
+  tourny = [];
+  teams.forEach(function(t){ t.rounds = 0; t.total = 0; });
+  renderTourny();
+  $("#tournyPanel").hidden = true;
+});
+
+$("#studyBtn").addEventListener("click", function(){
+  var p = $("#studyPanel"), open = p.hidden;
+  if(open) renderStudy();
+  p.hidden = !open;
+  this.setAttribute("aria-expanded", String(open));
+  this.textContent = open ? "Hide study sheet" : "Study sheet";
+});
+
+$("#leftGrid").addEventListener("click", onTileClick);
+$("#rightGrid").addEventListener("click", onTileClick);
+
+$("#teamRows").addEventListener("input", function(e){
+  if(e.target.matches('input[type="text"]')){
+    teams[+e.target.getAttribute("data-i")].name = e.target.value || "Team " + (1 + +e.target.getAttribute("data-i"));
+    renderTeamStrip(); updateStats(); renderTourny(); renderPresentStats();
+  }
+});
+$("#teamRows").addEventListener("click", function(e){
+  var b = e.target.closest("[data-remove]");
+  if(!b) return;
+  teams.splice(+b.getAttribute("data-remove"), 1);
+  if(teams.length === 0) teams = [{ name:"You", color:TEAM_COLORS[0], score:0, rounds:0, total:0 }];
+  renderTeamRows();
+  if(game){ game.turn = 0; renderTeamStrip(); updateStats(); renderPresent(); }
+  renderTourny();
+});
+$("#addTeamBtn").addEventListener("click", function(){
+  if(teams.length >= 6) return;
+  if(teams.length === 1 && teams[0].name === "You") teams[0].name = "Team 1";
+  teams.push({ name:"Team " + (teams.length+1), color:TEAM_COLORS[teams.length%TEAM_COLORS.length], score:0, rounds:0, total:0 });
+  renderTeamRows();
+  if(game){ renderTeamStrip(); updateStats(); renderPresent(); }
+});
+$("#soloBtn").addEventListener("click", function(){
+  teams = [{ name:"You", color:TEAM_COLORS[0], score:0, rounds:0, total:0 }];
+  tourny = [];
+  renderTeamRows(); renderTourny();
+  $("#tournyPanel").hidden = true;
+  if(game){ game.turn = 0; renderTeamStrip(); updateStats(); renderPresent(); }
+});
+$$('[data-theme]').forEach(function(b){
+  b.addEventListener("click", function(){ fillTheme(b.getAttribute("data-theme")); });
+});
+
+document.addEventListener("click", function(e){
+  if(e.target.id === "copyNamesBtn" || e.target.id === "copyNamesBtn2") copyNames();
+});
+$$('input[name="imgsrc"]').forEach(function(i){
+  i.addEventListener("change", function(){
+    imageSource = i.value;
+    failedSrc = {};
+    renderLibrary(); updateSetupNote(); renderGrabTarget();
+    if(game){ renderBoards(); renderPresent(); }
+    announce(i.value === "loop" ? "Reading images from the Loops repo first." : "Reading images from this repo's folder first.");
+  });
+});
+
+$("#vidPick").addEventListener("click", function(){ $("#vidInput").click(); });
+$("#vidInput").addEventListener("change", function(e){ openVideo(e.target.files[0]); e.target.value = ""; });
+$("#bk1s").addEventListener("click", function(){ nudge(-1); });
+$("#bkF").addEventListener("click",  function(){ nudge(-1/30); });
+$("#fwF").addEventListener("click",  function(){ nudge(1/30); });
+$("#fw1s").addEventListener("click", function(){ nudge(1); });
+$("#captureBtn").addEventListener("click", capture);
+$("#downloadBtn").addEventListener("click", downloadCaptured);
+
+$("#pickBtn").addEventListener("click", function(){ $("#bulkInput").click(); });
+$("#bulkInput").addEventListener("change", function(e){ ingestFiles(e.target.files); e.target.value = ""; });
+$("#libGrid").addEventListener("click", function(e){
+  var b = e.target.closest("[data-assign]");
+  if(!b) return;
+  var id = b.getAttribute("data-assign");
+  var inp = document.createElement("input");
+  inp.type = "file"; inp.accept = "image/*";
+  inp.addEventListener("change", function(){ assignFile(id, inp.files[0]); });
+  inp.click();
+});
+
+var dz = $("#dropzone");
+["dragenter","dragover"].forEach(function(ev){ dz.addEventListener(ev, function(e){ e.preventDefault(); dz.classList.add("over"); }); });
+["dragleave","drop"].forEach(function(ev){ dz.addEventListener(ev, function(e){ e.preventDefault(); dz.classList.remove("over"); }); });
+dz.addEventListener("drop", function(e){ if(e.dataTransfer && e.dataTransfer.files) ingestFiles(e.dataTransfer.files); });
+
+window.addEventListener("beforeunload", function(){ if(presentWin && !presentWin.closed) presentWin.close(); });
+</script>
+
+<script>
+/* iframe height sender for Kajabi and Canvas embeds */
+(function(){
+  var frameId = "memory-match";
+  function sendHeight(){
+    var h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight,
+                     document.body.offsetHeight, document.documentElement.offsetHeight);
+    if(window.parent !== window) window.parent.postMessage({ id:frameId, frameId:frameId, height:h, type:"resize" }, "*");
+  }
+  window.addEventListener("load", sendHeight);
+  window.addEventListener("resize", sendHeight);
+  if(window.ResizeObserver) new ResizeObserver(sendHeight).observe(document.body);
+  setTimeout(sendHeight, 300); setTimeout(sendHeight, 1200);
+})();
+</script>
+</body>
+</html>
