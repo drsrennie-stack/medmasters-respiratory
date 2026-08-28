@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Practice Exam Builder &middot; BIO 004 &middot; Fall 2026</title>
+<meta name="description" content="Build unlimited practice exams from the course question bank: pick your scope and DOK mix, take it, grade it, and track how close your predictions run.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Sans:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#08101F; --navy2:#1E2A47; --maroon:#7A2A22; --terra:#C2734D;
+    --gold:#DCB45C; --gold2:#B8924A;
+    --line:#DCE1E4; --page:#FAFAF9; --card:#FFFFFF; --soft:#3D4A57;
+    --f:'Plus Jakarta Sans',system-ui,sans-serif;
+    --fe:'DM Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  [hidden]{display:none !important}
+  body{background:var(--page);color:var(--navy);font-family:var(--f);line-height:1.55;font-size:16.5px}
+  .skip{position:absolute;left:-999px}
+  .skip:focus{left:12px;top:12px;background:var(--navy);color:#fff;padding:10px 14px;border-radius:8px;z-index:60}
+  .wrap{max-width:900px;margin:0 auto;padding:30px 20px 80px}
+  .eyebrow{font-family:var(--fe);font-size:12px;font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--maroon);margin:0 0 8px}
+  h1{font-size:clamp(26px,5vw,36px);font-weight:800;letter-spacing:-.02em;margin:0 0 8px;line-height:1.1}
+  .sub{font-size:16px;color:var(--soft);max-width:64ch;margin:0 0 24px}
+  .sub b{color:var(--navy)}
+  h2{font-size:20px;font-weight:800;margin:0 0 4px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:20px 22px;margin:0 0 20px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .hint{font-family:var(--fe);font-size:13px;font-weight:700;color:var(--soft);margin:2px 0 14px}
+
+  .modgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+  .modchk{display:flex;gap:10px;align-items:flex-start;font-weight:700;font-size:14.5px;cursor:pointer;
+    border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .modchk input{width:18px;height:18px;margin-top:2px;accent-color:var(--maroon);flex:none}
+  .modchk .wk{display:block;font-family:var(--fe);font-size:11px;font-weight:700;color:var(--terra);
+    text-transform:uppercase;letter-spacing:.08em}
+  .presets{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+  .pre{font-weight:700;font-size:13px;color:var(--navy);background:var(--page);border:1px solid var(--line);
+    border-radius:999px;padding:6px 14px;cursor:pointer}
+  .pre:hover{border-color:var(--gold2)}
+
+  .mixes{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+  .mix{display:block;border:1px solid var(--line);border-radius:10px;padding:11px 13px;cursor:pointer}
+  .mix input{position:absolute;opacity:0}
+  .mix b{display:block;font-size:14.5px}
+  .mix span{display:block;font-family:var(--fe);font-size:12px;font-weight:700;color:var(--soft);margin-top:2px}
+  .mix.picked{border-color:var(--maroon);outline:2px solid var(--maroon);outline-offset:-2px}
+  .mixnote{background:var(--navy2);color:#fff;border-radius:12px;padding:14px 18px;margin:14px 0 0;
+    font-weight:700;font-size:14.5px;box-shadow:0 8px 18px rgba(8,16,31,.22)}
+
+  .cta{font-family:var(--f);font-weight:800;font-size:15.5px;background:var(--gold);color:var(--navy);
+    border:0;border-radius:999px;padding:13px 26px;cursor:pointer;
+    transition:transform .2s ease,box-shadow .2s ease}
+  .cta:hover{transform:translateY(-2px);box-shadow:0 8px 16px rgba(0,0,0,.14)}
+  .cta.ghost{background:var(--card);border:1px solid var(--line);color:var(--maroon)}
+  .cta:focus-visible{outline:3px solid var(--maroon);outline-offset:3px}
+  .cta:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+  .actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:16px}
+
+  .exambar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin:0 0 18px}
+  .examno{font-family:var(--fe);font-size:13px;font-weight:700;color:var(--soft)}
+  .examno b{color:var(--maroon)}
+
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    margin:34px 0 6px;padding-bottom:9px;border-bottom:2px solid var(--navy)}
+  .sec-head h2{margin:0}
+  .sec-head .pts{font-family:var(--fe);font-weight:700;color:var(--gold2);font-size:14px}
+  .lead{font-size:15px;color:var(--soft);margin:8px 0 16px}
+  .lead b{color:var(--navy)}
+
+  .q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:0 0 12px}
+  .q .tag{font-family:var(--fe);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--terra);margin:0 0 6px}
+  .q .stem{font-weight:600;margin:0 0 12px}
+  .q .stem .key{color:var(--maroon);font-weight:800}
+  .tfrow{display:flex;gap:10px}
+  .tfbtn{font-weight:800;font-size:14px;border:1px solid var(--line);background:var(--page);color:var(--navy);
+    border-radius:999px;padding:8px 22px;cursor:pointer}
+  .tfbtn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+  .tfbtn:focus-visible{outline:3px solid var(--gold2);outline-offset:2px}
+  .corr{margin-top:10px}
+  .corr label{font-family:var(--fe);font-size:12.5px;font-weight:700;color:var(--soft);display:block;margin-bottom:4px}
+  .corr input{font:inherit;font-weight:600;border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:min(340px,100%)}
+  .corr input:focus{outline:none;border-color:var(--maroon)}
+
+  .optrow{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;
+    padding:8px 10px;margin:0 0 8px}
+  .optrow .lab{flex:1;font-weight:600;font-size:15px}
+  .stepper{display:flex;align-items:center;gap:6px;flex:none}
+  .stepper button{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--page);
+    font-weight:800;font-size:16px;cursor:pointer;color:var(--navy)}
+  .stepper button:hover{border-color:var(--gold2)}
+  .stepper button:focus-visible{outline:3px solid var(--gold2);outline-offset:1px}
+  .stepper .val{min-width:22px;text-align:center;font-weight:800}
+  .optrow.staked{border-color:var(--gold2);background:#fff}
+  .leftnote{font-family:var(--fe);font-size:12.5px;font-weight:700;color:var(--soft);margin:2px 0 0}
+  .leftnote.zero{color:#1f7a4d}
+  .optrow.right{border-color:#1f7a4d;box-shadow:inset 0 0 0 1px #1f7a4d}
+  .optrow.wrong-staked{border-color:var(--maroon);box-shadow:inset 0 0 0 1px var(--maroon)}
+
+  table.mt{width:100%;border-collapse:collapse}
+  table.mt th,table.mt td{text-align:left;padding:8px 8px;font-size:14.5px;vertical-align:top}
+  table.mt thead th{font-family:var(--fe);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--soft);border-bottom:2px solid var(--line)}
+  table.mt tbody tr{border-bottom:1px solid var(--line)}
+  .msel{font:inherit;font-weight:700;border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+  .bank{font-size:14px;color:var(--soft);margin:10px 0 12px}
+  .bank b{color:var(--navy)}
+
+  .fr-choose{display:flex;align-items:center;gap:8px;font-family:var(--fe);font-size:12.5px;font-weight:700;
+    color:var(--maroon);margin:0 0 8px}
+  .fr-choose input{width:16px;height:16px;accent-color:var(--maroon)}
+  textarea.fr{width:100%;min-height:130px;font:inherit;font-size:15px;border:1px solid var(--line);
+    border-radius:10px;padding:10px 12px;resize:vertical}
+  textarea.fr:focus{outline:none;border-color:var(--maroon)}
+  .rub{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px}
+  .rub .rt{font-family:var(--fe);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--terra);margin:0 0 6px}
+  .rub label{display:flex;gap:8px;align-items:flex-start;font-size:14.5px;font-weight:600;margin:5px 0;cursor:pointer}
+  .rub input{width:16px;height:16px;margin-top:2px;accent-color:var(--gold2)}
+
+  .warn{color:#9c2b1f;font-weight:700;font-size:14.5px;min-height:1.2em;margin:10px 0}
+  .results .big{font-size:44px;font-weight:800;line-height:1}
+  .results .grade{font-size:20px;font-weight:800;color:var(--maroon)}
+  .results .subpts{font-family:var(--fe);font-size:13.5px;font-weight:700;color:var(--soft)}
+  .bars{margin:16px 0 4px}
+  .bar{margin:0 0 10px}
+  .bar .bl{display:flex;justify-content:space-between;font-family:var(--fe);font-size:12.5px;font-weight:700;color:var(--soft)}
+  .bar .bt{height:10px;background:#EDF1F3;border-radius:999px;overflow:hidden;margin-top:3px}
+  .bar .bf{height:100%;background:linear-gradient(90deg,var(--terra),var(--gold2));border-radius:999px}
+  .pred{background:var(--navy2);color:#fff;border-radius:14px;padding:18px 20px;margin:18px 0;
+    box-shadow:0 10px 22px rgba(8,16,31,.28)}
+  .pred h3{margin:0 0 8px;font-size:17px}
+  .pred .range{font-size:26px;font-weight:800}
+  .pred .cave{font-size:13.5px;color:#C8D2DA;margin:8px 0 0;font-weight:600}
+  .pred .cave b{color:var(--gold)}
+  .logrow{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-top:10px}
+  .logrow .field{display:flex;flex-direction:column;gap:4px}
+  .logrow label{font-family:var(--fe);font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--soft)}
+  .logrow input,.logrow select{font:inherit;font-weight:600;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+  footer{border-top:1px solid var(--line);margin-top:44px;padding-top:14px;font-size:14px;color:var(--soft)}
+  footer b{color:var(--navy)}
+  @media (prefers-reduced-motion:reduce){.cta{transition:none}.cta:hover{transform:none}}
+</style>
+</head>
+<body data-no-reading-mode>
+<a class="skip" href="#main">Skip to main content</a>
+<main id="main" class="wrap">
+  <p class="eyebrow">BIO 004 &middot; Human Anatomy &middot; Fall 2026</p>
+  <h1>Practice Exam Builder</h1>
+  <p class="sub">Build yourself a fresh practice exam any time you want one. Every build pulls
+  different questions from the same bank your recall cards use, in the same format as the real
+  practice exams: <b>20 true or false</b> with a half point bonus for fixing the false ones,
+  <b>40 multiple choice</b> where you spread 4 confidence points per question, <b>matching</b>,
+  and <b>one brain dump</b>. Treat it closed book. Your work saves in this browser.</p>
+
+  <!-- ================= BUILDER ================= -->
+  <section class="card" id="builder">
+    <h2>Build an exam</h2>
+    <p class="hint">Pick what it covers and how hard it runs, then build. Unlimited rebuilds, always fresh questions.</p>
+
+    <div class="presets" id="presets">
+      <button type="button" class="pre" data-pre="sofar">Everything so far</button>
+      <button type="button" class="pre" data-pre="all">All modules</button>
+      <button type="button" class="pre" data-pre="none">Clear</button>
+    </div>
+    <div class="modgrid" id="modGrid"></div>
+
+    <h2 style="margin-top:22px">How hard?</h2>
+    <p class="hint">DOK 1 is recall, DOK 2 is understanding, DOK 3 is application and reasoning.</p>
+    <div class="mixes" id="mixes"></div>
+    <div class="mixnote">Straight from Dr. Rennie: my exams are 50% DOK 1 and 2. The Exam mix
+    preset copies that, so it is the honest rehearsal.</div>
+
+    <div class="actions">
+      <button type="button" class="cta" id="buildBtn">Build my exam</button>
+      <span class="hint" id="bankNote" style="margin:0"></span>
+    </div>
+  </section>
+
+  <!-- ================= EXAM ================= -->
+  <section id="examView" hidden>
+    <div class="exambar">
+      <span class="examno">Exam <b id="examSeed"></b> &middot; <span id="examScope"></span></span>
+      <button type="button" class="cta ghost" id="newExamBtn">Build a new exam</button>
+    </div>
+    <div id="sections"></div>
+    <div class="warn" id="warnMsg" role="alert"></div>
+    <div class="actions">
+      <button type="button" class="cta" id="submitBtn">Submit exam</button>
+    </div>
+  </section>
+
+  <!-- ================= RESULTS ================= -->
+  <section class="card results" id="results" hidden aria-live="polite">
+    <h2>Your results</h2>
+    <div style="display:flex;gap:22px;align-items:baseline;flex-wrap:wrap;margin:10px 0 4px">
+      <span class="big" id="pctOut">0%</span>
+      <span class="grade" id="gradeOut">&ndash;</span>
+      <span class="subpts" id="ptsOut"></span>
+    </div>
+    <div class="bars" id="bars"></div>
+    <div id="weakOut" class="bank"></div>
+
+    <div class="pred" id="predBox">
+      <h3>If the real exam were tomorrow</h3>
+      <div class="range" id="predLect">&ndash;</div>
+      <div class="cave" id="predLectNote"></div>
+      <div class="cave" id="calNote"></div>
+    </div>
+
+    <h2 style="font-size:17px">Log your real exam score when you get it</h2>
+    <p class="hint">This is how we find out how close the predictions run. Scores stay in this browser only.</p>
+    <div class="logrow">
+      <div class="field"><label for="rlKind">Exam</label>
+        <select id="rlKind"><option value="lecture">Lecture exam</option></select></div>
+      <div class="field"><label for="rlNo">Which one</label>
+        <select id="rlNo"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+      <div class="field"><label for="rlScore">Score %</label>
+        <input id="rlScore" type="number" min="0" max="110" step="0.1" style="width:90px"></div>
+      <button type="button" class="cta ghost" id="rlSave">Save score</button>
+    </div>
+    <div class="bank" id="histOut" style="margin-top:14px"></div>
+    <div class="actions">
+      <button type="button" class="cta ghost" id="reviewBtn">Review my answers above</button>
+      <button type="button" class="cta" id="againBtn">Build another exam</button>
+    </div>
+  </section>
+
+  <footer><b>Dr. Sharilyn Rennie</b> &middot; BIO 004 Human Anatomy &middot; Solano Community College</footer>
+</main>
+
+<script src="course-content.js"></script>
+<script>
+(function () {
+'use strict';
+/* =====================================================================
+   PRACTICE EXAM BUILDER
+   Pulls from window.BIO004_COURSE_CONTENT (the 1110-card recall bank).
+   Format per Dr. Rennie:
+     - 20 TF, one bolded key term per statement; marking False opens a
+       correction box; a right correction on a false one earns +0.5 bonus.
+     - 40 MC, confidence based: 4 points to distribute across the
+       options of each question; you score the points you put on the
+       right answer. 160 points.
+     - 1 or 2 matching sets, 8 pairs each, 1 point per pair.
+     - 4 brain dump prompts, answer exactly ONE; self graded against a
+       rubric after submit, 16 points.
+   DOK mixes: 1 / 2 / 3 / 2+3 half and half / Exam mix (50% DOK 1 and 2,
+   50% DOK 3), which is what her real exams run.
+   Everything persists in localStorage; an exam regenerates exactly from
+   its seed, so refresh never loses the paper.
+===================================================================== */
+var CC = window.BIO004_COURSE_CONTENT;
+if (!CC) { document.getElementById('builder').innerHTML = '<h2>The question bank did not load</h2><p class="hint">course-content.js is missing next to this page.</p>'; return; }
+
+var K_CUR = 'bio004_builder_current';
+var K_HIST = 'bio004_builder_history';
+var K_REAL = 'bio004_real_exam_scores';
+var TODAY = new Date();
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function norm(s){ return String(s||'').trim().toLowerCase().replace(/[.]$/,'').replace(/^the /,'').replace(/\s+/g,' '); }
+function load(k, d){ try{ var r = localStorage.getItem(k); return r ? JSON.parse(r) : d; }catch(e){ return d; } }
+function save(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+/* seeded rng so a seed always rebuilds the same exam */
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function shuffle(arr, rnd){ var a=arr.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(rnd()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+
+/* ---- flatten the bank ---- */
+/* THE FALL ORGANIZATION. The question file groups its topics the old
+   summer way ("Support and Control", "Transport and Exchange"), which
+   read as somebody else's course. Students scope by HER exam blocks:
+   each card below is one lab exam, labeled with the fall weeks it owns,
+   and the topics are reassigned underneath. Renal and reproductive sit
+   in their own block because neither Exam 4 nor Exam 5 lists them in
+   its coverage, and a block that lies about an exam is worse than one
+   more checkbox. */
+var MODULES = [
+  { id:'b1', week:1,  title:'Cells, Tissues, Histology, Integument', sub:'Exam 1 · Weeks 1 to 4',
+    topics:['t-anatomical-terminology','t-body-cavities','t-cell-anatomy','t-tissues','t-integumentary'] },
+  { id:'b2', week:5,  title:'Bone, Skeleton, and Joints', sub:'Exam 2 · Weeks 5 to 7',
+    topics:['t-bone-histology','t-axial-skeleton-skull','t-axial-skeleton-spine','t-appendicular-skeleton-upper','t-appendicular-skeleton-lower','t-articulations'] },
+  { id:'b3', week:8,  title:'Heart, Muscle, Blood, and Vessels', sub:'Exam 3 · Weeks 8 to 10',
+    topics:['t-heart','t-cardiac-conduction','t-blood','t-blood-vessels','t-blood-vessel-disorders','t-muscle-structure','t-muscle-fascicles'] },
+  { id:'b4', week:11, title:'Respiratory, Endocrine, Lymphatic, GI', sub:'Exam 4 · Weeks 11 to 14',
+    topics:['t-respiratory','t-endocrine','t-lymphatic-system','t-alimentary-canal','t-accessory-digestive-organs'] },
+  { id:'b5', week:14, title:'Renal and Reproductive', sub:'Weeks 14 to 16',
+    topics:['t-urinary-system','t-reproductive-male','t-reproductive-female','t-pregnancy-and-birth'] },
+  { id:'b6', week:15, title:'The Nervous System', sub:'Exam 5 · Weeks 15 to 17',
+    topics:['t-nervous-tissue','t-neuronal-integration','t-cns-brain','t-cns-brainstem','t-cns-spinal-cord','t-cns-meninges-csf','t-cranial-nerves','t-nerve-plexuses','t-pns','t-ans'] }
+];
+var BLOCK_OF = {};
+MODULES.forEach(function(b){ b.topics.forEach(function(t){ BLOCK_OF[t] = b.id; }); });
+var ALLCARDS = [];
+CC.modules.forEach(function(m){
+  m.topics.forEach(function(t){
+    (t.cards||[]).forEach(function(c){
+      ALLCARDS.push({ mod:BLOCK_OF[t.id]||'b0', topic:t.title, topicId:t.id, kw:t.gateKeywords||[], sum:t.summary||'',
+        dok:c.dok, q:c.q, a:c.a, options:c.options, ci:c.correctIndex, ex:c.explanation||'' });
+    });
+  });
+});
+/* TF eligible: the answer text appears in the first explanation sentence */
+function firstSentence(s){ var i = s.indexOf('. '); return i>-1 ? s.slice(0,i+1) : s; }
+ALLCARDS.forEach(function(c){
+  var fs = firstSentence(c.ex), an = c.a.replace(/[.]$/,'');
+  var idx = fs.toLowerCase().indexOf(an.toLowerCase());
+  if (an.length > 3 && idx > -1) { c.tfSent = fs; c.tfAt = idx; c.tfLen = an.length; }
+});
+
+/* ---- builder UI ---- */
+/* the storage key moved with the reorganization: an old saved list of
+   summer module ids must not half-match the new block ids */
+var chosenMods = load('bio004_builder_blocks', null);
+var grid = document.getElementById('modGrid');
+grid.innerHTML = MODULES.map(function(m){
+  return '<label class="modchk"><input type="checkbox" value="' + m.id + '">'
+    + '<span><span class="wk">' + esc(m.sub) + '</span>' + esc(m.title) + '</span></label>';
+}).join('');
+function setMods(fn){ grid.querySelectorAll('input').forEach(function(i){ i.checked = fn(i.value); }); }
+var curWeek = Math.max(1, Math.floor((TODAY - new Date(2026,7,17)) / (7*864e5)) + 1);
+if (chosenMods && chosenMods.length) setMods(function(v){ return chosenMods.indexOf(v) > -1; });
+else setMods(function(v){ var m = MODULES.filter(function(x){return x.id===v;})[0]; return m && m.week <= curWeek; });
+document.getElementById('presets').addEventListener('click', function(e){
+  var b = e.target.closest('.pre'); if(!b) return;
+  var p = b.getAttribute('data-pre');
+  if (p==='all') setMods(function(){return true;});
+  else if (p==='none') setMods(function(){return false;});
+  else setMods(function(v){ var m = MODULES.filter(function(x){return x.id===v;})[0]; return m && m.week <= curWeek; });
+  bankNote();
+});
+grid.addEventListener('change', bankNote);
+
+var MIXES = [
+  { id:'exam', name:'Exam mix', sub:'50% DOK 1 and 2, 50% DOK 3. Like the real thing.' },
+  { id:'d1',   name:'DOK 1 only', sub:'Straight recall. Good early.' },
+  { id:'d2',   name:'DOK 2 only', sub:'Understanding and connections.' },
+  { id:'d3',   name:'DOK 3 only', sub:'Application and reasoning. The deep end.' },
+  { id:'d23',  name:'DOK 2 + 3', sub:'Half and half, no gimmes.' },
+  { id:'d12',  name:'DOK 1 + 2', sub:'Half and half, warmup mode.' }
+];
+var mixEl = document.getElementById('mixes');
+var pickedMix = load('bio004_builder_mix', 'exam');
+function drawMixes(){
+  mixEl.innerHTML = MIXES.map(function(m){
+    return '<label class="mix' + (m.id===pickedMix?' picked':'') + '"><input type="radio" name="mix" value="' + m.id + '"'
+      + (m.id===pickedMix?' checked':'') + '><b>' + m.name + '</b><span>' + m.sub + '</span></label>';
+  }).join('');
+}
+drawMixes();
+mixEl.addEventListener('change', function(e){ pickedMix = e.target.value; save('bio004_builder_mix', pickedMix); drawMixes(); bankNote(); });
+
+function scopeCards(){
+  var mods = Array.prototype.map.call(grid.querySelectorAll('input:checked'), function(i){ return i.value; });
+  return { mods: mods, cards: ALLCARDS.filter(function(c){ return mods.indexOf(c.mod) > -1; }) };
+}
+function bankNote(){
+  var s = scopeCards();
+  var by = {1:0,2:0,3:0};
+  s.cards.forEach(function(c){ by[c.dok]++; });
+  document.getElementById('bankNote').textContent = s.cards.length
+    ? s.cards.length + ' questions in scope (' + by[1] + ' DOK 1, ' + by[2] + ' DOK 2, ' + by[3] + ' DOK 3)'
+    : 'Pick at least one module.';
+}
+bankNote();
+
+/* ---- sampling ---- */
+function wantForMix(mix, n){
+  if (mix==='d1') return {1:n,2:0,3:0};
+  if (mix==='d2') return {1:0,2:n,3:0};
+  if (mix==='d3') return {1:0,2:0,3:n};
+  if (mix==='d23') return {1:0,2:Math.round(n/2),3:n-Math.round(n/2)};
+  if (mix==='d12') return {1:Math.round(n/2),2:n-Math.round(n/2),3:0};
+  /* exam mix: 50% pooled from DOK 1 and 2, 50% DOK 3 */
+  var half = Math.round(n/2), q = Math.round(half/2);
+  return {1:q, 2:half-q, 3:n-half};
+}
+/* Sampling is stratified: round robin across the chosen modules so every
+   chapter gets an even share, and a card can be drawn only once per exam,
+   so nothing asked in TF reappears in MC or matching. */
+function sampleByDok(pool, want, rnd, used){
+  var out = [];
+  [1,2,3].forEach(function(d){
+    var need = want[d]; if(!need) return;
+    var byMod = {};
+    /* round robin by TOPIC, not block: equal distribution of chapters
+       means every topic in scope gets an even share of the paper */
+    pool.forEach(function(c){ if (c.dok===d && used.indexOf(c)===-1 && out.indexOf(c)===-1) (byMod[c.topicId]=byMod[c.topicId]||[]).push(c); });
+    var mods = shuffle(Object.keys(byMod), rnd);
+    mods.forEach(function(m){ byMod[m] = shuffle(byMod[m], rnd); });
+    var got = 0, ring = 0, guard = 0;
+    while (got < need && mods.length && guard++ < 5000) {
+      var mi = ring % mods.length;
+      var c = byMod[mods[mi]].pop();
+      if (c) { out.push(c); got++; ring++; }
+      else mods.splice(mi, 1);
+    }
+  });
+  /* backfill from neighboring DOKs if the scope ran short */
+  var total = (want[1]||0)+(want[2]||0)+(want[3]||0);
+  if (out.length < total) {
+    var cand2 = shuffle(pool.filter(function(c){ return used.indexOf(c)===-1 && out.indexOf(c)===-1; }), rnd);
+    out = out.concat(cand2.slice(0, total - out.length));
+  }
+  out.forEach(function(c){ used.push(c); });
+  return shuffle(out, rnd);
+}
+
+function generate(seed, mods, mix){
+  var rnd = mulberry32(seed);
+  var pool = ALLCARDS.filter(function(c){ return mods.indexOf(c.mod) > -1; });
+  var used = [];
+
+  /* MC: 40, options shuffled */
+  var mcCards = sampleByDok(pool, wantForMix(mix, 40), rnd, used);
+  var mc = mcCards.map(function(c){
+    var order = shuffle(c.options.map(function(_,i){return i;}), rnd);
+    return { topic:c.topic, dok:c.dok, stem:c.q, options:order.map(function(i){return c.options[i];}),
+      ci:order.indexOf(c.ci), why:c.ex };
+  });
+
+  /* TF: 20 from the eligible pool; half get falsified by swapping the
+     bolded term for a same-topic sibling answer */
+  var tfPool = pool.filter(function(c){ return c.tfSent && used.indexOf(c)===-1; });
+  var tfCards = sampleByDok(tfPool, wantForMix(mix, 20), rnd, used);
+  var tf = tfCards.map(function(c, n){
+    var term = c.tfSent.substr(c.tfAt, c.tfLen);
+    var makeFalse = (n % 2 === 0);
+    var sibs = pool.filter(function(o){ return o.topicId===c.topicId && norm(o.a)!==norm(c.a) && o.a.length < 60; });
+    if (makeFalse && sibs.length) {
+      var wrong = sibs[Math.floor(rnd()*sibs.length)].a.replace(/[.]$/,'');
+      return { topic:c.topic, dok:c.dok, answer:'F',
+        statement: c.tfSent.slice(0,c.tfAt) + '**' + wrong + '**' + c.tfSent.slice(c.tfAt+c.tfLen),
+        correction: term, accept:[norm(term)] };
+    }
+    return { topic:c.topic, dok:c.dok, answer:'T',
+      statement: c.tfSent.slice(0,c.tfAt) + '**' + term + '**' + c.tfSent.slice(c.tfAt+c.tfLen) };
+  });
+  tf = shuffle(tf, rnd);
+
+  /* matching: up to 2 topics with 8+ short unique answers */
+  var byTopic = {};
+  pool.forEach(function(c){ if (used.indexOf(c)>-1) return; if (c.a.length>44) return;
+    (byTopic[c.topic]=byTopic[c.topic]||[]).push(c); });
+  var mtopics = shuffle(Object.keys(byTopic).filter(function(t){
+    var seen={}, u=0; byTopic[t].forEach(function(c){ var k=norm(c.a); if(!seen[k]){seen[k]=1;u++;} }); return u>=9;
+  }), rnd).slice(0,2);
+  var match = mtopics.map(function(t){
+    var seen={}, uniq=[];
+    shuffle(byTopic[t], rnd).forEach(function(c){ var k=norm(c.a); if(!seen[k]){ seen[k]=1; uniq.push(c); } });
+    var pairs = uniq.slice(0,8), decoys = uniq.slice(8,10);
+    var colA = shuffle(pairs.map(function(c){ return c.a.replace(/[.]$/,''); }), rnd);
+    var colB = pairs.map(function(c){ return c.q; });
+    var answers = pairs.map(function(c){ return colA.indexOf(c.a.replace(/[.]$/,'')); });
+    pairs.forEach(function(c){ used.push(c); });
+    return { topic:t, colA:colA, colB:colB, answers:answers,
+      decoyNote: decoys.length ? '' : '' };
+  });
+
+  /* brain dump: 4 topics from scope, rubric from gate keywords */
+  var topicPool = [];
+  CC.modules.forEach(function(m){
+    m.topics.forEach(function(t){
+      if (mods.indexOf(BLOCK_OF[t.id]||'b0')===-1) return;
+      if ((t.gateKeywords||[]).length>=3) { t.__mod = BLOCK_OF[t.id]; topicPool.push(t); } }); });
+  /* spread the four prompts across different modules where possible */
+  var frByMod = {}, frTopics = [];
+  shuffle(topicPool, rnd).forEach(function(t){ (frByMod[t.__mod]=frByMod[t.__mod]||[]).push(t); });
+  var frMods = shuffle(Object.keys(frByMod), rnd);
+  var fri = 0;
+  while (frTopics.length < 4 && frMods.length) {
+    var fm = frMods[fri % frMods.length];
+    var ft = frByMod[fm].pop();
+    if (ft) { frTopics.push(ft); fri++; } else frMods.splice(fri % frMods.length, 1);
+  }
+  var fr = frTopics.map(function(t){
+    return { topic:t.title,
+      prompt:'Blank page brain dump: write everything you know about ' + t.title.toLowerCase()
+        + '. ' + (t.summary||'') + ' Names, order, relationships, and why it matters.',
+      rubric:(t.gateKeywords||[]).slice(0,8).map(function(k){ return 'Covered ' + k; }) };
+  });
+
+  return { seed:seed, mods:mods, mix:mix, tf:tf, mc:mc, match:match, fr:fr };
+}
+
+/* ---- state ---- */
+var EX = null;
+var st = null; /* {tf:{i:{val,fix}}, mc:{i:[pts...]}, match:{s:{r:idx}}, fr:{answers:{},checks:{},counted}, submitted} */
+function blankState(){ return { tf:{}, mc:{}, match:{}, fr:{answers:{},checks:{},counted:null}, submitted:false }; }
+function persist(){ save(K_CUR, { seed:EX.seed, mods:EX.mods, mix:EX.mix, st:st }); }
+
+/* ---- render exam ---- */
+var secEl = document.getElementById('sections');
+function ptsLeft(i){ var v = st.mc[i]||[0,0,0,0]; return 4 - v.reduce(function(a,b){return a+b;},0); }
+function render(){
+  var done = st.submitted;
+  var h = '';
+
+  h += '<div class="sec-head"><h2>Part 1 &middot; True or False</h2><span class="pts">20 points, + half point bonus per corrected false</span></div>';
+  h += '<p class="lead">One <b>bold</b> term or phrase per statement. If a statement is false, the bold part is the lie: mark False and fix it in the box for the bonus.</p>';
+  EX.tf.forEach(function(it, i){
+    var sel = st.tf[i]||{};
+    var stmt = esc(it.statement).replace(/\*\*(.+?)\*\*/g,'<span class="key">$1</span>');
+    var showFix = sel.val==='F';
+    h += '<div class="q"><div class="tag">' + (i+1) + ' &middot; ' + esc(it.topic) + ' &middot; DOK ' + it.dok + '</div>'
+      + '<p class="stem">' + stmt + '</p>'
+      + '<div class="tfrow">'
+      + '<button type="button" class="tfbtn' + (sel.val==='T'?' on':'') + '" data-tf="' + i + '" data-v="T">True</button>'
+      + '<button type="button" class="tfbtn' + (sel.val==='F'?' on':'') + '" data-tf="' + i + '" data-v="F">False</button>'
+      + '</div>';
+    if (showFix) h += '<div class="corr"><label for="fix' + i + '">The bold part should say:</label>'
+      + '<input id="fix' + i + '" data-fix="' + i + '" type="text" value="' + esc(sel.fix||'') + '"' + (done?' disabled':'') + '></div>';
+    if (done) {
+      var right = (sel.val === it.answer);
+      var bonus = it.answer==='F' && sel.val==='F' && it.accept && it.accept.indexOf(norm(sel.fix))>-1;
+      h += '<p class="leadnote" style="font-weight:700;font-size:14px;color:' + (right?'#1f7a4d':'var(--maroon)') + ';margin:8px 0 0">'
+        + (right ? 'Correct' : 'The answer was ' + (it.answer==='T'?'True':'False'))
+        + (it.answer==='F' ? ' &middot; it should say &ldquo;' + esc(it.correction) + '&rdquo;' + (bonus?' &middot; +0.5 bonus':'') : '') + '</p>';
+    }
+    h += '</div>';
+  });
+
+  h += '<div class="sec-head"><h2>Part 2 &middot; Multiple Choice, confidence based</h2><span class="pts">160 points, 4 per question</span></div>';
+  h += '<p class="lead"><b>Distribute 4 points on every question.</b> All in on one answer if you are sure. Split them if you are torn. You earn exactly the points you placed on the right answer, so honesty about your own certainty pays.</p>';
+  EX.mc.forEach(function(it, i){
+    var v = st.mc[i]||[0,0,0,0];
+    var left = ptsLeft(i);
+    h += '<div class="q"><div class="tag">' + (i+1) + ' &middot; ' + esc(it.topic) + ' &middot; DOK ' + it.dok + '</div>'
+      + '<p class="stem">' + esc(it.stem) + '</p>';
+    it.options.forEach(function(op, oi){
+      var cls = 'optrow' + (v[oi]>0?' staked':'');
+      if (done) { if (oi===it.ci) cls += ' right'; else if (v[oi]>0) cls += ' wrong-staked'; }
+      h += '<div class="' + cls + '"><span class="lab">' + esc(op) + '</span>'
+        + '<span class="stepper"><button type="button" data-mc="' + i + '" data-o="' + oi + '" data-d="-1" aria-label="Remove a point from ' + esc(op) + '"' + (done?' disabled':'') + '>&minus;</button>'
+        + '<span class="val">' + v[oi] + '</span>'
+        + '<button type="button" data-mc="' + i + '" data-o="' + oi + '" data-d="1" aria-label="Add a point to ' + esc(op) + '"' + (done?' disabled':'') + '>+</button></span></div>';
+    });
+    h += '<p class="leftnote' + (left===0?' zero':'') + '">' + (left===0 ? 'All 4 points placed.' : left + ' point' + (left===1?'':'s') + ' left to place.') + '</p>';
+    if (done) h += '<p style="font-size:14px;color:var(--soft);margin:8px 0 0"><b style="color:#1f7a4d">' + (v[it.ci]||0) + ' / 4</b> &middot; ' + esc(it.why) + '</p>';
+    h += '</div>';
+  });
+
+  EX.match.forEach(function(ms, si){
+    h += '<div class="sec-head"><h2>Part 3' + (EX.match.length>1?String.fromCharCode(97+si):'') + ' &middot; Matching: ' + esc(ms.topic) + '</h2><span class="pts">' + ms.answers.length + ' points</span></div>';
+    h += '<p class="bank"><b>Bank:</b> ' + ms.colA.map(function(t,ti){ return '<b>' + String.fromCharCode(65+ti) + '.</b> ' + esc(t); }).join(' &nbsp; ') + '</p>';
+    h += '<div class="q" style="overflow-x:auto"><table class="mt"><thead><tr><th style="width:70px">Answer</th><th>Description</th></tr></thead><tbody>';
+    ms.colB.forEach(function(desc, ri){
+      var sel = (st.match[si]||{})[ri];
+      h += '<tr><td><select class="msel" data-ms="' + si + '" data-r="' + ri + '"' + (done?' disabled':'') + '><option value="">&ndash;</option>'
+        + ms.colA.map(function(_,ti){ return '<option value="' + ti + '"' + (sel===ti?' selected':'') + '>' + String.fromCharCode(65+ti) + '</option>'; }).join('')
+        + '</select>' + (done ? '<div style="font-weight:800;color:' + (sel===ms.answers[ri]?'#1f7a4d':'var(--maroon)') + '">' + (sel===ms.answers[ri]?'&#10003;':String.fromCharCode(65+ms.answers[ri])) + '</div>' : '') + '</td>'
+        + '<td>' + esc(desc) + '</td></tr>';
+    });
+    h += '</tbody></table></div>';
+  });
+
+  h += '<div class="sec-head"><h2>Part 4 &middot; Brain Dump, choose one</h2><span class="pts">16 points, self graded</span></div>';
+  h += '<p class="lead">Answer <b>exactly one</b> prompt, closed book, and mark it as the one that counts. After you submit, grade yourself against the rubric, honestly. The reveal box rule applies: the struggle is the workout.</p>';
+  EX.fr.forEach(function(it, i){
+    var counted = st.fr.counted === i;
+    h += '<div class="q"><div class="tag">Prompt ' + (i+1) + ' &middot; ' + esc(it.topic) + '</div>'
+      + '<label class="fr-choose"><input type="radio" name="frc" data-frc="' + i + '"' + (counted?' checked':'') + (done?' disabled':'') + '> This is the one that counts</label>'
+      + '<p class="stem">' + esc(it.prompt) + '</p>'
+      + '<textarea class="fr" data-fr="' + i + '" placeholder="Closed book. Go."' + (done?' disabled':'') + '>' + esc((st.fr.answers||{})[i]||'') + '</textarea>';
+    if (done && counted) {
+      h += '<div class="rub"><div class="rt">Grade yourself: check everything you actually covered</div>'
+        + it.rubric.map(function(r, ri){
+          var ck = ((st.fr.checks||{})[i]||{})[ri];
+          return '<label><input type="checkbox" data-rub="' + i + ':' + ri + '"' + (ck?' checked':'') + '> ' + esc(r) + '</label>';
+        }).join('')
+        + '</div>';
+    }
+    h += '</div>';
+  });
+
+  secEl.innerHTML = h;
+  document.getElementById('submitBtn').hidden = done;
+  if (done) score();
+}
+
+/* ---- events (delegated) ---- */
+secEl.addEventListener('click', function(e){
+  var b = e.target.closest('button[data-tf]');
+  if (b && !st.submitted) { var i=+b.getAttribute('data-tf'); st.tf[i]=st.tf[i]||{}; st.tf[i].val=b.getAttribute('data-v'); persist(); render(); return; }
+  var m = e.target.closest('button[data-mc]');
+  if (m && !st.submitted) {
+    var qi=+m.getAttribute('data-mc'), oi=+m.getAttribute('data-o'), d=+m.getAttribute('data-d');
+    var v = st.mc[qi]||[0,0,0,0]; v = v.slice();
+    if (d>0 && ptsLeft(qi)>0) v[oi]=Math.min(4,v[oi]+1);
+    if (d<0) v[oi]=Math.max(0,v[oi]-1);
+    st.mc[qi]=v; persist(); render();
+    return;
+  }
+});
+secEl.addEventListener('input', function(e){
+  var f = e.target.closest('input[data-fix]');
+  if (f) { var i=+f.getAttribute('data-fix'); st.tf[i]=st.tf[i]||{}; st.tf[i].fix=f.value; persist(); return; }
+  var t = e.target.closest('textarea[data-fr]');
+  if (t) { st.fr.answers[+t.getAttribute('data-fr')] = t.value; persist(); return; }
+});
+secEl.addEventListener('change', function(e){
+  var s = e.target.closest('select[data-ms]');
+  if (s) { var si=+s.getAttribute('data-ms'), ri=+s.getAttribute('data-r');
+    st.match[si]=st.match[si]||{}; st.match[si][ri]= s.value===''?undefined:+s.value; persist(); return; }
+  var r = e.target.closest('input[data-frc]');
+  if (r) { st.fr.counted = +r.getAttribute('data-frc'); persist(); return; }
+  var rb = e.target.closest('input[data-rub]');
+  if (rb) { var p = rb.getAttribute('data-rub').split(':');
+    st.fr.checks[p[0]]=st.fr.checks[p[0]]||{}; st.fr.checks[p[0]][p[1]]=rb.checked; persist(); score(); return; }
+});
+
+/* ---- scoring ---- */
+function computeParts(){
+  var tfPts=0, tfBonus=0;
+  EX.tf.forEach(function(it,i){ var s=st.tf[i]||{};
+    if (s.val===it.answer) tfPts++;
+    if (it.answer==='F' && s.val==='F' && it.accept && it.accept.indexOf(norm(s.fix))>-1) tfBonus+=0.5; });
+  var mcPts=0; var dokPts={1:[0,0],2:[0,0],3:[0,0]}; var topicMiss={};
+  EX.mc.forEach(function(it,i){ var v=st.mc[i]||[0,0,0,0]; var got=v[it.ci]||0;
+    mcPts+=got; dokPts[it.dok][0]+=got; dokPts[it.dok][1]+=4;
+    if (got<3) topicMiss[it.topic]=(topicMiss[it.topic]||0)+1; });
+  EX.tf.forEach(function(it,i){ var s=st.tf[i]||{}; var got = s.val===it.answer?1:0;
+    dokPts[it.dok][0]+=got; dokPts[it.dok][1]+=1; if(!got) topicMiss[it.topic]=(topicMiss[it.topic]||0)+1; });
+  var maPts=0, maMax=0;
+  EX.match.forEach(function(ms,si){ maMax+=ms.answers.length;
+    ms.answers.forEach(function(a,ri){ if ((st.match[si]||{})[ri]===a) maPts++; }); });
+  var frMax=16, frPts=0;
+  if (st.fr.counted!=null) { var it=EX.fr[st.fr.counted]; var ck=st.fr.checks[st.fr.counted]||{};
+    var n=it.rubric.length, c=0; it.rubric.forEach(function(_,ri){ if(ck[ri]) c++; });
+    frPts = Math.round((16*c/n)*2)/2; }
+  var base = 20 + 160 + maMax + frMax;
+  var got = tfPts + mcPts + maPts + frPts;
+  return { tf:[tfPts,20], bonus:tfBonus, mc:[mcPts,160], ma:[maPts,maMax], fr:[frPts,frMax],
+    got:got, base:base, pct: Math.min(110, (got+tfBonus)/base*100),
+    dok:dokPts, topicMiss:topicMiss };
+}
+function grade(p){ return p>=90?'A':p>=80?'B':p>=70?'C':p>=60?'D':'F'; }
+
+function score(){
+  var r = computeParts();
+  document.getElementById('results').hidden = false;
+  document.getElementById('pctOut').textContent = (Math.round(r.pct*10)/10) + '%';
+  document.getElementById('gradeOut').textContent = grade(r.pct);
+  document.getElementById('ptsOut').textContent = (r.got + r.bonus) + ' of ' + r.base + ' points'
+    + (r.bonus ? ' (including +' + r.bonus + ' correction bonus)' : '');
+  var bars = [
+    ['True or False', r.tf[0], r.tf[1]], ['Multiple choice', r.mc[0], r.mc[1]],
+    ['Matching', r.ma[0], r.ma[1]], ['Brain dump', r.fr[0], r.fr[1]],
+    ['DOK 1', r.dok[1][0], r.dok[1][1]], ['DOK 2', r.dok[2][0], r.dok[2][1]], ['DOK 3', r.dok[3][0], r.dok[3][1]]
+  ];
+  document.getElementById('bars').innerHTML = bars.filter(function(b){return b[2]>0;}).map(function(b){
+    var p = b[1]/b[2]*100;
+    return '<div class="bar"><div class="bl"><span>' + b[0] + '</span><span>' + b[1] + ' / ' + b[2] + '</span></div>'
+      + '<div class="bt"><div class="bf" style="width:' + p + '%"></div></div></div>';
+  }).join('');
+  var weak = Object.keys(r.topicMiss).sort(function(a,b){return r.topicMiss[b]-r.topicMiss[a];}).slice(0,4);
+  document.getElementById('weakOut').innerHTML = weak.length
+    ? '<b>Study next:</b> ' + weak.map(esc).join(', ') + '.' : '';
+  prediction(r);
+  drawHistory();
+}
+
+/* ---- prediction: an honest range, not a promise ---- */
+function examWeighted(r){
+  var d12g = r.dok[1][0]+r.dok[2][0], d12m = r.dok[1][1]+r.dok[2][1];
+  var d3g = r.dok[3][0], d3m = r.dok[3][1];
+  var p12 = d12m? d12g/d12m*100 : null, p3 = d3m? d3g/d3m*100 : null;
+  if (p12!=null && p3!=null) return 0.5*p12 + 0.5*p3;
+  return p12!=null ? p12 : (p3!=null ? p3 : r.pct);
+}
+function prediction(r){
+  var hist = load(K_HIST, []);
+  var pts = hist.slice(-3).map(function(h){ return h.ew; }).concat([examWeighted(r)]);
+  var center = 0; pts.forEach(function(p,i){ center += p*(i+1); }); center /= pts.reduce(function(a,_,i){return a+i+1;},0);
+  var real = load(K_REAL, []);
+  var offs = real.filter(function(x){ return x.kind==='lecture' && x.predAt!=null; })
+    .map(function(x){ return x.score - x.predAt; });
+  var off = offs.length ? offs.reduce(function(a,b){return a+b;},0)/offs.length : 0;
+  center = Math.max(0, Math.min(105, center + off));
+  var half = pts.length>=4 ? 6 : pts.length===3 ? 8 : pts.length===2 ? 10 : 13;
+  var lo = Math.max(0, Math.round(center-half)), hi = Math.min(105, Math.round(center+half));
+  document.getElementById('predLect').textContent = 'Lecture exam: likely ' + lo + ' to ' + hi + '%';
+  document.getElementById('predLectNote').textContent = pts.length < 3
+    ? 'Wide on purpose: one practice exam is a small sample. The range tightens as you take more.'
+    : 'Weighted to the real exam mix (50% DOK 1 and 2), from your last ' + pts.length + ' attempts.';
+  document.getElementById('calNote').innerHTML = offs.length
+    ? '<b>Calibrated:</b> your real lecture scores have run ' + (off>=0?'+':'') + (Math.round(off*10)/10) + ' points against predictions, and that is baked in.'
+    : 'Log your real scores below and the predictions learn your personal offset.';
+  window.__lastPred = { lecture: center };
+}
+
+/* ---- history + real scores ---- */
+function drawHistory(){
+  var hist = load(K_HIST, []);
+  var real = load(K_REAL, []);
+  var h = '';
+  if (hist.length) h += '<b>Practice exams:</b> ' + hist.map(function(x){
+    return x.when + ' ' + (Math.round(x.pct*10)/10) + '%';
+  }).join(' &middot; ') + '.';
+  if (real.length) h += '<br><b>Real exams logged:</b> ' + real.map(function(x){
+    return (x.kind==='lab'?'Lab ':'Lecture ') + x.no + ': ' + x.score + '%'
+      + (x.predAt!=null ? ' (predicted ' + Math.round(x.predAt) + ')' : '');
+  }).join(' &middot; ') + '.';
+  document.getElementById('histOut').innerHTML = h;
+}
+document.getElementById('rlSave').addEventListener('click', function(){
+  var sc = parseFloat(document.getElementById('rlScore').value);
+  if (isNaN(sc)) return;
+  var real = load(K_REAL, []);
+  real.push({ kind:document.getElementById('rlKind').value, no:document.getElementById('rlNo').value,
+    score:sc, predAt: window.__lastPred ? Math.round(window.__lastPred.lecture*10)/10 : null,
+    when: (TODAY.getMonth()+1) + '/' + TODAY.getDate() });
+  save(K_REAL, real);
+  document.getElementById('rlScore').value = '';
+  var r = computeParts(); prediction(r); drawHistory();
+});
+
+/* ---- submit / build / boot ---- */
+document.getElementById('submitBtn').addEventListener('click', function(){
+  var missing = [];
+  EX.mc.forEach(function(_,i){ if (ptsLeft(i)>0) missing.push(i+1); });
+  var noTf = []; EX.tf.forEach(function(_,i){ if (!(st.tf[i]||{}).val) noTf.push(i+1); });
+  var w = [];
+  if (noTf.length) w.push('TF unanswered: ' + noTf.slice(0,6).join(', ') + (noTf.length>6?'&hellip;':''));
+  if (missing.length) w.push('MC with points left to place: ' + missing.slice(0,6).join(', ') + (missing.length>6?'&hellip;':''));
+  if (st.fr.counted==null) w.push('Mark one brain dump as the one that counts.');
+  var warnEl = document.getElementById('warnMsg');
+  if (w.length && !warnEl.getAttribute('data-armed')) {
+    warnEl.innerHTML = w.join(' &middot; ') + ' &middot; Press Submit again to grade as-is.';
+    warnEl.setAttribute('data-armed','1');
+    return;
+  }
+  warnEl.textContent = ''; warnEl.removeAttribute('data-armed');
+  st.submitted = true; persist();
+  var r = computeParts();
+  var hist = load(K_HIST, []);
+  hist.push({ when:(TODAY.getMonth()+1)+'/'+TODAY.getDate(), seed:EX.seed, mix:EX.mix,
+    pct:r.pct, ew:examWeighted(r) });
+  save(K_HIST, hist.slice(-20));
+  render();
+  document.getElementById('results').scrollIntoView({behavior:'smooth'});
+});
+document.getElementById('reviewBtn').addEventListener('click', function(){
+  document.getElementById('sections').scrollIntoView({behavior:'smooth'});
+});
+function startExam(seed, mods, mix, keepState){
+  EX = generate(seed, mods, mix);
+  if (!keepState) st = blankState();
+  document.getElementById('builder').hidden = true;
+  document.getElementById('examView').hidden = false;
+  document.getElementById('results').hidden = !st.submitted;
+  document.getElementById('examSeed').textContent = '#' + seed.toString(16).toUpperCase();
+  var mixName = MIXES.filter(function(m){return m.id===mix;})[0];
+  document.getElementById('examScope').textContent = mods.length + ' module' + (mods.length===1?'':'s')
+    + ' &middot; '.replace('&middot;','·') + (mixName?mixName.name:mix);
+  persist(); render();
+  if (!keepState) window.scrollTo({top:0});
+}
+document.getElementById('buildBtn').addEventListener('click', function(){
+  var s = scopeCards();
+  if (!s.cards.length) { bankNote(); return; }
+  save('bio004_builder_blocks', s.mods);
+  startExam(Math.floor(Math.random()*0xFFFFFF)+1, s.mods, pickedMix, false);
+});
+function backToBuilder(){
+  document.getElementById('examView').hidden = true;
+  document.getElementById('results').hidden = true;
+  document.getElementById('builder').hidden = false;
+  try{ localStorage.removeItem(K_CUR); }catch(e){}
+  window.scrollTo({top:0});
+}
+document.getElementById('newExamBtn').addEventListener('click', function(){
+  if (!st.submitted && !confirm('Toss this exam and build a new one?')) return;
+  backToBuilder();
+});
+document.getElementById('againBtn').addEventListener('click', backToBuilder);
+
+/* resume an exam in progress */
+var cur = load(K_CUR, null);
+/* an exam saved before the fall reorganization carries summer module ids;
+   it cannot regenerate under the new blocks, so it is let go cleanly */
+var curValid = cur && cur.seed && (cur.mods||[]).every(function(v){ return MODULES.some(function(m){ return m.id===v; }); });
+if (curValid) { st = cur.st || blankState(); startExam(cur.seed, cur.mods, cur.mix, true); }
+else if (cur) { try{ localStorage.removeItem(K_CUR); }catch(e){} }
+})();
+</script>
+
+<script>
+(function () {
+  'use strict';
+  var FRAME_ID = 'bio004-practice-exam-builder';
+  function sendHeight() {
+    var h = document.body.scrollHeight;
+    if (window.parent && window.parent !== window) parent.postMessage({type: 'resize', id: FRAME_ID, height: h}, '*');
+  }
+  window.addEventListener('load', sendHeight);
+  window.addEventListener('resize', sendHeight);
+  if (window.ResizeObserver) new ResizeObserver(sendHeight).observe(document.body);
+  [200, 600, 1200].forEach(function (t) { setTimeout(sendHeight, t); });
+})();
+</script>
+<script src="bio004-dock.js"></script>
+</body>
+</html>

@@ -154,24 +154,23 @@
   .ds-wrap[open] > summary::after{content:'\25B4'}
   .ds-wrap > summary:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:6px}
   .ds-wrap .daystrip{margin-top:6px}
-  .rhythm{display:flex;align-items:stretch;gap:8px;margin:18px 0 4px}
-  .rh-box{flex:1;display:flex;flex-direction:column;gap:2px;align-items:center;text-align:center;
-    border:2px solid var(--line);border-radius:13px;padding:10px 8px;background:#fff;color:#3F4C57}
-  .rh-box.now{opacity:1;border-color:var(--gold);background:var(--navy);color:#fff;
-    box-shadow:0 8px 18px -12px rgba(8,16,31,.4)}
-  .rh-n{font-family:var(--eb,inherit);font-size:10px;font-weight:800;letter-spacing:.1em;
-    color:var(--terra-dark);background:rgba(122,42,34,.08);border-radius:999px;padding:2px 9px}
-  .rh-box.now .rh-n{color:var(--navy);background:var(--gold)}
-  .rh-name{font-weight:800;font-size:14.5px;letter-spacing:-.01em}
+  /* The rhythm strip. This was three tall cards before the work even
+     started, and students read it as furniture to scroll past. One thin
+     line now: the pattern is still visible, the page belongs to step 1. */
+  .rhythm{display:flex;align-items:center;gap:6px;margin:14px 2px 2px;flex-wrap:wrap}
+  .rh-box{display:inline-flex;align-items:baseline;gap:7px;
+    border:1.5px solid var(--line);border-radius:999px;padding:5px 13px;background:#fff;color:#3F4C57}
+  .rh-box.now{border-color:var(--gold);background:var(--navy);color:#fff}
+  .rh-n{font-size:11px;font-weight:800;color:var(--terra-dark)}
+  .rh-box.now .rh-n{color:var(--gold)}
+  .rh-name{font-weight:800;font-size:13px;letter-spacing:-.01em}
   .rh-when{font-size:11px;color:#535F6B;line-height:1.3}
   .rh-box.now .rh-when{color:#CBD5DE}
-  .rh-arrow{align-self:center;color:var(--terra-dark);font-weight:800}
+  .rh-arrow{color:var(--terra-dark);font-weight:800;font-size:12px}
   .rh-note{font-size:13px;color:var(--ink-mid);margin:6px 0 0}
   .rh-note[hidden]{display:none}
   @media (max-width:560px){
-    .rhythm{flex-direction:column;gap:6px}
-    .rh-arrow{transform:rotate(90deg)}
-    .rh-box{flex-direction:row;justify-content:flex-start;gap:10px;text-align:left;padding:9px 12px}
+    .rh-when{display:none}
   }
   .headline-card[hidden]{display:none}
   .headline-card{
@@ -323,6 +322,20 @@
   }
 
   .step-body{padding:0 20px 20px 64px;background:var(--white)}
+  /* Coaching folds. The method paragraphs were three deep before the
+     button, and students clicked through the card just to clear them.
+     The action leads; the method waits behind one quiet line for the
+     night someone actually wants it. */
+  .how{margin:14px 0 4px}
+  .how summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--terra-dark);
+    list-style:none;display:inline-flex;align-items:center;gap:6px}
+  .how summary::before{content:"";width:7px;height:7px;border-right:2px solid var(--terra-dark);
+    border-bottom:2px solid var(--terra-dark);transform:rotate(-45deg);transition:transform .15s}
+  .how[open] summary::before{transform:rotate(45deg)}
+  .how summary::-webkit-details-marker{display:none}
+  .how summary:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:6px}
+  .how > p:first-of-type{margin-top:12px}
+  @media (prefers-reduced-motion:reduce){.how summary::before{transition:none}}
   /* These were white against a tinted card. The card is white now, so
      they are told apart by their border rather than by their fill. */
   .step-body .go, .step-body .link-list li{background:var(--white)}
@@ -1145,7 +1158,8 @@
     s.push({
       title:'Work the pre-work sheet',
       mins:EST.worksheet,
-      hint:'Handwritten. This is the one thing that has to happen tonight.',
+      fold:true, foldLabel:'How to work it, the two-minute rule',
+      hint:'Handwritten, on paper, notes on paper beside it. The one thing that has to happen tonight.',
       /* Two minutes closed book turns the first pass into a pretest rather
          than a search. Guessing and being wrong before you are told the
          answer beats reading the answer first, and it costs two minutes. */
@@ -1171,6 +1185,7 @@
       title:'Mark your own sheet against the video',
       mins:EST.videos,
       stateLabel:'Answer key',
+      fold:true, foldLabel:'How to mark it, and why skipping this breaks the night',
       hint:'Not extra. This is where you find out what you got wrong, while it is still fixable.',
       body:'<p>Watch with the sheet in front of you and mark it as you go. Anything the video says that you did not have, add it. Anything you had wrong, correct it in a different color so you can find it later.</p>'
           +'<p class="lead-in"><b>Skipping this is the one thing that breaks the night.</b> The sheet without the video is a test nobody grades.</p>',
@@ -1527,7 +1542,13 @@
         action +
         '</div>' +
         '<div class="step-body" id="sb' + i + '"' + (open ? '' : ' hidden') + '>' +
-          glossify(st.body || '') + links +
+          /* Action first. On folded steps the coaching paragraphs sit
+             behind one line instead of standing between the student and
+             the button, which is the difference between a console and a
+             lecture. Unfolded steps are a sentence long and stay inline. */
+          (st.fold
+            ? links + '<details class="how"><summary>' + (st.foldLabel || 'How to work it') + '</summary>' + glossify(st.body || '') + '</details>'
+            : glossify(st.body || '') + links) +
           /* Only the undo lives down here now. A second Done button at the
              foot of the body was a second place to finish the same step,
              and the one in the row is the one a student can see without
