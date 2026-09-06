@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Week 1 note sheet prompts. BIO 005 Human Physiology</title>
+<style>
+:root{
+  --navy:#0B1530; --terra:#8B3A2E; --terra-dark:#6E2D24; --gold:#C9A14A; --gold-ink:#5A4511;
+  --teal:#1F4E55; --white:#FFFFFF; --offwhite:#FAFAF9; --tint:#EDF1F3;
+  --muted:#3D4860; --rule:#DCE0E6; --shadow:0 1px 3px rgba(0,0,0,.08);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--offwhite);color:var(--navy);
+  font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:16.5px;line-height:1.7}
+.skip{position:absolute;left:-9999px;top:0;background:var(--white);color:var(--terra);
+  padding:12px 18px;z-index:20;font-weight:700;border-radius:0 0 8px 0}
+.skip:focus{left:0}
+.wrap{max-width:54rem;margin:0 auto;padding:0 22px}
+header.top{background:var(--terra);color:var(--white);padding:30px 0 26px}
+.eyebrow{font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:#FEF8EE;margin:0 0 8px}
+header.top h1{margin:0 0 8px;font-size:clamp(26px,4.4vw,38px);font-weight:800;line-height:1.18}
+header.top p{margin:0;color:#FFFFFF;max-width:44rem}
+h2{font-size:clamp(21px,2.8vw,27px);font-weight:800;margin:46px 0 8px;line-height:1.25}
+h3{font-size:18px;font-weight:700;color:var(--terra-dark);margin:26px 0 6px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:1.3em}
+li{margin:0 0 7px}
+main{padding-bottom:80px}
+
+/* progress */
+.progress{position:sticky;top:0;z-index:10;background:var(--offwhite);
+  border-bottom:1px solid var(--rule);padding:14px 0}
+.pbar-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.pbar{flex:1;min-width:200px;height:14px;background:var(--tint);border:1px solid var(--rule);
+  border-radius:99px;overflow:hidden}
+.pfill{height:100%;width:0;background:var(--terra);border-radius:99px;
+  transition:width 220ms ease}
+.pcount{font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:.6px;color:var(--navy);white-space:nowrap}
+.pnote{font-size:13.5px;color:var(--muted);margin:8px 0 0}
+.presetbtn{border:1px solid var(--rule);background:var(--white);color:var(--navy);
+  border-radius:8px;height:34px;padding:0 12px;font:600 13px system-ui,sans-serif;cursor:pointer}
+.presetbtn:hover{background:var(--tint)}
+
+/* competency blocks */
+.comp{background:var(--white);border:1px solid var(--rule);border-radius:10px;
+  box-shadow:var(--shadow);padding:18px 20px;margin:16px 0}
+.comp.done{background:var(--tint)}
+.chead{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;margin-bottom:2px}
+.cnum{font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:13px;font-weight:700;
+  color:var(--terra);letter-spacing:1px;white-space:nowrap}
+.cname{font-size:18px;font-weight:700;margin:0}
+.tag{font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:10.5px;font-weight:700;
+  letter-spacing:1.2px;text-transform:uppercase;border:1px solid var(--rule);
+  border-radius:99px;padding:2px 9px;color:var(--gold-ink);white-space:nowrap}
+.tag.lab{color:var(--teal);border-color:var(--teal)}
+.pick{font-size:13.5px;color:var(--muted);margin:2px 0 12px}
+.prompt{display:flex;gap:12px;align-items:flex-start;padding:11px 12px;border:1px solid var(--rule);
+  border-radius:8px;margin:0 0 8px;background:var(--white)}
+.prompt:last-child{margin-bottom:0}
+.prompt input[type=checkbox]{flex:0 0 auto;width:22px;height:22px;margin:2px 0 0;
+  accent-color:var(--terra);cursor:pointer}
+.prompt label{cursor:pointer;margin:0}
+.plet{font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-weight:700;color:var(--terra-dark);
+  margin-right:6px}
+.prompt.checked{background:var(--tint)}
+
+/* sample sheet */
+.sample{background:var(--white);border:1px solid var(--rule);border-radius:10px;
+  box-shadow:var(--shadow);padding:0;overflow:hidden;margin:20px 0}
+.sample svg{display:block;width:100%;height:auto}
+.samplecap{padding:14px 18px;border-top:1px solid var(--rule);font-size:14px;color:var(--muted)}
+.box{background:var(--white);border:1px solid var(--rule);border-radius:10px;
+  box-shadow:var(--shadow);padding:18px 20px;margin:18px 0}
+.box .lab{font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:11.5px;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;margin:0 0 8px;color:var(--terra)}
+.box p:last-child,.box ul:last-child{margin-bottom:0}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:15px}
+caption{text-align:left;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:11.5px;
+  font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--terra);padding-bottom:8px}
+th,td{border-bottom:1px solid var(--rule);padding:9px 10px;text-align:left;vertical-align:top}
+th{font-weight:700}
+.tw{overflow-x:auto}
+.tw:focus-visible{outline:3px solid var(--terra);outline-offset:3px}
+a{color:var(--terra-dark)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--terra);outline-offset:2px}
+footer{border-top:1px solid var(--rule);padding:24px 0;color:var(--muted);font-size:14px}
+@media print{
+  body{background:#fff;font-size:10.5pt;line-height:1.45}
+  header.top{background:#fff;color:#000;border-bottom:2px solid #000;padding:0 0 10pt}
+  header.top h1{font-size:19pt}.eyebrow{color:#6E2D24}header.top p{color:#000}
+  .progress{position:static;border:0;padding:0}
+  .pbar,.presetbtn,.pnote,.skip{display:none}
+  .comp,.box,.sample{box-shadow:none;break-inside:avoid}
+  .comp.done{background:#fff}
+  h2{break-after:avoid}
+}
+@media (prefers-reduced-motion:reduce){.pfill{transition:none}}
+
+/* Wide tables scroll in their own box rather than pushing the page
+   sideways. Added Sep 6 2026 with the MedMasters type change: Open Sans
+   is wider than Plus Jakarta, so tables that just fitted at 320px no
+   longer did. tabindex makes the scroll box keyboard reachable, which
+   WCAG 2.1.1 requires of any scrollable region. */
+.tblscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+.tblscroll:focus-visible{outline:3px solid var(--maroon,#8B3A2E);outline-offset:2px}
+.tblscroll table{min-width:100%}
+</style>
+</head>
+<body>
+<a class="skip" href="#prompts">Skip to the prompts</a>
+
+<header class="top">
+  <div class="wrap">
+    <p class="eyebrow">BIO 005 Human Physiology . Week 1 . Note sheet</p>
+    <h1>Week 1 note sheet prompts</h1>
+    <p>Fourteen competencies. Two prompts each, and you do one of the two. Everything is done by hand, on paper, in two colors.</p>
+  </div>
+</header>
+
+<div class="progress">
+  <div class="wrap">
+    <div class="pbar-row">
+      <span class="pcount" id="pcount">0 of 14 competencies</span>
+      <div class="pbar" role="progressbar" aria-labelledby="pcount" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0" id="pbar">
+        <div class="pfill" id="pfill"></div>
+      </div>
+      <button type="button" class="presetbtn" id="clearbtn">Clear all</button>
+    </div>
+    <p class="pnote" id="pnote">Tick a prompt once that box is finished on your sheet. The bar fills when you have done one prompt from every competency. Ticks are saved in this browser only, and they are not your grade.</p>
+  </div>
+</div>
+
+<main>
+<div class="wrap">
+
+<h2>How to use this page</h2>
+<p>Every competency below gets one box on your paper sheet. Two prompts are offered for each. <b>Pick whichever one you want and do that one.</b> If you want to do both, nothing is stopping you, but you are only graded on one per competency.</p>
+<p>The tick boxes are for you. They live in your browser, they do not report to Canvas, and I never see them. They exist so you can put this down on Wednesday and know where you were.</p>
+
+
+<style>
+.twoways{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:14px;margin:18px 0 6px}
+.way{border:1px solid #8C90A0;border-radius:12px;padding:18px 20px;background:#fff;box-shadow:0 14px 30px rgba(11,21,48,.14)}
+.way h3{margin:0 0 6px;font-size:16.5px}
+.way p{margin:0 0 12px;font-size:14px;max-width:60ch}
+.waybtn{display:inline-block;font-weight:800;text-decoration:none;border-radius:8px;padding:11px 18px;font-size:14px}
+.waybtn.solid{background:#8B3A2E;color:#fff}
+.waybtn.line{border:2px solid #0B1530;color:#0B1530}
+.wayrule{font-size:12.5px;font-weight:700;color:#8B3A2E;letter-spacing:.04em;margin-top:10px}
+</style>
+<h2>Your sheet, two ways</h2>
+<p>Same boxes, same labels, same grading either way. Pick the one that fits how you work.</p>
+<div class="twoways">
+  <div class="way">
+    <h3>Print the built sheet</h3>
+    <p>The sheet is already built for this week, one box per competency, and it prints clean: boxes only, no directions, because the directions live on this page.</p>
+    <a class="waybtn solid" href="note-sheet.html?week=1" target="_top">Open and print the sheet</a>
+    <p class="wayrule">Printed and hand drawn only. Work on the paper, in your two colors. Typing on it, or drawing on the PDF with a stylus, earns a zero.</p>
+  </div>
+  <div class="way">
+    <h3>Rule your own instead</h3>
+    <p>No printer needed, and nothing lost. Rule the boxes onto your own paper, one per competency, everything hand drawn.</p>
+    <a class="waybtn line" href="#boxlabel">The boxes and labels it must have</a>
+    <p class="wayrule">The labeling is not optional: competency number and name, prompt letter, your name and date, and the box number, on every box.</p>
+  </div>
+</div>
+<div class="box">
+<p class="lab">The two colors</p>
+<p><b>First pass, color one.</b> Book and your own notes, before the videos. Sparse. Mini mind maps, lists, sequences, flow charts. Not paragraphs. Leave real space in the box, because you are coming back to it.</p>
+<p><b>Second pass, color two.</b> After you watch the videos, add to the same box. Corrections, the parts you had wrong, the connections you missed. Do not start a new box and do not erase the first pass. The gap between the two colors is the whole point, and it is what I look at first.</p>
+</div>
+
+<h2>What a box looks like on paper</h2>
+
+<div class="sample">
+<svg viewBox="0 0 760 430" role="img" aria-labelledby="sT sD">
+  <title id="sT">A finished note sheet box</title>
+  <desc id="sD">A boxed area on lined paper. The header line carries the competency number and name, the date, and the student name. Inside, a first pass drawing in one color occupies the upper left, with space left empty. A second pass in a different color adds a correction, an arrow and a note in the space that was left. A small key in the corner names which color is which pass.</desc>
+  <rect x="1" y="1" width="758" height="428" fill="#FFFFFF"/>
+  <rect x="24" y="20" width="712" height="390" rx="6" fill="#FFFFFF" stroke="#0B1530" stroke-width="2"/>
+  <line x1="24" y1="66" x2="736" y2="66" stroke="#0B1530" stroke-width="1.5"/>
+  <text x="38" y="38" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#8B3A2E">4. FEEDBACK LOOP COMPONENTS</text>
+  <text x="38" y="57" font-family="system-ui,sans-serif" font-size="12.5" fill="#3D4860">Prompt A</text>
+  <text x="430" y="38" font-family="system-ui,sans-serif" font-size="12.5" fill="#3D4860">Name: A. Student</text>
+  <text x="430" y="57" font-family="system-ui,sans-serif" font-size="12.5" fill="#3D4860">Week 1  .  Sept 10</text>
+  <text x="620" y="38" font-family="system-ui,sans-serif" font-size="12.5" fill="#3D4860">Box 4 of 14</text>
+  <g stroke="#1F4E55" fill="none" stroke-width="2">
+    <rect x="52" y="92" width="150" height="34" rx="5"/>
+    <rect x="52" y="152" width="150" height="34" rx="5"/>
+    <rect x="52" y="212" width="150" height="34" rx="5"/>
+    <rect x="52" y="272" width="150" height="34" rx="5"/>
+    <path d="M127 126v20M127 186v20M127 246v20"/>
+    <path d="M52 289 L28 289 L28 109 L52 109" stroke-dasharray="5 4"/>
+  </g>
+  <g font-family="system-ui,sans-serif" font-size="12" fill="#1F4E55">
+    <text x="62" y="113">1. sensor</text>
+    <text x="62" y="173">2. afferent</text>
+    <text x="62" y="233">3. int. center</text>
+    <text x="62" y="293">5. effector</text>
+  </g>
+  <text x="228" y="113" font-family="system-ui,sans-serif" font-size="11.5" fill="#1F4E55">skin cold recep.</text>
+  <text x="228" y="173" font-family="system-ui,sans-serif" font-size="11.5" fill="#1F4E55">sensory neurons</text>
+  <text x="228" y="233" font-family="system-ui,sans-serif" font-size="11.5" fill="#1F4E55">hypothalamus</text>
+  <text x="228" y="293" font-family="system-ui,sans-serif" font-size="11.5" fill="#1F4E55">sk. muscle shiver</text>
+  <g stroke="#8B3A2E" fill="none" stroke-width="2">
+    <path d="M420 205 L400 240"/>
+    <path d="M400 240 l14 -4 M400 240 l3 -13"/>
+    <rect x="416" y="150" width="290" height="52" rx="5" stroke-dasharray="4 3"/>
+  </g>
+  <g font-family="system-ui,sans-serif" font-size="11.5" fill="#8B3A2E">
+    <text x="426" y="170">MISSED: setpoint is inside the center,</text>
+    <text x="426" y="188">not its own box. Not a 6th part.</text>
+    <text x="404" y="262">4. efferent = motor</text>
+    <text x="404" y="278">neurons. I left this out.</text>
+    <text x="426" y="330">Response closes loop, heat up,</text>
+    <text x="426" y="347">loss down. Feedback arrow = the loop.</text>
+  </g>
+  <rect x="416" y="310" width="290" height="52" rx="5" fill="none" stroke="#8B3A2E" stroke-width="2" stroke-dasharray="4 3"/>
+  <rect x="52" y="336" width="300" height="58" rx="5" fill="#FAFAF9" stroke="#DCE0E6" stroke-width="1.5"/>
+  <text x="64" y="356" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="#3D4860">KEY</text>
+  <line x1="64" y1="368" x2="96" y2="368" stroke="#1F4E55" stroke-width="3"/>
+  <text x="104" y="372" font-family="system-ui,sans-serif" font-size="11.5" fill="#3D4860">Pass 1, before videos</text>
+  <line x1="64" y1="384" x2="96" y2="384" stroke="#8B3A2E" stroke-width="3"/>
+  <text x="104" y="388" font-family="system-ui,sans-serif" font-size="11.5" fill="#3D4860">Pass 2, after videos</text>
+</svg>
+<p class="samplecap"><b>What makes this one easy to grade.</b> The header names the competency and the prompt. The first pass is sparse and left space. The second pass went into that space rather than onto a new page. The key says which color is which. Nothing on it is a paragraph.</p>
+</div>
+
+<h3 id="boxlabel">Label every box the same way</h3>
+<p>Across the top of each box, in this order:</p>
+<ul>
+<li><b>Competency number and name</b>, copied from this page. The number matters more than the name, because it is how I find it.</li>
+<li><b>Which prompt you chose</b>, A or B.</li>
+<li><b>Your name and the date</b> you did the first pass.</li>
+<li><b>Box number out of 14</b>, so a missing one is obvious to both of us.</li>
+</ul>
+<p>Put the color key once, on the front page. You do not need it on all fourteen.</p>
+
+<h2>How it is graded</h2>
+
+<p>Fourteen boxes. I grade five of them for accuracy, chosen at random and not announced, and check the rest for completion. That means the way to do well is to do all fourteen properly rather than guessing which five I will land on.</p>
+
+<div class="tw" tabindex="0" role="group" aria-label="Note sheet rubric">
+<div class="tblscroll" tabindex="0" role="region" aria-label="Table, scroll sideways to see all columns"><table>
+<caption>Rubric, each criterion out of 5</caption>
+<thead>
+<tr><th scope="col">Criterion</th><th scope="col">5, full marks</th><th scope="col">3, partial</th><th scope="col">1, not yet</th></tr>
+</thead>
+<tbody>
+<tr>
+  <th scope="row">Labeling</th>
+  <td>Every box carries competency number and name, prompt letter, name, date and box number. Color key present. Drawings have their parts labeled.</td>
+  <td>Most boxes labeled, some missing a field, or a drawing left unlabeled.</td>
+  <td>Boxes unlabeled or out of order, so I cannot tell which competency a box belongs to.</td>
+</tr>
+<tr>
+  <th scope="row">Accuracy and organization</th>
+  <td>The physiology is correct, and it is organized as sketches, sequences, flow charts or short lists. Information is arranged so the relationships are visible.</td>
+  <td>Mostly correct, with some errors carried into the second pass uncorrected, or organization that is mostly prose with a few sketches.</td>
+  <td>Significant errors, or paragraphs of copied text with no structure. Writing out a lot of words is not the same as organizing the material.</td>
+</tr>
+<tr>
+  <th scope="row">Completeness</th>
+  <td>All fourteen boxes present, both passes visible in both colors, nothing left blank.</td>
+  <td>Boxes missing, or a second pass on only some of them.</td>
+  <td>Large sections missing, or only one pass done.</td>
+</tr>
+<tr>
+  <th scope="row">Following directions and effort</th>
+  <td>Handwritten on paper, two distinct colors, second pass added into the original box, prompt actually answered rather than the topic summarized.</td>
+  <td>Directions partly followed. Typed sections, one color only, or a second pass started on a fresh page.</td>
+  <td>Directions not followed. Digital handwriting, one color, or the box does not answer the prompt that was chosen.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+
+<div class="box">
+<p class="lab">The two things that cost the most points</p>
+<p><b>One color.</b> If both passes are in the same pen, I cannot see what you learned from the videos, and that comparison is the reason this assignment exists. It is the single most common way to lose marks here.</p>
+<p><b>Paragraphs.</b> A box filled edge to edge with sentences copied from the book scores lower than a half full box with a correct labeled sketch. Copying is not the same as working with the material, and it is obvious on the page.</p>
+</div>
+
+<h2 id="prompts">The fourteen competencies</h2>
+<p>Lecture and lab competencies are both here. Lab ones are tagged, and they are worked the same way, by hand, on the same sheet.</p>
+
+<div id="list"></div>
+
+</div>
+</main>
+
+<footer>
+<div class="wrap">
+<p>BIO 005 Human Physiology . Yuba College . Fall 2026 . Dr. Sharilyn Rennie</p>
+</div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var KEY = "bio005-w1-notesheet-prompts";
+
+  var COMPS = [
+    {n:1, id:"levels-function", name:"Physiology and levels of function", lab:false, a:
+      "Pick one event and draw it at all six levels of organization, molecule up to organism. One small box per level, labeled with the level.",
+      b:"Draw a two column sheet. On the left, three questions anatomy asks about a structure. On the right, three questions physiology asks about the same structure."},
+    {n:2, id:"structure-function", name:"Structure and function relationship", lab:false, a:
+      "Draw one structure from this week and label the single feature that makes its job possible. Then sketch what would stop working if that feature changed.",
+      b:"List three structures from this week. Beside each, write the one property its function depends on, in six words or fewer."},
+    {n:3, id:"homeostasis", name:"Homeostasis defined", lab:false, a:
+      "Write the definition of homeostasis, then underline the three words doing the real work. Beside each underlined word, one line on why it matters.",
+      b:"Draw two graphs side by side, a value in steady state and a value at equilibrium. On each, label what is still moving and what it costs."},
+    {n:4, id:"feedback-components", name:"Feedback loop components", lab:false, a:
+      "Draw the five component reflex pathway top down and label all five plus the feedback arrow. Labels only, no sentences.",
+      b:"Fill in the five components for thermoregulation on a cold day. Then mark which component you would suspect first if the patient never shivered."},
+    {n:5, id:"feedback-types", name:"Negative and positive feedback", lab:false, a:
+      "Draw one negative feedback loop and one positive feedback loop as arrow diagrams. On each, mark what makes it stop.",
+      b:"Draw clotting as a positive feedback loop, then show what ends it. Underneath, write one line on why the body can afford to use positive feedback here."},
+    {n:6, id:"feedforward", name:"Feedforward control and acclimatization", lab:false, a:
+      "Draw a timeline of eating a meal. Mark where feedforward starts and where feedback takes over.",
+      b:"Draw a setpoint as a horizontal line. Show what fever does to it, and mark at each stage what the patient feels."},
+    {n:7, id:"control-pathways", name:"Local and reflex control pathways", lab:false, a:
+      "Draw a local control example and a reflex control example side by side. On each, mark how far the signal travels.",
+      b:"Standing up suddenly: draw the reflex, label all five components, and write one line on why local control could not have handled it."},
+    {n:8, id:"mass-balance", name:"Mass balance", lab:false, a:
+      "Write the mass balance equation and label every term. Then draw a body outline with arrows in and out for sodium, labeling which arrow is which term.",
+      b:"Work a mass balance for one substance across one day. Then change a single term and show the new result underneath."},
+    {n:9, id:"fluid-compartments", name:"Body fluid compartments", lab:false, a:
+      "Draw the fluid compartments top down with the fractions. Use one border style for inside cells and a different one for outside.",
+      b:"On a compartment drawing, mark where a blood sample is taken and which compartment you are actually drawing a conclusion about."},
+    {n:10, id:"compartment-shifts", name:"Compartment separation and clinical volume shifts", lab:false, a:
+      "Draw a patient with swollen ankles and a low blood pressure. Use arrows to show where the water went.",
+      b:"Draw three scenarios: water gained in the vessels, water lost from the body, water moved into tissue. Predict blood pressure under each."},
+    {n:11, id:"units-conversion", name:"Units and unit conversion", lab:false, a:
+      "Convert three values from this week. Show every step and carry the units through each line.",
+      b:"Take one equation from this week and show that the units on the left match the units on the right."},
+    {n:12, id:"lab-graphing", name:"Graphing and data interpretation", lab:true, a:
+      "Plot the mission patient's sodium across the three days. Label both axes with units and mark the reference range on the graph.",
+      b:"Draw a saturation curve. Label the plateau, then write one line on what the plateau means physiologically."},
+    {n:13, id:"lab-experimental-design", name:"Experimental design and controls", lab:true, a:
+      "Sketch an experiment as three labeled boxes: what you changed, what you measured, and your control.",
+      b:"Take a claim from this week and design the control group that would test it. Draw both groups and label the one difference between them."},
+    {n:14, id:"lab-measurement-error", name:"Measurement error and variability", lab:true, a:
+      "Draw two sets of repeated measurements, one with high variability and one with low. Mark which difference between readings is real.",
+      b:"List three sources of variation in a single measurement. Beside each, one way to reduce it."}
+  ];
+
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch(e) { state = {}; }
+
+  function save(){
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){ /* private mode, ticks work for this session only */ }
+  }
+
+  var list = document.getElementById("list");
+  var pfill = document.getElementById("pfill");
+  var pbar = document.getElementById("pbar");
+  var pcount = document.getElementById("pcount");
+
+  function update(){
+    var done = 0;
+    COMPS.forEach(function(c){
+      var hit = state[c.id + "-a"] || state[c.id + "-b"];
+      if (hit) done++;
+      var block = document.getElementById("comp-" + c.id);
+      if (block) block.classList.toggle("done", !!hit);
+    });
+    var pct = Math.round((done / COMPS.length) * 100);
+    pfill.style.width = pct + "%";
+    pbar.setAttribute("aria-valuenow", String(done));
+    pcount.textContent = done + " of " + COMPS.length + " competencies";
+  }
+
+  COMPS.forEach(function(c){
+    var d = document.createElement("section");
+    d.className = "comp";
+    d.id = "comp-" + c.id;
+    d.setAttribute("aria-labelledby", "h-" + c.id);
+
+    var head = document.createElement("div");
+    head.className = "chead";
+    head.innerHTML = '<span class="cnum">' + c.n + '</span>' +
+                     '<h3 class="cname" id="h-' + c.id + '" style="color:#0B1530;margin:0">' + c.name + '</h3>' +
+                     '<span class="tag' + (c.lab ? ' lab' : '') + '">' + (c.lab ? 'Lab' : 'Lecture') + '</span>';
+    d.appendChild(head);
+
+    var pick = document.createElement("p");
+    pick.className = "pick";
+    pick.textContent = "Do one of these two.";
+    d.appendChild(pick);
+
+    ["a","b"].forEach(function(letter){
+      var key = c.id + "-" + letter;
+      var row = document.createElement("div");
+      row.className = "prompt" + (state[key] ? " checked" : "");
+      var cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.id = "cb-" + key;
+      cb.checked = !!state[key];
+      var lb = document.createElement("label");
+      lb.setAttribute("for", cb.id);
+      lb.innerHTML = '<span class="plet">' + letter.toUpperCase() + '</span>' + c[letter];
+      cb.addEventListener("change", function(){
+        state[key] = cb.checked;
+        if (!cb.checked) delete state[key];
+        row.classList.toggle("checked", cb.checked);
+        save(); update();
+      });
+      row.appendChild(cb);
+      row.appendChild(lb);
+      d.appendChild(row);
+    });
+
+    list.appendChild(d);
+  });
+
+  document.getElementById("clearbtn").addEventListener("click", function(){
+    if (!window.confirm("Clear every tick on this page? Your paper sheet is not affected.")) return;
+    state = {};
+    save();
+    [].forEach.call(document.querySelectorAll('.prompt input[type=checkbox]'), function(cb){
+      cb.checked = false;
+      cb.closest(".prompt").classList.remove("checked");
+    });
+    update();
+  });
+
+  update();
+})();
+</script>
+</body>
+</html>

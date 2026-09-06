@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Enzyme Lab &middot; Week 2 &middot; BIO 005 Human Physiology</title>
+<link href="https://cdn.jsdelivr.net/npm/@fontsource-variable/plus-jakarta-sans/index.css" rel="stylesheet">
+<style>
+:root{--navy:#0B1530;--nearblack:#060A18;--rust:#8B3A2E;--gold:#C9A14A;--cream:#F5F1E8;--slate:#8C90A0;--goldpale:#F7EFD9}
+*,*::before,*::after{box-sizing:border-box}
+em,i,cite,dfn{font-style:normal}
+html,body{margin:0}
+body{font-family:'Plus Jakarta Sans Variable','Plus Jakarta Sans',system-ui,sans-serif;color:var(--navy);background:#fff;line-height:1.65;font-size:15px}
+.skip{position:absolute;left:-9999px;top:0;z-index:80;background:var(--navy);color:#fff;padding:12px 18px;font-weight:700;text-decoration:none}
+.skip:focus{left:0;top:0}
+a{color:var(--rust)}
+:focus-visible{outline:3px solid var(--rust);outline-offset:3px}
+.band{padding:60px max(40px,5vw)}
+.band.dark{background:var(--nearblack)}
+.inner{max-width:1080px;margin:0 auto}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--rust);margin:0 0 16px}
+.eyebrow.gold{color:var(--gold)}
+h1{font-size:clamp(30px,5vw,44px);font-weight:800;letter-spacing:-.025em;margin:0 0 10px;line-height:1.08}
+h2{font-size:clamp(21px,3vw,27px);font-weight:800;letter-spacing:-.02em;margin:0 0 8px}
+.cream{color:var(--cream)}
+.soft{opacity:.85;max-width:640px}
+.lede{max-width:640px;margin:0}
+.rulebox{margin-top:18px;background:var(--goldpale);border:1px solid var(--slate);border-radius:12px;padding:14px 18px;max-width:640px}
+.numrow{list-style:none;margin:22px 0 0;padding:0;counter-reset:s}
+.numrow > li{counter-increment:s;position:relative;padding:20px 0 20px 74px;border-bottom:1px solid rgba(11,21,48,.14)}
+.numrow > li:first-child{border-top:1px solid rgba(11,21,48,.14)}
+.numrow > li::before{content:"0" counter(s);position:absolute;left:0;top:16px;color:var(--rust);font-weight:800;font-size:32px;line-height:1;font-variant-numeric:tabular-nums}
+.numrow h3{font-size:17px;font-weight:800;margin:0 0 6px}
+.numrow p, .numrow li p{max-width:70ch}
+.qs{margin:8px 0 0;padding-left:20px;max-width:70ch}
+.qs li{margin:0 0 8px}
+table{border-collapse:collapse;margin:12px 0 4px;width:100%;max-width:640px}
+caption{text-align:left;font-weight:700;padding:0 0 6px}
+th,td{border:1px solid var(--slate);padding:8px 10px;text-align:left;font-size:14px}
+th{background:var(--goldpale)}
+td.blank{height:34px}
+.case{background:#fff;border:1px solid var(--slate);border-radius:12px;box-shadow:0 14px 30px rgba(11,21,48,.14);padding:20px 22px;max-width:640px;margin:14px 0 6px}
+.case p{margin:0 0 10px}
+.labvals th,.labvals td{font-variant-numeric:tabular-nums}
+footer{padding:26px max(40px,5vw) 40px;border-top:1px solid rgba(11,21,48,.14)}
+footer .inner{display:flex;flex-wrap:wrap;gap:8px 26px;font-size:14px}
+@media print{.band{padding:24px 0}.skip,footer{display:none}body{font-size:12.5px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<header class="band">
+  <div class="inner">
+    <p class="eyebrow">BIO 005 &middot; Week 2 lab &middot; due Sunday, September 20, 10:00 pm</p>
+    <h1>The enzyme lab, and the lab test.</h1>
+    <p class="lede">You are going to measure what temperature and pH do to an enzyme, the way a physiologist does. Then you are going to read the same enzyme the way a clinician does, as a number on a patient's lab report. Same molecule, two rooms.</p>
+    <div class="rulebox"><strong>In order, and it takes both parts:</strong> run PhysioEx Exercise 8, the amylase activity, until it shows complete in Pearson. Then work this sheet by hand and submit it as a PDF in Canvas. One part without the other earns nothing.</div>
+  </div>
+</header>
+
+<main id="main" class="band" style="padding-top:10px">
+  <div class="inner">
+    <p class="eyebrow">The five parts, in order</p>
+    <ol class="numrow">
+
+      <li>
+        <h3>Before you touch anything: predict</h3>
+        <p>In your first color, on your paper, answer these from what you already know. Do not look anything up. Wrong predictions are worth more than looked-up ones, because a wrong prediction shows you exactly what to fix.</p>
+        <ol class="qs">
+          <li>Amylase digests starch. Predict its activity at 8&deg;C, 37&deg;C, and 70&deg;C, and say why you predicted that shape.</li>
+          <li>Salivary amylase works in the mouth. Predict what happens to it in the stomach, and name the variable responsible.</li>
+          <li>Rate your confidence in each prediction, 1 to 5. You will come back to these numbers.</li>
+        </ol>
+      </li>
+
+      <li>
+        <h3>Run the experiment</h3>
+        <p>In Pearson, run PhysioEx Exercise 8, the amylase activity. Copy these tables onto your paper and record your results as you go.</p>
+        <table>
+          <caption>Amylase activity and temperature</caption>
+          <tr><th scope="col">Tube temperature</th><th scope="col">Starch remaining?</th><th scope="col">Maltose present?</th><th scope="col">Activity: none, some, full</th></tr>
+          <tr><td>8&deg;C</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+          <tr><td>37&deg;C</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+          <tr><td>70&deg;C</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+        </table>
+        <table>
+          <caption>Amylase activity and pH</caption>
+          <tr><th scope="col">Buffer pH</th><th scope="col">Starch remaining?</th><th scope="col">Maltose present?</th><th scope="col">Activity: none, some, full</th></tr>
+          <tr><td>2.0</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+          <tr><td>7.0</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+          <tr><td>9.0</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+        </table>
+      </li>
+
+      <li>
+        <h3>Interpret what you measured</h3>
+        <ol class="qs">
+          <li>Where was the optimum for each variable, and how do you know from your data rather than from the book?</li>
+          <li>At 70&deg;C the activity is gone and does not come back on cooling. Name what happened to the protein, and explain why the shape of a protein and the job of a protein are the same fact.</li>
+          <li>At 8&deg;C the activity is low but returns on warming. Why is cold different from heat for an enzyme?</li>
+          <li>Draw the curve of amylase activity against temperature, label the optimum, and mark where a fever of 40&deg;C would sit. What does that predict about enzyme function in a high fever?</li>
+        </ol>
+      </li>
+
+      <li>
+        <h3>The clinical correlation: read the lab test</h3>
+        <p>The enzyme you just measured is also a diagnosis. When pancreatic cells are injured, their enzymes leak out of the tissue where they belong and show up in the blood, where they do not. Measuring them there is one of the oldest tricks in medicine.</p>
+        <div class="case">
+          <p><strong>The patient.</strong> A 43 year old arrives with severe upper abdominal pain boring through to the back, worse after a large meal, with nausea and vomiting. The blood panel comes back:</p>
+          <table class="labvals">
+            <tr><th scope="col">Test</th><th scope="col">Patient</th><th scope="col">Reference range</th></tr>
+            <tr><td>Serum amylase</td><td>412 U/L</td><td>30 to 110 U/L</td></tr>
+            <tr><td>Serum lipase</td><td>780 U/L</td><td>0 to 160 U/L</td></tr>
+          </table>
+        </div>
+        <ol class="qs">
+          <li>Which organ is injured, and how do its digestive enzymes end up in the blood?</li>
+          <li>Both values are high, but clinicians trust the lipase more. Amylase is also made by the salivary glands; use that fact to explain why.</li>
+          <li>The lab measures these enzymes by their activity, the same property you measured in PhysioEx: give the enzyme substrate, measure product. Explain why a denatured enzyme would be invisible to this kind of test even if the protein were present.</li>
+          <li>Severe illness can push blood pH well below 7.35. Using your pH data, explain in one or two sentences why acidosis is a whole-body enzyme problem and not just a number.</li>
+        </ol>
+      </li>
+
+      <li>
+        <h3>Look back at your thinking</h3>
+        <ol class="qs">
+          <li>Return to your predictions. Which were right, which were wrong, and for each wrong one: what were you assuming that made it seem right?</li>
+          <li>In your second color, write the two or three things this lab taught you that you did not have walking in. That color is your commit to memory list.</li>
+          <li>Re-rate your confidence, 1 to 5, on explaining enzyme behavior to a classmate. If it did not move, that is information too; bring the sticking point to office hours or the discussion.</li>
+        </ol>
+      </li>
+
+    </ol>
+  </div>
+</main>
+
+<section class="band dark">
+  <div class="inner">
+    <p class="eyebrow gold">Turning it in</p>
+    <h2 class="cream">Handwritten, photographed, one PDF.</h2>
+    <p class="cream soft">All five parts on paper in your two colors, photographed or scanned into a single PDF, submitted in Canvas by Sunday, September 20 at 10:00 pm. It is graded once PhysioEx Exercise 8 shows complete in Pearson.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="inner">
+    <a href="week-02.html" target="_top">Week 2</a>
+    <a href="home.html" target="_top">Course home</a>
+    <a href="course-schedule.html" target="_top">Schedule</a>
+    <a href="syllabus-fall2026.html" target="_top">Syllabus</a>
+  </div>
+</footer>
+<script>
+(function(){var id='w2lab-'+Math.random().toString(36).slice(2,8);
+function post(){try{parent.postMessage({frame:id,height:document.documentElement.scrollHeight},'*');}catch(e){}}
+if('ResizeObserver' in window){new ResizeObserver(post).observe(document.documentElement);}
+window.addEventListener('load',post);window.addEventListener('resize',post);post();})();
+</script>
+</body>
+</html>

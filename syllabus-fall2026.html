@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<!-- build: syllabus 2026-09-05 rev C, stacked grade-bar labels, overflow-proof -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Syllabus &middot; BIO 005 Human Physiology &middot; Fall 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0B1530;--navy-70:rgba(11,21,48,.75);--navy-50:rgba(11,21,48,.50);--navy-15:rgba(11,21,48,.15);
+  --navy-tint:#EBEDF2;--terra:#8B3A2E;--terra-dark:#6E2C23;--gold-bright:#C9A14A;--straw-light:#F5F1E8;
+  --gold-pale:#F7EFD9;--white:#FFF;--offwhite:#FAFAF9;--r:8px;
+  --font:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  --display:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+em,i,cite,dfn,var,address{font-style:normal}
+html{scroll-behavior:smooth}
+html,body{margin:0}
+body{font-family:var(--font);background:var(--offwhite);color:var(--navy);line-height:1.6;font-size:16px}
+.skip{position:absolute;left:-9999px;top:0;z-index:80;background:var(--navy);color:#fff;padding:12px 18px;font-weight:700;text-decoration:none}
+.skip:focus{left:0;top:0}
+a{color:var(--terra-dark);text-decoration-thickness:1px;text-underline-offset:2px}
+a:hover{color:var(--terra)}
+:focus-visible{outline:3px solid var(--navy);outline-offset:2px;box-shadow:0 0 0 6px var(--gold-bright);border-radius:4px}
+h1,h2,h3,h4{margin:0;font-family:var(--display);font-weight:800;letter-spacing:-.02em}
+.wrap{max-width:880px;margin:0 auto;padding:0 24px}
+p{margin:0 0 13px;max-width:76ch}
+ul{margin:0 0 13px;padding-left:22px;max-width:76ch}
+li{margin:5px 0}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:3.3px;text-transform:uppercase;color:var(--terra);margin:0 0 16px}
+
+/* ---------- cover ---------- */
+.cover{padding:64px 0 44px;border-bottom:1px solid var(--navy-15);background:var(--white)}
+.cover h1{font-size:clamp(38px,7vw,54px);line-height:1.05;margin:0 0 20px}
+.cover .sub{font-size:17px;color:var(--navy);margin:0 0 4px;font-weight:700}
+.cover .subq{font-size:16px;color:var(--navy-70);margin:0 0 4px}
+.cover .readfirst{margin-top:30px;border-top:1px solid var(--navy-15);padding-top:22px;max-width:76ch}
+.cover .readfirst p{margin:0 0 8px}
+.cover .readfirst strong{font-family:var(--display)}
+.cover .sig{margin-top:26px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;color:var(--navy-70);font-size:15px}
+
+/* ---------- contents ---------- */
+.contents{background:var(--white);border-radius:var(--r);padding:24px 28px;margin:40px 0 0;box-shadow:0 14px 30px rgba(11,21,48,.14)}
+.contents h2{font-size:20px;margin-bottom:4px}
+.contents .lede{color:var(--navy-70);margin-bottom:14px}
+.contents ol{list-style:none;margin:0;padding:0;columns:2;column-gap:44px}
+.contents li{break-inside:avoid;margin:4px 0}
+.contents a{color:var(--navy);text-decoration:none;font-weight:500}
+.contents a:hover{color:var(--terra-dark)}
+.contents .n{font-family:var(--display);font-weight:800;color:var(--terra);margin-right:10px;font-variant-numeric:tabular-nums}
+@media(max-width:600px){.contents ol{columns:1}}
+
+/* ---------- sections ---------- */
+section{margin-top:52px}
+h2.sec{font-size:24px;line-height:1.2;margin:0 0 14px}
+h2.sec .n{color:var(--terra);margin-right:14px;font-variant-numeric:tabular-nums;font-size:38px;line-height:1;font-weight:800}
+h3{font-size:17px;letter-spacing:-.27px;margin:24px 0 8px}
+.smallcaps{font-size:11px;font-weight:700;letter-spacing:2.09px;text-transform:uppercase;color:var(--navy-70);margin:18px 0 8px}
+
+table{border-collapse:collapse;margin:12px 0 18px;background:var(--white);width:100%}
+th,td{border:1px solid var(--navy-15);padding:9px 14px;text-align:left;font-size:15px;vertical-align:top}
+th{background:var(--navy-tint);font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:1.5px;text-transform:uppercase}
+th[scope="row"]{background:var(--white);font-family:var(--font);font-weight:700;font-size:15px;letter-spacing:0;text-transform:none}
+td.k{font-weight:700;white-space:nowrap;width:1%;padding-right:22px}
+tr.exam td{background:var(--gold-pale);font-weight:700}
+tr.closed td{color:var(--navy-70);background:var(--offwhite)}
+
+/* grade bar */
+.grade-bar{display:flex;border-radius:var(--r);overflow:hidden;margin:14px 0 6px;box-shadow:0 14px 30px rgba(11,21,48,.14)}
+.grade-bar > div{color:#fff;padding:14px 6px;text-align:center;min-height:44px;display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:0}
+.grade-bar .gl{font-weight:700;font-size:13.5px;line-height:1.25;overflow-wrap:anywhere}
+.gb-book .gl,.gb-disc .gl{font-size:12px}
+.grade-bar .gp{font-weight:800;font-size:19px;line-height:1;font-family:var(--display);letter-spacing:-.01em}
+.gb-notes{flex:20 1 0;background:#485064}
+.gb-mid{flex:40 1 0;background:var(--terra)}
+.gb-lab{flex:15 1 0;background:var(--navy)}
+.gb-book{flex:15 1 0;background:var(--gold-bright);color:var(--navy)!important}
+.gb-disc{flex:10 1 0;background:#1C2E4F}
+@media(max-width:760px){.grade-bar{flex-direction:column}.grade-bar > div{flex-direction:row;justify-content:space-between;align-items:center;text-align:left;padding:12px 16px}}
+
+.rule-line{font-weight:700;color:var(--terra-dark)}
+.callout{background:var(--white);border:2px solid var(--terra);border-radius:var(--r);padding:14px 18px;margin:14px 0;max-width:76ch;box-shadow:0 14px 30px rgba(11,21,48,.14)}
+.notyet{background:var(--gold-pale);border-radius:var(--r);padding:12px 16px;margin:14px 0;font-size:15px;max-width:76ch;box-shadow:0 10px 24px rgba(11,21,48,.12)}
+.notyet::before{content:"Not posted yet: ";font-weight:800}
+
+.scale{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 8px}
+.scale div{background:var(--white);border-radius:var(--r);padding:12px 18px;text-align:center;flex:1 1 110px;box-shadow:0 10px 24px rgba(11,21,48,.12)}
+.scale .g{font-family:var(--display);font-weight:800;font-size:22px;color:var(--terra)}
+.scale .p{font-size:13px;color:var(--navy-70);white-space:nowrap}
+
+.finalword{background:var(--white);border-radius:var(--r);padding:26px 28px;margin-top:16px;box-shadow:0 14px 30px rgba(11,21,48,.14)}
+footer{margin-top:64px;padding:24px;color:var(--navy-70);font-size:14px;text-align:center}
+
+@media (forced-colors:active){.contents,.callout,.notyet,table,.scale div,.finalword{border:1px solid CanvasText}.grade-bar > div{border:1px solid CanvasText}}
+@media print{
+  body{background:#fff;font-size:11pt}
+  .cover{padding:24px 0}
+  .contents{display:none}
+  h2.sec{break-after:avoid;page-break-after:avoid}
+  section{break-inside:auto}
+  table,.callout,.finalword{break-inside:avoid}
+  tr.exam td{background:#eee}
+  .grade-bar > div{color:#000!important;background:#fff;border:1px solid #000}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#contents">Skip to the contents</a>
+
+<header class="cover">
+  <div class="wrap">
+    <p class="eyebrow">BIO 005 &middot; Yuba College &middot; Fall 2026</p>
+    <h1>Human Physiology.</h1>
+    <p class="sub">Course Syllabus &middot; Section BIOL-5-D9286 &middot; Sutter Internet (NET)</p>
+    <p class="subq">4.0 units &middot; 15 weeks &middot; September 8 to December 16, 2026</p>
+    <p class="subq">Fully online, lecture and lab &middot; nothing meets at a set time &middot; everything due Sunday at 10:00 pm</p>
+    <p class="subq">C-ID BIOL 120B &middot; IGETC 5B and 5C &middot; CSU GE B2 and B3 &middot; Transferable to CSU and UC</p>
+    <div class="readfirst">
+      <p><strong>Read this first</strong> &nbsp;How the course runs, what is graded, and every date you need.</p>
+      <p><strong>Keep it</strong> &nbsp;It is the agreement between us for the whole term.</p>
+      <p><strong>Also in Canvas</strong> &nbsp;The Competency Packet, listing everything this course asks you to be able to do, and the course schedule.</p>
+    </div>
+    <div class="sig"><span>Yuba College &middot; Fall 2026</span><span>Dr. Sharilyn Rennie</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<nav class="contents" id="contents" aria-label="Contents">
+  <h2>Contents</h2>
+  <p class="lede">Everything you are accountable for this term. Read it once now, and come back whenever you need to check something.</p>
+  <ol role="list">
+    <li><a href="#s01"><span class="n">01</span>Course identification and catalog data</a></li>
+    <li><a href="#s02"><span class="n">02</span>Instructor and contact</a></li>
+    <li><a href="#s03"><span class="n">03</span>Course description and learning outcomes</a></li>
+    <li><a href="#s04"><span class="n">04</span>How this course works</a></li>
+    <li><a href="#s05"><span class="n">05</span>The weekly rhythm</a></li>
+    <li><a href="#s06"><span class="n">06</span>Course materials and technology</a></li>
+    <li><a href="#s07"><span class="n">07</span>Grading and assessment</a></li>
+    <li><a href="#s08"><span class="n">08</span>Grading scale and the workload</a></li>
+    <li><a href="#s09"><span class="n">09</span>Course schedule</a></li>
+    <li><a href="#s10"><span class="n">10</span>Attendance, participation and enrollment</a></li>
+    <li><a href="#s11"><span class="n">11</span>Academic integrity and the use of AI</a></li>
+    <li><a href="#s12"><span class="n">12</span>Due dates, late work and make-ups</a></li>
+    <li><a href="#s13"><span class="n">13</span>Accessibility and accommodation</a></li>
+    <li><a href="#s14"><span class="n">14</span>Registration deadlines and important dates</a></li>
+    <li><a href="#s15"><span class="n">15</span>Student support, and where to find help</a></li>
+    <li><a href="#s16"><span class="n">16</span>A final word</a></li>
+  </ol>
+</nav>
+
+<!-- ============================== -->
+<section id="s01">
+  <h2 class="sec"><span class="n">01</span>Course identification and catalog data</h2>
+  <table>
+    <tr><th scope="row" class="k">Course</th><td>BIO 005, Human Physiology</td></tr>
+    <tr><th scope="row" class="k">Units</th><td>4.0 semester units</td></tr>
+    <tr><th scope="row" class="k">Section</th><td>BIOL-5-D9286 &middot; Sutter Internet (NET)</td></tr>
+    <tr><th scope="row" class="k">Term</th><td>Fall 2026, 15 weeks. Instruction begins September 8, 2026. Term ends December 16, 2026.</td></tr>
+    <tr><th scope="row" class="k">Format</th><td>Fully online, lecture and lab, on your own time. Nothing in this course meets at a set time. Everything is due Sunday at 10:00 pm.</td></tr>
+    <tr><th scope="row" class="k">Lecture instruction</th><td>Recorded concept lectures and slide decks in Canvas, worked against a weekly competency note sheet. This is where the content is taught.</td></tr>
+    <tr><th scope="row" class="k">Laboratory instruction</th><td>Weekly virtual labs in PhysioEx through Pearson, generating and interpreting real physiological output: traces, curves, values and calculations.</td></tr>
+    <tr><th scope="row" class="k">Instructor</th><td>Dr. Sharilyn Rennie</td></tr>
+    <tr><th scope="row" class="k">Level</th><td>Majors-level human physiology. Transfer-level laboratory science, taken by students heading into nursing, allied health, kinesiology and the biological sciences.</td></tr>
+    <tr><th scope="row" class="k">Prerequisite</th><td>BIOL 15 (Bioscience) or BIOL 1 (Principles of Biology). Recommended: eligibility for ENGL 1A and MATH 52, and basic computer skills.</td></tr>
+    <tr><th scope="row" class="k">Grading</th><td>Letter grade only. There is no Pass / No Pass option for this course.</td></tr>
+    <tr><th scope="row" class="k">Transfer</th><td>Transferable to both UC and CSU. IGETC Areas 5B and 5C. CSU GE Areas B2 and B3. C-ID BIOL 120B. Serves the Biology-Allied Health AS, Natural Science AS, Kinesiology AA-T, and the LVN-to-RN 30-Unit Option.</td></tr>
+  </table>
+  <p>If you're heading toward nursing or another health program, check that program's specific requirements with a counselor. The contacts are in Section 15.</p>
+</section>
+
+<!-- ============================== -->
+<section id="s02">
+  <h2 class="sec"><span class="n">02</span>Instructor and contact</h2>
+  <table>
+    <tr><th scope="row" class="k">Instructor</th><td>Dr. Sharilyn Rennie</td></tr>
+    <tr><th scope="row" class="k">Email</th><td><a href="mailto:srennie@yccd.edu">srennie@yccd.edu</a></td></tr>
+    <tr><th scope="row" class="k">Best channel</th><td>Canvas Inbox. It keeps every course message in one place, which means I can find your history when you need me to.</td></tr>
+    <tr><th scope="row" class="k">Reply time</th><td>48 to 72 hours on weekdays. Please do not expect a same-day reply the night before a deadline.</td></tr>
+    <tr><th scope="row" class="k">Office hours</th><td>Wednesdays 9:00 to 10:00 am on <a href="https://us06web.zoom.us/j/81803810332">Zoom</a>. Drop in, no appointment needed. If that window never works with your schedule, message me and we will find another time.</td></tr>
+  </table>
+  <p>Physiology builds on itself, so a small gap in September is a large one by November. Come and talk to me before you fall behind rather than after. That conversation is much easier for both of us while the gap is still small.</p>
+</section>
+
+<!-- ============================== -->
+<section id="s03">
+  <h2 class="sec"><span class="n">03</span>Course description and learning outcomes</h2>
+  <h3>Catalog description</h3>
+  <p>Human Physiology introduces the physiological principles of function, integration, regulation and homeostasis of the human body. It includes topics at the molecular, cellular, tissue, and organ levels found within all eleven organ systems. Laboratory includes activities such as EEGs, EMGs, EKGs, blood tests, spirometric measurements, urinalysis, digestion experiments, and many others, simulated in this online section. The clinical aspects of evaluating and maintaining health are also discussed in lecture and laboratory.</p>
+  <p>This is a physiology course. We are after mechanism: what the body must accomplish, how it accomplishes it, and what happens when conditions change. Where anatomy appears, it appears because it explains a mechanism. What runs through all of it is clinical context, because a mechanism you have seen matter to a real patient is a mechanism you remember.</p>
+  <h3>Student learning outcomes</h3>
+  <p>By the end of this course you should be able to:</p>
+  <ul>
+    <li><strong>Critical thinking.</strong> Collect, analyze and evaluate scientific data and show you understand it.</li>
+    <li><strong>Scientific awareness.</strong> Understand the purpose of scientific inquiry and how basic scientific principles and the scientific method apply.</li>
+    <li><strong>Communication.</strong> Use language and nonverbal communication to describe and present scientific data and results to an audience.</li>
+  </ul>
+  <p>These three outcomes are the official ones. The <strong>Competency Packet</strong> in Canvas, 268 specific things you'll be able to do, each one a single skill, sits underneath them, and every exam question in this course traces back to that list. Nothing is graded that isn't on it. The third outcome, communication, is exactly what the draw-and-teach midterms practice.</p>
+</section>
+
+<!-- ============================== -->
+<section id="s04">
+  <h2 class="sec"><span class="n">04</span>How this course works</h2>
+  <p>This is a fully online course, and the design is honest about what that means: nobody schedules your hours, so the course gives you a fixed weekly shape to pour them into. Your first meeting with every concept happens in the weekly <strong>note sheet</strong>, built from that week's competencies, worked against the reading and the concept lectures. The harder work, predicting, explaining, drawing a mechanism and teaching it out loud, is what the practice rounds and the midterms ask of you.</p>
+  <ul>
+    <li><strong>The note sheet is the pre-work.</strong> One prompt for each thing you must be able to do that week. It comes first, always, and it doubles as your midterm study guide.</li>
+    <li><strong>The lectures teach the content.</strong> Recorded concept lectures and steppable slide decks, built to answer the questions the note sheet just made you ask.</li>
+    <li><strong>The Mastery OS tracks your competencies</strong> and runs spaced recall cards, ungraded, so you find out what you actually know before a grade depends on it.</li>
+    <li><strong>Clinical Correlations</strong> appear through the course: a real bedside exam on video, then questions asking you to explain the physiology that makes it work. The clinician's hands are the problem; the physiology is the answer.</li>
+    <li><strong>The midterms are draw-and-teach.</strong> You draw a physiological pathway and teach it on video, out loud, no notes, the way you'd teach a classmate. If you can teach it, you know it. Every week includes a five-minute ungraded rehearsal in exactly this format, so by Midterm 1 the format is familiar.</li>
+  </ul>
+  <p>The one habit that makes this work: do the note sheet before anything else. Come to the lectures prepared and the problems, the labs and the practice rounds all click. Come in cold and none of them do.</p>
+</section>
+
+<!-- ============================== -->
+<section id="s05">
+  <h2 class="sec"><span class="n">05</span>The weekly rhythm</h2>
+  <p>Every week follows the same five steps in the same order. Learn the shape once and the term runs on rails.</p>
+  <table>
+    <tr><th scope="col">Step</th><th scope="col">Do this</th></tr>
+    <tr><th scope="row" class="k">1 &middot; Prepare</th><td>Open the week's note sheet and complete it from the assigned reading and the concept lectures. This comes first, always.</td></tr>
+    <tr><th scope="row" class="k">2 &middot; Watch</th><td>Work through the week's lectures and slide decks with your note sheet beside you.</td></tr>
+    <tr><th scope="row" class="k">3 &middot; Practice</th><td>Do the assigned book problems, and run your recall cards in the Mastery OS.</td></tr>
+    <tr><th scope="row" class="k">4 &middot; Lab</th><td>Complete the week's PhysioEx lab and turn in your data record.</td></tr>
+    <tr><th scope="row" class="k">5 &middot; Prove</th><td>Do the week's short draw-and-teach practice round. Five minutes, ungraded, exam format in miniature.</td></tr>
+  </table>
+  <p><strong>Everything is due Sunday at 10:00 pm.</strong> One due day, every week, all fifteen weeks. The one exception: when a discussion is assigned, your initial post is due Friday at 10:00 pm, so there is something to reply to, and peer replies are due Sunday at 10:00 pm with everything else. You choose when in the week each step happens: five in the morning before work, nine at night after the kids are down, all day Saturday. The order above is the order that works; the schedule is yours.</p>
+</section>
+
+<!-- ============================== -->
+<section id="s06">
+  <h2 class="sec"><span class="n">06</span>Course materials and technology</h2>
+  <h3>Required</h3>
+  <ul>
+    <li><strong>Canvas</strong>, the college learning management system. You already have access through your Yuba account. Canvas is the system of record for this course.</li>
+    <li><strong>Pearson Mastering A&amp;P with PhysioEx.</strong> Your labs run on it, and the eText of our book, <strong>Human Physiology: An Integrated Approach</strong> by Dee Unglaub Silverthorn, 9th edition, comes with it for free. <strong>Buy it one way, the right way:</strong> open our Canvas course, click <strong>Access Pearson</strong> in the left-hand menu, and purchase there. That path gives you the correct package at the best price, registered to our course automatically. Please don't buy access codes from Amazon or other websites. Many won't work with our course, can't be refunded, and are a waste of your money. You need this from the first week.</li>
+    <li><strong>A device and reliable internet</strong> that will run Canvas, Pearson and the Mastery OS, plus <strong>a camera</strong> (a phone is fine) for recording your draw-and-teach videos.</li>
+    <li><strong>Paper and pens.</strong> Homework in this course is handwritten and hand-drawn (Section 11), so you need a way to write, draw, and photograph or scan your work into a PDF for Canvas.</li>
+  </ul>
+  <h3>Free course tools, set up in Week 1</h3>
+  <ul>
+    <li><strong>Mastery OS</strong>, the study app. Browser-based and free. Tracks your competencies, runs spaced recall, and shows you where you are weak.</li>
+    <li><strong>Concept lectures</strong>, the recorded lecture videos and slide decks. This is where the content is taught.</li>
+    <li><strong>The Competency Packet</strong>, the full list of what this course asks of you and what it assumes you arrive with, with self-checks.</li>
+  </ul>
+</section>
+
+<!-- ============================== -->
+<section id="s07">
+  <h2 class="sec"><span class="n">07</span>Grading and assessment</h2>
+  <p>Five components. The work you can prove is your own carries the most weight.</p>
+  <div class="grade-bar" role="img" aria-label="Grade weights: note sheets 20 percent, midterms 40 percent, lab 15 percent, book problems 15 percent, discussions 10 percent">
+    <div class="gb-notes"><span class="gl">Note sheets</span><span class="gp">20%</span></div>
+    <div class="gb-mid"><span class="gl">Three midterms</span><span class="gp">40%</span></div>
+    <div class="gb-lab"><span class="gl">Lab</span><span class="gp">15%</span></div>
+    <div class="gb-book"><span class="gl">Book problems</span><span class="gp">15%</span></div>
+    <div class="gb-disc"><span class="gl">Discussions</span><span class="gp">10%</span></div>
+  </div>
+  <table>
+    <tr><th scope="col">Component</th><th scope="col">Detail</th><th scope="col">Weight</th></tr>
+    <tr><th scope="row" class="k">Competency note sheets</th><td>15 weekly sheets, one prompt per competency. Five prompts graded for accuracy, the rest checked for completion.</td><td>20%</td></tr>
+    <tr><th scope="row" class="k">Midterm exams</th><td>3 exams, draw-and-teach on video. No notes. Mostly apply-and-reason, not pure recall.</td><td>40%</td></tr>
+    <tr><th scope="row" class="k">Laboratory</th><td>15 weekly PhysioEx labs with data records.</td><td>15%</td></tr>
+    <tr><th scope="row" class="k">Book problems</th><td>Assigned Silverthorn problems each week.</td><td>15%</td></tr>
+    <tr><th scope="row" class="k">Discussions</th><td>One post a week, carrying both the physiology and your thinking about it.</td><td>10%</td></tr>
+  </table>
+
+  <h3>Competency note sheets, 20 percent</h3>
+  <ul>
+    <li><strong>Work them in this order.</strong> Read the questions first. Preview the text. Organize your notes so you know where to find things, no flashcards. Answer the best you can from what you know, in your first color, on the master sheet you will draw and create from. Then watch each concept's video, name and number at the top of the prompt, and add what you did not know in a second color. Color one is your baseline; color two is what you must commit to memory.</li>
+    <li>Every week's sheet is built directly from that week's competencies. You complete it from the reading and the lectures before anything else that week.</li>
+    <li>You submit the whole sheet. I choose <strong>five prompts</strong> and grade those for accuracy, you won't know which five ahead of time, so every prompt has to be real. The rest is checked for completion.</li>
+    <li>It doubles as your midterm study guide, so doing it well pays you twice.</li>
+  </ul>
+
+  <h3>Midterm exams, 40 percent</h3>
+  <ul>
+    <li>These are not multiple-choice tests. Each midterm asks you to <strong>draw a physiological pathway and teach it to me</strong> on video, out loud, no notes: draw the mechanism, label it, explain each step and why it happens.</li>
+    <li>If you can teach it, you know it. If you can only recognize it on a list of options, you don't, and this format is honest about the difference.</li>
+    <li><strong>Midterm 1</strong> covers Weeks 1 to 5: foundations, membranes, nerves. <strong>Midterm 2</strong> covers Weeks 6 to 10: muscle, hormones, the heart and circulation. <strong>Midterm 3</strong> covers Weeks 11 to 15: blood, digestion, breathing, the kidney, and putting it all together.</li>
+    <li>You will not be surprised by the format: every week includes an ungraded rehearsal round in exactly this shape.</li>
+    <li><strong>Each midterm is a window, not an hour.</strong> Midterm 1: Monday, October 12, 8:00 am to Sunday, October 18, 10:00 pm. Midterm 2: Monday, November 16, 8:00 am to Sunday, November 22, 10:00 pm. Midterm 3: Monday, December 14, 8:00 am to Wednesday, December 16, 10:00 pm.</li>
+  </ul>
+
+  <h3>Discussions, 10 percent</h3>
+  <ul>
+    <li>One post a week, not two. Each post does two jobs at once: it works through something from that week's physiology, and it says something honest about your own thinking on that same material. Not a content post and a separate reflection post; one post that carries both.</li>
+    <li>The second half is the part students tend to skip, so here is what it looks like. Where did your prediction turn out to be wrong, and what were you assuming that made it seem right? What did you have to go back and re-learn? Which part still feels shaky when you try to explain it without looking?</li>
+    <li>Your initial post is due Friday at 10:00 pm, so there is something to reply to. Peer replies are due Sunday at 10:00 pm.</li>
+  </ul>
+
+  <h3>Laboratory, 15 percent</h3>
+  <ul>
+    <li>One PhysioEx lab every week, aligned with that week's lecture material. You generate and interpret real physiological output: a trace, a curve, a set of values, a calculation.</li>
+    <li><span class="rule-line">The lab has two parts, and it takes both.</span> PhysioEx must show as complete in Pearson, and you must turn in the worksheet and data record for that lab, plus the clinical correlation questions in the weeks that have them. The points live entirely on the completed worksheet; PhysioEx itself carries no points and is only the gate. The worksheet is graded once PhysioEx shows complete. Clicking through PhysioEx alone earns nothing; a worksheet without the PhysioEx behind it does not get graded.</li>
+  </ul>
+
+  <h3>Book problems, 15 percent</h3>
+  <ul>
+    <li>Assigned problems from the Silverthorn chapters you read each week, the calculations and predict-and-explain reasoning the midterms ask for. Problem numbers are on each week's page.</li>
+  </ul>
+</section>
+
+<!-- ============================== -->
+<section id="s08">
+  <h2 class="sec"><span class="n">08</span>Grading scale and the workload</h2>
+  <p>Fixed scale, applied to your final weighted percentage. There is no curve.</p>
+  <div class="scale">
+    <div><div class="g">A</div><div class="p">89.5 to 100%</div></div>
+    <div><div class="g">B</div><div class="p">79.5 to 89.4%</div></div>
+    <div><div class="g">C</div><div class="p">69.5 to 79.4%</div></div>
+    <div><div class="g">D</div><div class="p">59.5 to 69.4%</div></div>
+    <div><div class="g">F</div><div class="p">0 to 59.4%</div></div>
+  </div>
+  <h3>The workload, honestly</h3>
+  <p>California community colleges follow the Carnegie standard, and by the official course outline this 4-unit course is <strong>216 learning hours</strong>: 144 hours of instruction plus 72 of study. Over our 15 weeks, that's an official floor of about <strong>14 hours a week</strong>. A floor is what it takes to pass, roughly, it is not a promise of what it takes to do well.</p>
+  <p><strong>Realistically, plan on 16 to 20 hours a week</strong> to genuinely learn this material: to walk into a midterm able to draw a pathway and teach it with no notes, not just recognize it.</p>
+  <p><strong>If you need an A or a B, budget 20 hours, and sometimes closer to 30.</strong> Most of you are headed for nursing or other health programs that require an A or B in this course; a C won't get you in. What it actually takes depends on the grade you're going for, your experience as a student, and your background. If you haven't had anatomy yet, or you're taking it at the same time as this course, you'll be teaching yourself the parts of the body on your own time while learning how they work in mine, and that's real added hours. The Competency Packet lists exactly what the course assumes you arrive with, so you can see your own gaps in Week 1 instead of discovering them in Week 6.</p>
+  <p>I would rather you knew all of this in September than discovered it in October. Load the early weeks heavily. Physiology compounds, and so does falling behind in it. This is a mastery-based course: attending and turning things in does not by itself earn the grade. The study hours are what do.</p>
+</section>
+
+<!-- ============================== -->
+<section id="s09">
+  <h2 class="sec"><span class="n">09</span>Course schedule</h2>
+  <p>15 weeks, three midterms. Each midterm closes a five-week block. Week titles below are what you'll see in Canvas; the reading and assignments for each week are on that week's page.</p>
+  <table>
+    <tr><th scope="col">Wk</th><th scope="col">Opens</th><th scope="col">Week</th></tr>
+    <tr><td>1</td><td>Sep 8</td><td>How physiology works and what keeps you steady</td></tr>
+    <tr><td>2</td><td>Sep 14</td><td>The chemistry that does work in the body</td></tr>
+    <tr><td>3</td><td>Sep 21</td><td>Getting across the membrane</td></tr>
+    <tr><td>4</td><td>Sep 28</td><td>The action potential</td></tr>
+    <tr><td>5</td><td>Oct 5</td><td>The nervous system, from sensing to moving</td></tr>
+    <tr class="exam"><td colspan="3">Midterm 1 &middot; Weeks 1 to 5 &middot; window Mon Oct 12, 8:00 am to Sun Oct 18, 10:00 pm</td></tr>
+    <tr><td>6</td><td>Oct 12</td><td>How muscle makes force</td></tr>
+    <tr><td>7</td><td>Oct 19</td><td>Hormones, the slow control system</td></tr>
+    <tr><td>8</td><td>Oct 26</td><td>Reproduction, and the clearest positive feedback loop</td></tr>
+    <tr><td>9</td><td>Nov 2</td><td>How the heart pumps blood</td></tr>
+    <tr><td>10</td><td>Nov 9</td><td>Pressure, flow, and holding blood pressure steady</td></tr>
+    <tr class="exam"><td colspan="3">Midterm 2 &middot; Weeks 6 to 10 &middot; window Mon Nov 16, 8:00 am to Sun Nov 22, 10:00 pm</td></tr>
+    <tr><td>11</td><td>Nov 16</td><td>Blood, and how the body defends itself</td></tr>
+    <tr><td>12</td><td>Nov 23</td><td>Digestion, and how you use food for fuel &middot; Thanksgiving week, plan ahead</td></tr>
+    <tr><td>13</td><td>Nov 30</td><td>Breathing, gas transport, and blood pH</td></tr>
+    <tr><td>14</td><td>Dec 7</td><td>The kidney, and body fluid balance</td></tr>
+    <tr><td>15</td><td>Dec 14</td><td>The slow lever on pH, and putting it all together &middot; three days only</td></tr>
+    <tr class="exam"><td colspan="3">Midterm 3 &middot; Weeks 11 to 15 &middot; window Mon Dec 14, 8:00 am to Wed Dec 16, 10:00 pm</td></tr>
+  </table>
+  <p>If a date has to move I will announce it in Canvas. Grade weights and exam policy will not change.</p>
+</section>
+
+<!-- ============================== -->
+<section id="s10">
+  <h2 class="sec"><span class="n">10</span>Attendance, participation and enrollment</h2>
+  <p>In an online course, participation is submitted work. There is no roll call. The weekly note sheet is the heartbeat. If it's coming in, you're attending; staying enrolled and staying current are the same thing here.</p>
+  <ul>
+    <li><strong>Week 1 is mandatory.</strong> Turn in Week 1's work. A student who submits nothing in the first weeks can be dropped as a no-show, and the seat goes to the waitlist.</li>
+    <li><strong>Census is September 27.</strong> I certify who is actively participating. If nothing has come in by then, I am required to report you as not attending, and you can be dropped. Don't let a registration date end your semester in Week 3.</li>
+    <li><strong>Get into Canvas at least three times a week</strong> and turn on announcement notifications, because that is where a schedule change or an exam-window note appears first.</li>
+  </ul>
+  <h3>Dropping the course is yours to do</h3>
+  <p>If you decide to leave the course, you have to formally drop it yourself through your student portal. Do not assume I have done it for you, and do not assume it happens on its own. A course you walked away from but never dropped becomes an F you did not need to earn. The Fall 2026 deadlines are in Section 14.</p>
+</section>
+
+<!-- ============================== -->
+<section id="s11">
+  <h2 class="sec"><span class="n">11</span>Academic integrity and the use of AI</h2>
+  <h3>Academic honesty</h3>
+  <p>Cheating and plagiarism are not tolerated in this course. A violation earns at least a zero on the work in question, may result in an F for the course, and is reported for disciplinary action under college policy. Complete your own work, and ask me if you are not sure where the line falls. Asking is always the cheaper option.</p>
+  <h3>Handwritten means handwritten</h3>
+  <p><span class="rule-line">Unless an assignment says otherwise, everything you turn in is handwritten and hand-drawn. Typed work earns a zero.</span></p>
+  <p>This isn't nostalgia. Drawing a pathway by hand is how your brain builds it, and it's how the midterms work, so it's how the practice works. Read the directions on every assignment before you start; work that ignores the directions can't be redone.</p>
+  <h3>Using AI</h3>
+  <p>For studying, AI is encouraged. Tools like ChatGPT and Claude are useful for the same things a good study partner is useful for: explaining a concept a second way, quizzing you, helping you plan your week. Teaching a concept to something that asks follow-up questions is one of the better ways to find out whether you actually have it.</p>
+  <p><span class="rule-line">For graded work, the rules are strict. What you turn in must be your own work, in your own hand, from your own head. Turning in AI-written work as yours is cheating, and no outside help of any kind is allowed during exams.</span></p>
+  <p>Here's the honest reason, beyond the rules: the midterms are half your grade, and they're you, on camera, teaching with no notes. A tool that does your weekly work for you is quietly taking the practice you'll desperately want back in exam week. Nobody can outsource their own understanding.</p>
+  <h3>No extra credit</h3>
+  <p><span class="rule-line">There's no individual extra credit, and asking for it won't create any.</span> If I ever offer extra credit, I offer it to the whole class at once.</p>
+</section>
+
+<!-- ============================== -->
+<section id="s12">
+  <h2 class="sec"><span class="n">12</span>Due dates, late work and make-ups</h2>
+  <p><span class="rule-line">Everything is due Sunday at 10:00 pm. Discussions run ahead of that: the initial post is due Friday at 10:00 pm and peer replies Sunday at 10:00 pm. Up to 24 hours late: automatic 50% reduction. After 24 hours: zero, no make-up. There are no exceptions, not for family, travel, work, other obligations, or emergencies.</span></p>
+  <p>I know that sounds strict, so here is the honest reasoning. This course never requires you to be anywhere at any particular time. You can do every bit of this work at whatever hour of whatever day fits your life, and the material is posted <strong>weeks ahead</strong>. That means the cushion for life's surprises is built in before the deadline, not after it. If you know a trip, a busy stretch at work, or a family event is coming, work ahead the week before. If something unexpected lands on a Saturday, the week's work shouldn't have been waiting on that Saturday.</p>
+  <p>This is the trade the course asks of you: total freedom over your hours, in exchange for full responsibility for them. Nobody takes attendance, so nobody rescues a deadline either. Students who pick their work times at the start of the week and protect them do very well here. Students who plan to "find time Sunday" usually find something else instead.</p>
+  <p>Submit early. The internet fails, computers crash, and files refuse to upload, always at 11:58 pm. A submission that exists on Thursday can't be lost on Sunday.</p>
+  <p>If something serious happens in your life, come and talk to me about your options in the course as a whole, including the withdrawal deadline in Section 14. What I can't do is reopen a deadline for one student that everyone else met under the same conditions.</p>
+</section>
+
+<!-- ============================== -->
+<section id="s13">
+  <h2 class="sec"><span class="n">13</span>Accessibility and accommodation</h2>
+  <p>Your success matters to me. This course is designed to be welcoming to and usable by everyone: English-language learners, students with disabilities, students returning to school after time away, and students new to online courses. If any part of the course gets in the way of your learning, tell me as soon as possible and we will build strategies together.</p>
+  <table>
+    <tr><th scope="row" class="k">Office</th><td>Disabled Student Programs &amp; Services (DSPS), Building 1800, Marysville campus</td></tr>
+    <tr><th scope="row" class="k">Phone</th><td>(530) 741-6795</td></tr>
+    <tr><th scope="row" class="k">Email</th><td><a href="mailto:dspsinfo@yccd.edu">dspsinfo@yccd.edu</a></td></tr>
+    <tr><th scope="row" class="k">Fax</th><td>(530) 741-6942</td></tr>
+  </table>
+  <p>Yuba College provides reasonable accommodations for students with documented disabilities under the ADA and Section 504. Apply with DSPS, submit your documentation, and schedule an intake appointment by phone, Zoom, or in person; you never have to come to campus.</p>
+  <p><strong>Set this up in Week 1.</strong> You are responsible for sending me your approved accommodations early in the term. Accommodations are not retroactive, so work you have already submitted cannot be re-graded under accommodation. Your information stays confidential; I only ever see the approved accommodation, never the paperwork behind it. Accommodations adjust how you show what you know, never what the course asks of you.</p>
+</section>
+
+<!-- ============================== -->
+<section id="s14">
+  <h2 class="sec"><span class="n">14</span>Registration deadlines and important dates</h2>
+  <p>These dates govern your enrollment, your money, and your transcript. Diary them today.</p>
+  <table>
+    <tr><th scope="col">Date</th><th scope="col">Deadline</th></tr>
+    <tr><th scope="row" class="k">Mon Sep 8</th><td>Instruction begins. Week 1 opens.</td></tr>
+    <tr><th scope="row" class="k">Sun Sep 27</th><td><strong>Census.</strong> Participation is certified from submitted work. No work in means being reported as not attending, and possibly dropped.</td></tr>
+    <tr><th scope="row" class="k">Sat Nov 21</th><td><strong>Last day to drop with a W</strong>, without academic penalty. After this date you receive a letter grade, whatever it is.</td></tr>
+    <tr><th scope="row" class="k">Wed Dec 16</th><td>Term ends. Final work is due.</td></tr>
+  </table>
+  <p>Check your schedule bill in your student portal for any class-specific add, refund, and no-record drop deadlines, those dates come from Admissions and Records, and short-term sections run on their own calendar. November 21 is the one people miss. If this course is not going to work out, the difference between deciding on November 20 and deciding on November 22 is the difference between a W and an F on your transcript forever, and Section 02 tells you how to reach me before it comes to that.</p>
+</section>
+
+<!-- ============================== -->
+<section id="s15">
+  <h2 class="sec"><span class="n">15</span>Student support, and where to find help</h2>
+  <p>Start with me: Canvas Inbox, email, or Wednesday office hours. For everything else, these are real offices with real people, already paid for by your enrollment, and almost all of them work with you online.</p>
+  <ul>
+    <li><strong>Counseling.</strong> Academic, career, and personal counseling, with online appointments. (530) 634-7766 &middot; <a href="mailto:yubacounseling@yccd.edu">yubacounseling@yccd.edu</a> &middot; <a href="https://yc.yccd.edu/student/counseling/">yc.yccd.edu/student/counseling</a></li>
+    <li><strong>Tutoring.</strong> Free through the college, in person and online, including at the Sutter County Center. (530) 751-5558 &middot; <a href="https://yc.yccd.edu/student/tutoring/">yc.yccd.edu/student/tutoring</a></li>
+    <li><strong>DSPS.</strong> Accommodations and disability services. (530) 741-6795 &middot; <a href="mailto:dspsinfo@yccd.edu">dspsinfo@yccd.edu</a>. See Section 13.</li>
+    <li><strong>EOPS/CARE.</strong> Counseling, books, and services for eligible students. (530) 741-6995 &middot; <a href="mailto:yceops@yccd.edu">yceops@yccd.edu</a></li>
+    <li><strong>Basic needs.</strong> Dusty's Food Pantry and Basic Needs can help with food, housing, and more. If you are hungry or unsure where you are sleeping, start here. It will not change how I grade you. <a href="https://yc.yccd.edu/student/dustys-food-pantry/">yc.yccd.edu/student/dustys-food-pantry</a></li>
+  </ul>
+  <div class="callout">
+    <p><strong>If you're in crisis.</strong> If it's a life-threatening emergency, call <strong>911</strong> or go to the nearest emergency room. The <strong>988 Suicide &amp; Crisis Lifeline</strong> is free, confidential, and answers 24/7: call or text 988. Sutter-Yuba Behavioral Health runs 24-hour local crisis services: <strong>(530) 673-8255</strong> or toll-free <strong>(888) 923-3800</strong>. During business hours, Yuba College Counseling can also help: (530) 634-7766.</p>
+    <p>Physiology can wait. You matter more than any deadline in this course. Reach out, and then message me and we'll sort the rest.</p>
+  </div>
+  <h3>This syllabus</h3>
+  <p>This syllabus is the course agreement between us for Fall 2026, written to be consistent with the approved Course Outline of Record for BIOL 5 and with college policy. Where a course rule here and a college policy could be read differently, college policy governs. I may adjust dates or activities as the term goes and will announce any change in Canvas. Grade weights and exam policy will not change.</p>
+</section>
+
+<!-- ============================== -->
+<section id="s16">
+  <h2 class="sec"><span class="n">16</span>A final word</h2>
+  <div class="finalword">
+    <p><strong>Prepare, keep the rhythm, and submit early.</strong></p>
+    <p>This course asks real work, and I will not pretend otherwise. But the design is on your side. Every week has the same five steps in the same order. The note sheet meets every idea before it's tested, the practice rounds rehearse the exam format until it's familiar, and the recall cards tell you what you actually know before a grade depends on it. Nothing in this course is a surprise. The whole of it is published in the Competency Packet on day one.</p>
+    <p>Keep the weekly rhythm, do the prepare step, and reach out early when you need help. Your grade is feedback, not a verdict. Keep showing up, and keep going. I am rooting for you.</p>
+    <p style="margin-bottom:0"><strong>Dr. Sharilyn Rennie</strong><br>Yuba College</p>
+  </div>
+</section>
+
+</main>
+<footer>BIO 005 Human Physiology &middot; Fall 2026 &middot; Section BIOL-5-D9286 &middot; Yuba College &middot; Dr. Sharilyn Rennie</footer>
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BIO 005 Human Physiology &middot; Start</title>
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="stylesheet" href="assets/fonts-site.css">
+<!--
+  ============================================================
+  BIO 005 Human Physiology, Yuba College, Fall 2026
+  course-door.html   THE CANVAS FRONT DOOR
+
+  Built to match the BIO 004 Solano course home: dark ground,
+  gold eyebrow, one question as the headline, white cards with
+  gradient icon tiles, gradient pill banners, outline pill CTA.
+
+  Embed it on the Canvas Start Here page:
+
+    <iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/course-door.html"
+            width="100%" height="1180" style="border:0;display:block"></iframe>
+
+  ------------------------------------------------------------
+  THE RULE THIS PAGE FOLLOWS
+  ------------------------------------------------------------
+  Nobody reads a wall of text on a course home page. So there
+  is no prose here at all. One question, six destinations, one
+  line of label each. Every word on this page is either a
+  destination or a due date. If a sentence is not one of those
+  two things it does not belong here, it belongs behind a door.
+
+  Total word count of non-link text: under 20.
+
+  ------------------------------------------------------------
+  IFRAME SAFE
+  ------------------------------------------------------------
+  Nothing is position:fixed. No min-widths. Fluid to 320px.
+  Height sender posts to the parent as bio005-course-door.
+  Every internal link is target="_top" so it escapes the frame.
+  ============================================================
+-->
+<style>
+:root{
+  --ground:#060A18;
+  --navy:#0B1530;
+  --maroon:#8B3A2E;
+  --gold:#C9A14A;
+  --white:#FFFFFF;
+  --muted:#4A5265;
+  --display:'Open Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --body:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;max-width:100%;overflow-x:hidden}
+body{background:var(--ground);font-family:var(--body);color:#fff;
+     -webkit-font-smoothing:antialiased;line-height:1.5}
+h1,h2,h3{font-family:var(--display);margin:0;font-weight:800;letter-spacing:-.022em}
+p{margin:0}
+a{text-decoration:none}
+:focus-visible{outline:3px solid var(--gold);outline-offset:4px;border-radius:6px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--gold);color:var(--ground);
+      padding:12px 20px;font-weight:700;border-radius:0 0 6px 0;z-index:50}
+.skip:focus{left:0}
+
+.wrap{max-width:840px;margin:0 auto;padding:46px 22px 52px;text-align:center}
+
+.eyebrow{font-family:var(--body);font-size:12px;font-weight:700;letter-spacing:.26em;
+         text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+h1{font-size:clamp(30px,6vw,44px);line-height:1.1;color:#fff}
+.sub{margin-top:12px;font-size:16.5px;color:#E4E7EE}
+
+/* ---------- four doors ---------- */
+.doors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:32px}
+.door{background:var(--white);border-radius:16px;padding:26px 20px 24px;
+      border:2px solid transparent;display:flex;flex-direction:column;align-items:center;
+      transition:transform 200ms ease,box-shadow 200ms ease}
+.door:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(0,0,0,.34)}
+.door.primary{border-color:var(--gold)}
+.tile{width:70px;height:70px;border-radius:18px;display:grid;place-items:center;margin-bottom:15px}
+.tile svg{width:32px;height:32px;stroke:#fff;fill:none;stroke-width:1.9;
+          stroke-linecap:round;stroke-linejoin:round}
+.t-maroon{background:linear-gradient(150deg,#A44B39,#7C3128)}
+.t-navy  {background:linear-gradient(150deg,#22314E,#0B1530)}
+.t-gold  {background:linear-gradient(150deg,#D8B45F,#A98536)}
+.door h2{font-size:20px;color:var(--navy);margin-bottom:5px}
+.door .d{font-size:14px;color:var(--muted);line-height:1.45}
+
+/* ---------- pill banners ---------- */
+.pill{display:flex;align-items:center;gap:16px;text-align:left;border-radius:15px;
+      padding:15px 20px;margin-top:12px;transition:transform 200ms ease,box-shadow 200ms ease}
+.pill:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(0,0,0,.3)}
+.p-maroon{background:linear-gradient(100deg,#8F3E2E,#7C3128)}  /* white on it: 7.25:1 to 9.03:1 */
+.p-gold  {background:linear-gradient(100deg,#D8B96A,#C9A14A)}  /* navy on it: 7.46:1 to 9.51:1 */
+.ptile{width:52px;height:52px;border-radius:14px;background:var(--ground);
+       display:grid;place-items:center;flex:none}
+.p-gold .ptile{background:#20304C}
+.ptile svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2;
+           stroke-linecap:round;stroke-linejoin:round}
+.pill .pt{font-family:var(--display);font-weight:800;font-size:17.5px;color:#fff;display:block}
+.pill .pd{font-size:14px;color:#FFFFFF;display:block;margin-top:1px}  /* #F7F3EC was 6.56:1 at the light end of the sweep */
+.p-gold .pd{color:#0B1530;font-weight:600}
+.p-gold .pt{color:#0B1530}
+
+/* ---------- outline pill ---------- */
+.enter{display:inline-block;margin-top:26px;border:2px solid #fff;border-radius:999px;
+       padding:15px 30px;font-family:var(--display);font-weight:800;font-size:16px;color:#fff;
+       transition:background-color 200ms ease,color 200ms ease}
+.enter:hover{background:#fff;color:var(--ground)}
+.small{display:block;margin-top:18px;font-size:13px;color:#C9CEDA}
+.small a{color:var(--gold);font-weight:700}
+
+/* ---------- the hello screen, folded in from the old welcome page ----------
+   It is an ABSOLUTE overlay inside .stage, never fixed and never a second
+   page load, so the door is still one Canvas embed and the iframe height
+   never changes while it plays. The cards sit underneath it in the DOM the
+   whole time, focusable and readable, so a keyboard or screen reader user is
+   never waiting on an animation. It plays once a day per browser, skips on
+   any click or key, and does not run at all under reduced motion. */
+.stage{position:relative}
+.hello{position:absolute;inset:0;background:var(--ground);z-index:10;
+       display:grid;place-items:center;text-align:center;padding:20px;
+       transition:opacity 520ms ease}
+.hello[hidden]{display:none}
+.hello.out{opacity:0;pointer-events:none}
+.hello .g{font-family:var(--display);font-weight:800;color:#fff;
+          font-size:clamp(46px,11vw,104px);line-height:1;letter-spacing:-.03em;
+          min-height:1.05em}
+.hello .gsub{margin-top:18px;font-size:14px;letter-spacing:.24em;
+             text-transform:uppercase;font-weight:700;color:#E2C583}  /* 9.34:1 */
+.hello .skip-hint{margin-top:26px;font-size:12.5px;color:#C9CEDA}     /* 11.4:1 */
+
+@media (max-width:560px){ .doors{grid-template-columns:1fr} }
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+  .hello{display:none}
+}
+
+.tw{max-width:820px;margin:0 auto 34px;background:#fff;border:2px solid var(--gold,#C9A14A);border-radius:14px;box-shadow:0 14px 30px rgba(0,0,0,.35);padding:26px 28px;text-align:center}
+.tw .twe{font-size:11px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:#8B3A2E;margin:0 0 8px}
+.tw h2{font-size:clamp(22px,3.6vw,30px);font-weight:800;letter-spacing:-.02em;color:#0B1530;margin:0 0 6px;line-height:1.15}
+.tw .twd{color:#0B1530;opacity:.8;margin:0 0 18px;font-size:15px}
+.tw .twbtn{display:inline-block;background:#8B3A2E;color:#fff;font-weight:800;font-size:17px;text-decoration:none;border-radius:8px;padding:15px 30px}
+.tw .twbtn:hover{background:#6E2D24}
+@media(max-width:560px){.tw{padding:20px 18px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#doors">Skip to the course</a>
+
+<div class="stage">
+
+<div class="hello" id="hello" aria-hidden="true" hidden>
+  <div>
+    <p class="g" id="greet">Hello</p>
+    <p class="gsub">BIO 005 &middot; Human Physiology &middot; Fall 2026</p>
+    <p class="skip-hint">Tap anywhere to skip</p>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <p class="eyebrow">BIO 005 &middot; Human Physiology &middot; Fall 2026</p>
+  <h1>This week comes first.</h1>
+  <p class="sub">The week carries you, one step at a time. The doors below are for when you need one thing.</p>
+
+  
+    <section class="tw" aria-labelledby="tw-h">
+      <p class="twe" id="twEyebrow">Week 1 of 15</p>
+      <h2 id="tw-h"><span id="twTitle">How physiology works and what keeps you steady</span></h2>
+      <p class="twd" id="twDue">Everything due Sunday at 10:00 pm</p>
+      <a class="twbtn" href="course-materials.html#thisweek" target="_top">Start this week &rarr;</a>
+    </section>
+
+    <div class="doors" id="doors">
+
+    <a class="door" href="door-lecture.html" target="_top">
+      <span class="tile t-navy" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M10 9l5 3-5 3z"/></svg></span>
+      <h2>Lecture</h2>
+      <span class="d">Videos, slides, written notes</span>
+    </a>
+
+    <a class="door" href="door-lab.html" target="_top">
+      <span class="tile t-navy" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10 2v7L4.5 19a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 9V2"/><path d="M8 2h8M7.5 14h9"/></svg></span>
+      <h2>Lab</h2>
+      <span class="d">PhysioEx, clinical labs, the manual</span>
+    </a>
+
+    <a class="door primary" href="door-assignments.html" target="_top">
+      <span class="tile t-maroon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 3.5h6a1.5 1.5 0 0 1 1.5 1.5v0A1.5 1.5 0 0 1 15 6.5H9A1.5 1.5 0 0 1 7.5 5v0A1.5 1.5 0 0 1 9 3.5z"/><path d="M7.5 5H6a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1.5"/><path d="M8.5 12l2 2 4-4"/><path d="M8.5 18h7"/></svg></span>
+      <h2>Assignments</h2>
+      <span class="d">What is due, in the order you do it</span>
+    </a>
+
+    <a class="door" href="door-study.html" target="_top">
+      <span class="tile t-gold" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.4-1.2 4.2-2.6 5.6-.8.8-1.4 1.9-1.4 3v.4H9v-.4c0-1.1-.6-2.2-1.4-3C6.2 13.2 5 11.4 5 9a7 7 0 0 1 7-7z"/><path d="M9 21h6"/></svg></span>
+      <h2>Study</h2>
+      <span class="d">The Mastery OS, recall cards, drawing</span>
+    </a>
+
+  </div>
+
+  <!-- Was Discussion 1 only, which went stale the moment Week 1 closed. It is
+       the discussions index now, so this button is right all fifteen weeks. -->
+  <a class="pill p-maroon" href="https://yccd.instructure.com/courses/42616/discussion_topics" target="_blank" rel="noopener">
+    <span class="ptile" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-4-.9L3 21l1.9-4.6A8.4 8.4 0 0 1 4 11.5 8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg></span>
+    <span><span class="pt">Discussions</span>
+    <span class="pd">Every discussion in the course &middot; Discussion 1 posts due Friday Sep 11, 10 pm</span></span>
+  </a>
+
+  <a class="pill p-gold" href="syllabus-fall2026.html" target="_top">
+    <span class="ptile" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></span>
+    <span><span class="pt">Syllabus and schedule</span>
+    <span class="pd">How the course runs, and every due date</span></span>
+  </a>
+
+  <a class="enter" href="course-start.html" target="_top">Enter the course &rarr;</a>
+
+  <span class="small">Grades and submissions stay in Canvas &middot;
+    <a href="https://yccd.instructure.com/courses/42616/discussion_topics/711800" target="_blank" rel="noopener">Dr. Rennie&rsquo;s Virtual Office</a></span>
+
+</main>
+
+</div><!-- /.stage -->
+
+<script>
+/* ---------------------------------------------------------------
+   The hello screen. Ported from the old welcome page, same ten
+   greetings and the same 320ms step, so students who saw it there
+   see the same thing here.
+
+   Rules it has to keep:
+     never taller than the door, so the iframe height is stable
+     never blocks the keyboard, the cards are live underneath
+     never plays twice in a day, students open this door often
+     never plays at all under prefers-reduced-motion
+   --------------------------------------------------------------- */
+(function(){
+  var el = document.getElementById("hello");
+  if (!el) return;
+
+  var reduce = window.matchMedia &&
+               window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) return;                       /* stays hidden, cards show at once */
+
+  /* Once a day per browser. Storage can throw in a private window or with site
+     data blocked, and the honest fallback there is to just play it. */
+  var KEY = "bio005-door-greeted", today = new Date().toDateString();
+  try { if (window.localStorage.getItem(KEY) === today) return; } catch(e){}
+  try { window.localStorage.setItem(KEY, today); } catch(e){}
+
+  var GREETINGS = ["Hello","Hola","Bonjour","\u4f60\u597d","\u3053\u3093\u306b\u3061\u306f",
+                   "Ol\u00e1","Ciao","Hallo","Namaste","Welcome"];
+  var g = document.getElementById("greet");
+  var i = 0, timer = null, done = false;
+
+  el.hidden = false;
+  g.textContent = GREETINGS[0];
+
+  function finish(){
+    if (done) return;
+    done = true;
+    if (timer) window.clearInterval(timer);
+    el.classList.add("out");
+    window.setTimeout(function(){ el.hidden = true; }, 560);
+    document.removeEventListener("keydown", finish, true);
+    el.removeEventListener("click", finish);
+  }
+
+  timer = window.setInterval(function(){
+    i++;
+    if (i >= GREETINGS.length){ g.textContent = "Welcome"; finish(); return; }
+    g.textContent = GREETINGS[i];
+  }, 320);
+
+  /* Any key, any click, and it is gone. Capture, so it fires even though the
+     cards underneath are the real focus targets. */
+  document.addEventListener("keydown", finish, true);
+  el.addEventListener("click", finish);
+})();
+
+/* Height sender, so Canvas can size the frame. */
+(function(){
+  var ID = "bio005-course-door";
+  function send(){
+    var h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+    try { window.parent.postMessage({ id:ID, frameId:ID, type:"resize", height:h }, "*"); } catch(e){}
+  }
+  window.addEventListener("load", send);
+  window.addEventListener("resize", send);
+  if (typeof ResizeObserver !== "undefined"){ try { new ResizeObserver(send).observe(document.body); } catch(e){} }
+  send(); setTimeout(send, 400); setTimeout(send, 1500);
+})();
+</script>
+
+<script>
+(function(){
+  var TITLES = ["How physiology works and what keeps you steady", "The chemistry that does work in the body", "Getting across the membrane", "How cells talk, and the electrical signal", "Synapses and central integration", "Sensing the world, and the responses you do not control", "Muscle, and how movement gets commanded", "Hormones and reproduction, the slow control system", "The heart as a pump", "Pressure, flow, and holding blood pressure steady", "Blood and how the body defends itself", "Digestion, and how you use food for fuel", "Breathing, gas transport, and the fast pH lever", "The kidney and body fluid balance", "The slow pH lever, and putting it all together"];
+  var DUE = ["Sunday, September 13", "Sunday, September 20", "Sunday, September 27", "Sunday, October 4", "Sunday, October 11", "Sunday, October 18", "Sunday, October 25", "Sunday, November 1", "Sunday, November 8", "Sunday, November 15", "Sunday, November 22", "Sunday, November 29", "Sunday, December 6", "Sunday, December 13", "Wednesday, December 16"];
+  var start = new Date(2026, 8, 8);
+  var now = new Date();
+  var wk = Math.floor((now - start) / (7*24*3600*1000)) + 1;
+  wk = Math.max(1, Math.min(15, wk));
+  var e = document.getElementById('twEyebrow');
+  var t = document.getElementById('twTitle');
+  var d = document.getElementById('twDue');
+  if (e) e.textContent = 'Week ' + wk + ' of 15';
+  if (t) t.textContent = TITLES[wk-1];
+  if (d) d.textContent = 'Everything due ' + DUE[wk-1] + ' at 10:00 pm';
+})();
+</script>
+</body>
+</html>

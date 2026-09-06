@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly lab &middot; BIO 005 Human Physiology</title>
+<link href="https://cdn.jsdelivr.net/npm/@fontsource-variable/plus-jakarta-sans/index.css" rel="stylesheet">
+<style>
+:root{--navy:#0B1530;--rust:#8B3A2E;--gold:#C9A14A;--goldpale:#F7EFD9;--slate:#8C90A0}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Plus Jakarta Sans Variable','Plus Jakarta Sans',system-ui,sans-serif;color:var(--navy);background:#fff;line-height:1.65;font-size:15.5px;padding:40px max(28px,4vw)}
+.inner{max-width:760px;margin:0 auto}
+.skip{position:absolute;left:-9999px;top:0;background:var(--navy);color:#fff;padding:12px 18px;font-weight:700;text-decoration:none}
+.skip:focus{left:0;top:0}
+a{color:var(--rust)}
+:focus-visible{outline:3px solid var(--rust);outline-offset:3px}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--rust);margin:0 0 12px}
+h1{font-size:clamp(26px,4.5vw,36px);font-weight:800;letter-spacing:-.02em;margin:0 0 4px;line-height:1.1}
+.sub{margin:0 0 4px;font-weight:700}
+.due{color:var(--rust);font-weight:800;margin:0 0 18px}
+ol.how{margin:14px 0 22px;padding-left:22px}
+ol.how li{margin:0 0 10px;max-width:64ch}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin:6px 0 26px}
+.btn{display:inline-block;font-weight:800;text-decoration:none;border-radius:10px;padding:13px 20px;letter-spacing:.04em}
+.btn.solid{background:var(--rust);color:#fff}
+h2{font-size:18px;font-weight:800;margin:22px 0 6px}
+.upload{background:var(--goldpale);border:1px solid var(--slate);border-radius:12px;padding:14px 18px;max-width:640px}
+.upload ol{margin:6px 0 0;padding-left:20px}
+.upload li{margin:0 0 6px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the instructions</a>
+<main id="main" class="inner">
+  <p class="eyebrow">Assignment &middot; graded &middot; part of 15% of your grade</p>
+  <h1>Weekly lab</h1>
+  <p class="sub" id="wkline"></p>
+  <p class="due" id="dueline"></p>
+  <ol class="how" id="how"></ol>
+  <div class="btns" id="btns"></div>
+  <h2>Turning it in</h2>
+  <div class="upload">
+    <ol id="up"></ol>
+  </div>
+</main>
+<script>
+(function(){
+  var TITLES = ["How physiology works and what keeps you steady", "The chemistry that does work in the body", "Getting across the membrane", "How cells talk, and the electrical signal", "Synapses and central integration", "Sensing the world, and the responses you do not control", "Muscle, and how movement gets commanded", "Hormones and reproduction, the slow control system", "The heart as a pump", "Pressure, flow, and holding blood pressure steady", "Blood and how the body defends itself", "Digestion, and how you use food for fuel", "Breathing, gas transport, and the fast pH lever", "The kidney and body fluid balance", "The slow pH lever, and putting it all together"];
+  var DUE = ["Sunday, September 13", "Sunday, September 20", "Sunday, September 27", "Sunday, October 4", "Sunday, October 11", "Sunday, October 18", "Sunday, October 25", "Sunday, November 1", "Sunday, November 8", "Sunday, November 15", "Sunday, November 22", "Sunday, November 29", "Sunday, December 6", "Sunday, December 13", "Wednesday, December 16"];
+  var NOPEX = {"1": ["The standards and ranges lab, where reference ranges come from. Nothing to complete in Pearson this week; PhysioEx begins in Week 2.", "reference-range-lab.html", "Open the reference range lab"], "5": ["The home sensory and reflex lab, measured on yourself. Nothing to complete in Pearson this week.", "", ""], "8": ["The hormone cycle graph worksheet. Nothing to complete in Pearson this week.", "", ""]};
+  var SHEETS = {"2": ["enzyme-amylase-lab.html", "Open the enzyme lab"], "3": ["osmosis-iv-fluids-lab.html", "Open the osmosis and IV fluids lab"], "11": ["cbc-pcr-lab.html", "Open the CBC and PCR lab"], "13": ["pulmonary-function-lab.html", "Open the pulmonary function lab"], "15": ["BIO005-patient-file.html", "Open your patient case file"]};
+  var m = /[?&]week=(\d{1,2})/.exec(location.search);
+  var w = m ? Math.max(1, Math.min(15, parseInt(m[1],10))) : 1;
+  document.title = "Weekly lab \u00b7 Week " + w + " \u00b7 BIO 005 Human Physiology";
+  document.getElementById("wkline").textContent = "Week " + w + " \u00b7 " + TITLES[w-1];
+  document.getElementById("dueline").textContent = "Due " + DUE[w-1] + " at 10:00 pm";
+  var how = [], btns = [], up = [];
+  if (NOPEX[w]){
+    how.push("<li><strong>This week's lab:</strong> " + NOPEX[w][0] + "</li>");
+    how.push("<li>Work it <strong>by hand</strong>, in your two colors, answering everything it asks.</li>");
+    if (NOPEX[w][1]) btns.push('<a class="btn solid" href="' + NOPEX[w][1] + '" target="_top">' + NOPEX[w][2] + '</a>');
+    up.push("<li><strong>Your own paper is always fine.</strong> Label every page the way the worksheet is labeled: your name, the week, the lab, the part number, and a few words on what it asked.</li>");
+    up.push("<li>Handwritten, photographed or scanned into <strong>one PDF</strong>, in order.</li>");
+    up.push("<li>Submit the PDF here before <strong>10:00 pm</strong>. Check for the Canvas confirmation screen.</li>");
+  } else {
+    how.push("<li><strong>Run PhysioEx first.</strong> Open our Canvas course, click <strong>Access Pearson</strong>, and complete this week's assigned activities until Pearson shows them complete.</li>");
+    how.push("<li><strong>Then the worksheet.</strong> Record your data and answer everything it asks, by hand, including the clinical correlation questions where the week has them.</li>");
+    if (SHEETS[w]) btns.push('<a class="btn solid" href="' + SHEETS[w][0] + '" target="_top">' + SHEETS[w][1] + '</a>');
+    up.push("<li>The points live on <strong>this worksheet</strong>; PhysioEx itself carries no points and is only the gate. It must <strong>show complete in Pearson</strong> before the worksheet is graded. One part without the other earns nothing.</li>");
+    up.push("<li><strong>Your own paper is always fine.</strong> Label every page the way the worksheet is labeled: your name, the week, the lab, the part number, and a few words on what it asked.</li>");
+    up.push("<li>Handwritten, photographed or scanned into <strong>one PDF</strong>, submitted here before <strong>10:00 pm</strong>.</li>");
+  }
+  document.getElementById("how").innerHTML = how.join("");
+  document.getElementById("btns").innerHTML = btns.join("");
+  document.getElementById("up").innerHTML = up.join("");
+  var id = "lab" + w + "-" + Math.random().toString(36).slice(2,8);
+  function post(){ try{ parent.postMessage({frame:id, height:document.documentElement.scrollHeight}, "*"); }catch(e){} }
+  if ("ResizeObserver" in window){ new ResizeObserver(post).observe(document.documentElement); }
+  window.addEventListener("load", post); window.addEventListener("resize", post); post();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note sheet &middot; BIO 005 Human Physiology</title>
+<link href="https://cdn.jsdelivr.net/npm/@fontsource-variable/plus-jakarta-sans/index.css" rel="stylesheet">
+<style>
+:root{--navy:#0B1530;--rust:#8B3A2E;--gold:#C9A14A;--goldpale:#F7EFD9;--slate:#8C90A0}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Plus Jakarta Sans Variable','Plus Jakarta Sans',system-ui,sans-serif;color:var(--navy);background:#fff;line-height:1.65;font-size:15.5px;padding:40px max(28px,4vw)}
+.inner{max-width:760px;margin:0 auto}
+.skip{position:absolute;left:-9999px;top:0;background:var(--navy);color:#fff;padding:12px 18px;font-weight:700;text-decoration:none}
+.skip:focus{left:0;top:0}
+a{color:var(--rust)}
+:focus-visible{outline:3px solid var(--rust);outline-offset:3px}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--rust);margin:0 0 12px}
+h1{font-size:clamp(26px,4.5vw,36px);font-weight:800;letter-spacing:-.02em;margin:0 0 4px;line-height:1.1}
+.sub{margin:0 0 4px;font-weight:700}
+.due{color:var(--rust);font-weight:800;margin:0 0 18px}
+ol.how{margin:14px 0 22px;padding-left:22px}
+ol.how li{margin:0 0 10px;max-width:64ch}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin:6px 0 26px}
+.btn{display:inline-block;font-weight:800;text-decoration:none;border-radius:10px;padding:13px 20px;letter-spacing:.04em}
+.btn.solid{background:var(--rust);color:#fff}
+.btn.line{border:2px solid var(--navy);color:var(--navy)}
+h2{font-size:18px;font-weight:800;margin:22px 0 6px}
+.upload{background:var(--goldpale);border:1px solid var(--slate);border-radius:12px;padding:14px 18px;max-width:640px}
+.upload ol{margin:6px 0 0;padding-left:20px}
+.upload li{margin:0 0 6px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the instructions</a>
+<main id="main" class="inner">
+  <p class="eyebrow">Assignment &middot; graded &middot; 20% of your grade</p>
+  <h1>Competency note sheet</h1>
+  <p class="sub" id="wkline">Week 1 &middot; How physiology works and what keeps you steady</p>
+  <p class="due" id="dueline">Due Sunday at 10:00 pm</p>
+
+  <ol class="how">
+    <li><strong>Print your sheet.</strong> One page per competency, spaces already labelled. You do not build anything.</li>
+    <li><strong>Open the competencies.</strong> Read the prompts first, preview the text, then answer the best you can from what you already know, in your <strong>first color</strong>.</li>
+    <li><strong>Watch the videos</strong> for each concept and add what you did not know in your <strong>second color</strong>. Do not erase the first pass; the gap between the colors is the point.</li>
+  </ol>
+
+  <div class="btns">
+    <a class="btn solid" id="sheetBtn" href="note-sheet.html?week=1" target="_top">Print your sheet</a>
+    <a class="btn line" id="compBtn" href="week-01-notesheet-prompts.html" target="_top">Open the competencies</a>
+  </div>
+
+  <h2>Turning it in</h2>
+  <div class="upload">
+    <ol>
+      <li>Handwritten, on paper, in your two colors. Typed work earns a zero. Every page labeled: your name, the week, and the competency number and name on each box.</li>
+      <li>Photograph or scan every page into <strong>one PDF</strong>, in order.</li>
+      <li>Submit the PDF here before <strong>10:00 pm</strong>. Check for the Canvas confirmation screen.</li>
+    </ol>
+  </div>
+</main>
+<script>
+(function(){
+  var TITLES = ["How physiology works and what keeps you steady", "The chemistry that does work in the body", "Getting across the membrane", "How cells talk, and the electrical signal", "Synapses and central integration", "Sensing the world, and the responses you do not control", "Muscle, and how movement gets commanded", "Hormones and reproduction, the slow control system", "The heart as a pump", "Pressure, flow, and holding blood pressure steady", "Blood and how the body defends itself", "Digestion, and how you use food for fuel", "Breathing, gas transport, and the fast pH lever", "The kidney and body fluid balance", "The slow pH lever, and putting it all together"];
+  var DUE = ["Sunday, September 13", "Sunday, September 20", "Sunday, September 27", "Sunday, October 4", "Sunday, October 11", "Sunday, October 18", "Sunday, October 25", "Sunday, November 1", "Sunday, November 8", "Sunday, November 15", "Sunday, November 22", "Sunday, November 29", "Sunday, December 6", "Sunday, December 13", "Wednesday, December 16"];
+  var m = /[?&]week=(\d{1,2})/.exec(location.search);
+  var w = m ? Math.max(1, Math.min(15, parseInt(m[1],10))) : 1;
+  var pad = (w < 10 ? "0" : "") + w;
+  document.title = "Note sheet \u00b7 Week " + w + " \u00b7 BIO 005 Human Physiology";
+  document.getElementById("wkline").textContent = "Week " + w + " \u00b7 " + TITLES[w-1];
+  document.getElementById("dueline").textContent = "Due " + DUE[w-1] + " at 10:00 pm";
+  document.getElementById("sheetBtn").href = "note-sheet.html?week=" + w;
+  document.getElementById("compBtn").href = "week-" + pad + "-notesheet-prompts.html";
+  var id = "ns" + pad + "-" + Math.random().toString(36).slice(2,8);
+  function post(){ try{ parent.postMessage({frame:id, height:document.documentElement.scrollHeight}, "*"); }catch(e){} }
+  if ("ResizeObserver" in window){ new ResizeObserver(post).observe(document.documentElement); }
+  window.addEventListener("load", post); window.addEventListener("resize", post); post();
+})();
+</script>
+</body>
+</html>

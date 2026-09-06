@@ -1,0 +1,187 @@
+==================================================================
+BIO 005 Human Physiology, Yuba College, Fall 2026
+CANVAS IFRAME SNIPPETS, EVERY PAGE
+Regenerated September 6, 2026. Dr. Sharilyn Rennie
+==================================================================
+
+HOW TO USE
+  Canvas page > Edit > the </> HTML editor button > paste > Save > PUBLISH.
+  Heights are starting values. If a page runs long inside Canvas, raise the
+  number; if it leaves white space, trim it. Canvas strips scripts, so the
+  fixed height is what Canvas uses.
+
+WHAT CHANGED IN THIS VERSION
+  course-door gained the This Week card, so its height went up.
+  The four doors now open their own term-wide index pages.
+  assignment-notesheet and assignment-physioex were rebuilt lean, so their
+  heights came way down.
+  New pages: the four door indexes, the reference range lab, the fluid
+  balance case, the enzyme lab, the Week 2 prompts, the vision board, and
+  the 250 questions page.
+
+------------------------------------------------------------------
+THE FRONT (embed once)
+------------------------------------------------------------------
+
+--- START HERE, the Canvas front page (course door, with This Week card) ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/course-door.html"
+  title="BIO 005 Human Physiology" width="100%" height="1300"
+  style="width:100%; min-height:1300px; border:0; display:block;"></iframe></p>
+
+--- ALTERNATIVE minimal front card (two buttons) ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/canvas-home.html"
+  title="BIO 005 Human Physiology" width="100%" height="820"
+  style="width:100%; min-height:820px; border:0; display:block;"></iframe></p>
+
+--- THE WELCOME, for a week 0 announcement or orientation page ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/welcome.html"
+  title="Welcome to BIO 005 Human Physiology" width="100%" height="2600"
+  style="width:100%; min-height:2600px; border:0; display:block;"></iframe></p>
+
+------------------------------------------------------------------
+THE FOUR DOORS, term-wide indexes (embed once each)
+------------------------------------------------------------------
+
+--- ASSIGNMENTS, every assignment all fifteen weeks ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/door-assignments.html"
+  title="Every assignment, all fifteen weeks" width="100%" height="2300"
+  style="width:100%; min-height:2300px; border:0; display:block;"></iframe></p>
+
+--- LAB, every lab with the PhysioEx buttons ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/door-lab.html"
+  title="Every lab, all fifteen weeks" width="100%" height="2100"
+  style="width:100%; min-height:2100px; border:0; display:block;"></iframe></p>
+
+--- LECTURE, every week's videos, slides and notes ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/door-lecture.html"
+  title="Every lecture, all fifteen weeks" width="100%" height="2000"
+  style="width:100%; min-height:2000px; border:0; display:block;"></iframe></p>
+
+--- STUDY, the Mastery OS and drawing tools ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/door-study.html"
+  title="The study tools" width="100%" height="1500"
+  style="width:100%; min-height:1500px; border:0; display:block;"></iframe></p>
+
+------------------------------------------------------------------
+COURSE TOOLS, the six-step weekly page (embed once)
+------------------------------------------------------------------
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/course-materials.html"
+  title="Course tools, this week in order" width="100%" height="9000"
+  style="width:100%; min-height:9000px; border:0; display:block;"></iframe></p>
+
+------------------------------------------------------------------
+ANY ASSIGNMENT PAGE, ANY WEEK
+Add ?week=N and the page relabels itself, including its due date.
+------------------------------------------------------------------
+
+--- NOTE SHEET (lean rebuild: sheet button, prompts button, upload) ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/assignment-notesheet.html?week=1"
+  title="Week 1 note sheet" width="100%" height="950"
+  style="width:100%; min-height:950px; border:0; display:block;"></iframe></p>
+
+--- BOOK PROBLEMS ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/assignment-bookproblems.html?week=1"
+  title="Week 1 book problems" width="100%" height="1700"
+  style="width:100%; min-height:1700px; border:0; display:block;"></iframe></p>
+
+--- WEEKLY LAB (week-aware: no-Pearson weeks 1, 5, 8 say so) ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/assignment-physioex.html?week=1"
+  title="Week 1 lab" width="100%" height="1000"
+  style="width:100%; min-height:1000px; border:0; display:block;"></iframe></p>
+
+--- DISCUSSION ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/assignment-discussion.html?week=1"
+  title="Week 1 discussion" width="100%" height="1500"
+  style="width:100%; min-height:1500px; border:0; display:block;"></iframe></p>
+
+--- AI WORK LOG ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/ai-work-log.html?week=1"
+  title="Week 1 AI work log" width="100%" height="1600"
+  style="width:100%; min-height:1600px; border:0; display:block;"></iframe></p>
+
+--- WEEK HUB, for a module front page (week-01 through week-15) ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/week-01.html"
+  title="Week 1" width="100%" height="2000"
+  style="width:100%; min-height:2000px; border:0; display:block;"></iframe></p>
+
+------------------------------------------------------------------
+WEEK 1 PAGES
+------------------------------------------------------------------
+
+--- THE DIGITAL VISION BOARD (Discussion 1) ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/assignment-discussion-01-visionboard.html"
+  title="Your digital vision board" width="100%" height="1900"
+  style="width:100%; min-height:1900px; border:0; display:block;"></iframe></p>
+
+--- WEEK 1 NOTE SHEET PROMPTS ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/week-01-notesheet-prompts.html"
+  title="Week 1 note sheet prompts" width="100%" height="3200"
+  style="width:100%; min-height:3200px; border:0; display:block;"></iframe></p>
+
+--- WEEK 1 LAB: STANDARDS AND RANGES ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/reference-range-lab.html"
+  title="The reference range lab" width="100%" height="3400"
+  style="width:100%; min-height:3400px; border:0; display:block;"></iframe></p>
+
+--- WEEK 1 COMPANION: THE FLUID BALANCE CASE ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/fluid-homeostasis-lab.html"
+  title="The fluid balance case" width="100%" height="3200"
+  style="width:100%; min-height:3200px; border:0; display:block;"></iframe></p>
+
+--- WEEK 1 COMPETENCIES (printable sheet page) ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/week-01-competencies.html"
+  title="Week 1 competencies" width="100%" height="10200"
+  style="width:100%; min-height:10200px; border:0; display:block;"></iframe></p>
+
+------------------------------------------------------------------
+WEEK 2 PAGES
+------------------------------------------------------------------
+
+--- WEEK 2 NOTE SHEET PROMPTS ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/week-02-notesheet-prompts.html"
+  title="Week 2 note sheet prompts" width="100%" height="3000"
+  style="width:100%; min-height:3000px; border:0; display:block;"></iframe></p>
+
+--- WEEK 2 LAB: THE ENZYME LAB AND THE LAB TEST ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/enzyme-amylase-lab.html"
+  title="The enzyme lab" width="100%" height="3400"
+  style="width:100%; min-height:3400px; border:0; display:block;"></iframe></p>
+
+------------------------------------------------------------------
+REFERENCE PAGES (embed once, or link from anywhere)
+------------------------------------------------------------------
+
+--- SYLLABUS ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/syllabus-fall2026.html"
+  title="Syllabus, BIO 005 Fall 2026" width="100%" height="6200"
+  style="width:100%; min-height:6200px; border:0; display:block;"></iframe></p>
+
+--- COURSE SCHEDULE ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/course-schedule.html"
+  title="Course schedule, all fifteen weeks" width="100%" height="3200"
+  style="width:100%; min-height:3200px; border:0; display:block;"></iframe></p>
+
+--- 250 QUESTIONS, ANSWERED ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/course-questions.html"
+  title="250 questions, answered" width="100%" height="4200"
+  style="width:100%; min-height:4200px; border:0; display:block;"></iframe></p>
+
+--- COMPETENCY PACKET ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/competency-packet-fall2026.html"
+  title="The Competency Packet" width="100%" height="5200"
+  style="width:100%; min-height:5200px; border:0; display:block;"></iframe></p>
+
+--- ALL 268 COMPETENCIES BY WEEK ---
+<p><iframe src="https://drsrennie-stack.github.io/human-physiology-Fa26/competencies-by-week.html"
+  title="All 268 competencies, by week" width="100%" height="5200"
+  style="width:100%; min-height:5200px; border:0; display:block;"></iframe></p>
+
+------------------------------------------------------------------
+NOTES
+  Discussions get two Canvas dates: available and initial post Friday
+  10:00 pm, due (replies) Sunday 10:00 pm.
+  Everything else: due Sunday 10:00 pm. Week 15 closes Wednesday
+  December 16, 10:00 pm.
+  The Pearson path is Access Pearson inside Canvas, never pearson.com.
+  The full week-by-week build guide with copy buttons is canvas-kit.html.
+==================================================================

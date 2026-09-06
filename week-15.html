@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 15 &middot; The slow lever on pH, and putting it all together &middot; BIO 005 Human Physiology</title>
+<link href="https://cdn.jsdelivr.net/npm/@fontsource-variable/plus-jakarta-sans/index.css" rel="stylesheet">
+<style>
+:root{--navy:#0B1530;--nearblack:#060A18;--rust:#8B3A2E;--gold:#C9A14A;--cream:#F5F1E8;--white:#FFFFFF;--slate:#8C90A0;--goldpale:#F7EFD9}
+*,*::before,*::after{box-sizing:border-box}
+em,i,cite,dfn,var,address{font-style:normal}
+html,body{margin:0}
+body{font-family:'Plus Jakarta Sans Variable','Plus Jakarta Sans',system-ui,sans-serif;color:var(--navy);background:var(--white);line-height:1.65;font-size:15px}
+.skip{position:absolute;left:-9999px;top:0;z-index:80;background:var(--navy);color:#fff;padding:12px 18px;font-weight:700;text-decoration:none}
+.skip:focus{left:0;top:0}
+a{color:var(--rust)}
+:focus-visible{outline:3px solid var(--rust);outline-offset:3px}
+.band{padding:60px max(40px,5vw)}
+.band.dark{background:var(--nearblack)}
+.band.dark :focus-visible{outline-color:var(--gold)}
+.inner{max-width:1080px;margin:0 auto}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--rust);margin:0 0 16px}
+.eyebrow.gold{color:var(--gold)}
+h1{font-size:clamp(32px,5vw,46px);font-weight:800;letter-spacing:-.025em;margin:0 0 10px;line-height:1.08}
+h2{font-size:clamp(23px,3vw,30px);font-weight:800;letter-spacing:-.02em;margin:0 0 10px}
+.cream{color:var(--cream)}.soft{opacity:.85;max-width:640px}
+.lede{font-size:15px;max-width:640px;margin:0}
+.duetag{display:inline-block;margin-top:14px;font-weight:700;color:var(--rust)}
+.opensnote{margin-top:18px;background:var(--goldpale);border:1px solid var(--slate);border-radius:12px;padding:14px 18px;max-width:640px;display:none}
+body.preweek .opensnote{display:block}
+body.preweek .chip.pend{display:none}
+.midbanner{margin-top:18px;background:var(--goldpale);border:1px solid var(--slate);border-radius:12px;padding:14px 18px;max-width:640px}
+.steps{list-style:none;margin:26px 0 0;padding:0;counter-reset:s}
+.steps li{counter-increment:s;position:relative;padding:18px 0 18px 74px;border-bottom:1px solid rgba(11,21,48,.14)}
+.steps li:first-child{border-top:1px solid rgba(11,21,48,.14)}
+.steps li::before{content:"0" counter(s);position:absolute;left:0;top:14px;color:var(--rust);font-weight:800;font-size:32px;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.steps h3{font-size:17px;font-weight:800;margin:0 0 4px}
+.stepbody{margin:0 0 4px;max-width:640px;font-size:14px}
+.steplink{font-weight:700;white-space:nowrap}
+.chip{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;background:var(--goldpale);border:1px solid var(--slate);border-radius:4px;padding:2px 8px;color:var(--navy)}
+.cclist{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:10px}
+.cclist a{display:block;background:#1C2E4F;border:1px solid rgba(245,241,232,.28);border-radius:12px;padding:14px 18px;color:var(--cream);font-weight:700;text-decoration:none;transition:transform 200ms ease,box-shadow 200ms ease}
+.cclist a:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(0,0,0,.3)}
+footer{padding:26px max(40px,5vw) 40px;border-top:1px solid rgba(11,21,48,.14)}
+footer .inner{display:flex;flex-wrap:wrap;gap:8px 26px;font-size:14px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body data-opens="2026-12-14">
+<a class="skip" href="#main">Skip to main content</a>
+<header class="band">
+  <div class="inner">
+    <p class="eyebrow">BIO 005 &middot; Part 3 &middot; Week 15 of 15</p>
+    <h1>The slow lever on pH, and putting it all together</h1>
+    <p class="lede">7 competencies this week, each one a single thing you will be able to do. Your note sheet lists them all.</p>
+    <span class="duetag">Everything below is due Wednesday, December 16, 10:00 pm, the last day of the term.</span>
+    <div class="opensnote"><strong>This week opens Monday, December 14.</strong> Everything for it posts by then. You are welcome to read ahead; nothing here is due yet.</div>
+      <div class="midbanner"><strong>This week closes Part 3.</strong> Midterm 3 covers Weeks 11 to 15: draw a pathway and teach it on video, no notes. The window opens Monday, December 14, 8:00 am and closes Wednesday, December 16, 10:00 pm.</div>
+  </div>
+</header>
+<main id="main" class="band" style="padding-top:20px">
+  <div class="inner">
+    <p class="eyebrow">The six steps, in order</p>
+    <ol class="steps">
+      <li><h3>Prepare</h3><p class="stepbody"><strong>Read the note sheet questions first, preview the text, organize your notes,</strong> then answer the best you can from what you know, in your first color. It comes first, always. <span class="chip pend">Note sheet posts when the week opens</span></p><p class="stepbody">Silverthorn Chapter 21 and Chapter 25.</p></li>
+      <li><h3>Watch</h3><p class="stepbody"><strong>Now watch each concept's video, name and number at the top of the prompt, and add what you did not know in a second color.</strong> Color one is your baseline; color two is what you need to commit to memory. <span class="chip pend">Videos post when the week opens</span></p></li>
+      <li><h3>Discuss</h3><p class="stepbody"><strong>One post: something from this week's physiology, plus your honest thinking about it.</strong> Initial post by Friday, 10:00 pm; peer replies by Sunday, 10:00 pm.</p></li>
+      <li><h3>Practice</h3><p class="stepbody">Do the assigned Silverthorn problems, and run your recall cards in the <a href="mastery-physio-os-standalone.html" target="_top">Mastery OS</a>. <span class="chip pend">Problem numbers post when the week opens</span></p></li>
+      <li><h3>Lab</h3><p class="stepbody">PhysioEx Exercise 10, the compensation activities, plus ABG interpretation and your patient case conference. Assigned in Pearson through <strong>Access Pearson</strong> in Canvas. In order: run PhysioEx first, until it shows complete in Pearson, then the worksheet and data record. One part without the other earns nothing. <a class="steplink" href="BIO005-patient-file.html" target="_top">Open your patient case file &rarr;</a></p></li>
+      <li><h3>Prove</h3><p class="stepbody"><strong>The five minute draw and teach practice round,</strong> in the exact midterm format, ungraded. <span class="chip pend">Posts when the week opens</span></p></li>
+    </ol>
+  </div>
+</main>
+<footer>
+  <div class="inner">
+    <a href="home.html" target="_top">Course home</a>
+    <a href="course-schedule.html" target="_top">Schedule</a>
+    <a href="syllabus-fall2026.html" target="_top">Syllabus</a>
+  </div>
+</footer>
+<script>
+(function(){
+  var opens = new Date(document.body.getAttribute('data-opens') + 'T00:00:00');
+  if(new Date() < opens){ document.body.classList.add('preweek'); }
+  var id='wk15-'+Math.random().toString(36).slice(2,8);
+  function post(){try{parent.postMessage({frame:id,height:document.documentElement.scrollHeight},'*');}catch(e){}}
+  if('ResizeObserver' in window){new ResizeObserver(post).observe(document.documentElement);}
+  window.addEventListener('load',post);window.addEventListener('resize',post);post();
+})();
+</script>
+</body>
+</html>

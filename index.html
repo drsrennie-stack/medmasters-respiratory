@@ -1,1230 +1,758 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anatomy Practice Loops</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Lora:ital@1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<title>Human Physiology &middot; BIO 005 &middot; Fall 2026</title>
+<meta name="description" content="BIO 005 Human Physiology, an integrative approach. Yuba College, Fall 2026, fully online. Course calendar, all fifteen weeks, and where to start.">
 <style>
-  :root{
-    --navy:#0B1530; --navy-deep:#0B1530; --navy-darkest:#060A18; --navy-tint:#ECEFF4;
-    --terra:#C2734D; --terra-dark:#8B3A2E; --terra-deep:#A0452F;
-    --white:#FFFFFF; --offwhite:#FAFAF9; --gray:#6B7280; --gray-light:#D1D5DB;
-    --radius:8px;
-    --shadow-rest:0 1px 3px rgba(0,0,0,0.08);
-    --shadow-hover:0 10px 22px rgba(0,0,0,0.12);
-    --t:transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease, background 200ms ease;
-    --font-display:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;
-    --font-body:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;
-    --font-eyebrow:'DM Sans',-apple-system,sans-serif;
-    --font-serif:'Lora',Georgia,serif;
-  }
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{margin:0;font-family:var(--font-body);color:var(--navy);background:var(--offwhite);line-height:1.55;font-size:16px;-webkit-font-smoothing:antialiased;}
-  .wrap{max-width:1040px;margin:0 auto;padding:30px 20px 56px;}
-  .skip{position:absolute;left:-9999px;top:auto;background:var(--terra-dark);color:#fff;padding:10px 16px;border-radius:8px;font-weight:700;z-index:50;}
-  .skip:focus{left:16px;top:16px;}
-  :focus-visible{outline:3px solid var(--terra-dark);outline-offset:3px;border-radius:6px;}
+:root{
+  /* ============================================================
+     MedMasters card system tokens.
+     From her spec, extracted off the live medmasterscollaborative.com
+     pricing section. Three values changed, each noted, because the
+     original drops below the WCAG floor this course has to hold.
+     ============================================================ */
+  --navy:#040711;                     /* body text, headings, borders, and the dark band.
+                                         20.12:1 on white. Deepened from the spec's #0B1530
+                                         at her request: much darker. */
+  --navy-70:rgba(4,7,17,.70);         /* de-emphasized text. 7.88:1 on white, 7.54:1 on off-white.
+                                         This is the LIGHTEST alpha that still clears AAA on both
+                                         grounds, so it de-emphasizes as much as the floor allows.
+                                         CHANGED from the spec's --navy-55, which measured 4.04:1
+                                         and fails even AA for normal text. */
+  --navy-75:var(--navy-70);           /* alias, older rules still name it */
+  --navy-50:rgba(4,7,17,.50);         /* boundary of a control. 3.79:1, clears 1.4.11.
+                                         CHANGED: the spec used --navy-15 on .cta-outline, and a
+                                         button whose only edge is 1.37:1 is not identifiable. */
+  --navy-15:rgba(4,7,17,.15);         /* decorative hairlines ONLY. Card edges and dividers, which
+                                         carry no information, so 1.40:1 is fine there. */
+  --terra:#8B3A2E;                    /* the only accent on a light ground. 7.66:1 on white */
+  --terra-dark:#6E2C23;               /* terra hover. 10.26:1 on white */
+  --white:#FFFFFF;
 
-  /* ---------- COURSE LOGO HEADER ---------- */
-  .site-header{background:#fff;border-bottom:.5px solid rgba(11,21,48,.10);padding:22px max(20px,4vw);}
-  .site-header-inner{max-width:1040px;margin:0 auto;}
-  .site-logo{display:inline-flex;align-items:center;gap:16px;text-decoration:none;}
-  .site-logo svg{height:54px;width:auto;display:block;}
-  .logo-text{display:flex;flex-direction:column;gap:3px;}
-  .logo-title{font-family:var(--font-display);font-size:1.68rem;font-weight:800;letter-spacing:-.02em;color:var(--navy);line-height:1;}
-  .logo-title .logo-accent{color:var(--terra-dark);}
-  .logo-sub{font-family:var(--font-eyebrow);font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--navy);opacity:.72;}
+  /* Dark grounds need their own accent: terra on navy is 2.36:1, which is
+     unusable (2.63:1). These three are her own BIO 004 tokens, not cream. */
+  --gold-bright:#DCB45C;              /* 10.28:1 on navy */
+  --straw:#E8CE85;
+  --straw-light:#F2E2B8;              /* 15.66:1 on navy */
+  --navy-deep:#01030A;                /* the footer, deeper still */
+  --navy-tint:#EBEDF2;
+  --offwhite:#FAFAF9;
 
-  .eyebrow{font-family:var(--font-eyebrow);font-weight:700;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--terra-dark);margin:0 0 .8rem;}
-  h1{font-family:var(--font-display);font-weight:800;font-size:clamp(2rem,5vw,3rem);line-height:1.05;letter-spacing:-.025em;color:var(--navy-deep);margin:0 0 .9rem;}
-  .rule{width:3.2rem;height:3px;background:var(--terra-dark);border-radius:2px;margin:0 0 1.1rem;}
-  .subhead{font-family:var(--font-display);font-weight:600;color:var(--terra-dark);font-size:clamp(1.05rem,2.4vw,1.3rem);margin:0;}
-  .usage{font-family:var(--font-serif);font-style:italic;color:var(--navy);opacity:.85;margin:.9rem 0 0;font-size:1.02rem;max-width:46rem;}
+  /* aliases kept so the older rules on the week and guide pages
+     keep working against the new palette */
+  --maroon:var(--terra); --maroon-dark:var(--terra-dark);
+  --ink-soft:var(--navy-70);
+  --rule:var(--navy-50); --rule-soft:var(--navy-15);
+  --gold:var(--gold-bright); --gold-deep:#8A6D33; --gold-text:#8B3A2E; --gold-pale:#F7EFD9;
+  --gray-lock:#767E8C;
 
-  /* ---------- COVER HERO (front page) ---------- */
-  .cover{background:var(--navy-darkest);border-radius:var(--radius);padding:clamp(24px,4.5vw,46px);color:#fff;border-top:3px solid var(--terra);}
-  .cover-grid{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:center;}
-  .cover-eyebrow{font-family:var(--font-eyebrow);font-size:.78rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#DCB45C;margin:0 0 16px;}
-  .cover-logo-mark{height:58px;width:auto;display:block;margin:2px 0 16px;}
-  .cover-title{font-family:var(--font-display);font-weight:800;font-size:clamp(30px,5vw,44px);line-height:1.04;letter-spacing:-.02em;color:#fff;margin:0;}
-  .cover-title span{color:var(--terra);}
-  .cover-tag{font-size:clamp(15px,1.5vw,18px);opacity:.9;margin:18px 0 0;max-width:46ch;line-height:1.5;}
-  .cover-cta{display:inline-flex;align-items:center;gap:8px;margin-top:18px;background:#C9A14A;color:#0B1530;font-family:var(--font-display);font-weight:800;font-size:.95rem;text-decoration:none;padding:11px 20px;border-radius:9px;transition:var(--t);}
-  .cover-cta:hover,.cover-cta:focus-visible{background:#d6b056;transform:translateY(-2px);box-shadow:var(--shadow-hover);outline:none;}
-  .cover-qr{background:#fff;border-radius:12px;padding:16px 16px 14px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;}
-  .cover-qr img{width:150px;height:150px;display:block;}
-  .cover-qr-cap{font-family:var(--font-eyebrow);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);}
-  @media(max-width:760px){.cover-grid{grid-template-columns:1fr;justify-items:start;}}
+  /* rhythm, from the spec */
+  --card-radius:8px; --btn-radius:4px; --badge-radius:3px;
+  --grid-gap:14px; --card-pad:24px 22px;
+  --r:8px; --rc:8px; --r-block:8px; --r-card:8px;
+  /* The pricing cards in her spec are flat by design and stay flat: .vl-card
+     declares no shadow. These three are for the page furniture that has to
+     read as lifted, above all the hero card that straddles the band edge. */
+  --shadow:0 1px 3px rgba(4,7,17,.10);
+  --shadow-rest:0 1px 3px rgba(4,7,17,.10);
+  --shadow-hover:0 14px 30px rgba(4,7,17,.24);
+  --shadow-lift:0 22px 48px rgba(4,7,17,.45);
 
-  .section-label{font-family:var(--font-eyebrow);font-weight:700;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--terra-dark);margin:30px 0 0;}
+  --font:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  --display:'Open Sans',system-ui,-apple-system,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{font-family:var(--font);background:var(--offwhite);color:var(--navy);line-height:1.6;font-size:16px}
+em,i,cite,dfn,var,address{font-style:normal}
+h1,h2,h3,h4{margin:0;letter-spacing:-.02em;font-family:var(--display);font-weight:800}
+p{margin:0 0 12px}
+ul,ol{margin:0;padding:0}
+a{color:var(--maroon-dark)}
+.vh{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+:focus-visible{outline:3px solid var(--navy);outline-offset:2px;box-shadow:0 0 0 6px var(--gold-bright);border-radius:4px}
+.skip{position:absolute;left:-9999px;top:0;z-index:80;background:var(--navy);color:#fff;padding:12px 18px;font-weight:700;text-decoration:none}
+.skip:focus{left:0;top:0}
 
-  /* ---------- HUB CARDS ---------- */
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(262px,1fr));gap:18px;margin-top:30px;}
-  .card{
-    display:flex;flex-direction:column;text-align:left;
-    background:var(--white);border:1px solid var(--navy-tint);border-radius:var(--radius);overflow:hidden;
-    box-shadow:var(--shadow-rest);cursor:pointer;padding:0;color:inherit;font:inherit;
-    transition:var(--t);
-  }
-  .card:hover,.card:focus-visible{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:var(--terra-dark);}
-  .card .card-top{padding:20px 18px 16px;text-align:center;border-bottom:1px solid var(--navy-tint);}
-  .badge-svg{width:100%;max-width:230px;height:auto;display:block;margin:0 auto;}
-  .badge-svg .arcT{stroke:var(--terra-dark);stroke-width:2.6;fill:none;}
-  .badge-svg .arcB{stroke:var(--navy);stroke-width:2.6;fill:none;}
-  .badge-svg .ic{stroke:var(--terra-dark);stroke-width:2.3;fill:none;stroke-linecap:round;stroke-linejoin:round;}
-  .badge-svg .wa{fill:var(--navy);font-family:var(--font-display);font-weight:800;font-size:23px;letter-spacing:.3px;}
-  .badge-svg .wl{fill:var(--terra-dark);font-family:var(--font-display);font-weight:800;font-size:23px;letter-spacing:.3px;}
-  .badge-svg .bone{fill:var(--navy);}
-  .badge-svg .unit{fill:var(--navy);font-family:var(--font-eyebrow);font-weight:700;font-size:11px;letter-spacing:2.2px;}
-  .card .card-body{padding:16px 22px 18px;display:flex;flex-direction:column;gap:6px;flex:1;}
-  .card .cmeta{font-family:var(--font-eyebrow);font-weight:700;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--terra-dark);}
-  .card .cdesc{font-size:.95rem;color:var(--navy);opacity:.82;}
-  .card .go{margin-top:auto;display:inline-flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:700;color:var(--terra-dark);font-size:.95rem;padding-top:10px;}
-  .card:hover .go .arr,.card:focus-visible .go .arr{transform:translateX(3px);}
-  .go .arr{transition:transform 200ms ease;}
-  .card.soon{cursor:not-allowed;opacity:.6;}
-  .card.soon:hover{transform:none;box-shadow:var(--shadow-rest);border-color:var(--navy-tint);}
-  .badge{display:inline-block;align-self:flex-start;font-family:var(--font-eyebrow);font-weight:700;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);border:1px solid var(--terra-dark);padding:.28rem .7rem;border-radius:999px;}
+/* ---------- top bar ---------- */
+.topbar{background:#fff;border-bottom:1px solid var(--rule-soft);position:sticky;top:0;z-index:40}
+.tb{max-width:1180px;margin:0 auto;padding:0 max(16px,3vw);display:flex;align-items:center;
+    gap:22px;flex-wrap:wrap;min-height:62px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--navy);padding:8px 0}
+.brand svg{height:30px;width:auto;display:block}
+.brand span{display:flex;flex-direction:column;line-height:1.1}
+.brand b{font-size:.94rem;font-weight:800;letter-spacing:-.01em}
+.brand i{font-size:.72rem;color:var(--ink-soft);font-weight:600}
+.mainnav{display:flex;gap:0;flex-wrap:wrap;margin-left:auto}
+/* The current page is marked three ways: a gold rule under it, a darker ink,
+   and a heavier weight. The gold rule is 1.9:1 on white, which is fine as
+   reinforcement but could not carry the state on its own, so the weight and
+   colour shift carry it too and aria-current carries it for a screen reader. */
+.mainnav a{position:relative;font-size:.9rem;font-weight:600;color:var(--navy-70);
+  text-decoration:none;padding:10px 6px;margin:0 10px;min-height:44px;min-width:44px;
+  display:flex;align-items:center;justify-content:center}
+.mainnav a:hover{color:var(--navy)}
+.mainnav a:hover::after,.mainnav a[aria-current="page"]::after{
+  content:"";position:absolute;left:0;right:0;bottom:7px;height:3px;border-radius:2px}
+.mainnav a:hover::after{background:var(--navy-15)}
+.mainnav a[aria-current="page"]{color:var(--navy);font-weight:800}
+.mainnav a[aria-current="page"]::after{background:var(--gold-bright)}
+.mainnav a[aria-current="page"]:hover::after{background:var(--gold-bright)}
 
-  /* ---------- PLAYER ---------- */
-  .player[hidden]{display:none;}
-  .pbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px;}
-  .back{background:transparent;border:2px solid var(--navy);color:var(--navy);font-family:var(--font-display);font-weight:700;font-size:.95rem;padding:.6rem 1rem;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:var(--t);}
-  .back:hover,.back:focus-visible{background:var(--navy);color:#fff;}
-  .ploop-title{font-family:var(--font-display);font-weight:700;font-size:1.15rem;color:var(--navy);}
+/* ---------- shell ---------- */
+.shell{max-width:1180px;margin:0 auto;padding:0 max(16px,3vw) 0}
+.crumb{font-size:.78rem;color:var(--ink-soft);padding:16px 0 0}
+.crumb a{color:var(--ink-soft)}
 
-  .controls{display:flex;flex-wrap:wrap;gap:14px 20px;align-items:flex-end;background:var(--white);border:1px solid var(--navy-tint);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow-rest);margin-bottom:16px;}
-  .field{display:flex;flex-direction:column;gap:5px;}
-  .field label{font-family:var(--font-eyebrow);font-weight:700;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--terra-dark);}
-  .field select{font:inherit;font-family:var(--font-display);font-weight:600;color:var(--navy);background:var(--offwhite);border:1px solid var(--gray-light);border-radius:8px;padding:8px 10px;min-width:124px;cursor:pointer;}
-  .toggle{display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:600;font-size:.95rem;color:var(--navy);cursor:pointer;user-select:none;}
-  .toggle input{width:18px;height:18px;accent-color:var(--terra-dark);cursor:pointer;}
+.hero{padding:6px 0 4px}
+.eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--maroon-dark);margin:0 0 6px}
+h1{font-size:clamp(1.6rem,3.4vw,2.15rem);margin:0 0 8px;line-height:1.14;max-width:30ch}
+.sub{color:var(--ink-soft);font-size:.95rem;margin:0 0 14px;max-width:64ch}
+.herorow{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:0 0 4px}
+.chips{list-style:none;display:flex;gap:6px;flex-wrap:wrap}
+.chips li{font-size:.76rem;font-weight:700;color:var(--ink-soft);background:#fff;
+          border:1px solid var(--rule-soft);border-radius:999px;padding:5px 12px}
+.wknote{background:var(--gold-pale);border-radius:var(--r);padding:11px 14px;font-size:.88rem;
+        margin:14px 0 0;max-width:70ch}
 
-  /* stage: clean white, minimal */
-  .stage{position:relative;background:#fff;border:1px solid var(--navy-tint);border-radius:var(--radius);box-shadow:var(--shadow-rest);overflow:hidden;}
-  .phasebar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--navy-tint);background:#fff;}
-  .phase{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-display);font-weight:800;font-size:.95rem;letter-spacing:.01em;color:var(--navy);}
-  .phase.question{color:var(--terra-dark);}
-  .phase.answer{color:var(--navy);}
-  .dot{width:11px;height:11px;border-radius:50%;background:var(--terra);}
-  .phase.answer .dot{background:var(--navy);}
-  .progress{font-family:var(--font-display);font-weight:700;font-size:.9rem;color:var(--navy);opacity:.65;font-variant-numeric:tabular-nums;}
+.cols{display:grid;grid-template-columns:minmax(0,1fr);gap:26px;padding:22px 0 0}
+@media(min-width:960px){.cols{grid-template-columns:minmax(0,1fr) 296px;gap:34px}}
 
-  .imgwrap{position:relative;aspect-ratio:16/9;background:#fff;display:flex;align-items:center;justify-content:center;}
-  .imgwrap img{max-width:100%;max-height:100%;width:100%;height:100%;object-fit:contain;display:block;}
+/* ---------- the path ---------- */
+.panel{background:#fff;border:1px solid var(--rule-soft);border-radius:var(--rc);box-shadow:var(--shadow)}
+.panelhead{padding:18px 20px 0}
+.panelhead h2{font-size:1.1rem;font-weight:800;margin:0 0 4px}
+.panelhead p{font-size:.9rem;color:var(--ink-soft);margin:0;max-width:62ch}
+.pmeter{display:flex;align-items:center;gap:12px;padding:14px 20px 0}
+.bar{flex:1;height:8px;background:var(--navy-tint);border-radius:999px;overflow:hidden}
+.bar span{display:block;height:100%;background:var(--gold);width:0;transition:width 220ms ease}
+.ptext{font-size:.82rem;font-weight:700;color:var(--ink-soft);white-space:nowrap}
 
-  /* first-question walkthrough */
-  .coach{display:flex;align-items:center;justify-content:center;gap:8px;background:#FBF4E4;color:var(--navy);font-size:.9rem;font-weight:600;line-height:1.4;padding:11px 16px;text-align:center;border-bottom:1px solid var(--navy-tint);border-left:4px solid #C9A14A;}
-  .coach[hidden]{display:none;}
-  .coach b{color:var(--terra-dark);}
-  .coach .hand{font-size:1.25em;line-height:1;display:inline-block;animation:coachbob 1.1s ease-in-out infinite;}
-  @keyframes coachbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.path{list-style:none;padding:14px 12px 16px}
+.step{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:12px;align-items:start;
+      padding:13px 10px;border-radius:var(--r)}
+.step + .step{border-top:1px solid var(--rule-soft)}
+.step[data-done="yes"]{background:var(--offwhite)}
+.step[data-done="yes"] .stepbody h3{color:var(--ink-soft)}
+.stepnum{width:26px;height:26px;border-radius:999px;background:var(--navy-tint);color:var(--navy);
+         font-weight:800;font-size:.78rem;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.step[data-done="yes"] .stepnum{background:var(--gold);border:1.5px solid #5C4110}
+.stepbody h3{font-size:.97rem;font-weight:700;margin:0 0 3px}
+.stepbody .do{font-size:.89rem;color:var(--ink-soft);margin:0;max-width:60ch}
+.stepbody .meta{font-size:.76rem;color:var(--ink-soft);margin:6px 0 0}
+.steprow{margin:9px 0 0}
+.go{display:inline-flex;align-items:center;min-height:44px;padding:10px 16px;border-radius:999px;
+    background:var(--maroon);color:#fff;font-size:.82rem;font-weight:700;text-decoration:none;
+    border:1.5px solid var(--maroon)}
+.go:hover{background:var(--maroon-dark);border-color:var(--maroon-dark)}
+.pending{display:inline-flex;align-items:center;min-height:44px;padding:10px 15px;border-radius:999px;
+  border:1.5px dashed var(--gray-lock);color:#4A5261;font-size:.79rem;font-weight:700}
+/* The label is the target, so the whole 44px box is clickable, not the box glyph. 2.5.8. */
+.stepdone{display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;cursor:pointer}
+.stepdone input{width:24px;height:24px;accent-color:var(--maroon)}
+@media(max-width:640px){.step{grid-template-columns:26px minmax(0,1fr) 30px;gap:10px}}
 
-  /* title slide (first frame of each loop) */
-  .title-card{position:absolute;inset:0;background:#FFFFFF;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6% 8%;}
-  .stage:not(.is-title) .title-card{display:none;}
-  .title-card .tc-logo{height:52px;width:auto;display:block;margin:0 0 20px;}
-  .title-card .tc-eyebrow{font-family:var(--font-eyebrow);font-weight:700;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--terra-dark);margin:0 0 12px;}
-  .title-card .tc-title{font-family:var(--font-display);font-weight:800;font-size:clamp(28px,4.6vw,48px);line-height:1.04;letter-spacing:-.02em;color:var(--navy);margin:0;}
-  .title-card .tc-title span{color:var(--terra-dark);}
-  .title-card .tc-sub{color:var(--navy);opacity:.78;font-size:clamp(14px,1.8vw,19px);line-height:1.45;margin:12px 0 0;max-width:44ch;}
-  .title-card .tc-meta{font-family:var(--font-eyebrow);font-weight:700;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--terra-dark);margin:20px 0 0;}
-  .title-card .tc-hint{color:var(--navy);opacity:.55;font-size:.85rem;margin:7px 0 0;}
+/* ---------- collapsibles ---------- */
+details.drop{background:#fff;border:1px solid var(--rule-soft);border-radius:var(--rc);
+             box-shadow:var(--shadow);margin:14px 0 0}
+details.drop > summary{list-style:none;cursor:pointer;padding:15px 20px;min-height:52px;
+  display:flex;align-items:center;gap:10px;font-size:.97rem;font-weight:700}
+details.drop > summary::-webkit-details-marker{display:none}
+details.drop > summary::after{content:'+';margin-left:auto;font-size:1.25rem;font-weight:700;color:var(--maroon)}
+details.drop[open] > summary::after{content:'2'}
+details.drop > summary .tag{font-size:.72rem;font-weight:700;color:var(--ink-soft);
+  background:var(--navy-tint);border-radius:999px;padding:3px 10px}
+.dropbody{padding:0 20px 20px}
+.dropbody > p:first-child{margin-top:0}
+.dropbody .lead{font-size:.9rem;color:var(--ink-soft);max-width:64ch}
 
-  /* caption band: navy brand chip (like the intro label) */
-  .caption{background:#fff;padding:15px 18px 16px;border-top:1px solid var(--navy-tint);text-align:center;}
-  .stage:not(.has-caption) .caption{display:none;}
-  .stage.is-results .caption{display:none;}
-  .caption .cap-q{font-size:.92rem;color:var(--navy);opacity:.55;margin:0 0 8px;font-weight:600;line-height:1.4;}
-  .caption .cap-q[hidden]{display:none;}
-  .caption .cap-main{display:inline-block;background:var(--navy);color:#fff;font-family:var(--font-display);font-weight:700;font-size:clamp(15px,1.9vw,20px);line-height:1.4;padding:10px 18px;border-radius:14px;margin:0;max-width:52ch;}
-  .stage.is-answer .caption .cap-main{background:var(--terra-dark);}
+.watch{list-style:none;display:grid;gap:9px;margin:4px 0 0}
+.watch li{display:grid;grid-template-columns:7px minmax(0,1fr);gap:11px;align-items:start;font-size:.92rem}
+.watch li::before{content:'';height:7px;border-radius:50%;background:var(--maroon);margin-top:8px}
+.watch li span{min-width:0}
 
-  /* self-check (score) bar, only on answer */
-  /* type-your-answer box, only during the question */
-  .answerbar{display:flex;justify-content:center;padding:12px 16px;border-top:1px solid var(--navy-tint);background:#fff;}
-  .stage:not(.is-question) .answerbar{display:none;}
-  .answerbar input{width:100%;max-width:430px;font-family:var(--font-display);font-size:1rem;font-weight:600;padding:11px 15px;border:2px solid var(--navy-tint);border-radius:9px;color:var(--navy);background:var(--offwhite);}
-  .answerbar input::placeholder{color:var(--navy);opacity:.45;font-weight:500;}
-  .answerbar input:focus{outline:none;border-color:var(--terra-dark);background:#fff;}
+.knowlist{list-style:none;display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 12px}
+.knowlist li{font-size:.85rem;font-weight:600;background:var(--offwhite);border:1px solid var(--rule-soft);
+             border-radius:999px;padding:6px 13px}
+.knowfoot{font-size:.86rem;color:var(--ink-soft);margin:0;max-width:66ch}
 
-  .selfcheck{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;padding:12px;background:#fff;border-top:1px solid var(--navy-tint);}
-  .stage:not(.is-answer) .selfcheck{display:none;}
-  .stage.is-results .selfcheck{display:none;}
-  .selfcheck .sc-typed{width:100%;text-align:center;color:var(--navy);font-weight:600;font-size:.92rem;margin-bottom:2px;}
-  .selfcheck .sc-typed b{color:var(--terra-dark);}
-  .selfcheck .sc-typed i{opacity:.55;font-weight:500;}
-  .selfcheck .sc-label{color:var(--navy);opacity:.7;font-weight:600;font-size:.9rem;}
-  .sc-btn{font-family:var(--font-display);font-weight:700;font-size:.92rem;border-radius:8px;padding:.5rem 1rem;cursor:pointer;border:2px solid transparent;transition:var(--t);}
-  .sc-yes{background:var(--navy);color:#fff;border-color:var(--navy);}
-  .sc-yes:hover{background:var(--navy-deep);}
-  .sc-spell{background:#C9A14A;color:#0B1530;border-color:#C9A14A;}
-  .sc-spell:hover{background:#b8923f;}
-  .sc-no{background:var(--terra-dark);color:#fff;border-color:var(--terra-dark);}
-  .sc-no:hover{background:var(--terra-deep);}
-  .sc-again{background:var(--terra-dark);color:#fff;border-color:var(--terra-dark);}
-  .sc-again:hover{background:var(--terra-deep);}
-  .sc-hard{background:#C2734D;color:#0B1530;border-color:#C2734D;}
-  .sc-hard:hover{background:#b5663f;}
-  .sc-good{background:#C9A14A;color:#0B1530;border-color:#C9A14A;}
-  .sc-good:hover{background:#b8923f;}
-  .sc-easy{background:var(--navy);color:#fff;border-color:var(--navy);}
-  .sc-easy:hover{background:var(--navy-deep);}
+.cplist{list-style:none;display:grid;gap:11px;margin:10px 0 0}
+.cplist li{border-left:2px solid var(--rule-soft);padding-left:12px}
+.cid{font:600 .72rem ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--gold-text)}
+.cname{font-weight:700;font-size:.9rem;display:block}
+.ccan{display:block;font-size:.86rem;color:var(--ink-soft)}
 
-  /* score chip in phasebar */
-  .pb-right{display:flex;align-items:center;gap:12px;}
-  .score{font-family:var(--font-display);font-weight:700;font-size:.82rem;color:var(--navy);background:var(--navy-tint);padding:3px 11px;border-radius:999px;}
-  .score[hidden]{display:none;}
+/* ---------- rail ---------- */
+.rail{display:grid;gap:14px;align-content:start}
+@media(min-width:960px){.rail{position:sticky;top:78px}}
+.rcard{background:#fff;border:1px solid var(--rule-soft);border-radius:var(--rc);
+       box-shadow:var(--shadow);padding:16px 18px}
+.rcard h2{font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+          color:var(--maroon-dark);margin:0 0 10px}
+.glance{list-style:none;display:grid;gap:9px}
+.glance li{display:grid;grid-template-columns:76px minmax(0,1fr);gap:8px;font-size:.86rem;align-items:start}
+.glance dt,.glance .k{color:var(--ink-soft);font-weight:700;font-size:.78rem;padding-top:1px}
+.glance .v{font-weight:600}
 
-  /* results summary */
-  .results-card{position:absolute;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6% 8%;}
-  .stage:not(.is-results) .results-card{display:none;}
-  .stage.is-results .timer{display:none;}
-  .stage.is-results .transport{display:none;}
-  .results-card .rc-eyebrow{font-family:var(--font-eyebrow);font-weight:700;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--terra-dark);margin:0 0 10px;}
-  .results-card .rc-score{font-family:var(--font-display);font-weight:800;font-size:clamp(42px,9vw,72px);line-height:1;color:var(--navy);margin:0;}
-  .results-card .rc-pct{font-family:var(--font-display);font-weight:700;font-size:1.1rem;color:var(--terra-dark);margin:10px 0 0;}
-  .results-card .rc-time{font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--terra-dark);margin:8px 0 0;}
-  .results-card .rc-time[hidden]{display:none;}
-  .results-card .rc-trend{font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--navy);margin:10px 0 0;}
-  .results-card .rc-msg{color:var(--navy);opacity:.78;margin:6px 0 0;font-size:.95rem;max-width:40ch;}
-  .results-card .rc-history{margin:16px 0 0;width:100%;max-width:340px;text-align:left;}
-  .results-card .rc-history .rh-title{font-family:var(--font-eyebrow);font-weight:700;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--terra-dark);margin:0 0 6px;}
-  .results-card .rc-history .rh-row{display:flex;justify-content:space-between;font-size:.85rem;color:var(--navy);padding:5px 0;border-bottom:1px solid var(--navy-tint);}
-  .results-card .rc-history .rh-row b{color:var(--terra-dark);font-weight:800;}
-  .results-card .rc-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px;}
-  .rbtn{font-family:var(--font-display);font-weight:700;font-size:.95rem;border-radius:8px;padding:.65rem 1.2rem;cursor:pointer;border:2px solid var(--navy);transition:var(--t);}
-  .rbtn.primary{background:var(--navy);color:#fff;}
-  .rbtn.primary:hover{background:var(--navy-deep);}
-  .rbtn.ghost{background:transparent;color:var(--navy);}
-  .rbtn.ghost:hover{background:var(--navy-tint);}
+.wkgrid{list-style:none;display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.wkgrid a{display:flex;align-items:center;justify-content:center;min-height:44px;border-radius:7px;
+  font-size:.82rem;font-weight:700;text-decoration:none;color:var(--navy);
+  background:var(--offwhite);border:1px solid var(--rule-soft)}
+.wkgrid a:hover{background:var(--gold-pale);border-color:var(--gold-deep)}
+.wkgrid a[aria-current="page"]{background:var(--maroon);border-color:var(--maroon);color:#fff}
 
-  /* countdown */
-  .timer{position:absolute;top:14px;right:14px;width:60px;height:60px;}
-  .timer svg{transform:rotate(-90deg);display:block;}
-  .timer .track{stroke:rgba(11,21,48,.14);}
-  .timer .arc{stroke:var(--terra);transition:stroke-dashoffset 240ms linear;}
-  .stage.is-answer .timer .arc{stroke:var(--navy);}
-  .timer .num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:20px;color:var(--navy);font-variant-numeric:tabular-nums;}
+.rlist{list-style:none;display:grid;gap:2px}
+.rlist a{display:block;font-size:.87rem;font-weight:600;text-decoration:none;color:var(--navy);
+  padding:10px;border-radius:7px;min-height:44px;display:flex;align-items:center;gap:9px}
+.rlist a:hover{background:var(--gold-pale)}
+.rlist .dot{flex:0 0 6px;height:6px;border-radius:50%;background:var(--gold)}
+.rlist small{display:block;font-weight:500;color:var(--ink-soft);font-size:.78rem}
 
-  .transport{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;border-top:1px solid var(--navy-tint);background:#fff;flex-wrap:wrap;}
-  .tbtn{font-family:var(--font-display);font-weight:700;font-size:.92rem;border-radius:8px;border:2px solid rgba(11,21,48,.26);background:#fff;color:var(--navy);padding:.6rem 1rem;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:var(--t);}
-  .tbtn:hover,.tbtn:focus-visible{background:var(--navy-tint);border-color:var(--navy);}
-  .tbtn:active{transform:translateY(1px);}
-  .tbtn.play{background:var(--terra-dark);color:#fff;border-color:var(--terra-dark);min-width:130px;justify-content:center;}
-  .tbtn.play:hover,.tbtn.play:focus-visible{background:var(--terra-deep);border-color:var(--terra-deep);}
-  .hint{text-align:center;font-size:.85rem;color:var(--navy);opacity:.65;margin-top:12px;}
+.nextcard{background:var(--navy);color:#fff;border-radius:var(--rc);padding:18px 20px;margin:14px 0 0}
+.nextcard .eyebrow{color:#F0DCA8}
+.nextcard h2{font-size:1rem;font-weight:800;margin:0 0 5px}
+.nextcard p{font-size:.88rem;color:#D6DCE6;margin:0 0 12px;max-width:58ch}
+.nextcard a{display:inline-flex;align-items:center;min-height:44px;padding:10px 16px;border-radius:999px;
+  background:var(--gold);color:#000;font-size:.82rem;font-weight:700;text-decoration:none}
 
-  footer{background:var(--navy-darkest);color:var(--navy-tint);text-align:center;padding:1.9rem 1.5rem 1.7rem;border-top:2px solid var(--terra);border-radius:var(--radius);margin-top:42px;}
-  footer .by{font-family:var(--font-display);font-weight:700;color:#fff;font-size:1rem;margin-bottom:.15rem;}
-  footer .role{font-size:.82rem;color:var(--navy-tint);}
-  footer .brand{font-family:var(--font-eyebrow);font-weight:700;color:var(--terra);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;margin-top:.9rem;}
-  .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+.site-footer{background:var(--navy-deep);color:#fff;padding:26px max(16px,3vw);margin-top:44px}
+.fi{max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:center}
+.site-footer .n{font-weight:800;margin:0;font-size:.95rem}
+.site-footer .c{font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#F0DCA8;margin:0}
+.footnav{display:flex;gap:4px;flex-wrap:wrap}
+.footnav a{color:#D6DCE6;font-size:.84rem;font-weight:600;text-decoration:none;padding:10px 14px;border-radius:999px;min-height:44px;display:flex;align-items:center}
+.footnav a:hover{background:rgba(255,255,255,.10);color:#fff}
 
-  @media (prefers-reduced-motion: reduce){
-    *{transition-duration:.01ms !important;animation:none !important;scroll-behavior:auto !important;}
-  }
+/* On a phone a sticky seven-item bar eats a third of the screen, so it
+   sits at the top of the document instead of on top of it. Nothing is
+   hidden behind a scroll or a menu button either way. */
+@media(max-width:760px){
+  .topbar{position:static}
+  .tb{gap:8px;min-height:0;padding-top:8px;padding-bottom:8px}
+  .brand svg{height:26px}
+  .brand b{font-size:.88rem}
+  .mainnav{margin-left:0;width:100%;gap:0}
+  .mainnav a{font-size:.82rem;padding:9px 4px;margin:0 8px}
+}
 
-  /* ---------- DARK LOOP THEME (opt in per loop: set theme:"dark") ---------- */
-  .player.theme-dark .ploop-title{color:#fff;}
-  .player.theme-dark .back{color:#fff;border-color:#fff;}
-  .player.theme-dark .back:hover,.player.theme-dark .back:focus-visible{background:#fff;color:#000;}
-  .player.theme-dark .controls{background:#0d0d0d;border-color:#333;}
-  .player.theme-dark .field label{color:#FFD23F;}
-  .player.theme-dark .field select{background:#111;color:#fff;border-color:#555;}
-  .player.theme-dark .toggle{color:#fff;}
-  .player.theme-dark .toggle input{accent-color:#FFD23F;}
-  .player.theme-dark .stage{background:#000;border-color:#000;}
-  .player.theme-dark .phasebar{background:#000;border-bottom-color:#222;}
-  .player.theme-dark .phase{color:#fff;}
-  .player.theme-dark .phase.question{color:#FFD23F;}
-  .player.theme-dark .phase.question .dot{background:#FFD23F;}
-  .player.theme-dark .phase.answer .dot{background:#fff;}
-  .player.theme-dark .progress{color:#fff;opacity:.7;}
-  .player.theme-dark .score{background:#1a1a1a;color:#fff;}
-  .player.theme-dark .imgwrap{background:#000;}
-  .player.theme-dark .coach{background:#1a1500;color:#fff;border-left-color:#FFD23F;border-bottom-color:#222;}
-  .player.theme-dark .coach b{color:#FFD23F;}
-  .player.theme-dark .caption{background:#000;border-top-color:#000;}
-  .player.theme-dark .caption .cap-q{color:#fff;opacity:.6;}
-  /* answer box floats in the black field at the bottom of the slide */
-  .player.theme-dark .answerbar{background:#000;border-top-color:#000;padding:4px 16px 18px;}
-  .player.theme-dark .answerbar input{background:rgba(255,210,63,.07);border-color:#FFD23F;color:#FFD23F;caret-color:#FFD23F;}
-  .player.theme-dark .answerbar input::placeholder{color:#FFD23F;opacity:.5;}
-  .player.theme-dark .answerbar input:focus{border-color:#FFD23F;background:rgba(255,210,63,.12);}
-  .player.theme-dark .selfcheck{background:#000;border-top-color:#000;}
-  .player.theme-dark .selfcheck .sc-typed{color:#fff;}
-  .player.theme-dark .selfcheck .sc-typed b{color:#FFD23F;}
-  .player.theme-dark .selfcheck .sc-label{color:#fff;opacity:.75;}
-  .player.theme-dark .transport{background:#000;border-top-color:#222;}
-  .player.theme-dark .tbtn{background:#141414;color:#fff;border-color:#3a3a3a;}
-  .player.theme-dark .tbtn:hover,.player.theme-dark .tbtn:focus-visible{background:#222;border-color:#666;}
-  .player.theme-dark .tbtn.play{background:#FFD23F;color:#000;border-color:#FFD23F;}
-  .player.theme-dark .tbtn.play:hover,.player.theme-dark .tbtn.play:focus-visible{background:#ffdd66;border-color:#ffdd66;}
-  .player.theme-dark .timer .num{color:#fff;}
-  .player.theme-dark .timer .track{stroke:rgba(255,255,255,.18);}
-  .player.theme-dark .timer .arc{stroke:#FFD23F;}
-  .player.theme-dark .stage.is-answer .timer .arc{stroke:#fff;}
-  .player.theme-dark .title-card{background:#000;}
-  .player.theme-dark .title-card .tc-logo path,.player.theme-dark .title-card .tc-logo circle{fill:#fff;}
-  .player.theme-dark .title-card .tc-eyebrow{color:#FFD23F;}
-  .player.theme-dark .title-card .tc-title{color:#fff;}
-  .player.theme-dark .title-card .tc-title span{color:#FFD23F;}
-  .player.theme-dark .title-card .tc-sub{color:#fff;opacity:.8;}
-  .player.theme-dark .title-card .tc-meta{color:#FFD23F;}
-  .player.theme-dark .title-card .tc-hint{color:#fff;opacity:.55;}
-  .player.theme-dark .results-card{background:#000;}
-  .player.theme-dark .results-card .rc-eyebrow{color:#FFD23F;}
-  .player.theme-dark .results-card .rc-score{color:#fff;}
-  .player.theme-dark .results-card .rc-pct{color:#FFD23F;}
-  .player.theme-dark .results-card .rc-time{color:#FFD23F;}
-  .player.theme-dark .results-card .rc-trend{color:#fff;}
-  .player.theme-dark .results-card .rc-msg{color:#fff;opacity:.8;}
-  .player.theme-dark .results-card .rc-history .rh-title{color:#FFD23F;}
-  .player.theme-dark .results-card .rc-history .rh-row{color:#fff;border-bottom-color:#222;}
-  .player.theme-dark .results-card .rc-history .rh-row b{color:#FFD23F;}
-  .player.theme-dark .rbtn.primary{background:#FFD23F;color:#000;border-color:#FFD23F;}
-  .player.theme-dark .rbtn.primary:hover{background:#ffdd66;}
-  .player.theme-dark .rbtn.ghost{color:#fff;border-color:#fff;}
-  .player.theme-dark .rbtn.ghost:hover{background:#222;}
-  .player.theme-dark .hint{color:#fff;opacity:.6;}
+/* ============================================================
+   MEDMASTERS CARD SYSTEM
+   Her spec, implemented. Type scale kept at her numbers.
+   Flat cards: hairline border, 8px radius, no shadow, no lift.
+   The emphasis treatment is a 2px terra border and nothing else.
+   ============================================================ */
 
-  /* ---------- REVIEW BUILDER ---------- */
-  .builder[hidden]{display:none;}
-  .builder-card{background:var(--white);border:1px solid var(--navy-tint);border-radius:var(--radius);padding:20px 18px;box-shadow:var(--shadow-rest);margin-top:8px;}
-  .builder-instr{margin:0 0 14px;color:var(--navy);font-weight:600;}
-  .builder-topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:14px;}
-  .topic-opt{display:flex;align-items:center;gap:10px;border:1px solid var(--navy-tint);border-radius:8px;padding:11px 13px;cursor:pointer;font-weight:600;color:var(--navy);transition:var(--t);}
-  .topic-opt:hover{border-color:var(--terra-dark);}
-  .topic-opt input{width:18px;height:18px;accent-color:var(--terra-dark);cursor:pointer;}
-  .topic-opt .t-count{margin-left:auto;font-family:var(--font-eyebrow);font-weight:700;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--terra-dark);opacity:.85;}
-  .weak-toggle{margin:2px 0 4px;}
-  .builder-note{font-size:.9rem;color:var(--navy);opacity:.72;margin:8px 0 0;min-height:1.2em;}
-  .builder-actions{margin-top:16px;}
-  .builder-actions .tbtn.play{min-width:170px;}
+/* ---- section shell ---- */
+.vl-section{background:var(--white);padding:48px max(40px,5vw)}
+.vl-eyebrow{font-size:11px;font-weight:700;letter-spacing:3.3px;text-transform:uppercase;
+  color:var(--terra);margin:0 0 18px}
+.vl-headline{font-family:var(--display);font-size:30px;font-weight:800;line-height:33px;
+  letter-spacing:-.6px;color:var(--navy);margin:0 0 26px;text-wrap:balance}
+.vl-headline .accent{color:var(--terra)}
 
-  /* ---------- MY PROGRESS DASHBOARD ---------- */
-  .dash[hidden]{display:none;}
-  .dash-body{margin-top:8px;}
-  .dash-card{background:var(--white);border:1px solid var(--navy-tint);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-rest);margin-bottom:14px;}
-  .dash-overall{display:flex;gap:30px;flex-wrap:wrap;align-items:baseline;}
-  .dash-stat{display:flex;flex-direction:column;gap:2px;}
-  .dash-stat .num{font-family:var(--font-display);font-weight:800;font-size:1.8rem;color:var(--navy);line-height:1;}
-  .dash-stat .lab{font-family:var(--font-eyebrow);font-weight:700;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--terra-dark);}
-  .dash-h{font-family:var(--font-display);font-weight:700;color:var(--navy);font-size:1.05rem;margin:0 0 12px;}
-  .topic-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--navy-tint);}
-  .topic-row:last-child{border-bottom:none;}
-  .topic-row .tn{font-weight:600;color:var(--navy);min-width:140px;}
-  .topic-row .bar{flex:1;height:8px;background:var(--navy-tint);border-radius:999px;overflow:hidden;min-width:60px;}
-  .topic-row .bar > i{display:block;height:100%;background:var(--terra);border-radius:999px;}
-  .topic-row .tv{font-family:var(--font-display);font-weight:700;font-size:.85rem;color:var(--navy);min-width:104px;text-align:right;}
-  .topic-row .tw{color:var(--terra-dark);}
-  .weak-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--navy-tint);}
-  .weak-item:last-child{border-bottom:none;}
-  .weak-item .wlab{font-weight:600;color:var(--navy);}
-  .weak-item .wtop{font-family:var(--font-eyebrow);font-weight:700;font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;color:var(--terra-dark);margin-left:auto;}
-  .weak-dots{display:inline-flex;gap:3px;}
-  .weak-dots i{width:9px;height:9px;border-radius:50%;background:var(--navy-tint);display:inline-block;}
-  .weak-dots i.c{background:var(--navy);}
-  .weak-dots i.m{background:#C9A14A;}
-  .weak-dots i.x{background:var(--terra-dark);}
-  .dash-empty{color:var(--navy);opacity:.72;margin:0;}
-  .dash-actions{margin-top:16px;}
+/* ---- grid ---- */
+.vl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--grid-gap);margin:0 0 22px}
+/* margin-top:auto on the CTA is what lands every button on the same
+   baseline however long the copy above it runs. */
+.vl-card{background:var(--white);border:1px solid var(--navy-15);border-radius:var(--card-radius);
+  padding:var(--card-pad);display:flex;flex-direction:column;position:relative}
+.vl-card.featured{border:2px solid var(--terra)}
+.vl-card.soon{border-style:dashed}
 
-  /* ---------- ACTION TILES (Build a review, My progress) ---------- */
-  .card.review-card,.card.progress-card{background:var(--terra-dark);border-color:var(--terra-dark);}
-  .card.review-card:hover,.card.progress-card:hover,.card.review-card:focus-visible,.card.progress-card:focus-visible{border-color:#C9A14A;}
-  .review-card .card-top,.progress-card .card-top{border-bottom-color:rgba(255,255,255,.14);}
-  .review-card .cmeta,.progress-card .cmeta{color:#DCB45C;}
-  .review-card .cdesc,.progress-card .cdesc{color:#fff;opacity:.85;}
-  .review-card .go,.progress-card .go{color:#DCB45C;}
-  .review-card .badge-svg .arcT,.progress-card .badge-svg .arcT{stroke:#C9A14A;}
-  .review-card .badge-svg .arcB,.progress-card .badge-svg .arcB{stroke:#FFFFFF;}
-  .review-card .badge-svg .ic,.progress-card .badge-svg .ic{stroke:#C9A14A;}
-  .review-card .badge-svg .wa,.progress-card .badge-svg .wa{fill:#FFFFFF;}
-  .review-card .badge-svg .wl,.progress-card .badge-svg .wl{fill:#C9A14A;}
-  .review-card .badge-svg .bone,.progress-card .badge-svg .bone{fill:#FFFFFF;}
-  .review-card .badge-svg .unit,.progress-card .badge-svg .unit{fill:#FFFFFF;}
+/* ---- card parts ---- */
+.vl-badge{position:absolute;top:-10px;right:22px;font-size:11px;font-weight:700;
+  letter-spacing:1.98px;text-transform:uppercase;color:var(--white);background:var(--terra);
+  border-radius:var(--badge-radius);padding:4px 10px}
+.vl-badge.quiet{background:var(--navy)}
+/* Numbers belong here only because the set is a real progression.
+   Do not carry them onto cards that have no order. */
+.vl-num{font-size:28px;font-weight:800;line-height:28px;letter-spacing:-.56px;color:var(--terra);
+  margin:0 0 12px;font-variant-numeric:tabular-nums}
+.vl-tier{font-size:18px;font-weight:800;line-height:28.8px;letter-spacing:-.27px;color:var(--navy);
+  margin:0 0 8px}
+.vl-price{font-size:13px;font-weight:700;line-height:20.8px;color:var(--terra);margin:0 0 14px;
+  font-variant-numeric:tabular-nums}
+.vl-price .was{color:var(--navy-70);font-weight:500;text-decoration:line-through;margin-right:6px}
+.vl-tagline{font-size:13px;font-weight:400;line-height:20.15px;color:var(--navy);margin:0 0 16px}
+/* A rule, not a border on the card: it separates the pitch from the
+   specifics without boxing anything in. */
+.vl-divider{height:1px;background:var(--navy-15);margin:0 0 14px}
+.vl-includes{font-size:11px;font-weight:700;letter-spacing:2.09px;text-transform:uppercase;
+  color:var(--navy);margin:0 0 10px}
+.vl-list{list-style:none;margin:0 0 20px;padding:0}
+.vl-list li{font-size:13px;font-weight:500;line-height:19px;color:var(--navy);
+  padding:4px 0 4px 15px;margin:0 0 2.4px;position:relative}
+/* Custom dot rather than a list marker, so the colour and size are ours
+   and the text hangs properly under itself. */
+.vl-list li::before{content:"";position:absolute;left:0;top:10px;width:5px;height:5px;
+  border-radius:50%;background:var(--terra)}
+
+/* ---- buttons ---- */
+.vl-cta{margin-top:auto;display:block;text-align:center;text-decoration:none;
+  font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  border-radius:var(--btn-radius);padding:14px;min-height:44px;
+  transition:opacity 160ms ease,background 160ms ease}
+.cta-outline{color:var(--navy);border:1px solid var(--navy-50)}
+.cta-outline:hover{background:var(--navy);color:var(--white);border-color:var(--navy)}
+.cta-solid{color:var(--white);background:var(--terra);border:1px solid var(--terra)}
+.cta-solid:hover{background:var(--terra-dark);border-color:var(--terra-dark)}
+.cta-quiet{color:var(--navy-70);border:1px dashed var(--navy-50)}
+.vl-cta:focus-visible{outline:3px solid var(--terra);outline-offset:2px}
+
+/* ---- note under a grid ---- */
+.vl-note{font-size:13px;line-height:19px;color:var(--navy);margin:0}
+.vl-note a{color:var(--terra);font-weight:700;text-decoration:none;border-bottom:1px solid var(--terra)}
+
+/* ---- on a dark or terra ground the cards stay white, but the
+        surrounding type has to switch: terra is 2.36:1 on navy. ---- */
+/* These reach section-level type only. .vl-num lives inside a card, and a
+   card is white on every ground, so it must keep its terra. */
+.band-dark .vl-eyebrow{color:var(--straw-light)}
+.band-dark .vl-headline{color:var(--white)}
+.band-maroon .vl-eyebrow,.band-maroon .vl-headline{color:var(--white)}
+
+@media(max-width:800px){
+  .vl-grid{grid-template-columns:1fr}
+  .vl-cta{margin-top:8px}
+  .vl-headline{font-size:26px;line-height:30px}
+}
+@media print{
+  .vl-card,.vl-card.featured,.vl-card.soon{border:1px solid #000;break-inside:avoid;page-break-inside:avoid}
+  .vl-badge,.cta-solid{background:none;color:#000;border:1px solid #000}
+  .vl-list li::before{background:#000}
+}
+
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .topbar,.site-footer,.rail,.pmeter,.stepdone,.go,.pending{display:none}
+  body{background:#fff;font-size:11.5px}
+  .cols{grid-template-columns:1fr}
+  details.drop{border:0}details.drop > summary::after{content:''}
+  .dropbody{display:block!important}
+}
+</style>
+<style>
+/* ==========================================================================
+   BANDS
+   Her own sites are not white top to bottom. medmasterscollaborative.com
+   runs white, a maroon strip, then tall #060A18 sections. The BIO 004 games
+   page puts white cards on a maroon ground. This page does the same:
+   navy hero, off-white middle, maroon tiles, dark footer.
+   ========================================================================== */
+.band{width:100%}
+.band-dark{background:var(--navy);color:#fff}
+.band-maroon{background:var(--maroon);color:#fff}
+.band-light{background:var(--offwhite)}
+.hwrap{max-width:1180px;margin:0 auto;padding:0 max(16px,3vw)}
+.band-dark h1,.band-dark h2,.band-maroon h2{color:#fff}
+.band-dark :focus-visible,.band-maroon :focus-visible{outline-color:#fff}
+
+/* eyebrow: her signature, tiny and heavy and widely tracked */
+.eyeb{font-family:var(--display);font-weight:700;font-size:.72rem;letter-spacing:.14em;
+      text-transform:uppercase;margin:0 0 .6rem}
+.band-dark .eyeb{color:var(--straw-light)}
+/* straw-light is only 5.96:1 on terra, so the terra band uses white. */
+.band-maroon .eyeb{color:#fff}
+.band-light .eyeb{color:var(--maroon-dark)}
+
+/* ---------- hero ---------- */
+.hero{padding:56px 0 42px}
+.hero h1{font-size:clamp(1.9rem,4.2vw,2.9rem);line-height:1.1;max-width:20ch;margin:0 0 18px;letter-spacing:-.025em}
+.hero h1 .hl{color:var(--gold-bright)}
+.hero .stand{font-size:1.08rem;color:#D6DCE6;max-width:60ch;margin:0 0 14px;line-height:1.65}
+.hero .stand:last-of-type{margin-bottom:28px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btnA,.btnB{display:inline-flex;align-items:center;min-height:48px;padding:12px 24px;
+  border-radius:var(--r-block);font-family:var(--display);font-size:.95rem;font-weight:700;
+  text-decoration:none;border:2px solid transparent}
+/* Hover inverts rather than shifting a shade. Gold-on-navy going to
+   navy-on-gold is unmistakable; gold to straw was not. The border keeps its
+   colour so the button stays visible once its fill matches the band. */
+.btnA{background:var(--gold-bright);border-color:var(--gold-bright);color:#040711}
+.btnA:hover,.btnA:focus-visible{background:var(--navy);color:var(--gold-bright);
+  border-color:var(--gold-bright)}
+.btnB{background:transparent;border-color:#fff;color:#fff}
+.btnB:hover,.btnB:focus-visible{background:#fff;color:var(--navy)}
+.nowcard .btnA{background:var(--terra);border-color:var(--terra);color:#fff}
+.nowcard .btnA:hover,.nowcard .btnA:focus-visible{background:#fff;color:var(--terra);
+  border-color:var(--terra)}
+
+/* ---------- this week: a white card sitting across the band edge ---------- */
+/* This card straddles the edge of the dark band, so it needs a real drop
+   shadow to sit above both grounds rather than butting against them. */
+.nowcard{background:#fff;color:var(--navy);border-radius:var(--r-card);box-shadow:var(--shadow-lift);
+  padding:30px max(20px,2.4vw);margin:0 0 -48px;position:relative;z-index:2;
+  display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
+@media(min-width:860px){.nowcard{grid-template-columns:minmax(0,1fr) auto;align-items:center}}
+.nowcard .eyeb{color:var(--maroon-dark)}
+.nowcard h2{font-size:clamp(1.3rem,2.2vw,1.7rem);color:var(--navy);margin:0 0 10px;max-width:24ch;letter-spacing:-.02em}
+.nowcard p{color:var(--ink-soft);font-size:1rem;margin:0;max-width:54ch}
+.nowmeta{display:flex;gap:24px;flex-wrap:wrap;margin:18px 0 0}
+.nowmeta div{font-size:.92rem;font-weight:600}
+.nowmeta b{display:block;font-family:var(--display);color:var(--maroon-dark);font-size:.66rem;
+  letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:3px}
+.spacer{height:48px}
+
+/* ---------- section heads ---------- */
+.sec{padding:46px 0}
+.sechead{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:start;
+         padding-bottom:18px;margin-bottom:26px;border-bottom:1px solid var(--rule-soft)}
+.band-maroon .sechead{border-bottom-color:rgba(255,255,255,.3)}
+.secnum{font-family:var(--display);font-size:.8rem;font-weight:800;letter-spacing:.14em;
+        padding-top:6px;color:var(--gold-text)}
+.band-maroon .secnum{color:#fff}
+.sechead h2{font-size:clamp(1.3rem,2.2vw,1.65rem);letter-spacing:-.02em;margin:0 0 5px;max-width:26ch}
+.sechead p{font-size:.97rem;color:var(--ink-soft);margin:0;max-width:62ch}
+.band-maroon .sechead p{color:#fff}
+@media(max-width:600px){.sechead{grid-template-columns:1fr;gap:4px}.secnum{padding:0}}
+
+/* ---------- calendar ---------- */
+/* ---------- calendar carousel ----------
+   Without JavaScript all four months render stacked and the control bar
+   stays hidden, so nothing is unreachable. JavaScript then shows the bar
+   and pages one month at a time, opening on the month the term is in. */
+.calbar{display:flex;align-items:center;gap:12px;margin:0 0 16px;max-width:420px}
+.calnav{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;
+  border:1px solid var(--navy-50);background:#fff;border-radius:var(--btn-radius);
+  color:var(--navy);font-size:1.2rem;line-height:1;cursor:pointer;padding:0}
+.calnav:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+.calnow{flex:1;margin:0;text-align:center;font-family:var(--display);font-size:.8rem;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--terra)}
+.calnow .of{display:block;font-family:var(--font);font-size:.72rem;font-weight:600;
+  letter-spacing:normal;text-transform:none;color:var(--navy-70);margin-top:2px}
+.cals{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,336px),1fr));gap:18px;max-width:760px}
+.cals.carousel{display:block;max-width:420px}
+.cal{background:#fff;border-radius:var(--r-card);box-shadow:var(--shadow-rest);padding:18px 16px 12px}
+.cal h3{font-family:var(--display);font-size:.72rem;font-weight:700;letter-spacing:.16em;
+        text-transform:uppercase;color:var(--maroon-dark);margin:0 0 12px;padding-left:4px}
+.cal table{width:100%;border-collapse:collapse;table-layout:fixed}
+.cal th{font-size:.7rem;font-weight:700;color:var(--ink-soft);padding:0 0 6px;text-align:center}
+.cal td{min-height:44px;height:44px;vertical-align:middle;padding:1px;text-align:center}
+.cal .dn{font-size:.86rem;font-weight:600}
+.cal td.day{color:var(--ink-soft);font-size:.86rem}
+.cal td.inwk{padding:0}
+/* The target is the whole 44px cell, the AAA size, not just the numeral. 2.5.8. */
+.cal td.inwk a{display:flex;align-items:center;justify-content:center;width:100%;height:100%;
+  min-height:44px;border-radius:6px;text-decoration:none;color:var(--navy);
+  background:var(--navy-tint);border:1px solid #7C8798}
+.cal td.inwk a:hover{background:var(--straw-light);border-color:var(--gold-text)}
+/* Opens and due are told apart by WHERE the bar sits, not only by its colour,
+   and both are named in each link's accessible name. 1.4.1. */
+.cal td.opens a{border-left:4px solid var(--navy)}
+.cal td.due a{border-bottom:4px solid var(--maroon)}
+.cal td.today a{outline:3px solid var(--maroon);outline-offset:-3px;font-weight:800}
+.callegend{display:flex;gap:18px;flex-wrap:wrap;margin:18px 0 0;font-size:.88rem;color:var(--ink-soft)}
+.callegend span{display:flex;align-items:center;gap:8px}
+.callegend i{width:16px;height:16px;border-radius:4px;background:var(--navy-tint);
+  border:1px solid #7C8798;border-left:4px solid var(--navy)}
+.callegend i.d{border-left:1px solid #7C8798;border-bottom:4px solid var(--maroon)}
+
+/* ---------- the fifteen weeks ---------- */
+/* The current week gets a terra arrow, a wash and a heavier border. Three
+   cues, only one of which is colour, so 1.4.1 holds. The visible tag
+   "This week" is what a screen reader hears. */
+.wklist{display:grid;gap:10px;padding-left:28px}
+@media(max-width:640px){.wklist{padding-left:22px}}
+.wkrow{position:relative;display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:16px;
+  align-items:center;background:#fff;border:1px solid var(--navy-15);border-radius:var(--r-card);
+  box-shadow:var(--shadow-rest);padding:15px 20px;text-decoration:none;color:var(--navy);
+  transition:transform 200ms ease,box-shadow 200ms ease}
+.wkrow:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+.wkrow .no{font-family:var(--display);font-size:1.1rem;font-weight:800;color:var(--gold-text)}
+.wkrow h3{font-size:1rem;font-weight:700;margin:0 0 2px}
+.wkrow p{font-size:.86rem;color:var(--ink-soft);margin:0}
+.wkrow .when{font-size:.84rem;font-weight:700;color:var(--ink-soft);white-space:nowrap}
+.wkrow[data-state="past"]{box-shadow:none;background:#F1F3F5}
+.wkrow[data-state="past"] h3{color:var(--ink-soft)}
+.wkrow[data-state="now"]{background:#EFF0F2;box-shadow:var(--shadow-hover)}
+/* Terra is 6.72:1 on the grey, just under AAA, so the number darkens. */
+.wkrow[data-state="now"] .no{color:var(--terra-dark)}
+.wkrow[data-state="now"]::before{content:"";position:absolute;left:-30px;top:50%;
+  transform:translateY(-50%);width:32px;height:22px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 28'%3E%3Cg fill='none' stroke='%23040711' stroke-width='8.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 23 C 13 23 14 13 28 12'/%3E%3Cpath d='M28 5 L38 12 L28 19'/%3E%3C/g%3E%3Cg fill='none' stroke='%23DCB45C' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 23 C 13 23 14 13 28 12'/%3E%3Cpath d='M28 5 L38 12 L28 19'/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat}
+@media(max-width:640px){.wkrow[data-state="now"]::before{left:-26px;width:25px;height:17px}}
+.tagnow{font-family:var(--display);font-size:.62rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;background:var(--maroon);color:#fff;border-radius:99px;
+  padding:3px 10px;margin-left:9px;white-space:nowrap}
+@media(max-width:640px){.wkrow{grid-template-columns:38px minmax(0,1fr)}.wkrow .when{grid-column:2}}
+
+/* ---------- app tiles, the BIO 004 games pattern ---------- */
+.tiles{display:grid;gap:1.05rem;grid-template-columns:repeat(auto-fill,minmax(238px,1fr))}
+.tile{background:#fff;color:var(--navy);border-radius:var(--r-card);box-shadow:var(--shadow-rest);
+  padding:1.4rem 1.3rem 1.2rem;display:flex;flex-direction:column;text-decoration:none;
+  transition:transform 200ms ease,box-shadow 200ms ease}
+.tile:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+.appicon{width:74px;height:74px;border-radius:18px;display:grid;place-items:center;
+  background:var(--navy);margin-bottom:1rem;box-shadow:var(--shadow-rest)}
+.appicon svg{width:46px;height:46px;display:block}
+.chip{display:inline-block;font-family:var(--display);font-weight:700;font-size:.64rem;
+  letter-spacing:.12em;text-transform:uppercase;border-radius:99px;padding:.24rem .64rem;
+  margin-bottom:.6rem;background:var(--navy-tint);color:var(--navy);align-self:flex-start}
+.tile h3{font-size:1.16rem;margin:0 0 .4rem}
+.tile p{font-size:.94rem;color:var(--ink-soft);margin:0 0 1.1rem}
+.tile .open{margin-top:auto;font-family:var(--display);font-weight:700;font-size:.9rem;color:var(--maroon)}
 </style>
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
 
-<header class="site-header">
-  <div class="site-header-inner">
-    <a href="https://drsrennie-stack.github.io/new-build-bio4-solano/index.html" class="site-logo" target="_top" aria-label="BIO 004 Human Anatomy, course home">
-      <svg viewBox="40 10 125 148" role="img" aria-hidden="true" focusable="false">
-        <g transform="translate(0, 18)">
-          <g transform="translate(60, 0) rotate(8 0 130)">
-            <circle cx="0" cy="20" r="10" fill="#0B1530"/>
-            <path d="M 0,32 C -10,32 -16,36 -16,42 C -16,55 -13,68 -11,82 C -10,100 -12,118 -14,130 L 14,130 C 12,118 10,100 11,82 C 13,68 16,55 16,42 C 16,36 10,32 0,32 Z" fill="#0B1530"/>
-          </g>
-          <g transform="translate(100, 0)">
-            <circle cx="0" cy="10" r="11" fill="#8B3A2E"/>
-            <path d="M 0,22 C -11,22 -17,26 -17,34 C -17,52 -14,70 -12,86 C -11,108 -13,122 -15,132 L 15,132 C 13,122 11,108 12,86 C 14,70 17,52 17,34 C 17,26 11,22 0,22 Z" fill="#8B3A2E"/>
-          </g>
-          <g transform="translate(140, 0) rotate(-8 0 130)">
-            <circle cx="0" cy="20" r="10" fill="#C9A14A"/>
-            <path d="M 0,32 C -10,32 -16,36 -16,42 C -16,55 -13,68 -11,82 C -10,100 -12,118 -14,130 L 14,130 C 12,118 10,100 11,82 C 13,68 16,55 16,42 C 16,36 10,32 0,32 Z" fill="#C9A14A"/>
-          </g>
-        </g>
-      </svg>
-      <span class="logo-text">
-        <span class="logo-title">Human <span class="logo-accent">Anatomy</span></span>
-        <span class="logo-sub">BIO 004 &middot; Solano Community College</span>
-      </span>
+<a class="skip" href="#main">Skip to the main content</a>
+<header class="topbar">
+  <div class="tb">
+    <a class="brand" href="index.html" target="_top">
+      <svg viewBox="40 10 125 148" aria-hidden="true" focusable="false"><g transform="translate(0,18)"><g transform="translate(60,0) rotate(8 0 130)"><circle cx="0" cy="20" r="10" fill="#040711"/><path d="M 0,32 C -10,32 -16,36 -16,42 C -16,55 -13,68 -11,82 C -10,100 -12,118 -14,130 L 14,130 C 12,118 10,100 11,82 C 13,68 16,55 16,42 C 16,36 10,32 0,32 Z" fill="#040711"/></g><g transform="translate(100,0)"><circle cx="0" cy="10" r="11" fill="#8B3A2E"/><path d="M 0,22 C -11,22 -17,26 -17,34 C -17,52 -14,70 -12,86 C -11,108 -13,122 -15,132 L 15,132 C 13,122 11,108 12,86 C 14,70 17,52 17,34 C 17,26 11,22 0,22 Z" fill="#8B3A2E"/></g><g transform="translate(140,0) rotate(-8 0 130)"><circle cx="0" cy="20" r="10" fill="#DCB45C"/><path d="M 0,32 C -10,32 -16,36 -16,42 C -16,55 -13,68 -11,82 C -10,100 -12,118 -14,130 L 14,130 C 12,118 10,100 11,82 C 13,68 16,55 16,42 C 16,36 10,32 0,32 Z" fill="#DCB45C"/></g></g></svg>
+      <span><b>BIO 005</b><i>Human Physiology</i></span>
     </a>
+    <nav class="mainnav" aria-label="Course sections">
+      <a href="index.html" target="_top" aria-current="page">Home</a>
+      <a href="welcome.html" target="_top" >This week</a>
+      <a href="week-01.html" target="_top">Lecture</a>
+      <a href="clinical-physiology-lab-manual.html" target="_top">Lab</a>
+      <a href="competency-recall.html" target="_top">Study</a>
+      <a href="course-schedule.html" target="_top">Schedule</a>
+      <a href="start-here.html" target="_top">Admin</a>
+    </nav>
   </div>
 </header>
 
-<div class="wrap">
 
-  <main id="main">
+<main id="main">
 
-    <!-- ============ HUB ============ -->
-    <section id="hub" aria-label="Anatomy Loops practice">
+  <div class="band band-dark">
+    <div class="hwrap">
+      <section class="hero" aria-labelledby="h-hero">
+        <p class="eyeb">BIO 005 &middot; Yuba College &middot; Fall 2026 &middot; Fully online</p>
+        <h1 id="h-hero">Human Physiology,<br><span class="hl">an integrative approach</span></h1>
+        <p class="stand">Physiology is the study of how the living body actually works. Not what the
+          parts are called, but what they do, how they do it, and what happens when they stop.
+          Over fifteen weeks you will work up from a single cell to the whole person: how a cell
+          moves things across its membrane, how a nerve fires, how a muscle pulls, how the heart
+          pumps, how the lung and the kidney keep your blood chemistry inside the narrow range
+          your cells can survive.</p>
+        <p class="stand">The word that ties it together is <strong>integrative</strong>. No organ
+          works alone. Hold your breath and your kidney hears about it. Stand up too fast and your
+          heart, your blood vessels and your brain all respond within a second. You will spend the
+          term learning to trace those connections rather than memorising the parts separately.</p>
+        <div class="ctas">
+          <a class="btnA" href="#thisweek">Go to this week</a>
+          <a class="btnB" href="syllabus-fall2026.html" target="_top">How this course works</a>
+        </div>
+      </section>
 
-      <div class="cover">
-        <div class="cover-grid">
-          <div class="cover-main">
-            <p class="cover-eyebrow">BIO 004 &middot; Lab Practical Practice</p>
-            <svg class="cover-logo-mark" viewBox="40 10 125 148" role="img" aria-label="Human Anatomy" focusable="false">
-              <g transform="translate(0,18)">
-                <g transform="translate(60,0) rotate(8 0 130)">
-                  <circle cx="0" cy="20" r="10" fill="#FFFFFF"/>
-                  <path d="M0,32 C-10,32 -16,36 -16,42 C-16,55 -13,68 -11,82 C-10,100 -12,118 -14,130 L14,130 C12,118 10,100 11,82 C13,68 16,55 16,42 C16,36 10,32 0,32 Z" fill="#FFFFFF"/>
-                </g>
-                <g transform="translate(100,0)">
-                  <circle cx="0" cy="10" r="11" fill="#C2734D"/>
-                  <path d="M0,22 C-11,22 -17,26 -17,34 C-17,52 -14,70 -12,86 C-11,108 -13,122 -15,132 L15,132 C13,122 11,108 12,86 C14,70 17,52 17,34 C17,26 11,22 0,22 Z" fill="#C2734D"/>
-                </g>
-                <g transform="translate(140,0) rotate(-8 0 130)">
-                  <circle cx="0" cy="20" r="10" fill="#C9A14A"/>
-                  <path d="M0,32 C-10,32 -16,36 -16,42 C-16,55 -13,68 -11,82 C-10,100 -12,118 -14,130 L14,130 C12,118 10,100 11,82 C13,68 16,55 16,42 C16,36 10,32 0,32 Z" fill="#C9A14A"/>
-                </g>
-              </g>
-            </svg>
-            <h2 class="cover-title">Anatomy <span>Loops</span></h2>
-            <p class="cover-tag">Practice the lab practical the way you are tested: a prompt, a countdown, then the key. Pick a loop and press play.</p>
-            <a class="cover-cta" href="https://www.loom.com/share/0da97e88267a46aa9dac209a59d832b2" target="_blank" rel="noopener">&#9658; Watch the how-to video</a>
-          </div>
-          <div class="cover-qr">
-            <img src="images/qr.png" alt="QR code to open Anatomy Loops on your phone">
-            <span class="cover-qr-cap">Scan to practice at home</span>
+      <section id="thisweek" class="nowcard" aria-labelledby="h-now">
+        <div>
+          <p class="eyeb" id="nowk">Week 1 of 15</p>
+          <h2 id="h-now"><span id="nowtitle">How physiology works and what keeps you steady</span></h2>
+          <p id="nowline">This week opens Tuesday September 8.</p>
+          <div class="nowmeta">
+            <div><b>Opens</b><span id="nowopen">Tuesday September 8</span></div>
+            <div><b>Everything due</b><span id="nowdue">Sunday September 13, 11:59 pm</span></div>
           </div>
         </div>
-      </div>
+        <a class="btnA" id="nowgo" href="week-01.html" target="_top">Open week 1</a>
+      </section>
+    </div>
+  </div>
 
-      <p class="section-label">Choose a loop</p>
-      <div class="grid" id="loopGrid"></div>
-    </section>
+  <div class="band band-light">
+    <div class="hwrap">
+      <div class="spacer"></div>
 
-    <!-- ============ PLAYER ============ -->
-    <section class="player" id="player" hidden aria-label="Loop player">
-      <div class="pbar">
-        <button class="back" id="backBtn" type="button">&larr; All loops</button>
-        <span class="ploop-title" id="playerTitle"></span>
-      </div>
-
-      <div class="controls" role="group" aria-label="Playback settings">
-        <div class="field">
-          <label for="lenSel">How many</label>
-          <select id="lenSel" aria-label="How many cards this session">
-            <option value="all" selected>All</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="qSel">Guess time</label>
-          <select id="qSel" aria-label="Seconds to show the question">
-            <option value="10">10 seconds</option>
-            <option value="15">15 seconds</option>
-            <option value="20">20 seconds</option>
-            <option value="30" selected>30 seconds</option>
-            <option value="45">45 seconds</option>
-            <option value="60">60 seconds</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="aSel">Answer key</label>
-          <select id="aSel" aria-label="Seconds to show the answer key">
-            <option value="3">3 seconds</option>
-            <option value="5">5 seconds</option>
-            <option value="8">8 seconds</option>
-            <option value="10">10 seconds</option>
-            <option value="15" selected>15 seconds</option>
-            <option value="20">20 seconds</option>
-          </select>
-        </div>
-        <label class="toggle"><input type="checkbox" id="practiceChk" checked> Practice (type &amp; score)</label>
-        <label class="toggle"><input type="checkbox" id="timedChk"> Timed</label>
-        <label class="toggle"><input type="checkbox" id="shuffleChk"> Shuffle</label>
-      </div>
-
-      <div class="stage" id="stage">
-        <div class="phasebar">
-          <span class="phase question" id="phaseLabel"><span class="dot"></span><span id="phaseText">Question</span></span>
-          <span class="pb-right">
-            <span class="score" id="score" hidden>&#10003; <span id="scoreNum">0</span> / <span id="scoreSeen">0</span></span>
-            <span class="progress" id="progress">1 / 1</span>
-          </span>
-        </div>
-        <div class="coach" id="coach" hidden></div>
-        <div class="imgwrap">
-          <img id="slideImg" alt="" src="">
-          <div class="title-card" id="titleCard">
-            <svg class="tc-logo" viewBox="40 10 125 148" role="img" aria-label="Human Anatomy" focusable="false">
-              <g transform="translate(0,18)">
-                <g transform="translate(60,0) rotate(8 0 130)"><circle cx="0" cy="20" r="10" fill="#0B1530"/><path d="M0,32 C-10,32 -16,36 -16,42 C-16,55 -13,68 -11,82 C-10,100 -12,118 -14,130 L14,130 C12,118 10,100 11,82 C13,68 16,55 16,42 C16,36 10,32 0,32 Z" fill="#0B1530"/></g>
-                <g transform="translate(100,0)"><circle cx="0" cy="10" r="11" fill="#8B3A2E"/><path d="M0,22 C-11,22 -17,26 -17,34 C-17,52 -14,70 -12,86 C-11,108 -13,122 -15,132 L15,132 C13,122 11,108 12,86 C14,70 17,52 17,34 C17,26 11,22 0,22 Z" fill="#8B3A2E"/></g>
-                <g transform="translate(140,0) rotate(-8 0 130)"><circle cx="0" cy="20" r="10" fill="#C9A14A"/><path d="M0,32 C-10,32 -16,36 -16,42 C-16,55 -13,68 -11,82 C-10,100 -12,118 -14,130 L14,130 C12,118 10,100 11,82 C13,68 16,55 16,42 C16,36 10,32 0,32 Z" fill="#C9A14A"/></g>
-              </g>
-            </svg>
-            <p class="tc-eyebrow">BIO 004 &middot; Lab Practical Practice</p>
-            <h3 class="tc-title" id="tcTitle"></h3>
-            <p class="tc-sub" id="tcSub"></p>
-            <p class="tc-meta" id="tcMeta"></p>
-            <p class="tc-hint">Press play to begin</p>
-          </div>
-          <div class="timer" id="timer" aria-hidden="true">
-            <svg width="60" height="60" viewBox="0 0 60 60">
-              <circle class="track" cx="30" cy="30" r="26" fill="none" stroke-width="6"></circle>
-              <circle class="arc" id="arc" cx="30" cy="30" r="26" fill="none" stroke-width="6" stroke-linecap="round"></circle>
-            </svg>
-            <span class="num" id="timerNum">30</span>
-          </div>
-          <div class="results-card" id="resultsCard">
-            <p class="rc-eyebrow">Your score</p>
-            <p class="rc-score" id="rcScore">0 / 0</p>
-            <p class="rc-pct" id="rcPct"></p>
-            <p class="rc-time" id="rcTime" hidden></p>
-            <p class="rc-trend" id="rcTrend"></p>
-            <p class="rc-msg" id="rcMsg"></p>
-            <div class="rc-history" id="rcHistory"></div>
-            <div class="rc-actions">
-              <button class="rbtn primary" id="rcRestart" type="button">Practice again</button>
-              <button class="rbtn ghost" id="rcBack" type="button">All loops</button>
-            </div>
+      <section class="sec" aria-labelledby="h-cal">
+        <div class="sechead">
+          <p class="secnum"><span class="vh">Section </span>02</p>
+          <div>
+            <h2 id="h-cal">The calendar</h2>
+            <p>Every day of the term links to the week it belongs to. Use it to go back and pick up
+              anything you missed, or to look ahead at what is coming.</p>
+            <p class="vh">The calendar shows one month at a time. Use the previous and next month
+              buttons, or the left and right arrow keys while a month button has focus. Every week
+              is also listed in full further down this page, under All fifteen weeks.</p>
           </div>
         </div>
-        <div class="caption" id="caption">
-          <p class="cap-q" id="capQ" hidden></p>
-          <p class="cap-main" id="capMain"></p>
+        <div class="calbar" id="calbar" hidden>
+          <button type="button" class="calnav" id="calprev" aria-controls="cals"
+                  aria-label="Previous month"><span aria-hidden="true">&lsaquo;</span></button>
+          <p class="calnow" id="calnow" aria-live="polite" aria-atomic="true"></p>
+          <button type="button" class="calnav" id="calnext" aria-controls="cals"
+                  aria-label="Next month"><span aria-hidden="true">&rsaquo;</span></button>
         </div>
-        <div class="answerbar" id="answerbar">
-          <input id="answerInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type your answer, then reveal to check it" aria-label="Type your answer">
-        </div>
-        <div class="selfcheck" id="selfcheck">
-          <span class="sc-typed" id="scTyped"></span>
-          <span class="sc-label">How did you do?</span>
-          <button class="sc-btn sc-again" id="scAgain" type="button">Again</button>
-          <button class="sc-btn sc-hard" id="scHard" type="button">Hard</button>
-          <button class="sc-btn sc-good" id="scGood" type="button">Good</button>
-          <button class="sc-btn sc-easy" id="scEasy" type="button">Easy</button>
-        </div>
-        <div class="transport">
-          <button class="tbtn" id="prevBtn" type="button">&#9664; Prev</button>
-          <button class="tbtn play" id="playBtn" type="button">&#9658; Play</button>
-          <button class="tbtn" id="nextBtn" type="button">Next &#9654;</button>
-          <button class="tbtn" id="revealBtn" type="button">Reveal answer</button>
-          <button class="tbtn" id="scoreBtn" type="button">See score</button>
-          <button class="tbtn" id="restartBtn" type="button">&#8635; Restart</button>
-        </div>
-      </div>
-      <p class="hint">Keyboard: Space = play / pause &middot; &larr; &rarr; = previous / next &middot; Enter = reveal answer</p>
-      <p class="visually-hidden" role="status" aria-live="polite" id="live"></p>
-    </section>
+        <div class="cals" id="cals"><div class="cal"><h3>September</h3><table><caption class="vh">September 2026, every day links to its course week</caption><thead><tr><th scope="col"><span aria-hidden="true">Mo</span><span class="vh">Monday</span></th><th scope="col"><span aria-hidden="true">Tu</span><span class="vh">Tuesday</span></th><th scope="col"><span aria-hidden="true">We</span><span class="vh">Wednesday</span></th><th scope="col"><span aria-hidden="true">Th</span><span class="vh">Thursday</span></th><th scope="col"><span aria-hidden="true">Fr</span><span class="vh">Friday</span></th><th scope="col"><span aria-hidden="true">Sa</span><span class="vh">Saturday</span></th><th scope="col"><span aria-hidden="true">Su</span><span class="vh">Sunday</span></th></tr></thead><tbody><tr><td class="pad"></td><td class="day" data-date="2026-09-01">1</td><td class="day" data-date="2026-09-02">2</td><td class="day" data-date="2026-09-03">3</td><td class="day" data-date="2026-09-04">4</td><td class="day" data-date="2026-09-05">5</td><td class="day" data-date="2026-09-06">6</td></tr><tr><td class="day" data-date="2026-09-07">7</td><td class="day inwk opens" data-date="2026-09-08"><a href="week-01.html" target="_top" aria-label="September 8. Week 1, How physiology works and what keeps you steady. Week 1 opens"><span class="dn">8</span></a></td><td class="day inwk" data-date="2026-09-09"><a href="week-01.html" target="_top" aria-label="September 9. Week 1, How physiology works and what keeps you steady"><span class="dn">9</span></a></td><td class="day inwk" data-date="2026-09-10"><a href="week-01.html" target="_top" aria-label="September 10. Week 1, How physiology works and what keeps you steady"><span class="dn">10</span></a></td><td class="day inwk" data-date="2026-09-11"><a href="week-01.html" target="_top" aria-label="September 11. Week 1, How physiology works and what keeps you steady"><span class="dn">11</span></a></td><td class="day inwk" data-date="2026-09-12"><a href="week-01.html" target="_top" aria-label="September 12. Week 1, How physiology works and what keeps you steady"><span class="dn">12</span></a></td><td class="day inwk due" data-date="2026-09-13"><a href="week-01.html" target="_top" aria-label="September 13. Week 1, How physiology works and what keeps you steady. Week 1 work is due, 11:59 pm"><span class="dn">13</span></a></td></tr><tr><td class="day inwk opens" data-date="2026-09-14"><a href="week-02.html" target="_top" aria-label="September 14. Week 2, The chemistry that does work in the body. Week 2 opens"><span class="dn">14</span></a></td><td class="day inwk" data-date="2026-09-15"><a href="week-02.html" target="_top" aria-label="September 15. Week 2, The chemistry that does work in the body"><span class="dn">15</span></a></td><td class="day inwk" data-date="2026-09-16"><a href="week-02.html" target="_top" aria-label="September 16. Week 2, The chemistry that does work in the body"><span class="dn">16</span></a></td><td class="day inwk" data-date="2026-09-17"><a href="week-02.html" target="_top" aria-label="September 17. Week 2, The chemistry that does work in the body"><span class="dn">17</span></a></td><td class="day inwk" data-date="2026-09-18"><a href="week-02.html" target="_top" aria-label="September 18. Week 2, The chemistry that does work in the body"><span class="dn">18</span></a></td><td class="day inwk" data-date="2026-09-19"><a href="week-02.html" target="_top" aria-label="September 19. Week 2, The chemistry that does work in the body"><span class="dn">19</span></a></td><td class="day inwk due" data-date="2026-09-20"><a href="week-02.html" target="_top" aria-label="September 20. Week 2, The chemistry that does work in the body. Week 2 work is due, 11:59 pm"><span class="dn">20</span></a></td></tr><tr><td class="day inwk opens" data-date="2026-09-21"><a href="week-03.html" target="_top" aria-label="September 21. Week 3, Getting across the membrane. Week 3 opens"><span class="dn">21</span></a></td><td class="day inwk" data-date="2026-09-22"><a href="week-03.html" target="_top" aria-label="September 22. Week 3, Getting across the membrane"><span class="dn">22</span></a></td><td class="day inwk" data-date="2026-09-23"><a href="week-03.html" target="_top" aria-label="September 23. Week 3, Getting across the membrane"><span class="dn">23</span></a></td><td class="day inwk" data-date="2026-09-24"><a href="week-03.html" target="_top" aria-label="September 24. Week 3, Getting across the membrane"><span class="dn">24</span></a></td><td class="day inwk" data-date="2026-09-25"><a href="week-03.html" target="_top" aria-label="September 25. Week 3, Getting across the membrane"><span class="dn">25</span></a></td><td class="day inwk" data-date="2026-09-26"><a href="week-03.html" target="_top" aria-label="September 26. Week 3, Getting across the membrane"><span class="dn">26</span></a></td><td class="day inwk due" data-date="2026-09-27"><a href="week-03.html" target="_top" aria-label="September 27. Week 3, Getting across the membrane. Week 3 work is due, 11:59 pm"><span class="dn">27</span></a></td></tr><tr><td class="day inwk opens" data-date="2026-09-28"><a href="week-04.html" target="_top" aria-label="September 28. Week 4, How cells talk, and the electrical signal. Week 4 opens"><span class="dn">28</span></a></td><td class="day inwk" data-date="2026-09-29"><a href="week-04.html" target="_top" aria-label="September 29. Week 4, How cells talk, and the electrical signal"><span class="dn">29</span></a></td><td class="day inwk" data-date="2026-09-30"><a href="week-04.html" target="_top" aria-label="September 30. Week 4, How cells talk, and the electrical signal"><span class="dn">30</span></a></td><td class="pad"></td><td class="pad"></td><td class="pad"></td><td class="pad"></td></tr></tbody></table></div><div class="cal"><h3>October</h3><table><caption class="vh">October 2026, every day links to its course week</caption><thead><tr><th scope="col"><span aria-hidden="true">Mo</span><span class="vh">Monday</span></th><th scope="col"><span aria-hidden="true">Tu</span><span class="vh">Tuesday</span></th><th scope="col"><span aria-hidden="true">We</span><span class="vh">Wednesday</span></th><th scope="col"><span aria-hidden="true">Th</span><span class="vh">Thursday</span></th><th scope="col"><span aria-hidden="true">Fr</span><span class="vh">Friday</span></th><th scope="col"><span aria-hidden="true">Sa</span><span class="vh">Saturday</span></th><th scope="col"><span aria-hidden="true">Su</span><span class="vh">Sunday</span></th></tr></thead><tbody><tr><td class="pad"></td><td class="pad"></td><td class="pad"></td><td class="day inwk" data-date="2026-10-01"><a href="week-04.html" target="_top" aria-label="October 1. Week 4, How cells talk, and the electrical signal"><span class="dn">1</span></a></td><td class="day inwk" data-date="2026-10-02"><a href="week-04.html" target="_top" aria-label="October 2. Week 4, How cells talk, and the electrical signal"><span class="dn">2</span></a></td><td class="day inwk" data-date="2026-10-03"><a href="week-04.html" target="_top" aria-label="October 3. Week 4, How cells talk, and the electrical signal"><span class="dn">3</span></a></td><td class="day inwk due" data-date="2026-10-04"><a href="week-04.html" target="_top" aria-label="October 4. Week 4, How cells talk, and the electrical signal. Week 4 work is due, 11:59 pm"><span class="dn">4</span></a></td></tr><tr><td class="day inwk opens" data-date="2026-10-05"><a href="week-05.html" target="_top" aria-label="October 5. Week 5, Synapses and central integration. Week 5 opens"><span class="dn">5</span></a></td><td class="day inwk" data-date="2026-10-06"><a href="week-05.html" target="_top" aria-label="October 6. Week 5, Synapses and central integration"><span class="dn">6</span></a></td><td class="day inwk" data-date="2026-10-07"><a href="week-05.html" target="_top" aria-label="October 7. Week 5, Synapses and central integration"><span class="dn">7</span></a></td><td class="day inwk" data-date="2026-10-08"><a href="week-05.html" target="_top" aria-label="October 8. Week 5, Synapses and central integration"><span class="dn">8</span></a></td><td class="day inwk" data-date="2026-10-09"><a href="week-05.html" target="_top" aria-label="October 9. Week 5, Synapses and central integration"><span class="dn">9</span></a></td><td class="day inwk" data-date="2026-10-10"><a href="week-05.html" target="_top" aria-label="October 10. Week 5, Synapses and central integration"><span class="dn">10</span></a></td><td class="day inwk due" data-date="2026-10-11"><a href="week-05.html" target="_top" aria-label="October 11. Week 5, Synapses and central integration. Week 5 work is due, 11:59 pm"><span class="dn">11</span></a></td></tr><tr><td class="day inwk opens" data-date="2026-10-12"><a href="week-06.html" target="_top" aria-label="October 12. Week 6, Sensing the world, and the responses you do not control. Week 6 opens"><span class="dn">12</span></a></td><td class="day inwk" data-date="2026-10-13"><a href="week-06.html" target="_top" aria-label="October 13. Week 6, Sensing the world, and the responses you do not control"><span class="dn">13</span></a></td><td class="day inwk" data-date="2026-10-14"><a href="week-06.html" target="_top" aria-label="October 14. Week 6, Sensing the world, and the responses you do not control"><span class="dn">14</span></a></td><td class="day inwk" data-date="2026-10-15"><a href="week-06.html" target="_top" aria-label="October 15. Week 6, Sensing the world, and the responses you do not control"><span class="dn">15</span></a></td><td class="day inwk" data-date="2026-10-16"><a href="week-06.html" target="_top" aria-label="October 16. Week 6, Sensing the world, and the responses you do not control"><span class="dn">16</span></a></td><td class="day inwk" data-date="2026-10-17"><a href="week-06.html" target="_top" aria-label="October 17. Week 6, Sensing the world, and the responses you do not control"><span class="dn">17</span></a></td><td class="day inwk due" data-date="2026-10-18"><a href="week-06.html" target="_top" aria-label="October 18. Week 6, Sensing the world, and the responses you do not control. Week 6 work is due, 11:59 pm"><span class="dn">18</span></a></td></tr><tr><td class="day inwk opens" data-date="2026-10-19"><a href="week-07.html" target="_top" aria-label="October 19. Week 7, Muscle, and how movement gets commanded. Week 7 opens"><span class="dn">19</span></a></td><td class="day inwk" data-date="2026-10-20"><a href="week-07.html" target="_top" aria-label="October 20. Week 7, Muscle, and how movement gets commanded"><span class="dn">20</span></a></td><td class="day inwk" data-date="2026-10-21"><a href="week-07.html" target="_top" aria-label="October 21. Week 7, Muscle, and how movement gets commanded"><span class="dn">21</span></a></td><td class="day inwk" data-date="2026-10-22"><a href="week-07.html" target="_top" aria-label="October 22. Week 7, Muscle, and how movement gets commanded"><span class="dn">22</span></a></td><td class="day inwk" data-date="2026-10-23"><a href="week-07.html" target="_top" aria-label="October 23. Week 7, Muscle, and how movement gets commanded"><span class="dn">23</span></a></td><td class="day inwk" data-date="2026-10-24"><a href="week-07.html" target="_top" aria-label="October 24. Week 7, Muscle, and how movement gets commanded"><span class="dn">24</span></a></td><td class="day inwk due" data-date="2026-10-25"><a href="week-07.html" target="_top" aria-label="October 25. Week 7, Muscle, and how movement gets commanded. Week 7 work is due, 11:59 pm"><span class="dn">25</span></a></td></tr><tr><td class="day inwk opens" data-date="2026-10-26"><a href="week-08.html" target="_top" aria-label="October 26. Week 8, Hormones and reproduction, the slow control system. Week 8 opens"><span class="dn">26</span></a></td><td class="day inwk" data-date="2026-10-27"><a href="week-08.html" target="_top" aria-label="October 27. Week 8, Hormones and reproduction, the slow control system"><span class="dn">27</span></a></td><td class="day inwk" data-date="2026-10-28"><a href="week-08.html" target="_top" aria-label="October 28. Week 8, Hormones and reproduction, the slow control system"><span class="dn">28</span></a></td><td class="day inwk" data-date="2026-10-29"><a href="week-08.html" target="_top" aria-label="October 29. Week 8, Hormones and reproduction, the slow control system"><span class="dn">29</span></a></td><td class="day inwk" data-date="2026-10-30"><a href="week-08.html" target="_top" aria-label="October 30. Week 8, Hormones and reproduction, the slow control system"><span class="dn">30</span></a></td><td class="day inwk" data-date="2026-10-31"><a href="week-08.html" target="_top" aria-label="October 31. Week 8, Hormones and reproduction, the slow control system"><span class="dn">31</span></a></td><td class="pad"></td></tr></tbody></table></div><div class="cal"><h3>November</h3><table><caption class="vh">November 2026, every day links to its course week</caption><thead><tr><th scope="col"><span aria-hidden="true">Mo</span><span class="vh">Monday</span></th><th scope="col"><span aria-hidden="true">Tu</span><span class="vh">Tuesday</span></th><th scope="col"><span aria-hidden="true">We</span><span class="vh">Wednesday</span></th><th scope="col"><span aria-hidden="true">Th</span><span class="vh">Thursday</span></th><th scope="col"><span aria-hidden="true">Fr</span><span class="vh">Friday</span></th><th scope="col"><span aria-hidden="true">Sa</span><span class="vh">Saturday</span></th><th scope="col"><span aria-hidden="true">Su</span><span class="vh">Sunday</span></th></tr></thead><tbody><tr><td class="pad"></td><td class="pad"></td><td class="pad"></td><td class="pad"></td><td class="pad"></td><td class="pad"></td><td class="day inwk due" data-date="2026-11-01"><a href="week-08.html" target="_top" aria-label="November 1. Week 8, Hormones and reproduction, the slow control system. Week 8 work is due, 11:59 pm"><span class="dn">1</span></a></td></tr><tr><td class="day inwk opens" data-date="2026-11-02"><a href="week-09.html" target="_top" aria-label="November 2. Week 9, The heart as a pump. Week 9 opens"><span class="dn">2</span></a></td><td class="day inwk" data-date="2026-11-03"><a href="week-09.html" target="_top" aria-label="November 3. Week 9, The heart as a pump"><span class="dn">3</span></a></td><td class="day inwk" data-date="2026-11-04"><a href="week-09.html" target="_top" aria-label="November 4. Week 9, The heart as a pump"><span class="dn">4</span></a></td><td class="day inwk" data-date="2026-11-05"><a href="week-09.html" target="_top" aria-label="November 5. Week 9, The heart as a pump"><span class="dn">5</span></a></td><td class="day inwk" data-date="2026-11-06"><a href="week-09.html" target="_top" aria-label="November 6. Week 9, The heart as a pump"><span class="dn">6</span></a></td><td class="day inwk" data-date="2026-11-07"><a href="week-09.html" target="_top" aria-label="November 7. Week 9, The heart as a pump"><span class="dn">7</span></a></td><td class="day inwk due" data-date="2026-11-08"><a href="week-09.html" target="_top" aria-label="November 8. Week 9, The heart as a pump. Week 9 work is due, 11:59 pm"><span class="dn">8</span></a></td></tr><tr><td class="day inwk opens" data-date="2026-11-09"><a href="week-10.html" target="_top" aria-label="November 9. Week 10, Pressure, flow, and holding blood pressure steady. Week 10 opens"><span class="dn">9</span></a></td><td class="day inwk" data-date="2026-11-10"><a href="week-10.html" target="_top" aria-label="November 10. Week 10, Pressure, flow, and holding blood pressure steady"><span class="dn">10</span></a></td><td class="day inwk" data-date="2026-11-11"><a href="week-10.html" target="_top" aria-label="November 11. Week 10, Pressure, flow, and holding blood pressure steady"><span class="dn">11</span></a></td><td class="day inwk" data-date="2026-11-12"><a href="week-10.html" target="_top" aria-label="November 12. Week 10, Pressure, flow, and holding blood pressure steady"><span class="dn">12</span></a></td><td class="day inwk" data-date="2026-11-13"><a href="week-10.html" target="_top" aria-label="November 13. Week 10, Pressure, flow, and holding blood pressure steady"><span class="dn">13</span></a></td><td class="day inwk" data-date="2026-11-14"><a href="week-10.html" target="_top" aria-label="November 14. Week 10, Pressure, flow, and holding blood pressure steady"><span class="dn">14</span></a></td><td class="day inwk due" data-date="2026-11-15"><a href="week-10.html" target="_top" aria-label="November 15. Week 10, Pressure, flow, and holding blood pressure steady. Week 10 work is due, 11:59 pm"><span class="dn">15</span></a></td></tr><tr><td class="day inwk opens" data-date="2026-11-16"><a href="week-11.html" target="_top" aria-label="November 16. Week 11, Blood and how the body defends itself. Week 11 opens"><span class="dn">16</span></a></td><td class="day inwk" data-date="2026-11-17"><a href="week-11.html" target="_top" aria-label="November 17. Week 11, Blood and how the body defends itself"><span class="dn">17</span></a></td><td class="day inwk" data-date="2026-11-18"><a href="week-11.html" target="_top" aria-label="November 18. Week 11, Blood and how the body defends itself"><span class="dn">18</span></a></td><td class="day inwk" data-date="2026-11-19"><a href="week-11.html" target="_top" aria-label="November 19. Week 11, Blood and how the body defends itself"><span class="dn">19</span></a></td><td class="day inwk" data-date="2026-11-20"><a href="week-11.html" target="_top" aria-label="November 20. Week 11, Blood and how the body defends itself"><span class="dn">20</span></a></td><td class="day inwk" data-date="2026-11-21"><a href="week-11.html" target="_top" aria-label="November 21. Week 11, Blood and how the body defends itself"><span class="dn">21</span></a></td><td class="day inwk due" data-date="2026-11-22"><a href="week-11.html" target="_top" aria-label="November 22. Week 11, Blood and how the body defends itself. Week 11 work is due, 11:59 pm"><span class="dn">22</span></a></td></tr><tr><td class="day inwk opens" data-date="2026-11-23"><a href="week-12.html" target="_top" aria-label="November 23. Week 12, Digestion, and how you use food for fuel. Week 12 opens"><span class="dn">23</span></a></td><td class="day inwk" data-date="2026-11-24"><a href="week-12.html" target="_top" aria-label="November 24. Week 12, Digestion, and how you use food for fuel"><span class="dn">24</span></a></td><td class="day inwk" data-date="2026-11-25"><a href="week-12.html" target="_top" aria-label="November 25. Week 12, Digestion, and how you use food for fuel"><span class="dn">25</span></a></td><td class="day inwk" data-date="2026-11-26"><a href="week-12.html" target="_top" aria-label="November 26. Week 12, Digestion, and how you use food for fuel"><span class="dn">26</span></a></td><td class="day inwk" data-date="2026-11-27"><a href="week-12.html" target="_top" aria-label="November 27. Week 12, Digestion, and how you use food for fuel"><span class="dn">27</span></a></td><td class="day inwk" data-date="2026-11-28"><a href="week-12.html" target="_top" aria-label="November 28. Week 12, Digestion, and how you use food for fuel"><span class="dn">28</span></a></td><td class="day inwk due" data-date="2026-11-29"><a href="week-12.html" target="_top" aria-label="November 29. Week 12, Digestion, and how you use food for fuel. Week 12 work is due, 11:59 pm"><span class="dn">29</span></a></td></tr><tr><td class="day inwk opens" data-date="2026-11-30"><a href="week-13.html" target="_top" aria-label="November 30. Week 13, Breathing, gas transport, and the fast pH lever. Week 13 opens"><span class="dn">30</span></a></td><td class="pad"></td><td class="pad"></td><td class="pad"></td><td class="pad"></td><td class="pad"></td><td class="pad"></td></tr></tbody></table></div><div class="cal"><h3>December</h3><table><caption class="vh">December 2026, every day links to its course week</caption><thead><tr><th scope="col"><span aria-hidden="true">Mo</span><span class="vh">Monday</span></th><th scope="col"><span aria-hidden="true">Tu</span><span class="vh">Tuesday</span></th><th scope="col"><span aria-hidden="true">We</span><span class="vh">Wednesday</span></th><th scope="col"><span aria-hidden="true">Th</span><span class="vh">Thursday</span></th><th scope="col"><span aria-hidden="true">Fr</span><span class="vh">Friday</span></th><th scope="col"><span aria-hidden="true">Sa</span><span class="vh">Saturday</span></th><th scope="col"><span aria-hidden="true">Su</span><span class="vh">Sunday</span></th></tr></thead><tbody><tr><td class="pad"></td><td class="day inwk" data-date="2026-12-01"><a href="week-13.html" target="_top" aria-label="December 1. Week 13, Breathing, gas transport, and the fast pH lever"><span class="dn">1</span></a></td><td class="day inwk" data-date="2026-12-02"><a href="week-13.html" target="_top" aria-label="December 2. Week 13, Breathing, gas transport, and the fast pH lever"><span class="dn">2</span></a></td><td class="day inwk" data-date="2026-12-03"><a href="week-13.html" target="_top" aria-label="December 3. Week 13, Breathing, gas transport, and the fast pH lever"><span class="dn">3</span></a></td><td class="day inwk" data-date="2026-12-04"><a href="week-13.html" target="_top" aria-label="December 4. Week 13, Breathing, gas transport, and the fast pH lever"><span class="dn">4</span></a></td><td class="day inwk" data-date="2026-12-05"><a href="week-13.html" target="_top" aria-label="December 5. Week 13, Breathing, gas transport, and the fast pH lever"><span class="dn">5</span></a></td><td class="day inwk due" data-date="2026-12-06"><a href="week-13.html" target="_top" aria-label="December 6. Week 13, Breathing, gas transport, and the fast pH lever. Week 13 work is due, 11:59 pm"><span class="dn">6</span></a></td></tr><tr><td class="day inwk opens" data-date="2026-12-07"><a href="week-14.html" target="_top" aria-label="December 7. Week 14, The kidney and body fluid balance. Week 14 opens"><span class="dn">7</span></a></td><td class="day inwk" data-date="2026-12-08"><a href="week-14.html" target="_top" aria-label="December 8. Week 14, The kidney and body fluid balance"><span class="dn">8</span></a></td><td class="day inwk" data-date="2026-12-09"><a href="week-14.html" target="_top" aria-label="December 9. Week 14, The kidney and body fluid balance"><span class="dn">9</span></a></td><td class="day inwk" data-date="2026-12-10"><a href="week-14.html" target="_top" aria-label="December 10. Week 14, The kidney and body fluid balance"><span class="dn">10</span></a></td><td class="day inwk" data-date="2026-12-11"><a href="week-14.html" target="_top" aria-label="December 11. Week 14, The kidney and body fluid balance"><span class="dn">11</span></a></td><td class="day inwk" data-date="2026-12-12"><a href="week-14.html" target="_top" aria-label="December 12. Week 14, The kidney and body fluid balance"><span class="dn">12</span></a></td><td class="day inwk due" data-date="2026-12-13"><a href="week-14.html" target="_top" aria-label="December 13. Week 14, The kidney and body fluid balance. Week 14 work is due, 11:59 pm"><span class="dn">13</span></a></td></tr><tr><td class="day inwk opens" data-date="2026-12-14"><a href="week-15.html" target="_top" aria-label="December 14. Week 15, The slow pH lever, and putting it all together. Week 15 opens"><span class="dn">14</span></a></td><td class="day inwk" data-date="2026-12-15"><a href="week-15.html" target="_top" aria-label="December 15. Week 15, The slow pH lever, and putting it all together"><span class="dn">15</span></a></td><td class="day inwk due" data-date="2026-12-16"><a href="week-15.html" target="_top" aria-label="December 16. Week 15, The slow pH lever, and putting it all together. Week 15 work is due, 11:59 pm"><span class="dn">16</span></a></td><td class="day" data-date="2026-12-17">17</td><td class="day" data-date="2026-12-18">18</td><td class="day" data-date="2026-12-19">19</td><td class="day" data-date="2026-12-20">20</td></tr><tr><td class="day" data-date="2026-12-21">21</td><td class="day" data-date="2026-12-22">22</td><td class="day" data-date="2026-12-23">23</td><td class="day" data-date="2026-12-24">24</td><td class="day" data-date="2026-12-25">25</td><td class="day" data-date="2026-12-26">26</td><td class="day" data-date="2026-12-27">27</td></tr><tr><td class="day" data-date="2026-12-28">28</td><td class="day" data-date="2026-12-29">29</td><td class="day" data-date="2026-12-30">30</td><td class="day" data-date="2026-12-31">31</td><td class="pad"></td><td class="pad"></td><td class="pad"></td></tr></tbody></table></div></div>
+        <p class="callegend">
+          <span><i aria-hidden="true"></i> Bar on the left: the week opens</span>
+          <span><i class="d" aria-hidden="true"></i> Bar underneath: everything is due, 11:59 pm</span>
+        </p>
+      </section>
 
-    <!-- ============ REVIEW BUILDER ============ -->
-    <section class="builder" id="builder" hidden aria-label="Build a review">
-      <div class="pbar">
-        <button class="back" id="builderBack" type="button">&larr; All loops</button>
-        <span class="ploop-title">Build a review</span>
-      </div>
-      <div class="builder-card">
-        <p class="builder-instr">Pick the topics you want to review, then start. You choose how many cards once you are in.</p>
-        <div class="builder-topics" id="builderTopics" role="group" aria-label="Topics to include"></div>
-        <label class="toggle weak-toggle"><input type="checkbox" id="weakChk"> Focus on my weak cards</label>
-        <p class="builder-note" id="builderNote"></p>
-        <div class="builder-actions">
-          <button class="tbtn play" id="builderStart" type="button">Start review &#9654;</button>
+      <section class="sec" aria-labelledby="h-weeks">
+        <div class="sechead">
+          <p class="secnum"><span class="vh">Section </span>03</p>
+          <div>
+            <h2 id="h-weeks">All fifteen weeks</h2>
+            <p>The term runs in three parts. Foundations sets up the rules every system follows,
+              control systems covers the nerves and hormones that give the orders, and systems in
+              action is those rules running inside real organs.</p>
+          </div>
         </div>
-      </div>
-    </section>
+        <div class="wklist"><a class="wkrow" href="week-01.html" target="_top" data-wk="1"><span class="no">01</span><span><h3>How physiology works and what keeps you steady</h3><p>Foundations</p></span><span class="when">Sep 8</span></a><a class="wkrow" href="week-02.html" target="_top" data-wk="2"><span class="no">02</span><span><h3>The chemistry that does work in the body</h3><p>Foundations</p></span><span class="when">Sep 14</span></a><a class="wkrow" href="week-03.html" target="_top" data-wk="3"><span class="no">03</span><span><h3>Getting across the membrane</h3><p>Foundations</p></span><span class="when">Sep 21</span></a><a class="wkrow" href="week-04.html" target="_top" data-wk="4"><span class="no">04</span><span><h3>How cells talk, and the electrical signal</h3><p>Control systems</p></span><span class="when">Sep 28</span></a><a class="wkrow" href="week-05.html" target="_top" data-wk="5"><span class="no">05</span><span><h3>Synapses and central integration</h3><p>Control systems</p></span><span class="when">Oct 5</span></a><a class="wkrow" href="week-06.html" target="_top" data-wk="6"><span class="no">06</span><span><h3>Sensing the world, and the responses you do not control</h3><p>Control systems</p></span><span class="when">Oct 12</span></a><a class="wkrow" href="week-07.html" target="_top" data-wk="7"><span class="no">07</span><span><h3>Muscle, and how movement gets commanded</h3><p>Control systems</p></span><span class="when">Oct 19</span></a><a class="wkrow" href="week-08.html" target="_top" data-wk="8"><span class="no">08</span><span><h3>Hormones and reproduction, the slow control system</h3><p>Control systems</p></span><span class="when">Oct 26</span></a><a class="wkrow" href="week-09.html" target="_top" data-wk="9"><span class="no">09</span><span><h3>The heart as a pump</h3><p>Systems in action</p></span><span class="when">Nov 2</span></a><a class="wkrow" href="week-10.html" target="_top" data-wk="10"><span class="no">10</span><span><h3>Pressure, flow, and holding blood pressure steady</h3><p>Systems in action</p></span><span class="when">Nov 9</span></a><a class="wkrow" href="week-11.html" target="_top" data-wk="11"><span class="no">11</span><span><h3>Blood and how the body defends itself</h3><p>Systems in action</p></span><span class="when">Nov 16</span></a><a class="wkrow" href="week-12.html" target="_top" data-wk="12"><span class="no">12</span><span><h3>Digestion, and how you use food for fuel</h3><p>Systems in action</p></span><span class="when">Nov 23</span></a><a class="wkrow" href="week-13.html" target="_top" data-wk="13"><span class="no">13</span><span><h3>Breathing, gas transport, and the fast pH lever</h3><p>Systems in action</p></span><span class="when">Nov 30</span></a><a class="wkrow" href="week-14.html" target="_top" data-wk="14"><span class="no">14</span><span><h3>The kidney and body fluid balance</h3><p>Systems in action</p></span><span class="when">Dec 7</span></a><a class="wkrow" href="week-15.html" target="_top" data-wk="15"><span class="no">15</span><span><h3>The slow pH lever, and putting it all together</h3><p>Systems in action</p></span><span class="when">Dec 14</span></a></div>
+      </section>
+    </div>
+  </div>
 
-    <!-- ============ MY PROGRESS DASHBOARD ============ -->
-    <section class="dash" id="dash" hidden aria-label="My progress">
-      <div class="pbar">
-        <button class="back" id="dashBack" type="button">&larr; All loops</button>
-        <span class="ploop-title">My progress</span>
-      </div>
-      <div id="dashBody" class="dash-body"></div>
-    </section>
+  <div class="band band-maroon">
+    <div class="hwrap">
+      <section class="sec" aria-labelledby="h-start">
+        <div class="sechead">
+          <p class="secnum"><span class="vh">Section </span>04</p>
+          <div>
+            <h2 id="h-start">Start here</h2>
+            <p>If you are new to the course, or something is not working, these four are where to go.</p>
+          </div>
+        </div>
+        <div class="tiles"><a class="tile" href="course-entry.html" target="_top"><span class="appicon"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="7" y="6" width="30" height="34" rx="5" fill="#FFFFFF"/><path d="M14 16h14M14 23h14M14 30h8" stroke="#040711" stroke-width="2.6" stroke-linecap="round"/><circle cx="34" cy="33" r="10" fill="#DCB45C"/><path d="M29.5 33l3.2 3.2 6-6.4" stroke="#040711" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span class="chip">Do this first</span><h3>Set up and tech check</h3><p>Fifteen minutes, and it saves you a bad week later. Check that your browser, camera and Canvas all work before the first assignment is due.</p><span class="open">Open it &rsaquo;</span></a><a class="tile" href="mastery-physio-os-standalone.html" target="_top"><span class="appicon"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M24 10c-6 0-9 3-9 7 0 1-3 2-3 6s3 5 3 7c0 4 4 8 9 8s9-4 9-8c0-2 3-3 3-7s-3-5-3-6c0-4-3-7-9-7z" fill="#FFFFFF"/><path d="M24 12v24M18 18h12M18 28h12" stroke="#8B3A2E" stroke-width="2.4" stroke-linecap="round"/></svg></span><span class="chip">Method</span><h3>How to study this course</h3><p>Rereading feels like studying, but it is not what makes the material stick. This explains what to do instead, and why.</p><span class="open">Open it &rsaquo;</span></a><a class="tile" href="start-here.html" target="_top"><span class="appicon"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="9" y="6" width="30" height="36" rx="4" fill="#FFFFFF"/><path d="M9 10a4 4 0 0 1 4-4h22a4 4 0 0 1 4 4v5H9z" fill="#DCB45C"/><path d="M16 23h16M16 29h16M16 35h10" stroke="#040711" stroke-width="2.6" stroke-linecap="round"/></svg></span><span class="chip">Admin</span><h3>Syllabus and grading</h3><p>Office hours, how points are earned, deadlines, and the late work policy. Read it once in week one so nothing surprises you in week ten.</p><span class="open">Open it &rsaquo;</span></a><a class="tile" href="competency-recall.html" target="_top"><span class="appicon"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="7" y="12" width="21" height="28" rx="3" fill="#FFFFFF"/><rect x="18" y="7" width="21" height="28" rx="3" fill="#DCB45C" stroke="#040711" stroke-width="2"/><path d="M23 16h11M23 21h11M23 26h7" stroke="#040711" stroke-width="2" stroke-linecap="round"/></svg></span><span class="chip">Study</span><h3>Recall cards</h3><p>Short practice you can do most days. Fifteen minutes at a time beats two hours the night before.</p><span class="open">Open it &rsaquo;</span></a></div>
+      </section>
+    </div>
+  </div>
 
-  </main>
+</main>
 
-  <footer>
-    <div class="by">Dr. Sharilyn Rennie</div>
-    <div class="role">Professor of Anatomy &amp; Physiology</div>
-    <div class="brand">MedMasters Collaborative</div>
-  </footer>
-</div>
+
+<footer class="site-footer"><div class="fi">
+  <div>
+    <p class="n">Dr. Sharilyn Rennie</p>
+    <p class="c">BIO 005 Human Physiology &middot; Fall 2026</p>
+  </div>
+  <nav class="footnav" aria-label="Footer">
+    <a href="welcome.html" target="_top">All weeks</a>
+    <a href="course-schedule.html" target="_top">Schedule</a>
+    <a href="start-here.html" target="_top">Syllabus</a>
+    <a href="competency-map.html" target="_top">Competencies</a>
+  </nav>
+</div></footer>
+
 
 <script>
-/* ---------------- DATA ----------------
-   Each loop: id, title, subtitle, dir (image folder), cover, and pairs.
-   A pair is [questionSlideNumber, answerSlideNumber, label] -> images sNN.jpg
-   To add a loop later: render its slides to images/<dir>/ and add an entry. */
-const BONEAXIAL2_LABELS = ["Sharpey s Fibers Fibrous Periosteium", "Epiphysis Endosteum", "Left Parietal External Auditory meatus", "Superior Orbital Perpendicular Fissure Plate Ethmoid", "Concentric Lamellae Osteon", "Hypophyseal Fossa Sella Turcica Jugular Foramen", "Elastic Cartilage Ear, Epiglottis", "Crista Galli Olfactory foramina", "Median palatine suture Choana", "Sagittal Suture Lambdoidal Suture", "Frontal Coronal Suture", "Hyaline Cartilage Ends long , epiphyseal plate, ribs, trachea", "Compact Spongy", "Lacuna w/osteocyte Central Canal", "Lesser Wing Sphenoid Foramen Ovale", "Fibrocartilage Pubic Symphysis, intervertebral disc", "Coranoid Process; Mandible Mental foramen", "Supraprbital notch Maxilla", "Osteon Interstitial Lamellae", "Internal Acoustic Meatus Foramen Magnum", "Articular Cartilage Epiphyseal Line", "Incisive Fossa Vomer", "Jugular Notch Xiphoid Process", "Greater Cornu Hyoid", "Clavicle", "Circumferential Lamellae Volkmann s Canal", "Occipital Condyle Occipital", "Squamous suture Styloid process", "Glabella Zygomatic", "Optic Foramen Optic N. CN II Middle Nasal concha", "Supoerior Nuchal Line Occipital Protuberance", "Anterior Fontanel Anterolateral Fontanel", "Superior articular facet Transverse foramen", "Superior articular Facet & Process Body thoracic vertebrae", "Pedicle Vertebral Foramen", "Inferior articular facet/process Lumbar", "Transverse Foramen Anterior tubercle C", "Dens C", "Sacral Promontory Anterior Sacral Foramina", "Median Sacral crest Sacral Hiatus", "Thoracic", "Cervical"];
-const APPENDICULAR_LABELS = ["Iliac Crest, Acetabulum", "Scapula, Infraspinous Fossa", "Ischial Spine, Obturator Foramen", "Clavicle Sternal End", "Femur, Intercondylar Notch", "Humerus Surgical Neck", "Patella, Apex", "Scapular Notch, Subscapular Fossa", "Ilium, Pubis", "Acromion, Glenoid Fossa", "Humerus, Olecranon Fossa", "Femur Intertrochanteric Crest", "Middle Phalanx #3, Metacarpal #1", "Intercondylar Eminence, Tibia", "Articular Fovea of Radius Trochlear Notch of Ulna", "Ischium, Ischial Tuberosity", "Fibula, Lateral Malleolus", "Coronoid process, Ulna, Radial Tuberosity, Radius", "3rd Metatarsal, 4th Distal Phalanx", "Olecranon Process Radial Notch", "Talus, Navicular", "Medial Cuneiform, Cuboid", "Ulna, Ulnar Tuberosity, Radius, Styloid Process", "Proximal Phalanx #1, Carpal", "Anterior Superior Iliac Spine, Greater Sciatic Notch", "Spine of the Scapula, Medial Border", "Sacroiliac Joint, Pubic Symphysis", "Conoid Tubercle, Clavicle, Acromial End", "Linea Aspera, Femur, Medial Condyle", "Deltoid tuberosity, Humerus, Ulnar groove", "Superior Angle, Scapula, Coracoid Process", "Coccyx, Ischium", "Scapula, Acromion, Coracoid Process", "Humerus, Anatomical Neck, Olecranon Fossa", "bone Femur, Medial Supracondylar Line Lesser Trochanter", "Capitate, Scaphoid", "Tibia, Tibial Tuberosity, Medial Malleolus", "Calcaneus, Lateral Cuneiform", "Humerus, Greater Tubercle, Capitulum", "Hamate, Lunate", "Pisiform, Trapezium"];
-/* Axial Skull loop: full-slide deck on black. Labels are the answer text (used for alt / screen-reader announcements). */
-const SKULL_LABELS = ["Occipital Bone","Sphenoid Bone","Sagittal Suture","Nasal Bone","Maxilla","Supraorbital Foramen","Perpendicular Plate of Ethmoid Bone","Zygomatic Bone","Temporal Bone","Lambdoid Suture","Frontal Bone","Coronal (Frontal) Suture","Middle Cranial Fossa","Cribriform Plate","Mandible","Foramen Ovale","Jugular Foramen","Vomer","Palatine Bone","Choana","Infraorbital Foramen","Inferior Nuchal Line","Anterior Nasal Spine","Mental Protuberance","Optic Foramen","Mental Foramen","External Acoustic (Auditory) Meatus","Lacrimal Canal","Superior Orbital Fissure","Coronoid Process","Greater Cornu of the Hyoid Bone"];
-/* Bone Tissue loop: full-slide deck. Labels are the answer text (used for alt / screen-reader announcements). */
-const BONE_LABELS = ["Chondrocyte","Articular Cartilage (surface)","Lacuna","Diaphysis","Articular surface (epiphysis), nose, growth plate, ends of ribs, fetal skeleton","Lacuna","Elastic Cartilage","Periosteum","Canaliculi","Osteon","Chondrocytes","Perichondrium","Elastic Cartilage","Interstitial Lamella","Haversian Canal","Metaphysis","Hyaline Cartilage","Volkmann's Canal","Circumferential Lamellae","Perichondrium","Concentric Lamellae","Haversian (Central) Canal","Epiphysis","Canaliculi","Fibrocartilage","Lacuna","Medullary Cavity","Sharpey's Fibers","Intervertebral disc, menisci, or pubic symphysis","Compact Bone Tissue","Lacuna with osteocyte","Concentric Lamellae"];
-const LABELS = ["Patellar","Lumbar","Midsagittal plane","Calcaneal","Mammary / Pectoral","Scapular","Brachial","Sternal","Axillary","Popliteal","Antebrachial","Auricular (Otic)","Pubic","Transverse plane","Crural","Olecranal","Acromial","Cervical","Dorsal cavity","Abdominal cavity","Parietal pleura","Parasagittal plane","RUQ (gallbladder)","Antecubital","Oblique plane","Vertebral","Occipital","LUQ (spleen)","Umbilical","Sural","Pollex","Plantar","RLQ (appendix)","Buccal","Clavicular","Femoral","Optic (orbital)","Sacral","Gluteal","Hallux","Plantar","Mediastinum","Mediastinum contents","Mediastinum borders"];
+(function () {
+  'use strict';
+  var WEEKS = [{"wk": 1, "title": "How physiology works and what keeps you steady", "opens": "2026-09-08", "closes": "2026-09-13", "n": 14}, {"wk": 2, "title": "The chemistry that does work in the body", "opens": "2026-09-14", "closes": "2026-09-20", "n": 6}, {"wk": 3, "title": "Getting across the membrane", "opens": "2026-09-21", "closes": "2026-09-27", "n": 20}, {"wk": 4, "title": "How cells talk, and the electrical signal", "opens": "2026-09-28", "closes": "2026-10-04", "n": 23}, {"wk": 5, "title": "Synapses and central integration", "opens": "2026-10-05", "closes": "2026-10-11", "n": 16}, {"wk": 6, "title": "Sensing the world, and the responses you do not control", "opens": "2026-10-12", "closes": "2026-10-18", "n": 25}, {"wk": 7, "title": "Muscle, and how movement gets commanded", "opens": "2026-10-19", "closes": "2026-10-25", "n": 24}, {"wk": 8, "title": "Hormones and reproduction, the slow control system", "opens": "2026-10-26", "closes": "2026-11-01", "n": 24}, {"wk": 9, "title": "The heart as a pump", "opens": "2026-11-02", "closes": "2026-11-08", "n": 16}, {"wk": 10, "title": "Pressure, flow, and holding blood pressure steady", "opens": "2026-11-09", "closes": "2026-11-15", "n": 13}, {"wk": 11, "title": "Blood and how the body defends itself", "opens": "2026-11-16", "closes": "2026-11-22", "n": 18}, {"wk": 12, "title": "Digestion, and how you use food for fuel", "opens": "2026-11-23", "closes": "2026-11-29", "n": 18}, {"wk": 13, "title": "Breathing, gas transport, and the fast pH lever", "opens": "2026-11-30", "closes": "2026-12-06", "n": 22}, {"wk": 14, "title": "The kidney and body fluid balance", "opens": "2026-12-07", "closes": "2026-12-13", "n": 19}, {"wk": 15, "title": "The slow pH lever, and putting it all together", "opens": "2026-12-14", "closes": "2026-12-16", "n": 10}];
 
-/* caption loops: each station is ONE clean image (cNN.jpg) + question + answer */
-const TISSUE_ITEMS = [
-  {q:"ID the tissue. Name its location.", a:"Keratinized Stratified Squamous Epithelium. Location: skin"},
-  {q:"ID the tissue (arrow). ID the structure at the free surface.", a:"Stratified Cuboidal Epithelium. Free surface: lumen / apical surface"},
-  {q:"ID the tissue. Name a function.", a:"Transitional Epithelium. Accommodates stretch"},
-  {q:"ID the tissue. Name a function (where is it?).", a:"Simple Squamous Epithelium. Filtration"},
-  {q:"ID the structure. Describe its function.", a:"Microvilli. Increase surface area for absorption"},
-  {q:"ID the tissue. Name one location.", a:"Simple Cuboidal Epithelium. Renal tubules or glands"},
-  {q:"ID the tissue. Name its location.", a:"Pseudostratified Ciliated Columnar Epithelium. Upper respiratory tract"},
-  {q:"ID the tissue. Name its location.", a:"Simple Squamous Epithelium. Alveoli of the lungs"},
-  {q:"ID the structure. Describe its function.", a:"Goblet Cell. Produces and secretes mucus"},
-  {q:"ID the tissue. Name a function.", a:"Non-Keratinized Stratified Squamous Epithelium. Protection from abrasion"},
-  {q:"ID the tissue. Name one location.", a:"Simple Columnar Epithelium. Stomach or intestines"},
-  {q:"ID the structure. Describe its function.", a:"Cilia. Move substances along the surface"},
-  {q:"ID cell A. ID cell B.", a:"A: Fibroblast. B: Mast cell"},
-  {q:"ID the tissue. Name a location.", a:"Reticular Connective Tissue. Spleen, lymph nodes, tonsils"},
-  {q:"ID the tissue. Name a function.", a:"Compact Bone Tissue. Structural support; serum calcium regulation"},
-  {q:"ID the tissue. Name one location.", a:"Dense Irregular Connective Tissue. Dermis of the skin"},
-  {q:"ID the cell. When is it increased?", a:"Eosinophil. Allergy or parasitic worm infection"},
-  {q:"ID the tissue. Name a location.", a:"Elastic Connective Tissue. Muscular arteries; aorta"},
-  {q:"ID the connective tissue. Name a location.", a:"Dense Regular Connective Tissue. Tendon"},
-  {q:"ID the tissue. Name one location.", a:"Adipose Tissue. Around organs; behind the eyeball"},
-  {q:"ID the tissue. Name the fiber at the arrow.", a:"Loose Areolar Connective Tissue. Arrow: elastic fiber"},
-  {q:"ID the cell and the structure at the arrows.", a:"Basophil and Thrombocyte (platelet)"},
-  {q:"ID this cell. In tissue it becomes a ___.", a:"Monocyte. In tissue: macrophage"},
-  {q:"ID the structure and tissue. ID the specific region.", a:"Nervous Tissue; spinal cord. Region: dorsal horn"},
-  {q:"ID this cell. When is it increased? (Be specific.)", a:"Neutrophil. Bacterial infection"},
-  {q:"ID this cell. When is it increased? (Be specific.)", a:"Lymphocyte. Viral infection; possibly cancer"},
-  {q:"ID the structure at the arrow.", a:"Motor End Plate (neuromuscular junction)"},
-  {q:"ID the tissue. What are the alternating light and dark bands?", a:"Skeletal Muscle Tissue. Striations: actin (light) and myosin (dark)"},
-  {q:"ID the tissue. Describe its neurological control.", a:"Smooth Muscle Tissue. Involuntary"},
-  {q:"ID the tissue. ID the structure.", a:"Cardiac Muscle Tissue. Structure: intercalated disc"},
-  {q:"ID the tissue and location. ID the tissue at A.", a:"Nervous Tissue; spinal cord. A: gray matter"}
-];
-const SKIN_ITEMS = [
-  {q:"ID the layer. ID the structure.", a:"Layer: epidermis. Structure: Lamellated (Pacinian) corpuscle"},
-  {q:"ID the structure. ID the structure.", a:"Sebaceous gland and Hair bulb"},
-  {q:"ID the layer. ID the structure.", a:"Layer: stratum granulosum. Structure: Meissner's corpuscle"},
-  {q:"ID the protein. Thick or thin skin?", a:"Protein: keratin. Thin skin"},
-  {q:"ID the structure. ID the structure.", a:"Apocrine gland and Hair bulb"},
-  {q:"ID the structure. ID the structure.", a:"Hair root and Arrector pili muscle"},
-  {q:"ID the epidermal layer. ID the structure (region).", a:"Layer: stratum corneum. Structure: dermal papilla"},
-  {q:"ID the tissue type. ID the region (be specific).", a:"Dense Irregular Connective Tissue. Papillary dermis"},
-  {q:"Name the tissue. ID the layer inside the circle.", a:"Tissue: Keratinized Stratified Squamous Epithelium. Layer: stratum lucidum"},
-  {q:"ID the structure. ID the structure.", a:"Hair shaft and Eccrine sweat gland"},
-  {q:"This layer has which two sub-components? ID the layer.", a:"Layer: dermis. Papillary dermis and reticular dermis"},
-  {q:"Name three structures in the dermal papilla. ID the structure that dips down.", a:"Dips down: epidermal ridges. In the papilla: Meissner's corpuscles, free nerve endings, capillary loops"}
-];
+  function D(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  var today = new Date(); today.setHours(0, 0, 0, 0);
 
-/* full-slide loops use the original deck images: [questionSlide, answerSlide, label] */
-function buildPairs(labels){
-  const pairs=[];
-  for(let k=0;k<labels.length;k++){ pairs.push([2+2*k, 3+2*k, labels[k]]); }
-  return pairs;
-}
-/* original decks: swapSet reverses pairs that are answer-first in the source file */
-function buildSlidePairs(items, swapSet){
-  const pairs=[];
-  for(let k=0;k<items.length;k++){
-    let q=2+2*k, a=3+2*k;
-    if(swapSet.indexOf(k)>=0){ const t=q; q=a; a=t; }
-    pairs.push([q, a, items[k].a]);
+  var cur = null;
+  for (var i = 0; i < WEEKS.length; i++) {
+    if (today >= D(WEEKS[i].opens) && today <= D(WEEKS[i].closes)) { cur = WEEKS[i]; break; }
   }
-  return pairs;
-}
+  if (!cur) { cur = (today < D(WEEKS[0].opens)) ? WEEKS[0] : WEEKS[WEEKS.length - 1]; }
 
-const LOOPS = [
-  { id:"intro", title:"Introduction Loop", module:"Fundamentals", icon:"book", unit:"Intro to Anatomy", subtitle:"Regions, planes, cavities & quadrants", dir:"intro", type:"slide", pairs:buildPairs(LABELS) },
-  { id:"tissues", title:"Tissues Loop", module:"Cells & Tissues", icon:"micro", unit:"Tissues & Histology", subtitle:"Epithelial & connective tissues, cells, muscle & nervous", dir:"tissues", type:"slide", pairs:buildSlidePairs(TISSUE_ITEMS,[23]) },
-  { id:"skin", title:"Integumentary Loop", module:"Integumentary", icon:"skin", unit:"Skin", subtitle:"Skin layers, glands & structures", dir:"skin", type:"slide", pairs:buildSlidePairs(SKIN_ITEMS,[2]) },
-  { id:"bone", title:"Bone Tissue Loop", module:"Cartilage & Bone", icon:"bone", unit:"Bone Tissue", subtitle:"Cartilage, bone tissue, osteon & bony landmarks", dir:"bone", type:"slide", pairs:buildPairs(BONE_LABELS) },
-  { id:"skull", title:"Axial Skull Loop", module:"Axial Skeleton", icon:"skull", unit:"Axial Skull", subtitle:"Cranial & facial bones, sutures, foramina & landmarks", dir:"skull", type:"slide", pairs:buildPairs(SKULL_LABELS) },
-  { id:"appendicular", title:"Appendicular Loop", module:"Appendicular Skeleton", icon:"appendicular", unit:"Appendicular Skeleton", subtitle:"Upper & lower limb bones, girdles & landmarks", dir:"appendicular", type:"slide", pairs:buildPairs(APPENDICULAR_LABELS) },
-  { id:"boneaxial2", title:"Bone & Axial Loop II", module:"Bone & Axial", icon:"spine", unit:"Bone & Axial II", subtitle:"Bone tissue, skull, vertebrae, sacrum & spinal curves", dir:"boneaxial2", type:"slide", pairs:buildPairs(BONEAXIAL2_LABELS) }
-];
+  function pretty(s) {
+    return D(s).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+  }
 
-/* ---- Anatomy Loops badge (original SVG, scalable/high-def) ---- */
-const BADGE_ICONS={
-  book:'<path d="M0,-12 C-8,-18 -20,-18 -27,-14 L-27,13 C-20,9 -8,9 0,15 C8,9 20,9 27,13 L27,-14 C20,-18 8,-18 0,-12 Z"/><line x1="0" y1="-12" x2="0" y2="15"/>',
-  micro:'<circle cx="6" cy="-20" r="3.6"/><line x1="6" y1="-16" x2="6" y2="-2"/><line x1="6" y1="-2" x2="2" y2="6"/><path d="M6,-7 C-7,-3 -13,6 -13,17"/><line x1="-17" y1="17" x2="17" y2="17"/><line x1="-4" y1="9" x2="12" y2="9"/>',
-  skin:'<path d="M-25,-8 q8,-6 16,0 t16,0 t16,0"/><path d="M-25,0 q8,-5 16,0 t16,0 t16,0"/><path d="M-25,8 q8,-5 16,0 t16,0 t16,0"/><line x1="2" y1="-20" x2="2" y2="-6"/><circle cx="-13" cy="13" r="2.4"/>',
-  bone:'<g transform="rotate(-32)"><line x1="-13" y1="0" x2="13" y2="0"/><circle cx="-15" cy="-4.5" r="4.4"/><circle cx="-15" cy="4.5" r="4.4"/><circle cx="15" cy="-4.5" r="4.4"/><circle cx="15" cy="4.5" r="4.4"/></g>',
-  skull:'<path d="M-15,-3 a15,15 0 0 1 30,0 v5 a5,5 0 0 1 -3,4.6 l0,4.4 a3.5,3.5 0 0 1 -3.5,3.5 h-1.5 v-3 h-5 v3 h-5 v-3 h-5 v3 h-1.5 a3.5,3.5 0 0 1 -3.5,-3.5 l0,-4.4 a5,5 0 0 1 -3,-4.6 z"/><circle cx="-6.5" cy="-2" r="3.6"/><circle cx="6.5" cy="-2" r="3.6"/><path d="M0,1 l-2.4,5 h4.8 z"/>',
-  appendicular:'<g transform="rotate(22)"><rect x="-3.2" y="-13" width="6.4" height="26" rx="3"/><circle cx="-4.5" cy="-13" r="4"/><circle cx="4.5" cy="-13" r="4"/><circle cx="-4.5" cy="13" r="4"/><circle cx="4.5" cy="13" r="4"/></g>',
-  spine:'<rect x="-5.5" y="-16" width="11" height="6.4" rx="2"/><rect x="-5.5" y="-7.7" width="11" height="6.4" rx="2"/><rect x="-5.5" y="0.6" width="11" height="6.4" rx="2"/><rect x="-5.5" y="8.9" width="11" height="6.4" rx="2"/><line x1="9" y1="-13" x2="9" y2="12"/>',
-  review:'<rect x="-18" y="-13" width="22" height="16" rx="2"/><rect x="-9" y="-5" width="22" height="16" rx="2"/><path d="M-3,3 l3,3 l8,-9"/>',
-  progress:'<line x1="-17" y1="13" x2="17" y2="13"/><rect x="-14" y="2" width="8" height="11"/><rect x="-3" y="-7" width="8" height="20"/><rect x="8" y="-2" width="8" height="15"/>'
-};
-function badgeSVG(loop){
-  const ic=BADGE_ICONS[loop.icon]||'';
-  const label=(loop.unit||loop.module||'').toUpperCase();
-  return `<svg class="badge-svg" viewBox="0 0 340 224" role="img" aria-label="Anatomy Loops, ${loop.unit||loop.module}">
-    <path class="arcT" d="M40,120 A152,152 0 0 1 300,120"/>
-    <path class="arcB" d="M62,188 A210,210 0 0 0 278,188"/>
-    <g class="ic" transform="translate(170,76)">${ic}</g>
-    <text class="wa" x="156" y="140" text-anchor="end">ANATOMY</text>
-    <g class="bone" transform="translate(168,132)"><circle cx="-3" cy="-7" r="3"/><circle cx="3" cy="-7" r="3"/><circle cx="-3" cy="7" r="3"/><circle cx="3" cy="7" r="3"/><rect x="-2" y="-7" width="4" height="14"/></g>
-    <text class="wl" x="180" y="140" text-anchor="start">LOOPS</text>
-    <text class="unit" x="170" y="174" text-anchor="middle">${label}</text>
-  </svg>`;
-}
+  document.getElementById('nowk').textContent = 'Week ' + cur.wk + ' of 15';
+  document.getElementById('nowtitle').textContent = cur.title;
+  document.getElementById('nowline').textContent =
+    (today < D(cur.opens) ? 'This week opens ' + pretty(cur.opens) + '.'
+                          : 'This week is open now. Everything in it is due Sunday at 10:00 pm.');
+  document.getElementById('nowopen').textContent = pretty(cur.opens);
+  document.getElementById('nowdue').textContent = pretty(cur.closes) + ', 11:59 pm';
+  var go = document.getElementById('nowgo');
+  go.setAttribute('href', 'week-' + (cur.wk < 10 ? '0' : '') + cur.wk + '.html');
+  go.textContent = 'Open week ' + cur.wk;
 
-/* placeholder cards for loops not yet built */
-const COMING = [];
+  /* ---------- calendar carousel ----------
+     Progressive enhancement. The markup ships four months stacked and the
+     control bar hidden, so with JavaScript off nothing is unreachable.
+     Here we reveal the bar, hide all but one month with the hidden
+     attribute (which takes them out of the tab order AND out of the
+     accessibility tree, so a keyboard user never tabs into an invisible
+     month), and open on the month the term is actually in. */
+  var cals = document.getElementById('cals');
+  var bar = document.getElementById('calbar');
+  var months = cals ? Array.prototype.slice.call(cals.querySelectorAll('.cal')) : [];
 
-/* ---------------- HUB RENDER ---------------- */
-const grid=document.getElementById('loopGrid');
-function pad2(n){ return String(n).padStart(2,'0'); }
-/* ---- item-level memory (this browser only): powers the weakness picker ---- */
-function loadItemStats(){ try{ return JSON.parse(localStorage.getItem('loopItemStats_v1')||'{}'); }catch(e){ return {}; } }
-function saveItemStats(o){ try{ localStorage.setItem('loopItemStats_v1',JSON.stringify(o)); }catch(e){} }
-function recordItem(loopId,idx,kind){
-  const k=loopId+'#'+idx; const s=loadItemStats();
-  const it=s[k]||{seen:0,again:0,hard:0,good:0,easy:0,recent:[]};
-  it.seen++; it[kind]=(it[kind]||0)+1;
-  it.recent.push(kind.charAt(0)); if(it.recent.length>10) it.recent.shift(); /* a h g e */
-  it.last=Date.now(); s[k]=it; saveItemStats(s);
-}
-function itemCorrect(it){ return (it.good||0)+(it.easy||0)+(it.correct||0); }
-function outcomeMiss(o){ if(o==='e'||o==='g'||o==='c'||o===1) return 0; if(o==='h'||o==='m') return 0.5; return 1; }
-function itemRecord(loopId,idx){ return loadItemStats()[loopId+'#'+idx]; }
-function weaknessScore(loopId,idx){
-  const it=itemRecord(loopId,idx); if(!it||!it.seen) return null;
-  const r=it.recent;
-  if(r&&r.length){ let wsum=0,msum=0; for(let i=0;i<r.length;i++){ const w=i+1; wsum+=w; msum+=w*outcomeMiss(r[i]); } return msum/wsum; }
-  return (it.incorrect + 0.5*it.misspelled)/it.seen;
-}
-function isWeak(loopId,idx){ const s=weaknessScore(loopId,idx); return s!=null && s>=0.4; }
-function weakCount(loops){ let c=0; loops.forEach(L=>{ const n=stationN(L); for(let k=0;k<n;k++) if(isWeak(L.id,k)) c++; }); return c; }
-/* ---- station resolver: a real loop yields {loop,idx}; a review carries its own ---- */
-function stationAt(p){ const i=order[p]; if(cur && cur.type==='review') return cur.stations[i]; return {loop:cur, idx:i}; }
-function buildReviewStations(loops, weakOnly){ const stations=[]; loops.forEach(L=>{ const n=stationN(L); for(let k=0;k<n;k++){ if(weakOnly && !isWeak(L.id,k)) continue; stations.push({loop:L, idx:k}); } }); return stations; }
-function makeReviewLoop(loops, weakOnly){ const stations=buildReviewStations(loops, weakOnly); return { id: weakOnly?'review-weak':'review-mixed', title: weakOnly?'Weak Cards Review':'Custom Review', type:'review', stations:stations, subtitle:(weakOnly?'Your weak cards, ':'Mixed review, ')+loops.length+' topic'+(loops.length>1?'s':'') }; }
-function stationN(loop){ return loop.type==='caption' ? loop.items.length : (loop.type==='review' ? loop.stations.length : loop.pairs.length); }
-function imgPath(loop,n){ return `images/${loop.dir}/s${pad2(n)}.jpg`; }   /* intro full-slide image */
-function capImg(loop,k){ return `images/${loop.dir}/c${pad2(k)}.jpg`; }    /* caption station image (k = 1-based) */
+  if (bar && months.length > 1) {
+    var label = document.getElementById('calnow');
+    var names = months.map(function (m) {
+      var h = m.querySelector('h3');
+      return h ? h.textContent.trim() : '';
+    });
+    var at = today.getFullYear() === 2026 ? Math.min(Math.max(today.getMonth() - 8, 0), months.length - 1) : 0;
 
-LOOPS.forEach(loop=>{
-  const btn=document.createElement('button');
-  btn.className='card'; btn.type='button';
-  btn.innerHTML=`
-    <span class="card-top">${badgeSVG(loop)}</span>
-    <span class="card-body">
-      <span class="cmeta">${stationN(loop)} stations</span>
-      <span class="cdesc">${loop.subtitle}</span>
-      <span class="go">Start loop <span class="arr" aria-hidden="true">&rarr;</span></span>
-    </span>`;
-  btn.addEventListener('click',()=>openLoop(loop));
-  grid.appendChild(btn);
-});
-/* Build a review: separate entry point for multi-topic and weak-card sessions */
-(function(){
-  const c=document.createElement('button');
-  c.className='card review-card'; c.type='button';
-  c.innerHTML=`<span class="card-top">${badgeSVG({icon:'review',unit:'Build a Review'})}</span>`
-    +`<span class="card-body"><span class="cmeta">Build a review</span>`
-    +`<span class="cdesc">Mix topics or drill your weak cards for exam prep.</span>`
-    +`<span class="go">Choose topics <span class="arr" aria-hidden="true">&rarr;</span></span></span>`;
-  c.addEventListener('click',showBuilder);
-  grid.appendChild(c);
-})();
-(function(){
-  const c=document.createElement('button');
-  c.className='card progress-card'; c.type='button';
-  c.innerHTML=`<span class="card-top">${badgeSVG({icon:'progress',unit:'My Progress'})}</span>`
-    +`<span class="card-body"><span class="cmeta">My progress</span>`
-    +`<span class="cdesc">See your accuracy by topic and the cards you keep missing.</span>`
-    +`<span class="go">View progress <span class="arr" aria-hidden="true">&rarr;</span></span></span>`;
-  c.addEventListener('click',showDash);
-  grid.appendChild(c);
-})();
-COMING.forEach(name=>{
-  const c=document.createElement('div');
-  c.className='card soon';
-  c.innerHTML=`<span class="thumb"></span><span class="body"><span class="badge">Coming soon</span><span class="ctitle">${name}</span><span class="cdesc">In production</span></span>`;
-  grid.appendChild(c);
-});
-
-/* ---------------- PLAYER ---------------- */
-const hub=document.getElementById('hub');
-const player=document.getElementById('player');
-const stage=document.getElementById('stage');
-const slideImg=document.getElementById('slideImg');
-const phaseLabel=document.getElementById('phaseLabel');
-const phaseText=document.getElementById('phaseText');
-const progress=document.getElementById('progress');
-const playerTitle=document.getElementById('playerTitle');
-const live=document.getElementById('live');
-const qSel=document.getElementById('qSel');
-const aSel=document.getElementById('aSel');
-const lenSel=document.getElementById('lenSel');
-const shuffleChk=document.getElementById('shuffleChk');
-const practiceChk=document.getElementById('practiceChk');
-const timedChk=document.getElementById('timedChk');
-const answerInput=document.getElementById('answerInput');
-const scTyped=document.getElementById('scTyped');
-const coach=document.getElementById('coach');
-const rcTime=document.getElementById('rcTime');
-const playBtn=document.getElementById('playBtn');
-let runStart=null;   // timestamp when the current run's stations began
-function practiceOn(){ return practiceChk.checked; }
-function timedOn(){ return timedChk.checked; }
-function fmtTime(ms){ var s=Math.round(ms/1000); var m=Math.floor(s/60); return m+':'+String(s%60).padStart(2,'0'); }
-function baseStageClass(){ return 'stage'+(cur&&cur.type==='caption'?' has-caption':'')+(practiceOn()?' is-practice':''); }
-function escHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-const timerNum=document.getElementById('timerNum');
-const tcTitle=document.getElementById('tcTitle');
-const tcSub=document.getElementById('tcSub');
-const tcMeta=document.getElementById('tcMeta');
-const captionEl=document.getElementById('caption');
-const capQ=document.getElementById('capQ');
-const capMain=document.getElementById('capMain');
-const selfcheck=document.getElementById('selfcheck');
-const scoreChip=document.getElementById('score');
-const scoreNum=document.getElementById('scoreNum');
-const scoreSeen=document.getElementById('scoreSeen');
-const rcScore=document.getElementById('rcScore');
-const rcPct=document.getElementById('rcPct');
-const rcMsg=document.getElementById('rcMsg');
-const rcTrend=document.getElementById('rcTrend');
-const rcHistory=document.getElementById('rcHistory');
-const arc=document.getElementById('arc');
-const ARC_LEN=2*Math.PI*26;
-arc.style.strokeDasharray=ARC_LEN;
-
-const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-let cur=null;          // current loop
-let order=[];          // array of pair indexes
-let pos=0;             // position in order
-let phase='question';  // 'question' | 'answer'
-let playing=false;
-let ticker=null;       // setInterval
-let remaining=0;       // whole seconds remaining
-let total=0;
-let results=[];        // per-station: undefined | true | false
-
-/* preference persistence */
-try{
-  const sv=JSON.parse(localStorage.getItem('loopPrefs')||'{}');
-  if(sv.q) qSel.value=sv.q; if(sv.a) aSel.value=sv.a; if(sv.shuffle) shuffleChk.checked=true;
-  if(sv.len) lenSel.value=sv.len;
-  if(sv.practice===false) practiceChk.checked=false;
-  if(sv.timed===true) timedChk.checked=true;
-}catch(e){}
-function savePrefs(){ try{ localStorage.setItem('loopPrefs',JSON.stringify({q:qSel.value,a:aSel.value,len:lenSel.value,shuffle:shuffleChk.checked,practice:practiceChk.checked,timed:timedChk.checked})); }catch(e){} }
-
-function shuffleArr(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
-/* watch mode + "All" plays continuously like a video; any numeric length is a finite, scored session */
-function loopForever(){ return lenSel.value==='all' && !practiceOn(); }
-function buildOrder(){
-  const total=stationN(cur);
-  let base=Array.from({length:total},(_,i)=>i);
-  if(shuffleChk.checked || (cur && cur.type==='review')) shuffleArr(base);
-  if(lenSel.value==='all'){ order=base; return; }
-  const N=parseInt(lenSel.value,10)||total;
-  order=[]; let pool=[];
-  while(order.length<N){
-    if(pool.length===0){
-      pool=Array.from({length:total},(_,i)=>i); shuffleArr(pool);
-      /* avoid an immediate repeat across the seam between passes */
-      if(order.length && pool.length>1 && pool[0]===order[order.length-1]){ const t=pool[0]; pool[0]=pool[1]; pool[1]=t; }
+    function show(i, announce) {
+      at = (i + months.length) % months.length;
+      months.forEach(function (m, k) { m.hidden = (k !== at); });
+      label.innerHTML = '';
+      label.appendChild(document.createTextNode(names[at] + ' 2026'));
+      /* The count sits on its own line visually, so without a separator a
+         screen reader runs it straight on: "September 2026Month 1 of 4". */
+      var sep = document.createElement('span');
+      sep.className = 'vh';
+      sep.textContent = ', ';
+      label.appendChild(sep);
+      var of = document.createElement('span');
+      of.className = 'of';
+      of.textContent = 'Month ' + (at + 1) + ' of ' + months.length;
+      label.appendChild(of);
+      if (announce === false) { label.setAttribute('aria-live', 'off'); }
+      else { label.setAttribute('aria-live', 'polite'); }
     }
-    order.push(pool.shift());
+
+    cals.classList.add('carousel');
+    bar.hidden = false;
+    show(at, false);
+    label.setAttribute('aria-live', 'polite');
+
+    document.getElementById('calprev').addEventListener('click', function () { show(at - 1); });
+    document.getElementById('calnext').addEventListener('click', function () { show(at + 1); });
+    /* Arrow keys work while a month button has focus. Focus is deliberately
+       left where it is, so repeated presses keep paging. */
+    bar.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); show(at - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); show(at + 1); }
+      if (e.key === 'Home') { e.preventDefault(); show(0); }
+      if (e.key === 'End') { e.preventDefault(); show(months.length - 1); }
+    });
   }
-}
 
-function openLoop(loop){
-  cur=loop;
-  playerTitle.textContent=loop.title;
-  buildOrder();
-  results=new Array(order.length).fill(undefined);
-  pos=0;
-  hub.hidden=true; player.hidden=false;
-  player.classList.toggle('theme-dark', loop.theme==='dark');
-  playing=false; setPlayBtn();
-  showTitle();
-  updateScore();
-  if(player.scrollIntoView) player.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'start'});
-  notifyHeight();
-}
-function backToHub(){
-  stopTimer(); playing=false; setPlayBtn();
-  player.hidden=true; hub.hidden=false;
-  notifyHeight();
-}
+  var iso = today.getFullYear() + '-' +
+            String(today.getMonth() + 1).padStart(2, '0') + '-' +
+            String(today.getDate()).padStart(2, '0');
+  var td = document.querySelector('[data-date="' + iso + '"]');
+  if (td) { td.classList.add('today'); }
 
-/* image for the current station, per loop type */
-function stationImg(idx){ return cur.type==='caption' ? capImg(cur, idx+1) : null; }
-function preloadCaption(idx){ const im=new Image(); im.src=capImg(cur, idx+1); }
-function curIdx(){ return order[pos]; }
-
-function showTitle(){
-  phase='title';
-  stopTimer();
-  stage.className=baseStageClass()+' is-title';
-  tcTitle.innerHTML = cur.title.replace(/\s*Loop$/, ' <span>Loop</span>');
-  tcSub.textContent = cur.subtitle;
-  tcMeta.textContent = order.length + ' stations';
-  phaseLabel.className='phase question';
-  phaseText.textContent='Title';
-  progress.textContent='Ready';
-  slideImg.removeAttribute('src'); slideImg.alt='';
-  coach.hidden=true;
-  live.textContent = cur.title + ', ' + order.length + ' stations. Press play to begin.';
-}
-function beginStations(){ runStart = timedOn() ? Date.now() : null; pos=0; showQuestion(); }
-
-function setStageMode(){
-  // base classes for stations
-  stage.className='stage'+(cur.type==='caption'?' has-caption':'');
-}
-
-function showQuestion(){
-  phase='question';
-  stage.className=baseStageClass()+' is-question';
-  const st=stationAt(pos), L=st.loop, idx=st.idx;
-  if(L.type==='caption'){
-    slideImg.src=capImg(L, idx+1);
-    slideImg.alt=`Question ${pos+1}: identify the marked structure`;
-    capQ.hidden=true; capQ.textContent='';
-    capMain.textContent=L.items[idx].q;
-    const nst=stationAt((pos+1)%order.length); if(nst.loop.type==='caption'){ const im=new Image(); im.src=capImg(nst.loop, nst.idx+1); }
-  } else {
-    const p=L.pairs[idx];
-    slideImg.src=imgPath(L,p[0]);
-    slideImg.alt=`Question ${pos+1}: identify the marked structure`;
-    const nst=stationAt((pos+1)%order.length); if(nst.loop.pairs){ const np=nst.loop.pairs[nst.idx]; const im=new Image(); im.src=imgPath(nst.loop,np[0]); }
-  }
-  phaseLabel.className='phase question';
-  phaseText.textContent='Question';
-  progress.textContent=`${pos+1} / ${order.length}`;
-  live.textContent=`Station ${pos+1} of ${order.length}. Question showing.`;
-  if(pos===0){
-    coach.hidden=false;
-    coach.innerHTML = practiceOn()
-      ? '<span class="hand" aria-hidden="true">👇</span><span>New here? <b>Type your answer</b> below, hit <b>Reveal</b> (or Enter), then rate yourself <b>Again</b>, <b>Hard</b>, <b>Good</b>, or <b>Easy</b>.</span>'
-      : '<span class="hand" aria-hidden="true">👉</span><span><b>Watch mode:</b> sit back, it plays itself. Turn on <b>Practice</b> to type and score.</span>';
-  } else { coach.hidden=true; }
-  if(practiceOn()){ answerInput.value=''; try{answerInput.focus({preventScroll:true});}catch(e){} }
-  if(playing) startCountdown(parseInt(qSel.value), goAnswer);
-  else { stopTimer(); setTimerDisplay(parseInt(qSel.value), parseInt(qSel.value)); }
-}
-function showAnswer(){
-  phase='answer';
-  stage.className=baseStageClass()+' is-answer';
-  coach.hidden=true;
-  const st=stationAt(pos), L=st.loop, idx=st.idx;
-  if(L.type==='caption'){
-    const it=L.items[idx];
-    capQ.hidden=false; capQ.textContent=it.q;
-    capMain.textContent=it.a;
-    live.textContent=`Answer: ${it.a}.`;
-  } else {
-    const p=L.pairs[idx];
-    slideImg.src=imgPath(L,p[1]);
-    slideImg.alt=`Answer ${pos+1}: ${p[2]}`;
-    live.textContent=`Answer: ${p[2]}.`;
-  }
-  phaseLabel.className='phase answer';
-  phaseText.textContent='Answer';
-  if(practiceOn()){
-    stopTimer();
-    const t=answerInput.value.trim();
-    scTyped.innerHTML = t ? 'You typed: <b>'+escHtml(t)+'</b>' : '<i>No answer typed</i>';
-  } else if(playing){ startCountdown(parseInt(aSel.value), goNext); }
-  else { stopTimer(); setTimerDisplay(parseInt(aSel.value), parseInt(aSel.value)); }
-}
-function goAnswer(){ showAnswer(); }
-function goNext(){
-  if(phase==='title'||phase==='results'){ beginStations(); return; }
-  if(pos>=order.length-1){
-    if(loopForever()){ pos=0; showQuestion(); }
-    else { showResults(true); }
-    return;
-  }
-  pos++; showQuestion();
-}
-function goPrev(){ if(phase==='title'||phase==='results'){ return; } pos=(pos-1+order.length)%order.length; showQuestion(); }
-
-/* ----- self-check score: 'correct' | 'misspelled' | 'incorrect' ----- */
-function mark(kind){
-  if(phase!=='answer' || !practiceOn()) return;
-  stopTimer();
-  results[pos]=kind;
-  const mst=stationAt(pos); recordItem(mst.loop.id, mst.idx, kind);
-  updateScore();
-  if(results.every(r=>r!==undefined)){ showResults(true); }
-  else { goNext(); }
-}
-function updateScore(){
-  const seen=results.filter(r=>r!==undefined).length;
-  const right=results.filter(r=>r==='good'||r==='easy').length;
-  scoreNum.textContent=right; scoreSeen.textContent=seen;
-  scoreChip.hidden = !practiceOn() || seen===0;
-}
-
-/* ----- score history (this browser only) ----- */
-function loadScores(){ try{ return JSON.parse(localStorage.getItem('loopScores_v1')||'{}'); }catch(e){ return {}; } }
-function saveScores(o){ try{ localStorage.setItem('loopScores_v1',JSON.stringify(o)); }catch(e){} }
-function loadHistory(id){ return loadScores()[id]||[]; }
-function recordAttempt(id,right,denom,pct,ms){
-  const s=loadScores(); const arr=s[id]||[];
-  arr.push({t:Date.now(),right:right,denom:denom,pct:pct,ms:(ms!=null?ms:null)});
-  if(arr.length>40) arr.splice(0,arr.length-40);
-  s[id]=arr; saveScores(s); return arr;
-}
-function fmtDate(t){ try{ return new Date(t).toLocaleString(undefined,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}); }catch(e){ return ''; } }
-
-function showResults(commit){
-  phase='results';
-  stopTimer(); playing=false; setPlayBtn();
-  stage.className=baseStageClass()+' is-results';
-  coach.hidden=true;
-  const seen=results.filter(r=>r!==undefined).length;
-  if(!practiceOn() && seen===0){
-    rcScore.textContent='Done';
-    rcPct.textContent=`You watched ${order.length} card${order.length===1?'':'s'}.`;
-    rcTime.hidden=true; rcTrend.textContent='';
-    rcMsg.textContent='Turn on Practice to type and score next time.';
-    rcHistory.innerHTML='';
-    phaseText.textContent='Done';
-    progress.textContent=`${order.length} / ${order.length}`;
-    live.textContent=`Session complete. ${order.length} cards watched.`;
-    return;
-  }
-  const right=results.filter(r=>r==='good'||r==='easy').length;
-  const hardN=results.filter(r=>r==='hard').length;
-  const wrong=results.filter(r=>r==='again').length;
-  const denom=seen||order.length;
-  const pct=Math.round((right/denom)*100);
-  const complete=seen===order.length;
-  const ms = (timedOn() && runStart) ? (Date.now()-runStart) : null;
-
-  const histBefore=loadHistory(cur.id);
-  const prevPct = histBefore.length ? histBefore[histBefore.length-1].pct : null;
-  const prevMs = (function(){ for(var i=histBefore.length-1;i>=0;i--){ if(histBefore[i].ms!=null) return histBefore[i].ms; } return null; })();
-  let hist = histBefore;
-  if(commit && complete){ hist=recordAttempt(cur.id,right,denom,pct,ms); }
-
-  rcScore.textContent=`${right} / ${denom}`;
-  rcPct.textContent = hardN||wrong ? `${pct}% solid  ·  ${hardN} shaky  ·  ${wrong} to redo` : `${pct}% solid`;
-
-  // time + pace improvement
-  if(ms!=null){
-    var tt='Time: '+fmtTime(ms);
-    if(prevMs!=null){ var ds=Math.round((prevMs-ms)/1000);
-      tt += ds>2 ? `  ·  ${ds}s faster than last time` : ds<-2 ? `  ·  ${-ds}s slower than last time` : '  ·  about the same pace';
+  Array.prototype.forEach.call(document.querySelectorAll('.wkrow'), function (row) {
+    var wk = +row.getAttribute('data-wk');
+    var w = WEEKS.filter(function (x) { return x.wk === wk; })[0];
+    if (!w) { return; }
+    var state = today > D(w.closes) ? 'past' : (wk === cur.wk ? 'now' : 'ahead');
+    row.setAttribute('data-state', state);
+    if (state === 'now') {
+      var h = row.querySelector('h3');
+      if (h && !h.querySelector('.tagnow')) {
+        var t = document.createElement('span');
+        t.className = 'tagnow'; t.textContent = 'This week';
+        h.appendChild(t);
+      }
     }
-    rcTime.textContent=tt; rcTime.hidden=false;
-  } else { rcTime.hidden=true; }
-  rcMsg.textContent = pct>=90?"Outstanding. You know these cold.":pct>=75?"Strong work. Review the misses and run it again.":pct>=50?"Good progress. Another pass will lock these in.":"Keep going. Run the loop again and watch it climb.";
-
-  // improvement assessment vs previous attempt
-  let trend;
-  if(prevPct===null){ trend = complete ? "First attempt saved." : "Finish all stations to start tracking."; }
-  else { const d=pct-prevPct;
-    trend = d>=5 ? `Up ${d} points from last time. Improving!` : d<=-5 ? `Down ${-d} points from last time. Run it again.` : "About the same as last time.";
-  }
-  rcTrend.textContent=trend;
-
-  if(cur.type==='review'){
-    const tally={};
-    for(let p=0;p<order.length;p++){ const st=cur.stations[order[p]]; const nm=st.loop.unit||st.loop.title; const r=results[p]; if(!tally[nm]) tally[nm]={seen:0,right:0}; if(r!==undefined){ tally[nm].seen++; if(r==='good'||r==='easy') tally[nm].right++; } }
-    const rows=Object.keys(tally).map(nm=>{ const t=tally[nm]; const tp=t.seen?Math.round(t.right/t.seen*100):0; return `<div class="rh-row"><span>${nm}</span><b>${t.right}/${t.seen} &middot; ${tp}%</b></div>`; }).join('');
-    rcHistory.innerHTML=`<p class="rh-title">By topic</p>${rows}`;
-    phaseText.textContent='Results';
-    progress.textContent=`${seen} / ${order.length}`;
-    live.textContent=`Your score: ${right} out of ${denom}, ${pct} percent.`;
-    return;
-  }
-
-  // history list (most recent first)
-  if(hist.length){
-    const best=Math.max.apply(null,hist.map(h=>h.pct));
-    const times=hist.map(h=>h.ms).filter(m=>m!=null);
-    const bestTime=times.length?Math.min.apply(null,times):null;
-    const rows=hist.slice().reverse().slice(0,6).map(h=>{
-      const tm = (h.ms!=null) ? '  ·  '+fmtTime(h.ms) : '';
-      return `<div class="rh-row"><span>${fmtDate(h.t)}</span><b>${h.pct}%${tm}</b></div>`;
-    }).join('');
-    const head = bestTime!=null ? `Your history &middot; best ${best}% &middot; fastest ${fmtTime(bestTime)}` : `Your history &middot; best ${best}%`;
-    rcHistory.innerHTML=`<p class="rh-title">${head}</p>${rows}`;
-  } else { rcHistory.innerHTML=''; }
-
-  phaseText.textContent='Results';
-  progress.textContent=`${seen} / ${order.length}`;
-  live.textContent=`Your score: ${right} out of ${denom}, ${pct} percent. ${trend}`;
-}
-
-/* ----- countdown engine ----- */
-function setTimerDisplay(rem,tot){
-  timerNum.textContent=rem;
-  const frac= tot>0 ? rem/tot : 0;
-  arc.style.strokeDashoffset = ARC_LEN*(1-frac);
-}
-function stopTimer(){ if(ticker){clearInterval(ticker);ticker=null;} }
-function startCountdown(seconds,onDone){
-  stopTimer();
-  total=seconds; remaining=seconds;
-  setTimerDisplay(remaining,total);
-  ticker=setInterval(()=>{
-    remaining--;
-    if(remaining<=0){ stopTimer(); setTimerDisplay(0,total); onDone(); return; }
-    setTimerDisplay(remaining,total);
-  },1000);
-}
-
-/* ----- transport ----- */
-function play(){
-  if(phase==='results'){ return; }
-  playing=true; setPlayBtn();
-  if(phase==='title'){ beginStations(); return; }
-  if(phase==='question') startCountdown(parseInt(qSel.value), goAnswer);
-  else startCountdown(parseInt(aSel.value), goNext);
-}
-function pause(){ playing=false; setPlayBtn(); stopTimer(); }
-function togglePlay(){ if(phase==='results') return; playing?pause():play(); }
-function practiceAgain(){ pause(); buildOrder(); results=new Array(order.length).fill(undefined); updateScore(); pos=0; showTitle(); }
-function setPlayBtn(){ playBtn.innerHTML = playing ? '&#10073;&#10073; Pause' : '&#9658; Play'; playBtn.setAttribute('aria-pressed',playing); }
-
-document.getElementById('backBtn').addEventListener('click',backToHub);
-document.getElementById('prevBtn').addEventListener('click',()=>{goPrev();});
-document.getElementById('nextBtn').addEventListener('click',()=>{goNext();});
-document.getElementById('revealBtn').addEventListener('click',()=>{ if(phase==='question'){ stopTimer(); showAnswer(); }});
-document.getElementById('restartBtn').addEventListener('click',practiceAgain);
-document.getElementById('scoreBtn').addEventListener('click',()=>{ if(phase!=='title') showResults(false); });
-document.getElementById('scAgain').addEventListener('click',()=>mark('again'));
-document.getElementById('scHard').addEventListener('click',()=>mark('hard'));
-document.getElementById('scGood').addEventListener('click',()=>mark('good'));
-document.getElementById('scEasy').addEventListener('click',()=>mark('easy'));
-document.getElementById('rcRestart').addEventListener('click',practiceAgain);
-document.getElementById('rcBack').addEventListener('click',backToHub);
-playBtn.addEventListener('click',togglePlay);
-qSel.addEventListener('change',()=>{ savePrefs(); if(playing&&phase==='question') startCountdown(parseInt(qSel.value),goAnswer); else if(!playing&&phase==='question') setTimerDisplay(parseInt(qSel.value),parseInt(qSel.value)); });
-aSel.addEventListener('change',()=>{ savePrefs(); if(playing&&phase==='answer'&&!practiceOn()) startCountdown(parseInt(aSel.value),goNext); else if(!playing&&phase==='answer'&&!practiceOn()) setTimerDisplay(parseInt(aSel.value),parseInt(aSel.value)); });
-shuffleChk.addEventListener('change',()=>{ savePrefs(); buildOrder(); results=new Array(order.length).fill(undefined); pos=0; if(phase==='title') showTitle(); else showQuestion(); });
-lenSel.addEventListener('change',()=>{ savePrefs(); buildOrder(); results=new Array(order.length).fill(undefined); updateScore(); pos=0; showTitle(); });
-practiceChk.addEventListener('change',()=>{ savePrefs(); updateScore(); if(phase==='question') showQuestion(); else if(phase==='answer') showAnswer(); else if(phase==='title') showTitle(); });
-timedChk.addEventListener('change',()=>{ savePrefs(); });
-
-document.addEventListener('keydown',(e)=>{
-  if(player.hidden) return;
-  const tag=(e.target.tagName||'').toLowerCase();
-  if(tag==='input'||tag==='textarea'){
-    if(e.code==='Enter' && phase==='question'){ e.preventDefault(); stopTimer(); showAnswer(); }
-    return;
-  }
-  if(tag==='select') return;
-  if(e.code==='Space'){ e.preventDefault(); togglePlay(); }
-  else if(e.code==='ArrowRight'){ e.preventDefault(); goNext(); }
-  else if(e.code==='ArrowLeft'){ e.preventDefault(); goPrev(); }
-  else if(e.code==='Enter'){ if(phase==='question'){ e.preventDefault(); stopTimer(); showAnswer(); } }
-});
-
-/* ---------------- REVIEW BUILDER ---------------- */
-const builder=document.getElementById('builder');
-const builderTopics=document.getElementById('builderTopics');
-const weakChk=document.getElementById('weakChk');
-const builderNote=document.getElementById('builderNote');
-function renderBuilderTopics(){
-  builderTopics.innerHTML='';
-  LOOPS.forEach(L=>{
-    const lab=document.createElement('label'); lab.className='topic-opt';
-    lab.innerHTML=`<input type="checkbox" value="${L.id}"><span>${L.unit||L.title}</span><span class="t-count">${stationN(L)}</span>`;
-    builderTopics.appendChild(lab);
   });
-  builderTopics.querySelectorAll('input').forEach(cb=>cb.addEventListener('change',updateBuilderNote));
-}
-function selectedReviewLoops(){ const ids=Array.from(builderTopics.querySelectorAll('input:checked')).map(cb=>cb.value); return LOOPS.filter(L=>ids.indexOf(L.id)>=0); }
-function updateBuilderNote(){
-  const loops=selectedReviewLoops();
-  if(loops.length===0){ builderNote.textContent='Select one or more topics to begin.'; return; }
-  if(weakChk.checked){ const w=weakCount(loops); builderNote.textContent = w>0 ? `${w} weak card${w===1?'':'s'} found in the selected topic${loops.length===1?'':'s'}.` : 'No weak cards here yet. Practice these topics first, or turn this off to review all.'; }
-  else { const total=loops.reduce((a,L)=>a+stationN(L),0); builderNote.textContent=`${total} cards across ${loops.length} topic${loops.length===1?'':'s'}. They will be shuffled together.`; }
-}
-function showBuilder(){ renderBuilderTopics(); weakChk.checked=false; updateBuilderNote(); hub.hidden=true; player.hidden=true; builder.hidden=false; if(builder.scrollIntoView) builder.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'start'}); notifyHeight(); }
-function hideBuilder(){ builder.hidden=true; hub.hidden=false; notifyHeight(); }
-function startReview(){
-  const loops=selectedReviewLoops();
-  if(loops.length===0){ updateBuilderNote(); return; }
-  const weakOnly=weakChk.checked;
-  if(weakOnly && weakCount(loops)===0){ updateBuilderNote(); return; }
-  const rl=makeReviewLoop(loops, weakOnly);
-  if(rl.stations.length===0){ updateBuilderNote(); return; }
-  builder.hidden=true;
-  openLoop(rl);
-}
-document.getElementById('builderBack').addEventListener('click',hideBuilder);
-document.getElementById('builderStart').addEventListener('click',startReview);
-weakChk.addEventListener('change',updateBuilderNote);
+}());
+</script>
 
-/* ---------------- MY PROGRESS DASHBOARD ---------------- */
-const dash=document.getElementById('dash');
-const dashBody=document.getElementById('dashBody');
-function overallStats(){ const s=loadItemStats(); let att=0,cor=0,items=0; for(const k in s){ const it=s[k]; att+=it.seen||0; cor+=itemCorrect(it); if(it.seen) items++; } return {attempts:att,correct:cor,items:items,pct:att?Math.round(cor/att*100):0}; }
-function topicStatsList(){ return LOOPS.map(L=>{ const total=stationN(L); let practiced=0,weak=0,att=0,cor=0; for(let k=0;k<total;k++){ const it=itemRecord(L.id,k); if(it&&it.seen){ practiced++; att+=it.seen; cor+=itemCorrect(it); if(isWeak(L.id,k)) weak++; } } return {loop:L,total,practiced,weak,pct:att?Math.round(cor/att*100):null}; }); }
-function weakItemsAll(){ const arr=[]; LOOPS.forEach(L=>{ const n=stationN(L); for(let k=0;k<n;k++){ const sc=weaknessScore(L.id,k); if(sc!=null&&sc>=0.4){ const it=itemRecord(L.id,k); arr.push({loop:L,idx:k,score:sc,label:(L.pairs?L.pairs[k][2]:''),recent:(it&&it.recent)||[]}); } } }); arr.sort((a,b)=>b.score-a.score); return arr; }
-function recentDots(recent){ const last=recent.slice(-6); return '<span class="weak-dots">'+last.map(o=>{ const c=(o==='e'||o==='g'||o==='c'||o===1)?'c':(o==='h'||o==='m')?'m':'x'; return '<i class="'+c+'"></i>'; }).join('')+'</span>'; }
-function renderDash(){
-  const ov=overallStats();
-  if(!ov.attempts){ dashBody.innerHTML='<div class="dash-card"><p class="dash-empty">No practice yet. Run a loop in Practice mode and mark your answers, then your strengths and weak spots show up here.</p></div>'; return; }
-  const topics=topicStatsList().filter(t=>t.practiced>0).sort((a,b)=>b.weak-a.weak);
-  const weak=weakItemsAll();
-  let html='<div class="dash-card"><div class="dash-overall">'
-    +'<div class="dash-stat"><span class="num">'+ov.pct+'%</span><span class="lab">Overall accuracy</span></div>'
-    +'<div class="dash-stat"><span class="num">'+ov.items+'</span><span class="lab">Cards practiced</span></div>'
-    +'<div class="dash-stat"><span class="num">'+weak.length+'</span><span class="lab">Weak cards</span></div>'
-    +'</div></div>';
-  html+='<div class="dash-card"><p class="dash-h">By topic</p>';
-  topics.forEach(t=>{ const pct=t.pct==null?0:t.pct; html+='<div class="topic-row"><span class="tn">'+escHtml(t.loop.unit||t.loop.title)+'</span><span class="bar"><i style="width:'+pct+'%"></i></span><span class="tv">'+pct+'% <span class="tw">'+t.weak+' weak</span></span></div>'; });
-  html+='</div>';
-  if(weak.length){
-    html+='<div class="dash-card"><p class="dash-h">Cards to work on</p>';
-    weak.slice(0,12).forEach(w=>{ html+='<div class="weak-item"><span class="wlab">'+escHtml(w.label||('Card '+(w.idx+1)))+'</span>'+recentDots(w.recent)+'<span class="wtop">'+escHtml(w.loop.unit||w.loop.title)+'</span></div>'; });
-    html+='<div class="dash-actions"><button class="tbtn play" id="dashDrill" type="button">Drill my weak cards &#9654;</button></div></div>';
+<script>
+(function () {
+  var ID = 'bio005-home';
+  function send() {
+    try { parent.postMessage({ id: ID, frameId: ID,
+      height: Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) }, '*'); } catch (e) {}
   }
-  dashBody.innerHTML=html;
-  const dd=document.getElementById('dashDrill'); if(dd) dd.addEventListener('click',drillWeak);
-}
-function drillWeak(){ const rl=makeReviewLoop(LOOPS, true); if(!rl.stations.length) return; dash.hidden=true; openLoop(rl); }
-function showDash(){ renderDash(); hub.hidden=true; player.hidden=true; builder.hidden=true; dash.hidden=false; if(dash.scrollIntoView) dash.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'start'}); notifyHeight(); }
-function hideDash(){ dash.hidden=true; hub.hidden=false; notifyHeight(); }
-document.getElementById('dashBack').addEventListener('click',hideDash);
-
-/* ---------------- iframe height-sender (Kajabi / GitHub Pages embed) ---------------- */
-function notifyHeight(){
-  try{
-    var h=Math.max(document.body.scrollHeight,document.documentElement.scrollHeight,document.body.offsetHeight,document.documentElement.offsetHeight);
-    parent.postMessage({id:'anatomy-loops',frameHeight:h},'*');
-  }catch(e){}
-}
-window.addEventListener('load',notifyHeight);
-window.addEventListener('resize',notifyHeight);
-if(typeof ResizeObserver!=='undefined'){ new ResizeObserver(notifyHeight).observe(document.body); }
+  window.addEventListener('load', send); window.addEventListener('resize', send);
+  if (window.ResizeObserver) { new ResizeObserver(send).observe(document.body); }
+  send();
+}());
 </script>
 </body>
 </html>

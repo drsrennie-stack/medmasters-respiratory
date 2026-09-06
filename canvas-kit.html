@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canvas assignment kit &middot; BIO 005 &middot; instructor tool</title>
+<link href="https://cdn.jsdelivr.net/npm/@fontsource-variable/plus-jakarta-sans/index.css" rel="stylesheet">
+<style>
+:root{--navy:#0B1530;--rust:#8B3A2E;--gold:#C9A14A;--goldpale:#F7EFD9;--slate:#8C90A0}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Plus Jakarta Sans Variable',system-ui,sans-serif;color:var(--navy);background:#fff;line-height:1.6;font-size:15px;padding:60px max(40px,5vw)}
+.inner{max-width:1080px;margin:0 auto}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--rust);margin:0 0 14px}
+h1{font-size:clamp(30px,5vw,44px);font-weight:800;letter-spacing:-.025em;margin:0 0 8px}
+h2{font-size:clamp(20px,3vw,26px);font-weight:800;letter-spacing:-.02em;margin:36px 0 8px;border-top:1px solid rgba(11,21,48,.14);padding-top:14px}
+h3{font-size:16px;font-weight:800;margin:18px 0 4px}
+.lede{max-width:660px}
+a{color:var(--rust)}
+:focus-visible{outline:3px solid var(--rust);outline-offset:3px}
+.pick{margin:20px 0 6px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+select{font:inherit;padding:10px 14px;border:1px solid var(--slate);border-radius:10px}
+.meta{background:var(--goldpale);border:1px solid var(--slate);border-radius:12px;padding:12px 16px;max-width:660px;margin:10px 0 4px}
+.snip{margin:14px 0 22px}
+.snip .bar{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap}
+.snip .lbl{font-weight:800}
+.snip .due{font-size:12.5px;font-weight:700;color:var(--rust);letter-spacing:.06em;text-transform:uppercase}
+pre{background:#0B1530;color:#F5F1E8;border-radius:12px;padding:14px 16px;overflow:auto;font-size:12.5px;line-height:1.5;margin:8px 0 6px}
+button.copy{font:inherit;font-weight:700;font-size:13px;border:1px solid var(--slate);background:#fff;border-radius:8px;padding:6px 14px;cursor:pointer}
+button.copy:hover{border-color:var(--rust);color:var(--rust)}
+.note{font-size:13.5px;color:rgba(11,21,48,.75);max-width:660px}
+.disc{background:#fff;border:1px solid var(--slate);border-radius:12px;box-shadow:0 14px 30px rgba(11,21,48,.14);padding:16px 20px;max-width:760px;margin:12px 0 18px}
+.disc p{margin:6px 0}
+ol.setup{max-width:700px}
+ol.setup li{margin:0 0 10px}
+</style>
+</head>
+<body>
+<div class="inner">
+<p class="eyebrow">BIO 005 &middot; instructor tool &middot; not for students</p>
+<h1>The Canvas assignment kit.</h1>
+<p class="lede">Everything needed to build a week's assignments in Canvas: pick the week, copy each embed into the assignment's HTML editor (the &lt;/&gt; button), set the dates shown, publish. The pages relabel themselves by week; the snippets below already carry the right parameter.</p>
+
+<h2>Once, before Week 1: the five assignment groups</h2>
+<ol class="setup">
+<li>In Canvas, Assignments, create five groups and turn on <strong>weight final grade by group</strong>: Competency note sheets 20%, Midterms 40%, Lab 15%, Book problems 15%, Discussions 10%.</li>
+<li>Point values inside a group can be anything consistent; the weights do the math. Ten points per weekly item is easy to read.</li>
+<li>Name every assignment the same way: <strong>Week 03 &middot; Note sheet</strong>, so the list sorts itself.</li>
+<li><strong>Worksheets are linked, never embedded.</strong> Anything students complete goes in as a link that opens in its own tab; they print it to PDF or copy it to paper, work by hand, and upload. Only directions pages get iframed.</li>
+<li>All due times are <strong>10:00 pm</strong>. Discussions get two dates: initial post Friday, replies Sunday (use the Canvas available/due fields).</li>
+<li>Pearson items: assign the week's PhysioEx activities by name in Mastering, completion weight; the graded points live on the Canvas lab assignment. The week-by-week exercise list is in physioex-lab-map-fall2026.md.</li>
+</ol>
+
+<h2>Pick a week</h2>
+<div class="pick">
+  <label for="wk" class="eyebrow" style="margin:0">Week</label>
+  <select id="wk"></select>
+</div>
+<div class="meta" id="wkmeta"></div>
+<div id="snips"></div>
+
+<h2>Entry pages, embed once</h2>
+<div id="static"></div>
+
+<h2>The first discussions, copy-paste prompts</h2>
+<p class="note">The embed for the discussion instructions page is above, per week. These are the prompt texts for the Canvas discussion body. Week 1 uses your built vision board page.</p>
+<div id="discs"></div>
+</div>
+
+<script>
+var BASE = "https://drsrennie-stack.github.io/human-physiology-Fa26/";
+var TITLES = {"1": "How physiology works and what keeps you steady", "2": "The chemistry that does work in the body", "3": "Getting across the membrane", "4": "How cells talk, and the electrical signal", "5": "Synapses and central integration", "6": "Sensing the world, and the responses you do not control", "7": "Muscle, and how movement gets commanded", "8": "Hormones and reproduction, the slow control system", "9": "The heart as a pump", "10": "Pressure, flow, and holding blood pressure steady", "11": "Blood and how the body defends itself", "12": "Digestion, and how you use food for fuel", "13": "Breathing, gas transport, and the fast pH lever", "14": "The kidney and body fluid balance", "15": "The slow pH lever, and putting it all together"};
+var DUE = {"1": "Sun Sep 13", "2": "Sun Sep 20", "3": "Sun Sep 27", "4": "Sun Oct 4", "5": "Sun Oct 11", "6": "Sun Oct 18", "7": "Sun Oct 25", "8": "Sun Nov 1", "9": "Sun Nov 8", "10": "Sun Nov 15", "11": "Sun Nov 22", "12": "Sun Nov 29", "13": "Sun Dec 6", "14": "Sun Dec 13", "15": "Wed Dec 16"};
+var POST = {"1": "Fri Sep 11", "2": "Fri Sep 18", "3": "Fri Sep 25", "4": "Fri Oct 2", "5": "Fri Oct 9", "6": "Fri Oct 16", "7": "Fri Oct 23", "8": "Fri Oct 30", "9": "Fri Nov 6", "10": "Fri Nov 13", "11": "Fri Nov 20", "12": "Fri Nov 27", "13": "Fri Dec 4", "14": "Fri Dec 11", "15": "Mon Dec 14"};
+var EXTRAS = {"1": [["Week 1 prompts", "week-01-notesheet-prompts.html", 3200], ["Week 1 lab: standards and ranges", "reference-range-lab.html", 3400], ["Week 1 digital vision board", "assignment-discussion-01-visionboard.html", 1900]], "2": [["Week 2 prompts", "week-02-notesheet-prompts.html", 3000], ["Week 2 enzyme lab", "enzyme-amylase-lab.html", 3400], ["Learning lab: Reading a Physiology Figure or Graph", "learning-lab.html", "link"]]};
+var DISCUSSIONS = {"1": ["The digital vision board", "Embed assignment-discussion-01-visionboard.html (snippet in the Week 1 section above adds it when you add it to EXTRAS) or link it. Post Fri Sep 11, 10:00 pm; replies Sun Sep 13, 10:00 pm."], "2": ["Week 2 discussion: the molecule that surprised you", "This week was chemistry doing physiological work. Pick one thing you measured or drew this week, the enzyme curve, the buffer, ATP, and work through what it does and why it matters in a body. Then the honest half: what did you predict wrong in the enzyme lab, and what were you assuming that made your prediction seem right? One post carrying both. Initial post Friday 10:00 pm, replies Sunday 10:00 pm."], "3": ["Week 3 discussion: the gradient you did not notice", "Everything this week moved because of a gradient. Choose one movement across a membrane from the week, describe the gradient driving it and what would stop it. Then the honest half: which transport mechanism still feels shaky when you explain it without looking, and what specifically breaks down when you try? One post carrying both. Initial post Friday 10:00 pm, replies Sunday 10:00 pm."], "4": ["Week 4 discussion: the signal, start to finish", "Cells talked to each other this week, chemically and electrically. Walk one signal from its trigger to its effect in your own words, no notes open. Then the honest half: where in the electrical story did you have to go back and relearn something, and what finally made it click, or has not yet? One post carrying both. Initial post Friday 10:00 pm, replies Sunday 10:00 pm."]};
+
+function pad(n){ return (n < 10 ? "0" : "") + n; }
+function linksnip(url, label){
+  return '<p><a href="' + BASE + url + '" target="_blank" rel="noopener"><strong>' + label + '</strong></a><br>Open it in a new tab, print to PDF or copy to your own paper, work it by hand, and upload it here.</p>';
+}
+function iframe(url, title, h){
+  return '<p><iframe src="' + BASE + url + '"\n  title="' + title + '" width="100%" height="' + h + '"\n  style="width:100%; min-height:' + h + 'px; border:0; display:block;"></iframe></p>';
+}
+function snip(label, due, code){
+  return '<div class="snip"><div class="bar"><span class="lbl">' + label + '</span><span class="due">' + due + '</span></div>' +
+    '<pre>' + code.replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</pre>' +
+    '<button type="button" class="copy" data-code="' + encodeURIComponent(code) + '">Copy embed</button></div>';
+}
+function build(w){
+  var t = TITLES[w], due = DUE[w] + ", 10:00 pm", post = POST[w] + ", 10:00 pm";
+  document.getElementById('wkmeta').innerHTML = '<strong>Week ' + w + ' &middot; ' + t + '.</strong> Everything due ' + due + '. Discussion initial post ' + post + '.';
+  var out = '';
+  out += snip('Week ' + w + ' &middot; Note sheet &middot; group: Competency note sheets', 'due ' + due,
+    iframe('assignment-notesheet.html?week=' + w, 'Week ' + w + ' note sheet', 950));
+  out += snip('Week ' + w + ' &middot; Discussion &middot; group: Discussions', 'post ' + post + ' &middot; replies ' + due,
+    iframe('assignment-discussion.html?week=' + w, 'Week ' + w + ' discussion', 1500));
+  out += snip('Week ' + w + ' &middot; Book problems &middot; group: Book problems', 'due ' + due,
+    iframe('assignment-bookproblems.html?week=' + w, 'Week ' + w + ' book problems', 1700));
+  out += snip('Week ' + w + ' &middot; Lab &middot; group: Lab', 'due ' + due,
+    iframe('assignment-physioex.html?week=' + w, 'Week ' + w + ' lab', 1000));
+  out += snip('Week ' + w + ' &middot; AI work log', 'due ' + due,
+    iframe('ai-work-log.html?week=' + w, 'Week ' + w + ' AI work log', 1600));
+  out += snip('Week ' + w + ' hub, for the module front page', 'opens with the week',
+    iframe('week-' + pad(w) + '.html', 'Week ' + w + ' \u00b7 ' + t, 2000));
+  var ex = EXTRAS[w] || [];
+  for (var i = 0; i < ex.length; i++){
+    var code = (ex[i][2] === 'link') ? linksnip(ex[i][1], ex[i][0]) : iframe(ex[i][1], ex[i][0], ex[i][2]);
+    out += snip(ex[i][0], 'due ' + due, code);
+  }
+  document.getElementById('snips').innerHTML = out;
+  wireCopy();
+}
+function buildStatic(){
+  var items = [
+    ['Canvas front page: course door with the This Week card', 'course-door.html', 1300],
+    ['Minimal front card, two buttons', 'canvas-home.html', 820],
+    ['The welcome, week 0 announcement', 'welcome.html', 2600],
+    ['Course tools, the six step weekly page', 'course-materials.html', 9000],
+    ['Door: every assignment, all fifteen weeks', 'door-assignments.html', 2300],
+    ['Door: every lab, with the PhysioEx buttons', 'door-lab.html', 2100],
+    ['Door: every lecture', 'door-lecture.html', 2000],
+    ['Door: the study tools', 'door-study.html', 1500],
+    ['Syllabus page', 'syllabus-fall2026.html', 6200],
+    ['Schedule page', 'course-schedule.html', 3200],
+    ['250 questions, answered', 'course-questions.html', 4200],
+    ['Competency Packet', 'competency-packet-fall2026.html', 5200]
+  ];
+  var out = '';
+  for (var i = 0; i < items.length; i++){
+    out += snip(items[i][0], 'embed once', iframe(items[i][1], items[i][0], items[i][2]));
+  }
+  document.getElementById('static').innerHTML = out;
+}
+function buildDiscs(){
+  var out = '';
+  for (var w in DISCUSSIONS){
+    out += '<div class="disc"><p class="eyebrow" style="margin:0 0 6px">Week ' + w + ' &middot; ' + DISCUSSIONS[w][0] + '</p><p>' + DISCUSSIONS[w][1] + '</p>' +
+      '<button type="button" class="copy" data-code="' + encodeURIComponent(DISCUSSIONS[w][1]) + '">Copy prompt</button></div>';
+  }
+  document.getElementById('discs').innerHTML = out;
+}
+function wireCopy(){
+  var btns = document.querySelectorAll('button.copy');
+  for (var i = 0; i < btns.length; i++){
+    btns[i].onclick = function(){
+      var code = decodeURIComponent(this.getAttribute('data-code'));
+      var self = this;
+      navigator.clipboard.writeText(code).then(function(){
+        self.textContent = 'Copied'; setTimeout(function(){ self.textContent = self.getAttribute('data-orig') || 'Copy embed'; }, 1400);
+      });
+    };
+    btns[i].setAttribute('data-orig', btns[i].textContent);
+  }
+}
+var sel = document.getElementById('wk');
+for (var w = 1; w <= 15; w++){
+  var o = document.createElement('option'); o.value = w; o.textContent = 'Week ' + w + ' \u00b7 ' + TITLES[w];
+  sel.appendChild(o);
+}
+sel.addEventListener('change', function(){ build(parseInt(sel.value, 10)); });
+build(1); buildStatic(); buildDiscs(); wireCopy();
+</script>
+</body>
+</html>

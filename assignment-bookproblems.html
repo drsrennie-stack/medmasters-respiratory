@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book problems &middot; BIO 005 Human Physiology</title>
+<link href="https://cdn.jsdelivr.net/npm/@fontsource-variable/plus-jakarta-sans/index.css" rel="stylesheet">
+<style>
+:root{--navy:#0B1530;--rust:#8B3A2E;--gold:#C9A14A;--goldpale:#F7EFD9;--slate:#8C90A0}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Plus Jakarta Sans Variable','Plus Jakarta Sans',system-ui,sans-serif;color:var(--navy);background:#fff;line-height:1.65;font-size:15.5px;padding:40px max(28px,4vw)}
+.inner{max-width:860px;margin:0 auto}
+.skip{position:absolute;left:-9999px;top:0;background:var(--navy);color:#fff;padding:12px 18px;font-weight:700;text-decoration:none}
+.skip:focus{left:0;top:0}
+a{color:var(--rust)}
+:focus-visible{outline:3px solid var(--rust);outline-offset:3px}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--rust);margin:0 0 12px}
+h1{font-size:clamp(26px,4.5vw,36px);font-weight:800;letter-spacing:-.02em;margin:0 0 4px;line-height:1.1}
+.sub{margin:0 0 4px;font-weight:700}
+.due{color:var(--rust);font-weight:800;margin:0 0 18px}
+.probbox{background:var(--goldpale);border:1px solid var(--slate);border-radius:12px;padding:16px 20px;max-width:680px;margin:0 0 20px}
+.probbox p{margin:0;font-weight:700}
+h2{font-size:18px;font-weight:800;margin:24px 0 6px}
+ol.how{margin:8px 0 18px;padding-left:22px}
+ol.how li{margin:0 0 10px;max-width:64ch}
+.waybtn{display:inline-block;background:var(--rust);color:#fff;font-weight:800;text-decoration:none;border-radius:8px;padding:12px 20px;font-size:14px;margin:0 0 10px}
+.upload{background:var(--goldpale);border:1px solid var(--slate);border-radius:12px;padding:14px 18px;max-width:680px}
+.upload ol{margin:6px 0 0;padding-left:20px}
+.upload li{margin:0 0 6px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the instructions</a>
+<main id="main" class="inner">
+  <p class="eyebrow">Assignment &middot; graded &middot; part of 15% of your grade &middot; AI open, with the log</p>
+  <h1>Book problems</h1>
+  <p class="sub" id="wkline"></p>
+  <p class="due" id="dueline"></p>
+
+  <div class="probbox"><p id="probline"></p></div>
+
+  <h2>How to work them</h2>
+  <ol class="how">
+    <li><strong>By hand, before you look anything up.</strong> Get as far as you can from what you know; the reasoning is the assignment, not the answer.</li>
+    <li><strong>Write where each piece came from</strong> as you go: the page, the figure, the video. You will need those sources for the log below.</li>
+    <li><strong>The answers in the back are for checking, after.</strong> A problem you watched yourself solve is not a problem you can solve.</li>
+  </ol>
+
+  <h2>The AI worksheet</h2>
+  <p style="max-width:66ch">One log entry per problem: solve it, source it, then, and only then, open AI to check it. The worksheet is part of the assignment, not extra. Open it, print it to PDF or paper, and complete it by hand as you work; it does not get filled out on a screen.</p>
+  <p><a class="waybtn" id="aitab" href="ai-work-log.html" target="_blank" rel="noopener">Open the AI worksheet to print</a></p>
+
+  <h2>Turning it in</h2>
+  <div class="upload">
+    <ol>
+      <li><strong>Both parts, together, or it is not complete:</strong> your hand worked answers to every assigned problem, and your completed AI worksheet.</li>
+      <li><strong>Your own paper is always fine.</strong> Label it the way the worksheet is labeled: your name, the week, the question or part number, and a few words saying what the question asked, above each answer. An unlabeled page cannot be graded.</li>
+      <li>Everything handwritten, photographed or scanned into <strong>one PDF</strong>, answers first, worksheet after.</li>
+      <li>Submit the PDF on this assignment in Canvas before <strong>10:00 pm</strong>. Check for the confirmation screen.</li>
+    </ol>
+  </div>
+</main>
+<script>
+(function(){
+  var TITLES = ["How physiology works and what keeps you steady", "The chemistry that does work in the body", "Getting across the membrane", "How cells talk, and the electrical signal", "Synapses and central integration", "Sensing the world, and the responses you do not control", "Muscle, and how movement gets commanded", "Hormones and reproduction, the slow control system", "The heart as a pump", "Pressure, flow, and holding blood pressure steady", "Blood and how the body defends itself", "Digestion, and how you use food for fuel", "Breathing, gas transport, and the fast pH lever", "The kidney and body fluid balance", "The slow pH lever, and putting it all together"];
+  var DUE = ["Sunday, September 13", "Sunday, September 20", "Sunday, September 27", "Sunday, October 4", "Sunday, October 11", "Sunday, October 18", "Sunday, October 25", "Sunday, November 1", "Sunday, November 8", "Sunday, November 15", "Sunday, November 22", "Sunday, November 29", "Sunday, December 6", "Sunday, December 13", "Wednesday, December 16"];
+  var PROBLEMS = {"4": "Silverthorn, Chapter 6: questions 12 to 22. Find them at the end of Chapter 6 in your eText, inside Access Pearson in Canvas.", "3": "Silverthorn, Chapter 3: questions 16 to 31, and Chapter 5: questions 17 to 35. Find them at the end of each chapter in your eText, inside Access Pearson in Canvas.", "2": "Silverthorn, Chapter 2: questions 16 to 24, and Chapter 4: questions 17 to 28. Find them at the end of each chapter in your eText, inside Access Pearson in Canvas.", "1": "Silverthorn, Chapter 1: questions 9, 13, 14, 16, 17, 18, and 19. The reasoning set: the body map, the feedback compare and contrast, why-does-blood-flow, and the four data and study design problems. Find them at the end of Chapter 1 in your eText, inside Access Pearson in Canvas."};
+  var m = /[?&]week=(\d{1,2})/.exec(location.search);
+  var w = m ? Math.max(1, Math.min(15, parseInt(m[1],10))) : 1;
+  document.title = "Book problems \u00b7 Week " + w + " \u00b7 BIO 005 Human Physiology";
+  document.getElementById("wkline").textContent = "Week " + w + " \u00b7 " + TITLES[w-1];
+  document.getElementById("dueline").textContent = "Due " + DUE[w-1] + " at 10:00 pm";
+  document.getElementById("probline").textContent = PROBLEMS[w] ||
+    ("This week's assigned problems are listed on this assignment in Canvas, directly above these instructions.");
+  var tab = document.getElementById("aitab");
+  tab.href = "ai-work-log.html?week=" + w;
+  var id = "bp" + w + "-" + Math.random().toString(36).slice(2,8);
+  function post(){ try{ parent.postMessage({frame:id, height:document.documentElement.scrollHeight}, "*"); }catch(e){} }
+  if ("ResizeObserver" in window){ new ResizeObserver(post).observe(document.documentElement); }
+  window.addEventListener("load", post); window.addEventListener("resize", post); post();
+})();
+</script>
+</body>
+</html>

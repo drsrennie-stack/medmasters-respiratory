@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Reference Range Lab &middot; BIO 005 Human Physiology</title>
+<link href="https://cdn.jsdelivr.net/npm/@fontsource-variable/plus-jakarta-sans/index.css" rel="stylesheet">
+<style>
+:root{--navy:#0B1530;--nearblack:#060A18;--rust:#8B3A2E;--gold:#C9A14A;--cream:#F5F1E8;--slate:#8C90A0;--goldpale:#F7EFD9}
+*,*::before,*::after{box-sizing:border-box}
+em,i,cite,dfn{font-style:normal}
+html,body{margin:0}
+body{font-family:'Plus Jakarta Sans Variable','Plus Jakarta Sans',system-ui,sans-serif;color:var(--navy);background:#fff;line-height:1.65;font-size:15px}
+.skip{position:absolute;left:-9999px;top:0;z-index:80;background:var(--navy);color:#fff;padding:12px 18px;font-weight:700;text-decoration:none}
+.skip:focus{left:0;top:0}
+a{color:var(--rust)}
+:focus-visible{outline:3px solid var(--rust);outline-offset:3px}
+.band{padding:60px max(40px,5vw)}
+.band.dark{background:var(--nearblack)}
+.inner{max-width:1080px;margin:0 auto}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--rust);margin:0 0 16px}
+.eyebrow.gold{color:var(--gold)}
+h1{font-size:clamp(30px,5vw,44px);font-weight:800;letter-spacing:-.025em;margin:0 0 10px;line-height:1.08}
+h2{font-size:clamp(21px,3vw,27px);font-weight:800;letter-spacing:-.02em;margin:0 0 8px}
+.cream{color:var(--cream)}
+.soft{opacity:.85;max-width:640px}
+.lede{max-width:640px;margin:0}
+.rulebox{margin-top:18px;background:var(--goldpale);border:1px solid var(--slate);border-radius:12px;padding:14px 18px;max-width:640px}
+.numrow{list-style:none;margin:22px 0 0;padding:0;counter-reset:s}
+.numrow > li{counter-increment:s;position:relative;padding:20px 0 20px 74px;border-bottom:1px solid rgba(11,21,48,.14)}
+.numrow > li:first-child{border-top:1px solid rgba(11,21,48,.14)}
+.numrow > li::before{content:"0" counter(s);position:absolute;left:0;top:16px;color:var(--rust);font-weight:800;font-size:32px;line-height:1;font-variant-numeric:tabular-nums}
+.numrow h3{font-size:17px;font-weight:800;margin:0 0 6px}
+.numrow p{max-width:70ch}
+.qs{margin:8px 0 0;padding-left:20px;max-width:70ch}
+.qs li{margin:0 0 8px}
+table{border-collapse:collapse;margin:12px 0 4px;width:100%;max-width:640px}
+caption{text-align:left;font-weight:700;padding:0 0 6px}
+th,td{border:1px solid var(--slate);padding:8px 10px;text-align:left;font-size:14px;font-variant-numeric:tabular-nums}
+th{background:var(--goldpale)}
+.data{font-size:14.5px;letter-spacing:.02em;background:#fff;border:1px solid var(--slate);border-radius:12px;box-shadow:0 14px 30px rgba(11,21,48,.14);padding:16px 20px;max-width:640px;line-height:2}
+.case{background:#fff;border:1px solid var(--slate);border-radius:12px;box-shadow:0 14px 30px rgba(11,21,48,.14);padding:20px 22px;max-width:640px;margin:14px 0 6px}
+.case p{margin:0 0 10px}
+footer{padding:26px max(40px,5vw) 40px;border-top:1px solid rgba(11,21,48,.14)}
+footer .inner{display:flex;flex-wrap:wrap;gap:8px 26px;font-size:14px}
+@media print{.band{padding:24px 0}.skip,footer{display:none}body{font-size:12.5px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<header class="band">
+  <div class="inner">
+    <p class="eyebrow">BIO 005 &middot; Week 1 lab &middot; due Sunday, September 13, 10:00 pm</p>
+    <h1>Where "normal" comes from.</h1>
+    <p class="lede">Every lab panel in this course has a column called reference range, and for the rest of your career a machine will compare your patients to it. Today you build one yourself, so you know exactly what that column is claiming, and what it is not.</p>
+    <div class="rulebox"><strong>How it works:</strong> real laboratories measure a large group of apparently healthy people, at least 120, then keep the middle 95 percent. The lowest 2.5 percent and the highest 2.5 percent of healthy values are cut off. That middle span is the reference range. You are going to do exactly that, with 40 values so the arithmetic stays kind.</div>
+  </div>
+</header>
+
+<main id="main" class="band" style="padding-top:10px">
+  <div class="inner">
+    <p class="eyebrow">The five parts, in order</p>
+    <ol class="numrow">
+
+      <li>
+        <h3>Before you touch anything: predict</h3>
+        <p>First color, from what you already know. Do not look anything up.</p>
+        <ol class="qs">
+          <li>Where do you think the numbers in a reference range come from? Write your honest best guess, even if it is "someone decided."</li>
+          <li>If we measured the fasting blood glucose of 1,000 healthy students, predict the shape of the data. Where would you personally draw the line for "normal," and what is your line based on?</li>
+          <li>A perfectly healthy person gets a 20 test panel. Predict how many results come back flagged. Confidence, 1 to 5, on each prediction.</li>
+        </ol>
+      </li>
+
+      <li>
+        <h3>Build the range</h3>
+        <p>Below are fasting glucose values, in mg/dL, from 40 apparently healthy volunteers. On your paper:</p>
+        <div class="data">70 &middot; 74 &middot; 76 &middot; 77 &middot; 79 &middot; 80 &middot; 81 &middot; 82 &middot; 83 &middot; 83 &middot; 84 &middot; 85 &middot; 85 &middot; 86 &middot; 86 &middot; 87 &middot; 87 &middot; 88 &middot; 88 &middot; 88 &middot; 89 &middot; 89 &middot; 90 &middot; 90 &middot; 91 &middot; 91 &middot; 92 &middot; 92 &middot; 93 &middot; 94 &middot; 94 &middot; 95 &middot; 96 &middot; 96 &middot; 97 &middot; 98 &middot; 99 &middot; 101 &middot; 103 &middot; 106</div>
+        <ol class="qs">
+          <li>Draw a dot plot or tally histogram of the 40 values. Look at the shape you predicted.</li>
+          <li>Cut 2.5 percent from each end. With 40 values, that is the single lowest and the single highest. Write the range that remains: your reference range, from the second value to the thirty ninth.</li>
+          <li>Estimate the mean by eye and mark it. For a bell shaped set like this one, the same cut lands about two standard deviations either side of the mean; mark roughly where those sit on your plot.</li>
+        </ol>
+      </li>
+
+      <li>
+        <h3>What the range does and does not claim</h3>
+        <ol class="qs">
+          <li>By the way it is built, what fraction of completely healthy people fall outside a reference range? So on a 20 test panel, how many flags should a healthy person expect, and what does one flagged value therefore prove by itself?</li>
+          <li>Your patient's glucose sits just inside your range. Does the range claim that value is good for them? Write one sentence on what the range actually says, and one on what it stays silent about.</li>
+          <li>Give one reason two hospitals might publish different ranges for the same test, and one physiological group whose "healthy" is genuinely different (children, pregnancy, and people living at altitude are all fair game).</li>
+        </ol>
+      </li>
+
+      <li>
+        <h3>The clinical correlation: when the population moves</h3>
+        <p>A range is a photograph of the population it was measured in. Populations do not hold still.</p>
+        <div class="case">
+          <p><strong>The lab.</strong> A hospital re-derives its fasting glucose range every 15 years, each time from its own "apparently healthy" local adults, same method, same 95 percent cut:</p>
+          <table>
+            <tr><th scope="col">Year derived</th><th scope="col">Published reference range</th></tr>
+            <tr><td>1995</td><td>70 to 105 mg/dL</td></tr>
+            <tr><td>2010</td><td>74 to 112 mg/dL</td></tr>
+            <tr><td>2025</td><td>78 to 118 mg/dL</td></tr>
+          </table>
+        </div>
+        <ol class="qs">
+          <li>Nobody changed the math. Explain how the range moved anyway.</li>
+          <li>A patient's fasting glucose is 110. In 1995 that value is flagged; in 2025 it is "normal." What changed, the patient's physiology or the ruler? What is the danger in the word normal here?</li>
+          <li><strong>Now write your own.</strong> Pick any measurable value, resting heart rate, vitamin D, blood pressure, body weight, anything. Invent two re-derived ranges twenty years apart under a population trend you name, and write a short paragraph on what quietly goes wrong when clinicians read "within range" as "healthy" while the range itself is drifting.</li>
+          <li>Some cutoffs refuse to float. The diabetes threshold of 126 mg/dL fasting is anchored to the glucose level where eye damage risk climbs, measured against outcomes, not percentiles. In one or two sentences: why must some lines be anchored to what harms the body, optimal, rather than to what the population currently looks like, normal?</li>
+        </ol>
+      </li>
+
+      <li>
+        <h3>Look back at your thinking</h3>
+        <ol class="qs">
+          <li>Return to your predictions, including your guess at where ranges come from. What were you assuming?</li>
+          <li>Second color: the two or three things you now know about that reference range column that you did not have this morning. That is your commit to memory list, and you will use it every clinical correlation from here to Week 15.</li>
+          <li>Re-rate your confidence, 1 to 5, on explaining to a classmate why "in range" and "healthy" are not synonyms.</li>
+        </ol>
+      </li>
+
+    </ol>
+  </div>
+</main>
+
+<section class="band dark">
+  <div class="inner">
+    <p class="eyebrow gold">Turning it in</p>
+    <h2 class="cream">Handwritten, photographed, one PDF.</h2>
+    <p class="cream soft">All five parts, including your plot and your own invented example, on paper in your two colors, photographed or scanned into a single PDF, submitted in Canvas by Sunday, September 13 at 10:00 pm.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="inner">
+    <a href="week-01.html" target="_top">Week 1</a>
+    <a href="home.html" target="_top">Course home</a>
+    <a href="course-schedule.html" target="_top">Schedule</a>
+    <a href="syllabus-fall2026.html" target="_top">Syllabus</a>
+  </div>
+</footer>
+<script>
+(function(){var id='rrlab-'+Math.random().toString(36).slice(2,8);
+function post(){try{parent.postMessage({frame:id,height:document.documentElement.scrollHeight},'*');}catch(e){}}
+if('ResizeObserver' in window){new ResizeObserver(post).observe(document.documentElement);}
+window.addEventListener('load',post);window.addEventListener('resize',post);post();})();
+</script>
+</body>
+</html>

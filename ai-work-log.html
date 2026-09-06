@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<title>Problem log &middot; BIO 005</title>
+<link rel="stylesheet" href="assets/fonts-site.css">
+<!--
+  ============================================================
+  BIO 005 Human Physiology, Fall 2026
+  ai-work-log.html
+
+  SOLVE IT, SOURCE IT, THEN CHECK IT.
+
+  Used on every AI open problem set. The student works the problem by
+  hand with the book, the notes and the videos, cites exactly where
+  each piece came from, writes their answer, and only then may open AI
+  to check it.
+
+  THE PROBLEM THIS SOLVES
+  A student can always claim "I knew it already, I got it right." The
+  fix is not to punish knowing it, because a student who genuinely
+  knew it deserves the marks. The fix is to tell "I knew it" apart
+  from "AI knew it," and the citations do that:
+
+    AI does not know which figure number or section heading covers it.
+    AI does not know the module and topic structure of these notes.
+    AI does not know the timestamp in a video Dr. Rennie recorded.
+
+  A student who went to AI first has no citations, or has invented
+  ones that do not check out. Spot checking one citation per submission
+  takes about thirty seconds and it is the whole enforcement mechanism.
+
+  Citations are figures and section headings rather than page numbers,
+  because page numbers differ between the US and Global editions and
+  between printings. Figure 5.9 is Figure 5.9 in every copy.
+
+  The second check is section 6. A student who outsourced the work
+  cannot say how they would solve the same problem on a whiteboard
+  under a timer, because they never engaged with the procedure. And
+  that is not a hypothetical: it is the Week 8 midterm.
+
+  NOT A LOCK. The gate is a nudge and the timestamps are client side.
+  A determined student defeats both in a minute. The point is to make
+  the useful path the easy one, and to make the shortcut show up later
+  where it costs more.
+
+  STORAGE: bio005- prefixed, in the student's own browser, sent
+  nowhere. They copy or print the log and attach it in Canvas.
+  ============================================================
+-->
+<style>
+:root{
+  --navy:#0B1530; --navy-deep:#060A18; --navy-tint:#ECEFF4;
+  --maroon:#8B3A2E; --maroon-dark:#6E2D24;
+  --gold:#C9A14A; --gold-deep:#8A6D33; --gold-text:#624612; --gold-pale:#F7EFD9;
+  --gray-lock:#454B58;  /* white on it: 8.75:1. Was #767E8C at 4.09:1, which FAILED AA on the locked step numbers. */
+  --offwhite:#FAFAF9; --ink-soft:#3D4759; --rule:#A3ACBA;
+  --r:8px; --rc:16px; --shadow:0 1px 3px rgba(11,21,48,.08),0 1px 2px rgba(11,21,48,.05);
+  --font:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{font-family:var(--font);background:var(--offwhite);color:var(--navy);line-height:1.6;font-size:17px}
+em,i,cite,dfn,var,address{font-style:normal}
+h1,h2,h3{margin:0;letter-spacing:-.02em}
+p{margin:0 0 14px}
+.vh{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+:focus-visible{outline:3px solid var(--navy);outline-offset:3px;border-radius:4px}
+.skip{position:absolute;left:-9999px;top:0;z-index:60;background:var(--navy);color:#fff;padding:12px 18px;font-weight:700;text-decoration:none}
+.skip:focus{left:0;top:0}
+
+.site-header{background:#fff;border-bottom:.5px solid rgba(11,21,48,.10);padding:18px max(20px,4vw)}
+.shi{max-width:1120px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.shi svg{height:48px;width:auto;display:block}
+.t1{font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-text)}
+.t2{font-size:1.42rem;font-weight:800;line-height:1.1}
+.t3{font-size:.88rem;color:var(--ink-soft)}
+.site-footer{background:var(--navy-deep);color:#fff;padding:28px max(20px,4vw);margin-top:56px}
+.fi{max-width:1120px;margin:0 auto;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+.site-footer .n{font-weight:800;margin:0}
+.site-footer .c{font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#F0DCA8;margin:0}
+
+.wrap{max-width:900px;margin:0 auto;padding:32px max(20px,4vw) 0}
+.page-eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--maroon-dark);margin:0 0 6px}
+h1{font-size:1.7rem;margin:0 0 10px}
+.page-lead{max-width:68ch;color:var(--ink-soft)}
+.phase{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-text);margin:26px 0 0}
+
+.step{background:#fff;border:1px solid var(--rule);border-radius:var(--rc);box-shadow:var(--shadow);
+      padding:22px max(16px,2vw) 24px;margin:14px 0 0}
+.step[data-locked="yes"]{background:var(--offwhite);border-style:dashed;border-color:var(--gray-lock)}
+.step h2{font-size:1.06rem;font-weight:800;margin:0 0 4px;display:flex;gap:10px;align-items:center}
+.step h2 .num{flex:0 0 26px;height:26px;border-radius:999px;background:var(--navy);color:#fff;
+  font-size:.78rem;font-weight:800;display:inline-flex;align-items:center;justify-content:center}
+.step[data-locked="yes"] h2 .num{background:var(--gray-lock)}
+.step[data-done="yes"] h2 .num{background:var(--gold);color:var(--navy);border:1.5px solid #5C4110}
+.step .why{color:var(--ink-soft);font-size:.92rem;margin:0 0 12px;max-width:68ch}
+.lockmsg{color:var(--maroon-dark);font-weight:700;font-size:.9rem;margin:0}
+
+label{display:block;font-weight:700;font-size:.92rem;margin:0 0 6px}
+textarea,input[type=text],select{width:100%;font:inherit;font-size:.95rem;color:var(--navy);background:#fff;
+  border:1.5px solid #7C8798;border-radius:var(--r);padding:10px 12px;min-height:44px}
+textarea{min-height:100px;resize:vertical;line-height:1.55}
+textarea:disabled,input:disabled,select:disabled{background:#F2F3F5;color:#454B58;cursor:not-allowed}
+.count{font-size:.82rem;color:var(--ink-soft);margin:6px 0 0}
+.count.ok{color:var(--gold-text);font-weight:700}
+.field + .field{margin-top:16px}
+
+/* the handwriting checklist */
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.checks li{display:flex;gap:10px;align-items:flex-start;font-size:.94rem}
+.checks input{margin-top:5px;width:18px;height:18px;flex:0 0 auto}
+.checks label{font-weight:400;margin:0}
+
+/* citation rows */
+.cite{border:1px solid var(--rule);border-radius:var(--r);padding:12px;margin:0 0 10px;
+      display:grid;gap:10px;grid-template-columns:170px 1fr auto;align-items:end}
+.cite .full{grid-column:1 / -1}
+.cite button{font:inherit;font-size:.82rem;font-weight:700;cursor:pointer;color:var(--maroon-dark);
+  background:#fff;border:1.5px solid #7C8798;border-radius:999px;padding:9px 14px;min-height:44px;white-space:nowrap}
+.cite button:hover{background:var(--gold-pale);border-color:var(--gold-deep)}
+@media(max-width:700px){.cite{grid-template-columns:1fr}}
+.hint{font-size:.86rem;color:var(--ink-soft);margin:0 0 10px}
+
+.compbar{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin:0 0 12px}
+.compbar > div{flex:1 1 200px}
+.complist{list-style:none;margin:0;padding:10px;display:grid;gap:6px;max-height:280px;overflow-y:auto;
+  border:1px solid var(--rule);border-radius:var(--r)}
+.complist li{display:flex;gap:10px;align-items:flex-start;font-size:.9rem}
+.complist input[type=checkbox]{margin-top:5px;width:18px;height:18px;flex:0 0 auto}
+.complist label{font-weight:400;margin:0}
+.cid{font:600 .78rem ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--gold-text)}
+
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 0}
+button.btn{font:inherit;font-size:.9rem;font-weight:700;cursor:pointer;color:#fff;background:var(--maroon);
+  border:1.5px solid var(--maroon);border-radius:999px;padding:11px 20px;min-height:44px}
+button.btn:hover{background:var(--maroon-dark);border-color:var(--maroon-dark)}
+button.btn.ghost{color:var(--navy);background:#fff;border-color:#7C8798}
+button.btn.ghost:hover{background:var(--gold-pale);border-color:var(--gold-deep)}
+.msg{font-size:.92rem;font-weight:700;color:var(--gold-text);margin:12px 0 0;min-height:1.5em}
+.stamps{font-size:.84rem;color:var(--ink-soft);margin:10px 0 0}
+.stamps b{color:var(--navy)}
+#out{width:100%;min-height:220px;font:400 13px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;margin-top:12px}
+
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .site-header,.site-footer,.btnrow,.count,.why,.hint,#out,.lockmsg{display:none}
+  body{background:#fff;font-size:12px}
+  .step{box-shadow:none;border:1px solid #999;break-inside:avoid;margin:8px 0}
+  .btn,button{display:none!important}
+  .printlines{display:block!important}
+  .printlines div{border-bottom:1px solid #444;height:34px}
+  .field input,.field select{border:1px solid #444;min-height:30px;background:#fff}
+  .field textarea{border:1px solid #444;min-height:110px;background:#fff}
+  .field input::placeholder,.field textarea::placeholder{color:transparent}
+  input[type=checkbox]{width:14px;height:14px;border:1px solid #444}
+  @page{margin:14mm}
+}
+.printlines{display:none}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the log</a>
+
+<header class="site-header"><div class="shi">
+<svg viewBox="40 10 125 148" role="img" aria-label="BIO 005 Human Physiology"><g transform="translate(0,18)"><g transform="translate(60,0) rotate(8 0 130)"><circle cx="0" cy="20" r="10" fill="#0B1530"/><path d="M 0,32 C -10,32 -16,36 -16,42 C -16,55 -13,68 -11,82 C -10,100 -12,118 -14,130 L 14,130 C 12,118 10,100 11,82 C 13,68 16,55 16,42 C 16,36 10,32 0,32 Z" fill="#0B1530"/></g><g transform="translate(100,0)"><circle cx="0" cy="10" r="11" fill="#6E2D24"/><path d="M 0,22 C -11,22 -17,26 -17,34 C -17,52 -14,70 -12,86 C -11,108 -13,122 -15,132 L 15,132 C 13,122 11,108 12,86 C 14,70 17,52 17,34 C 17,26 11,22 0,22 Z" fill="#6E2D24"/></g><g transform="translate(140,0) rotate(-8 0 130)"><circle cx="0" cy="20" r="10" fill="#C9A14A"/><path d="M 0,32 C -10,32 -16,36 -16,42 C -16,55 -13,68 -11,82 C -10,100 -12,118 -14,130 L 14,130 C 12,118 10,100 11,82 C 13,68 16,55 16,42 C 16,36 10,32 0,32 Z" fill="#C9A14A"/></g></g></svg>
+<div><div class="t1">Study tool</div><div class="t2">Human Physiology</div>
+<div class="t3">BIO 005 &middot; Fall 2026</div></div></div></header>
+
+<div class="wrap">
+<main id="main">
+
+<p class="page-eyebrow"><span data-wk>Week 1</span> &middot; <span data-wt>How physiology works and what keeps you steady</span></p>
+<h1>Problem log</h1>
+<p class="page-eyebrow" style="margin-top:6px">Use this on every problem set</p>
+<p class="page-lead">Solve it, source it, then check it. You work the problem by hand using the book, my notes and my videos, you write down exactly where each piece came from, and only then do you open AI to check your answer. The sources are what make this work: AI does not know what page something is on or where it sits in my videos, so citing them is the proof you did the thinking first.</p>
+
+<p class="phase">Part one, before AI</p>
+
+<!-- 1 -->
+<section class="step" data-step="1" aria-labelledby="h1a">
+  <h2 id="h1a"><span class="num" aria-hidden="true">1</span> Which problem</h2>
+  <div class="field">
+    <label for="f-src">Source and number</label>
+    <input type="text" id="f-src" data-key="src" placeholder="Silverthorn ch 5, Level Three question 2">
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="step" data-step="2" aria-labelledby="h2a">
+  <h2 id="h2a"><span class="num" aria-hidden="true">2</span> My handwritten work</h2>
+  <p class="why">Do the problem on paper first. Then tick each of these off before you go on. You will attach the photograph in Canvas.</p>
+  <ul class="checks">
+    <li><input type="checkbox" id="k1" data-check="k1"><label for="k1">It is handwritten, and my name and the question number are on it</label></li>
+    <li><input type="checkbox" id="k2" data-check="k2"><label for="k2">Every diagram is labeled, not just drawn</label></li>
+    <li><input type="checkbox" id="k3" data-check="k3"><label for="k3"><strong>Every calculation shows the worked values</strong>, not just the final number. Units on every line</label></li>
+    <li><input type="checkbox" id="k4" data-check="k4"><label for="k4">I have photographed it and it is readable</label></li>
+  </ul>
+</section>
+
+<!-- 3 -->
+<section class="step" data-step="3" aria-labelledby="h3a">
+  <h2 id="h3a"><span class="num" aria-hidden="true">3</span> Where I found what I needed</h2>
+  <p class="why">One row per source, and be exact. A figure number, a section heading, a module and topic, a timestamp. "The textbook" is not a citation. This is the part of the log I check, and it is the part that shows the work was yours.</p>
+  <p class="hint">For the book, cite the <strong>figure number or the section heading</strong> rather than the page. Page numbers differ between editions and printings. Figure 5.9 is Figure 5.9 in every copy.</p>
+  <p class="hint">You need at least two, and at least one has to be the book or my notes.</p>
+  <div id="cites"></div>
+  <div class="printlines" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+<button type="button" class="btn ghost" id="addcite">Add another source</button>
+  <p class="count" id="c-cites" aria-live="polite">0 sources. Needs 2.</p>
+</section>
+
+<!-- 4 -->
+<section class="step" data-step="4" aria-labelledby="h4a">
+  <h2 id="h4a"><span class="num" aria-hidden="true">4</span> My answer, before any AI</h2>
+  <p class="why">Write your answer and your reasoning. If you are not sure, write what you think and say where the uncertainty is. An honest wrong answer here is worth full marks on this section.</p>
+  <div class="field">
+    <label for="f-answer">My answer and how I got there</label>
+    <textarea id="f-answer" data-key="answer" data-gate="100"></textarea>
+    <p class="count" id="c-answer" aria-live="polite">0 characters. Needs 100.</p>
+  </div>
+  <div class="field">
+    <label for="f-unsure">The part I am least sure about</label>
+    <textarea id="f-unsure" data-key="unsure" data-gate="40" style="min-height:70px"></textarea>
+    <p class="count" id="c-unsure" aria-live="polite">0 characters. Needs 40.</p>
+  </div>
+</section>
+
+<p class="phase">Part two, now you may use AI</p>
+
+<!-- 5 -->
+<section class="step" data-step="5" data-locked="yes" aria-labelledby="h5a">
+  <h2 id="h5a"><span class="num" aria-hidden="true">5</span> The AI check</h2>
+  <p class="lockmsg">This opens once boxes 3 and 4 are done. Sources first, answer first, then AI.</p>
+  <div class="body" hidden>
+    <p class="why">Ask it to check your reasoning, not to give you the answer. Then say what came back that was different from what you had. If nothing was different, say that: it is a real result and you will not lose marks for it.</p>
+    <div class="field">
+      <label for="f-asked">What I asked, word for word</label>
+      <textarea id="f-asked" data-key="asked" style="min-height:80px"></textarea>
+    </div>
+    <div class="field">
+      <label for="f-diff">What it said that was different from my answer</label>
+      <textarea id="f-diff" data-key="diff"></textarea>
+    </div>
+    <div class="field">
+      <label for="f-verify">Where I checked whether the AI was actually right</label>
+      <textarea id="f-verify" data-key="verify" style="min-height:70px"
+        placeholder="AI produces confident wrong physiology. Figure, section, or notes topic where you verified it."></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section class="step" data-step="6" data-locked="yes" aria-labelledby="h6a">
+  <h2 id="h6a"><span class="num" aria-hidden="true">6</span> If this were on the exam</h2>
+  <p class="lockmsg">Locked until boxes 3 and 4 are done.</p>
+  <div class="body" hidden>
+    <p class="why">This is not hypothetical. In Week 8 you will solve a problem like this on a whiteboard, out loud, with a timer running and nothing open. Write the steps you would need, in order, from memory.</p>
+    <div class="field">
+      <label for="f-exam">How this could be asked on an exam</label>
+      <textarea id="f-exam" data-key="exam" style="min-height:70px"></textarea>
+    </div>
+    <div class="field">
+      <label for="f-steps">The steps I would work through on the whiteboard, in order</label>
+      <textarea id="f-steps" data-key="steps"></textarea>
+    </div>
+    <div class="field">
+      <label for="f-interp">Once I had the number, how I would know what it means</label>
+      <textarea id="f-interp" data-key="interp" style="min-height:70px"
+        placeholder="Getting the number is half of it. What does it tell you about the patient?"></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="step" data-step="7" data-locked="yes" aria-labelledby="h7a">
+  <h2 id="h7a"><span class="num" aria-hidden="true">7</span> What this needed, and what I had</h2>
+  <p class="lockmsg">Locked until boxes 3 and 4 are done.</p>
+  <div class="body" hidden>
+    <p class="why">Tick the competencies this problem required. Then say which of them you already had and which you were missing. That second part is the one I read most carefully.</p>
+    <div class="compbar">
+      <div><label for="f-week">Filter by week</label>
+        <select id="f-week"><option value="">All weeks</option></select></div>
+      <div><label for="f-find">Search</label>
+        <input type="text" id="f-find" placeholder="osmolarity, feedback, buffer"></div>
+    </div>
+    <ul class="complist" id="complist" aria-label="Course competencies"></ul>
+    <div class="field">
+      <label for="f-had">Which of these I already had, and which I was missing</label>
+      <textarea id="f-had" data-key="had"></textarea>
+    </div>
+  </div>
+</section>
+
+<div class="btnrow">
+  <button type="button" class="btn" id="copy">Copy log for Canvas</button>
+  <button type="button" class="btn ghost" id="print">Print or save as PDF</button>
+  <button type="button" class="btn ghost" id="clear">Start a new log</button>
+</div>
+<p class="msg" id="msg" role="status" aria-live="polite"></p>
+<p class="stamps" id="stamps"></p>
+<label class="vh" for="out">Log text for copying</label>
+<textarea id="out" readonly spellcheck="false" hidden></textarea>
+
+</main>
+</div>
+
+<footer class="site-footer"><div class="fi">
+<p class="n">Dr. Sharilyn Rennie</p>
+<p class="c">BIO 005 Human Physiology &middot; Problem log</p>
+</div></footer>
+
+<script src="bio005-competencies.js" onerror="window.__noComps=true"></script>
+<script>
+(function () {
+  'use strict';
+
+  var KEY = 'bio005-problem-log';
+  var GATED = ['5', '6', '7'];
+  var SOURCES = [
+    ['book',   'Textbook',            'Chapter and figure or section, e.g. ch 5, Figure 5.9, or ch 5 tonicity section'],
+    ['notes',  'Dr. Rennie notes',    'Module, topic and section, e.g. Week 3, Membrane Transport, section 4'],
+    ['video',  'Dr. Rennie video',    'Video title and timestamp, e.g. Membrane Transport, 12:40'],
+    ['other',  'Other video',         'Channel or author, title, and timestamp'],
+    ['lab',    'Lab manual',          'Exercise and step'],
+    ['own',    'My own earlier work',  'Which week and which entry']
+  ];
+  var state = { fields: {}, checks: {}, cites: [], comps: [], stamps: {} };
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) { state = JSON.parse(raw); }
+    } catch (e) {}
+    state.fields = state.fields || {}; state.checks = state.checks || {};
+    state.cites = state.cites || []; state.comps = state.comps || [];
+    state.stamps = state.stamps || {};
+  }
+  function stamp(k) { if (!state.stamps[k]) { state.stamps[k] = new Date().toISOString(); paintStamps(); } }
+
+  function paintStamps() {
+    var order = [['answer', 'own answer written'], ['cites', 'sources cited'],
+                 ['asked', 'opened AI'], ['steps', 'exam steps written']];
+    var out = order.filter(function (o) { return state.stamps[o[0]]; }).map(function (o) {
+      return '<b>' + o[1] + '</b> ' + new Date(state.stamps[o[0]]).toLocaleString();
+    });
+    $('#stamps').innerHTML = out.length ? 'Times recorded: ' + out.join(' &middot; ') : '';
+  }
+
+  /* ---------- citations ---------- */
+  function citeRow(i) {
+    var c = state.cites[i] || { type: '', where: '', gave: '' };
+    var wrap = document.createElement('div');
+    wrap.className = 'cite';
+
+    var sel = document.createElement('select');
+    sel.id = 'ct-' + i;
+    sel.innerHTML = '<option value="">Pick a source type</option>' +
+      SOURCES.map(function (s) { return '<option value="' + s[0] + '">' + s[1] + '</option>'; }).join('');
+    sel.value = c.type;
+
+    var l1 = document.createElement('label'); l1.setAttribute('for', sel.id); l1.textContent = 'Source type';
+    var d1 = document.createElement('div'); d1.appendChild(l1); d1.appendChild(sel);
+
+    var inp = document.createElement('input');
+    inp.type = 'text'; inp.id = 'cw-' + i; inp.value = c.where;
+    var l2 = document.createElement('label'); l2.setAttribute('for', inp.id); l2.textContent = 'Exactly where';
+    var d2 = document.createElement('div'); d2.appendChild(l2); d2.appendChild(inp);
+
+    var del = document.createElement('button');
+    del.type = 'button'; del.textContent = 'Remove';
+    del.setAttribute('aria-label', 'Remove source ' + (i + 1));
+
+    var ta = document.createElement('textarea');
+    ta.id = 'cg-' + i; ta.value = c.gave; ta.style.minHeight = '60px';
+    var l3 = document.createElement('label'); l3.setAttribute('for', ta.id);
+    l3.textContent = 'What this source gave me';
+    var d3 = document.createElement('div'); d3.className = 'full';
+    d3.appendChild(l3); d3.appendChild(ta);
+
+    function upd() {
+      state.cites[i] = { type: sel.value, where: inp.value, gave: ta.value };
+      var s = SOURCES.filter(function (x) { return x[0] === sel.value; })[0];
+      inp.placeholder = s ? s[2] : 'Figure, section, or timestamp';
+      countCites(); markDone(); save();
+    }
+    sel.addEventListener('change', upd);
+    inp.addEventListener('input', upd);
+    ta.addEventListener('input', upd);
+    del.addEventListener('click', function () {
+      state.cites.splice(i, 1); paintCites(); countCites(); markDone(); save();
+    });
+
+    var s0 = SOURCES.filter(function (x) { return x[0] === c.type; })[0];
+    inp.placeholder = s0 ? s0[2] : 'Figure, section, or timestamp';
+
+    wrap.appendChild(d1); wrap.appendChild(d2); wrap.appendChild(del); wrap.appendChild(d3);
+    return wrap;
+  }
+
+  function paintCites() {
+    var host = $('#cites');
+    host.textContent = '';
+    if (!state.cites.length) { state.cites = [{ type: '', where: '', gave: '' }]; }
+    state.cites.forEach(function (_, i) { host.appendChild(citeRow(i)); });
+  }
+
+  function goodCites() {
+    return state.cites.filter(function (c) {
+      return c.type && c.where.trim().length >= 4;
+    });
+  }
+  function countCites() {
+    var g = goodCites();
+    var core = g.some(function (c) { return c.type === 'book' || c.type === 'notes'; });
+    var ok = g.length >= 2 && core;
+    var c = $('#c-cites');
+    c.textContent = ok ? (g.length + ' sources cited. That is enough.')
+      : (g.length + ' complete source' + (g.length === 1 ? '' : 's') + '. Needs 2, and one has to be the book or my notes.');
+    c.className = 'count' + (ok ? ' ok' : '');
+    if (ok) { stamp('cites'); }
+    applyGate();
+    return ok;
+  }
+
+  /* ---------- gate ---------- */
+  function gateOpen() {
+    var text = $$('textarea[data-gate]').every(function (t) {
+      return t.value.trim().length >= +t.getAttribute('data-gate');
+    });
+    var g = goodCites();
+    var core = g.some(function (c) { return c.type === 'book' || c.type === 'notes'; });
+    return text && g.length >= 2 && core;
+  }
+
+  function applyGate() {
+    var open = gateOpen();
+    GATED.forEach(function (n) {
+      var sec = $('.step[data-step="' + n + '"]');
+      if (!sec) { return; }
+      sec.setAttribute('data-locked', open ? 'no' : 'yes');
+      $$('.lockmsg', sec).forEach(function (e) { e.hidden = open; });
+      $$('.body', sec).forEach(function (e) { e.hidden = !open; });
+      $$('textarea, input, select', sec).forEach(function (e) { e.disabled = !open; });
+    });
+  }
+
+  function markDone() {
+    $$('.step').forEach(function (sec) {
+      var n = sec.getAttribute('data-step');
+      var any = $$('textarea, input[type=text]', sec).some(function (i) { return i.value.trim().length > 0; });
+      if (n === '2') { any = $$('input[type=checkbox]', sec).every(function (b) { return b.checked; }); }
+      if (n === '3') { any = goodCites().length >= 2; }
+      if (n === '7') { any = state.comps.length > 0; }
+      sec.setAttribute('data-done', any ? 'yes' : 'no');
+    });
+  }
+
+  /* ---------- competencies ---------- */
+  function buildComps() {
+    var C = (window.BIO005 && window.BIO005.all) || window.BIO005_COMPETENCIES || [];
+    var list = $('#complist'), wk = $('#f-week');
+    if (!C.length) {
+      list.innerHTML = '<li>The competency list did not load. Type the ones you needed in the box below instead.</li>';
+      return;
+    }
+    var weeks = [];
+    C.forEach(function (c) { if (weeks.indexOf(c.week) === -1) { weeks.push(c.week); } });
+    weeks.sort(function (a, b) { return a - b; }).forEach(function (w) {
+      var o = document.createElement('option');
+      o.value = w; o.textContent = 'Week ' + w; wk.appendChild(o);
+    });
+    function paint() {
+      var w = wk.value, q = $('#f-find').value.trim().toLowerCase();
+      list.textContent = '';
+      var rows = C.filter(function (c) {
+        if (w && String(c.week) !== w) { return false; }
+        if (q && (c.name + ' ' + c.id + ' ' + (c.can || '')).toLowerCase().indexOf(q) === -1) { return false; }
+        return true;
+      }).slice(0, 200);
+      rows.forEach(function (c) {
+        var li = document.createElement('li');
+        var box = document.createElement('input');
+        box.type = 'checkbox'; box.id = 'cx-' + c.id; box.value = c.id;
+        box.checked = state.comps.indexOf(c.id) > -1;
+        box.addEventListener('change', function () {
+          var i = state.comps.indexOf(c.id);
+          if (box.checked && i === -1) { state.comps.push(c.id); }
+          if (!box.checked && i > -1) { state.comps.splice(i, 1); }
+          markDone(); save();
+        });
+        var lab = document.createElement('label');
+        lab.setAttribute('for', box.id);
+        lab.innerHTML = '<span class="cid">' + c.id + '</span> ' + c.name;
+        li.appendChild(box); li.appendChild(lab); list.appendChild(li);
+      });
+      if (!rows.length) { list.innerHTML = '<li>Nothing matches that search.</li>'; }
+    }
+    wk.addEventListener('change', paint);
+    $('#f-find').addEventListener('input', paint);
+    paint();
+  }
+
+  /* ---------- output ---------- */
+  function logText() {
+    var byId = (window.BIO005 && window.BIO005.byId) || {};
+    var f = state.fields;
+    var cites = goodCites().map(function (c, i) {
+      var name = (SOURCES.filter(function (s) { return s[0] === c.type; })[0] || ['', c.type])[1];
+      return '  ' + (i + 1) + '. ' + name + ' | ' + c.where + '\n     gave me: ' + (c.gave || '');
+    }).join('\n') || '  none';
+    var comps = state.comps.map(function (id) {
+      return '  ' + id + (byId[id] ? '  ' + byId[id].name : '');
+    }).join('\n') || '  none selected';
+    var st = Object.keys(state.stamps).map(function (k) {
+      return '  ' + k + ': ' + new Date(state.stamps[k]).toLocaleString();
+    }).join('\n');
+    var checks = ['k1', 'k2', 'k3', 'k4'].filter(function (k) { return state.checks[k]; }).length;
+
+    return [
+      'PROBLEM LOG  ·  BIO 005 Human Physiology',
+      '',
+      'PROBLEM: ' + (f.src || ''),
+      'Handwritten work checklist: ' + checks + ' of 4 confirmed',
+      '',
+      'PART ONE, BEFORE AI',
+      '',
+      'SOURCES',
+      cites,
+      '',
+      'MY ANSWER',
+      (f.answer || ''),
+      '',
+      'LEAST SURE ABOUT',
+      (f.unsure || ''),
+      '',
+      'PART TWO, AI CHECK',
+      '',
+      'WHAT I ASKED',
+      (f.asked || ''),
+      '',
+      'WHAT WAS DIFFERENT',
+      (f.diff || ''),
+      '',
+      'WHERE I VERIFIED IT',
+      (f.verify || ''),
+      '',
+      'IF THIS WERE ON THE EXAM',
+      'How it could be asked: ' + (f.exam || ''),
+      'Whiteboard steps: ' + (f.steps || ''),
+      'What the answer would mean: ' + (f.interp || ''),
+      '',
+      'COMPETENCIES THIS NEEDED',
+      comps,
+      '',
+      'WHICH I HAD, WHICH I WAS MISSING',
+      (f.had || ''),
+      '',
+      'TIMES RECORDED',
+      st
+    ].join('\n');
+  }
+
+  function say(t) { $('#msg').textContent = t; }
+
+  /* ---------- wire up ---------- */
+  load();
+  paintCites();
+  buildComps();
+
+  $$('[data-key]').forEach(function (el) {
+    var k = el.getAttribute('data-key');
+    el.value = state.fields[k] || '';
+    var g = el.getAttribute('data-gate');
+    function refresh() {
+      if (!g) { return; }
+      var n = el.value.trim().length, c = $('#c-' + k);
+      if (!c) { return; }
+      c.textContent = n >= +g ? (n + ' characters. That is enough.') : (n + ' characters. Needs ' + g + '.');
+      c.className = 'count' + (n >= +g ? ' ok' : '');
+    }
+    el.addEventListener('input', function () {
+      state.fields[k] = el.value;
+      if (el.value.trim().length > 0) { stamp(k); }
+      refresh(); applyGate(); markDone(); save();
+    });
+    refresh();
+  });
+
+  $$('[data-check]').forEach(function (b) {
+    var k = b.getAttribute('data-check');
+    b.checked = !!state.checks[k];
+    b.addEventListener('change', function () {
+      state.checks[k] = b.checked; markDone(); save();
+    });
+  });
+
+  $('#addcite').addEventListener('click', function () {
+    state.cites.push({ type: '', where: '', gave: '' });
+    paintCites(); countCites(); save();
+    var rows = $$('#cites .cite');
+    var last = rows[rows.length - 1];
+    if (last) { $('select', last).focus(); }
+  });
+
+  $('#copy').addEventListener('click', function () {
+    var t = logText(), out = $('#out');
+    out.hidden = false; out.value = t; out.select();
+    try { navigator.clipboard.writeText(t); } catch (e) {}
+    say('Copied. Paste it into the Canvas assignment and attach the photo of your handwritten work.');
+  });
+  $('#print').addEventListener('click', function () { window.print(); });
+  $('#clear').addEventListener('click', function () {
+    if (!window.confirm('Clear this log and start a new one? This cannot be undone.')) { return; }
+    state = { fields: {}, checks: {}, cites: [], comps: [], stamps: {} };
+    save();
+    $$('[data-key]').forEach(function (e) { e.value = ''; });
+    $$('[data-check]').forEach(function (e) { e.checked = false; });
+    $$('#complist input[type=checkbox]').forEach(function (b) { b.checked = false; });
+    $$('.count').forEach(function (c) { c.className = 'count'; });
+    paintCites(); countCites(); applyGate(); markDone(); paintStamps();
+    $('#out').hidden = true;
+    say('Cleared. Start with your handwritten work.');
+  });
+
+  countCites();
+  applyGate();
+  markDone();
+  paintStamps();
+}());
+</script>
+
+<!-- Canvas iframe height sender. -->
+<script>
+(function () {
+  var ID = 'problem-log';
+  function send() {
+    try {
+      var h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+      parent.postMessage({ id: ID, frameId: ID, height: h }, '*');
+    } catch (e) {}
+  }
+  window.addEventListener('load', send);
+  window.addEventListener('resize', send);
+  document.addEventListener('input', function () { setTimeout(send, 200); });
+  document.addEventListener('change', function () { setTimeout(send, 200); });
+  if (window.ResizeObserver) { new ResizeObserver(send).observe(document.body); }
+  send();
+}());
+</script>
+<script src="bio005-nav.js" defer></script>
+
+<script>
+/* ONE FILE, FIFTEEN WEEKS. Same pattern as the other four assignment pages:
+   the week comes from the URL, so ?week=3 relabels this page. Added Sep 6
+   2026, when this page turned out to be reachable from nowhere at all. */
+(function(){
+  "use strict";
+  var TITLES = ["How physiology works and what keeps you steady", "The chemistry that does work in the body", "Getting across the membrane", "The action potential", "The nervous system, from sensing to moving", "How muscle makes force", "Hormones, the slow control system", "Reproduction, and the clearest positive feedback loop", "The heart as a pump", "Pressure, flow, and holding blood pressure steady", "Blood, and how the body defends itself", "Digestion, and how you use food for fuel", "Breathing, gas transport, and blood pH", "The kidney, and body fluid balance", "The slow lever on pH, and putting it all together"];
+  var q = new URLSearchParams(window.location.search);
+  var w = parseInt(q.get("week"), 10);
+  if (isNaN(w) || w < 1 || w > 15) { w = 1; }
+  document.querySelectorAll("[data-wk]").forEach(function(n){ n.textContent = "Week " + w; });
+  document.querySelectorAll("[data-wt]").forEach(function(n){ n.textContent = TITLES[w-1]; });
+  if (/Week \d+/.test(document.title)) { document.title = document.title.replace(/Week \d+/, "Week " + w); }
+})();
+</script>
+</body>
+</html>

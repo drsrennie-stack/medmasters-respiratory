@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your digital vision board &middot; Week 1 &middot; BIO 005 Human Physiology</title>
+<link href="https://cdn.jsdelivr.net/npm/@fontsource-variable/plus-jakarta-sans/index.css" rel="stylesheet">
+<style>
+:root{--navy:#0B1530;--rust:#8B3A2E;--gold:#C9A14A;--goldpale:#F7EFD9;--slate:#8C90A0}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Plus Jakarta Sans Variable','Plus Jakarta Sans',system-ui,sans-serif;color:var(--navy);background:#fff;line-height:1.65;font-size:15.5px;padding:40px max(28px,4vw)}
+.inner{max-width:760px;margin:0 auto}
+.skip{position:absolute;left:-9999px;top:0;background:var(--navy);color:#fff;padding:12px 18px;font-weight:700;text-decoration:none}
+.skip:focus{left:0;top:0}
+a{color:var(--rust)}
+:focus-visible{outline:3px solid var(--rust);outline-offset:3px}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--rust);margin:0 0 12px}
+h1{font-size:clamp(26px,4.5vw,36px);font-weight:800;letter-spacing:-.02em;margin:0 0 4px;line-height:1.1}
+.sub{margin:0 0 4px;font-weight:700}
+.due{color:var(--rust);font-weight:800;margin:0 0 18px}
+p{max-width:66ch}
+h2{font-size:18px;font-weight:800;margin:24px 0 6px}
+ul.four{margin:8px 0 0;padding-left:22px;max-width:64ch}
+ul.four li{margin:0 0 8px}
+.privacy{background:var(--goldpale);border:1px solid var(--slate);border-radius:12px;padding:14px 18px;max-width:640px;margin:10px 0 4px}
+.privacy p{margin:0 0 8px}
+.privacy p:last-child{margin:0}
+ol.ways{margin:8px 0 0;padding-left:22px;max-width:64ch}
+ol.ways li{margin:0 0 8px}
+.upload{background:var(--goldpale);border:1px solid var(--slate);border-radius:12px;padding:14px 18px;max-width:640px}
+.upload ol{margin:6px 0 0;padding-left:20px}
+.upload li{margin:0 0 6px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the assignment</a>
+<main id="main" class="inner">
+  <p class="eyebrow">Discussion &middot; graded on completion &middot; part of 10% of your grade</p>
+  <h1>Your digital vision board</h1>
+  <p class="sub">Week 1 &middot; How physiology works and what keeps you steady</p>
+  <p class="due">Post due Friday, September 11, 10:00 pm &middot; Replies due Sunday, September 13, 10:00 pm</p>
+
+  <p>Before we talk physiology, it is important to me to know who you are, and for you to get to know each other. This class runs online, so we do not get the accidental version of this, the talking before lecture starts. We are doing it on purpose, in week one, before anything else.</p>
+
+  <h2>What you are making</h2>
+  <p>A vision board: one single image that shows what matters to you. Photos, pictures, words, colors, whatever gets it across. Cover four things, weighted however you like:</p>
+  <ul class="four">
+    <li><strong>Who you are.</strong> Photos of yourself if you are comfortable; only what you are happy for classmates to see.</li>
+    <li><strong>What matters to you.</strong> People, places, things you care about, what you do when you are not in class.</li>
+    <li><strong>Why you are taking this class.</strong> The real reason. "It is required for my program" is a real reason and you can say so.</li>
+    <li><strong>Where you are going.</strong> What you are working toward, in school or after it.</li>
+  </ul>
+
+  <h2>On privacy, and I mean this</h2>
+  <div class="privacy">
+    <p>Share only what you want classmates to have. Do not put your address, your workplace, your schedule, your phone number, or anything with a document number on it into the board.</p>
+    <p>If you would rather not include photos of yourself, use images that represent you instead; nobody loses a point for that. If there is something you want me to know but not the class, message me in the Canvas Inbox instead of putting it on the board.</p>
+  </div>
+
+  <h2>Build it, any of three ways</h2>
+  <ol class="ways">
+    <li><strong>Pinterest.</strong> Build a board, arrange it, screenshot it. Send the screenshot, not the board link.</li>
+    <li><strong>One slide.</strong> PowerPoint or Google Slides, drop images and text on one slide, export the slide as an image.</li>
+    <li><strong>All video.</strong> Skip the image and make the whole thing as one video, showing and telling as you go.</li>
+  </ol>
+
+  <h2>Post it</h2>
+  <div class="upload">
+    <ol>
+      <li>Attach your board image to the Week 1 discussion, with a short video of you introducing yourself and walking us through it. A phone video is perfect.</li>
+      <li>Post by <strong>Friday, September 11, 10:00 pm</strong>, so there is someone to meet over the weekend.</li>
+      <li>Reply to at least two classmates by <strong>Sunday, September 13, 10:00 pm</strong>. Real replies, about their board, not "nice board."</li>
+    </ol>
+  </div>
+</main>
+<script>
+(function(){
+  var id = "vb01-" + Math.random().toString(36).slice(2,8);
+  function post(){ try{ parent.postMessage({frame:id, height:document.documentElement.scrollHeight}, "*"); }catch(e){} }
+  if ("ResizeObserver" in window){ new ResizeObserver(post).observe(document.documentElement); }
+  window.addEventListener("load", post); window.addEventListener("resize", post); post();
+})();
+</script>
+</body>
+</html>

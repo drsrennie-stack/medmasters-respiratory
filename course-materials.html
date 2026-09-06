@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Course Tools &middot; BIO 005 Human Physiology</title>
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="stylesheet" href="assets/fonts-site.css">
+<!--
+  ============================================================
+  BIO 005 Human Physiology, Yuba College, Fall 2026
+  course-materials.html
+
+  THE HUB. One page, one path. Everything a student needs is
+  reachable from here in one click, grouped the way the week is
+  actually lived: this week's work first, then Lecture, Lab,
+  Study, then Admin at the bottom.
+
+  ------------------------------------------------------------
+  BRANDING, SEP 6 2026
+  ------------------------------------------------------------
+  Restyled to the MedMasters Collaborative site, on Scrubs'
+  instruction ("I would prefer the MedMasters branding, like
+  this page"). Every value below was read off the live site
+  with computed styles, not guessed:
+
+    navy      #0B1530   body text, headlines
+    ink-deep  #060A18   full-bleed dark band
+    maroon    #8B3A2E   eyebrows, CTAs, emphasis
+    gold      #C9A14A   eyebrows on the dark band only
+    display   Open Sans 800, tracked -0.025em
+    body      Plus Jakarta Sans
+    eyebrows  11px, 700, 0.3em tracking, uppercase
+    buttons   4px radius, 11px, 700, 0.2em tracking, uppercase
+    cards     square corners, hairline border, no shadow
+
+  ONE SUBSTITUTION. The live site uses bone #F5F1E8 for text on
+  the dark band. Standing rule is that cream is out of teaching
+  deliverables, so off-white #FAFAF9 is used instead. On near
+  black the two are visually indistinguishable, and the swap is
+  one token (--bone) if Scrubs wants the site value back.
+
+  SITE WIDE, SEP 6 2026. Scrubs then said "everything the
+  MedMasters brand," so the whole repo was moved onto these
+  values, not just this page: assets/brand.css, all 107 root
+  pages, and the deck engine. Two older generations were folded
+  in, brand.css maroon #7A2A22 and the physiology deck terra
+  #8B1D1D, both now #8B3A2E. The tokens below and the ones in
+  assets/brand.css now agree. This page keeps its own copy only
+  because it is self contained; the values are the same.
+
+  ------------------------------------------------------------
+  ACCESSIBILITY
+  ------------------------------------------------------------
+  Every text pair on this page is AAA (7:1 normal, 4.5:1 large).
+  Fonts are self-hosted in assets/fonts-site.css, so there is
+  zero external network traffic. The old bobbing arrow is gone,
+  replaced by a real "This week" section that says what to do
+  rather than pointing at it.
+
+  Tools that are not built yet say so plainly rather than linking
+  to a 404.
+  ============================================================
+-->
+<style>
+:root{
+  /* ---- MedMasters Collaborative, read off the live site ---- */
+  --navy:#0B1530;          /* body text and headlines. 17.0:1 on white */
+  --ink-deep:#060A18;      /* the full-bleed dark band */
+  --maroon:#8B3A2E;        /* eyebrows, CTAs, emphasis. 7.66:1 on white, AAA */
+  --maroon-dk:#6E2D24;     /* maroon hover only */
+  --gold:#C9A14A;          /* eyebrows on the dark band. 8.16:1 on --ink-deep */
+  --bone:#FAFAF9;          /* text on the dark band. Site uses #F5F1E8, see header note */
+  --page:#FFFFFF;
+  --card:#FFFFFF;
+  --muted:#4A5265;         /* secondary body text. 7.82:1 on white, 7.70:1 on
+                              off-white, AAA both ways. Was #4F576A, which is
+                              7.23:1 on white but only 6.92:1 on off-white. */
+  --faint:#4A5265;         /* small labels. Same value, same reason. */
+
+  --hair:rgba(11,21,48,.16);
+  --hair-soft:rgba(11,21,48,.09);
+  --hair-dark:rgba(250,250,249,.18);
+
+  --display:'Open Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --body:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--body);background:var(--page);color:var(--navy);
+     font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+em,i,cite,dfn,var{font-style:normal}
+h1,h2,h3{font-family:var(--display);margin:0;letter-spacing:-.025em;font-weight:800}
+p{margin:0}
+a{color:var(--maroon)}
+:focus-visible{outline:3px solid var(--maroon);outline-offset:3px;border-radius:2px}
+.skip{position:absolute;left:-9999px;top:0;z-index:80;background:var(--navy);color:#fff;
+      padding:12px 20px;font-weight:700;text-decoration:none;border-radius:4px}
+.skip:focus{left:8px;top:8px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+/* ---------- shared idioms from the site ---------- */
+.eyebrow{font-family:var(--body);font-size:11px;font-weight:700;letter-spacing:.3em;
+         text-transform:uppercase;color:var(--maroon);margin:0}
+.on-dark .eyebrow{color:var(--gold)}
+.btn{display:inline-block;font-family:var(--body);font-size:11px;font-weight:700;
+     letter-spacing:.2em;text-transform:uppercase;text-decoration:none;
+     padding:13px 22px;border-radius:4px;border:1px solid transparent;
+     transition:background-color 160ms ease,border-color 160ms ease}
+.btn-fill{background:var(--maroon);color:#fff}
+.btn-fill:hover{background:var(--maroon-dk)}
+.btn-line{background:transparent;color:var(--navy);border-color:var(--hair)}
+.btn-line:hover{border-color:var(--maroon);color:var(--maroon)}
+
+/* ---------- brand bar ---------- */
+.brandbar{background:var(--card);border-bottom:1px solid var(--hair-soft);padding:14px 0}
+.brandbar .wrap{display:flex;align-items:center;gap:13px;flex-wrap:wrap}
+.brandbar .lock{display:flex;align-items:center;gap:10px}
+.brandbar .wm{display:block;font-family:var(--display);font-size:17px;font-weight:800;
+              letter-spacing:-.02em;line-height:1;color:var(--navy)}
+.brandbar .wm b{color:var(--maroon);font-weight:800}
+/* display:block so COLLABORATIVE stacks under the wordmark the way it does
+   on the live site, instead of running on the same line. */
+.brandbar .sub{display:block;font-family:var(--body);font-size:8.5px;font-weight:700;
+               letter-spacing:.34em;text-transform:uppercase;color:var(--faint);margin-top:4px}
+.brandbar .course{margin-left:auto;font-family:var(--body);font-size:10px;font-weight:700;
+                  letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+
+/* ---------- hero ---------- */
+.hero{background:var(--card);padding:52px 0 44px;border-bottom:1px solid var(--hair-soft)}
+.hero h1{font-size:clamp(28px,4.6vw,44px);line-height:1.12;margin-top:14px;max-width:19ch}
+.hero h1 em{color:var(--maroon)}
+.hero .lede{margin-top:16px;color:var(--muted);max-width:56ch;font-size:16.5px}
+.hero .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+
+/* ---------- week strip ---------- */
+.weeks{background:var(--card);border-bottom:1px solid var(--hair);
+       padding:15px 0 17px;position:sticky;top:0;z-index:20}
+.weeks h2{font-family:var(--body);font-size:11px;font-weight:700;letter-spacing:.3em;
+          text-transform:uppercase;color:var(--faint);margin-bottom:11px}
+.strip{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+.wk{flex:none;min-width:62px;border:1px solid var(--hair);background:var(--card);
+    padding:8px 10px;text-decoration:none;color:var(--navy);text-align:center;border-radius:4px}
+.wk .n{font-family:var(--display);font-size:15px;font-weight:800;line-height:1;
+       font-variant-numeric:tabular-nums;display:block}
+.wk .d{font-size:10.5px;color:var(--faint);margin-top:3px;white-space:nowrap;display:block}
+.wk:hover{border-color:var(--maroon);color:var(--maroon)}
+.wk:hover .d{color:var(--maroon)}
+.wk[aria-current="true"]{background:var(--maroon);border-color:var(--maroon);color:#fff}
+.wk[aria-current="true"] .d{color:#fff}   /* full white, not .9 alpha: .9 lands at 6.54:1, under the AAA floor */
+.wk.future{opacity:.55}
+.now{font-size:13px;color:var(--muted);margin-top:11px}
+.now b{color:var(--maroon);font-weight:700}
+
+/* ---------- bands ---------- */
+.band{padding:54px 0}
+.band-dark{background:var(--ink-deep);color:var(--bone)}
+.band-dark h2,.band-dark h3{color:var(--bone)}
+.band-dark .b-sub{color:rgba(250,250,249,.82)}
+.b-head{max-width:60ch}
+.b-head h2{font-size:clamp(23px,3.2vw,31px);line-height:1.18;margin-top:13px}
+.b-head h2 em{color:var(--maroon)}
+.band-dark .b-head h2 em{color:var(--gold)}
+.b-sub{margin-top:11px;color:var(--muted);font-size:15.5px;max-width:56ch}
+
+/* ---------- numbered rows, the site's "how the build works" ---------- */
+.rows{margin-top:28px;border-top:1px solid var(--hair)}
+.row{display:grid;grid-template-columns:76px 1fr;gap:18px;align-items:start;
+     padding:20px 0;border-bottom:1px solid var(--hair);text-decoration:none;color:inherit}
+a.row:hover .rt{color:var(--maroon)}
+a.row:hover .rn{color:var(--maroon-dk)}
+.rn{font-family:var(--display);font-size:34px;font-weight:800;line-height:.9;
+    color:var(--maroon);font-variant-numeric:tabular-nums}
+.rt{font-family:var(--display);font-size:17px;font-weight:800;letter-spacing:-.02em;
+    display:block;transition:color 160ms ease}
+.rd{font-size:14.5px;color:var(--muted);margin-top:5px;max-width:62ch}
+.rmeta{font-family:var(--body);font-size:10px;font-weight:700;letter-spacing:.2em;
+       text-transform:uppercase;color:var(--faint);margin-top:8px;display:block}
+.rmeta.due{color:var(--maroon)}
+
+/* ---------- the path: stages with arrows between them ----------
+   The week is one sequence, not four piles. Each stage is a card, and a
+   maroon arrow sits between them so the order is impossible to miss. The
+   arrows are aria-hidden: order is already carried by the numbers, the
+   stage labels and DOM order, so a screen reader loses nothing. */
+.path{margin-top:30px}
+.stage{position:relative;background:var(--card);box-shadow:0 0 0 1px var(--hair);
+       padding:24px 28px 26px}
+.stage-hd{display:grid;grid-template-columns:64px 1fr;gap:16px;align-items:start}
+.sn{font-family:var(--display);font-size:38px;font-weight:800;line-height:.86;
+    color:var(--maroon);font-variant-numeric:tabular-nums}
+.slabel{font-family:var(--body);font-size:10px;font-weight:700;letter-spacing:.28em;
+        text-transform:uppercase;color:var(--maroon);display:block;margin-bottom:5px}
+.stage h3{font-size:19px;margin:0 0 7px}
+.stage .sd{font-size:14.5px;color:var(--muted);max-width:64ch}
+.slinks{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
+.slink{display:inline-block;font-family:var(--body);font-size:10.5px;font-weight:700;
+       letter-spacing:.14em;text-transform:uppercase;text-decoration:none;
+       color:var(--navy);border:1px solid var(--hair);border-radius:4px;
+       padding:9px 14px;transition:border-color 160ms ease,color 160ms ease,background-color 160ms ease}
+.slink:hover{border-color:var(--maroon);color:var(--maroon);background:#FBF6F5}
+.slink.key{background:var(--maroon);border-color:var(--maroon);color:#fff}
+.slink.key:hover{background:var(--maroon-dk);border-color:var(--maroon-dk);color:#fff}
+.sdue{font-family:var(--body);font-size:10px;font-weight:700;letter-spacing:.2em;
+      text-transform:uppercase;color:var(--maroon);margin-top:13px;display:block}
+
+.arrow{display:flex;justify-content:center;padding:0;margin:0;height:46px;align-items:center}
+.arrow svg{color:var(--maroon);display:block}
+
+/* Study band. Same components, gold instead of maroon, on near black. */
+.band-dark .stage{background:var(--ink-deep);box-shadow:0 0 0 1px var(--hair-dark)}
+.band-dark .sn,.band-dark .slabel{color:var(--gold)}
+.band-dark .stage .sd{color:rgba(250,250,249,.82)}
+.band-dark .slink{color:var(--bone);border-color:var(--hair-dark)}
+.band-dark .slink:hover{border-color:var(--gold);color:var(--gold);background:#11151F}
+.band-dark .slink.key{background:var(--gold);border-color:var(--gold);color:var(--ink-deep)}
+.band-dark .slink.key:hover{background:#D9B565;border-color:#D9B565;color:var(--ink-deep)}
+.band-dark .arrow svg{color:var(--gold)}
+
+/* Week 1 only callout, above the path. */
+.oneoff{background:var(--card);box-shadow:0 0 0 1px var(--maroon);padding:22px 26px 24px;
+        margin-top:26px;display:block;color:inherit}
+.oneoff .otag{font-family:var(--body);font-size:10px;font-weight:700;letter-spacing:.28em;
+        text-transform:uppercase;color:var(--maroon);display:block;margin-bottom:6px}
+.oneoff h3{font-size:18px;margin:0 0 6px;transition:color 160ms ease}
+.oneoff p{font-size:14.5px;color:var(--muted);max-width:64ch}
+
+/* ---------- tiles ---------- */
+/* Each tile draws its own 1px ring with a box-shadow, and the 1px grid gap
+   lets neighbouring rings overlap into one hairline. Two earlier attempts were
+   wrong: per-tile borders doubled up at every wrap point and jammed the text
+   against the rule, and colouring the CONTAINER and showing it through the gap
+   painted any empty grid cell as a grey block (a four-tile group in three
+   columns leaves one). A ring per tile has neither problem. */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:1px;
+       margin-top:30px;padding:1px}
+.tile{position:relative;background:var(--card);padding:24px 26px 26px;text-decoration:none;
+      color:inherit;display:flex;flex-direction:column;
+      box-shadow:0 0 0 1px var(--hair);transition:background-color 160ms ease}
+a.tile:hover{background:#FBF6F5}
+a.tile:hover h3{color:var(--maroon)}
+.band-dark .tile{background:var(--ink-deep);box-shadow:0 0 0 1px var(--hair-dark)}
+.band-dark a.tile:hover{background:#11151F}
+.band-dark a.tile:hover h3{color:var(--gold)}
+.tile .ic{color:var(--maroon);margin-bottom:12px}
+.band-dark .tile .ic{color:var(--gold)}
+.tile h3{font-size:17px;margin-bottom:6px;transition:color 160ms ease}
+.tile p{font-size:14px;color:var(--muted);flex:1}
+.band-dark .tile p{color:rgba(250,250,249,.82)}
+.tile .go{font-family:var(--body);font-size:10px;font-weight:700;letter-spacing:.2em;
+          text-transform:uppercase;color:var(--maroon);margin-top:15px}
+.band-dark .tile .go{color:var(--gold)}
+.tile.soon{cursor:default}
+.tile.soon .ic,.tile.soon h3{color:var(--faint)}
+.band-dark .tile.soon .ic,.band-dark .tile.soon h3{color:rgba(250,250,249,.62)}
+/* Top right, out of the flow. Inline, it pushed the headings of badged tiles
+   down and left the un-badged tile in the same row sitting a line higher. */
+.badge{position:absolute;top:22px;right:24px;font-family:var(--body);font-size:9.5px;
+       font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+       border:1px solid var(--maroon);color:var(--maroon);padding:3px 8px;border-radius:3px}
+.band-dark .badge{border-color:var(--gold);color:var(--gold)}
+.soon-tag{display:inline-block;font-family:var(--body);font-size:9.5px;font-weight:700;
+          letter-spacing:.2em;text-transform:uppercase;border:1px dashed var(--faint);
+          color:var(--faint);padding:3px 8px;margin-top:15px;align-self:flex-start;border-radius:3px}
+.band-dark .soon-tag{border-color:rgba(250,250,249,.42);color:rgba(250,250,249,.78)}
+
+/* ---------- admin ---------- */
+.admin{padding:46px 0 56px;border-top:1px solid var(--hair)}
+.admin h2{font-family:var(--body);font-size:11px;font-weight:700;letter-spacing:.3em;
+          text-transform:uppercase;color:var(--faint);margin-bottom:18px}
+.arow{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0}
+.acard{border:1px solid var(--hair);border-radius:4px;padding:16px 18px;text-decoration:none;
+       color:var(--navy);display:flex;align-items:flex-start;gap:13px;margin:-0.5px;
+       transition:border-color 160ms ease,background-color 160ms ease}
+.acard:hover{border-color:var(--maroon);background:rgba(139,58,46,.04)}
+.acard .ic{color:var(--maroon);flex:none;margin-top:1px}
+.acard .txt{display:flex;flex-direction:column}          /* the fix: t and s were inline and ran together */
+.acard .t{font-family:var(--display);font-size:15px;font-weight:800;letter-spacing:-.02em}
+.acard .s{font-size:12.5px;color:var(--muted);margin-top:3px}
+
+/* ---------- footer ---------- */
+footer{background:var(--ink-deep);color:var(--bone);padding:34px 0 38px}
+.flinks{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+        font-size:13.5px;line-height:2.1}
+.flinks a{color:var(--bone);text-decoration:none;font-weight:600;padding:0 2px}
+.flinks a:hover{color:var(--gold);text-decoration:underline}
+.flinks .dot{color:rgba(250,250,249,.78);padding:0 10px}  /* .5 alpha was 5.14:1, under the AAA floor */
+footer :focus-visible{outline-color:var(--gold)}
+.fleg{text-align:center;margin-top:16px;padding-top:16px;border-top:1px solid var(--hair-dark);
+      font-size:12px;color:rgba(250,250,249,.82);font-weight:600;letter-spacing:.06em}
+.fleg .sep{color:rgba(250,250,249,.78);padding:0 8px}
+
+/* No animation on this page by design. These transitions are color only,
+   never motion, but honor the preference anyway rather than assume. */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+  html{scroll-behavior:auto}
+}
+
+@media(max-width:640px){
+  .band{padding:38px 0}
+  .hero{padding:36px 0 32px}
+  .row{grid-template-columns:54px 1fr;gap:14px}
+  .rn{font-size:26px}
+  .tile{padding:22px 20px 24px}
+  .brandbar .course{margin-left:0;flex-basis:100%}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#thisweek">Skip to the course tools</a>
+
+<!-- ============ BRAND BAR ============ -->
+<div class="brandbar"><div class="wrap">
+  <span class="lock">
+    <svg viewBox="40 10 125 148" width="24" height="28" role="img" aria-label="MedMasters Collaborative">
+      <g transform="translate(0,18)">
+        <g transform="translate(60,0) rotate(8 0 130)"><circle cx="0" cy="20" r="10" fill="#0B1530"/><path d="M 0,32 C -10,32 -16,36 -16,42 C -16,55 -13,68 -11,82 C -10,100 -12,118 -14,130 L 14,130 C 12,118 10,100 11,82 C 13,68 16,55 16,42 C 16,36 10,32 0,32 Z" fill="#0B1530"/></g>
+        <g transform="translate(100,0)"><circle cx="0" cy="10" r="11" fill="#8B3A2E"/><path d="M 0,22 C -11,22 -17,26 -17,34 C -17,52 -14,70 -12,86 C -11,108 -13,122 -15,132 L 15,132 C 13,122 11,108 12,86 C 14,70 17,52 17,34 C 17,26 11,22 0,22 Z" fill="#8B3A2E"/></g>
+        <g transform="translate(140,0) rotate(-8 0 130)"><circle cx="0" cy="20" r="10" fill="#C9A14A"/><path d="M 0,32 C -10,32 -16,36 -16,42 C -16,55 -13,68 -11,82 C -10,100 -12,118 -14,130 L 14,130 C 12,118 10,100 11,82 C 13,68 16,55 16,42 C 16,36 10,32 0,32 Z" fill="#C9A14A"/></g>
+      </g>
+    </svg>
+    <span>
+      <span class="wm">Med<b>Masters</b></span>
+      <span class="sub">Collaborative</span>
+    </span>
+  </span>
+  <span class="course">BIO 005 &middot; Yuba College &middot; Fall 2026</span>
+</div></div>
+
+<!-- ============ HERO ============ -->
+<header class="hero"><div class="wrap">
+  <p class="eyebrow">Human Physiology &middot; Course tools</p>
+  <h1>Everything for this course, in <em>one place</em>.</h1>
+  <p class="lede">Pick your week at the top, then work down the page. What is due comes first, then lecture, then lab, then the study tools. Administrative things are at the bottom for when you need them.</p>
+  <p class="cta">
+    <a class="btn btn-fill" href="#thisweek">Start this week</a>
+    <a class="btn btn-line" href="syllabus-fall2026.html" target="_top">Read the syllabus</a>
+  </p>
+</div></header>
+
+<!-- ============ WEEK STRIP ============ -->
+<nav class="weeks" aria-label="Course weeks"><div class="wrap">
+  <h2 id="wkh">Jump to a week</h2>
+  <div class="strip" id="strip" role="list" aria-labelledby="wkh"></div>
+  <p class="now" id="nowline"></p>
+</div></nav>
+
+<main>
+
+  <!-- ---------- THE PATH ---------- -->
+  <section class="band" id="thisweek" aria-labelledby="h-week">
+    <div class="wrap">
+      <div class="b-head">
+        <p class="eyebrow">Week 1 &middot; Do it in this order</p>
+        <h2 id="h-week">Six steps, <em>start to finish</em>.</h2>
+        <p class="b-sub">Each step feeds the next one, which is why the order matters more than the time you spend on any single step. Set the note sheet up before you watch, not after. That is the whole trick.</p>
+      </div>
+
+      <!-- Week 1 only, sits outside the loop -->
+      <div class="oneoff">
+        <span class="otag">Week 1 only, do this first</span>
+        <h3>Your vision board</h3>
+        <p>Build a board that shows who you are, then introduce yourself and walk us through it on a short video. This one is not part of the weekly routine. It happens once, in week one, so we can get to know each other. Post due Friday September 11 at 10 pm, replies due Sunday September 13 at 10 pm.</p>
+        <p class="slinks" style="margin-top:15px">
+          <a class="slink key" href="assignment-discussion-01-visionboard.html" target="_top">Instructions and rubric</a>
+          <a class="slink" href="https://yccd.instructure.com/courses/42616/discussion_topics/712733" target="_blank" rel="noopener">Post it in Canvas</a>
+        </p>
+      </div>
+
+      <div class="path">
+
+        <!-- 01 -->
+        <section class="stage" aria-labelledby="s1">
+          <div class="stage-hd">
+            <span class="sn">01</span>
+            <div>
+              <span class="slabel">Prework, part one</span>
+              <h3 id="s1">Set your note sheet up before you watch anything</h3>
+              <p class="sd">Open the prompts, pick one prompt for each competency, and lay them out on your sheet in your first color. Do not answer them yet. You are building the empty frame you are about to fill, and doing it cold is what makes the video stick instead of wash over you.</p>
+              <p class="slinks">
+                <a class="slink key" href="week-01-notesheet-prompts.html" target="_top">Get the prompts</a>
+                <a class="slink" href="note-sheet.html?week=1" target="_top">Print your Week 1 sheet</a>
+                
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <p class="arrow" aria-hidden="true"><svg width="26" height="40" viewBox="0 0 26 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3v29"/><path d="M4 24l9 9 9-9"/></svg></p>
+
+        <!-- 02 -->
+        <section class="stage" aria-labelledby="s2">
+          <div class="stage-hd">
+            <span class="sn">02</span>
+            <div>
+              <span class="slabel">Watch</span>
+              <h3 id="s2">The Week 1 lecture, with your sheet open beside it</h3>
+              <p class="sd">Homeostasis, mass balance, the reflex pathway, feedback, and how signals travel. Play it straight through or take one concept at a time.</p>
+              <p class="slinks">
+                <a class="slink key" href="concept-videos-week01.html" target="_top">Watch the lecture</a>
+                <a class="slink" href="week-01-notes.html" target="_top">Read it instead</a>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <p class="arrow" aria-hidden="true"><svg width="26" height="40" viewBox="0 0 26 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3v29"/><path d="M4 24l9 9 9-9"/></svg></p>
+
+        <!-- 03 -->
+        <section class="stage" aria-labelledby="s3">
+          <div class="stage-hd">
+            <span class="sn">03</span>
+            <div>
+              <span class="slabel">Prework, part two</span>
+              <h3 id="s3">Go back through the sheet in your second color</h3>
+              <p class="sd">After the videos, go back into the same boxes in your second color and add what you did not know. That gap between the two colors is the whole point.</p>
+              <p class="slinks">
+                <a class="slink key" href="week-01-notesheet-prompts.html" target="_top">Back to the prompts</a>
+              </p>
+              <span class="sdue">Due Sunday September 13, 10 pm</span>
+            </div>
+          </div>
+        </section>
+
+        <p class="arrow" aria-hidden="true"><svg width="26" height="40" viewBox="0 0 26 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3v29"/><path d="M4 24l9 9 9-9"/></svg></p>
+
+        <!-- 04 -->
+        <section class="stage" aria-labelledby="s4">
+          <div class="stage-hd">
+            <span class="sn">04</span>
+            <div>
+              <span class="slabel">Homework</span>
+              <h3 id="s4">Silverthorn problems, chapters 1 and 6</h3>
+              <p class="sd">End of chapter problems from the book. Work them on paper before you look at anything. The answers are in the back, which is exactly why you check them after and not during. A problem you watched yourself solve is not a problem you can solve.</p>
+              <p class="slinks">
+                <a class="slink key" href="assignment-bookproblems.html" target="_top">See the problem set</a>
+              </p>
+              <span class="sdue">Due Sunday September 13, 10 pm</span>
+            </div>
+          </div>
+        </section>
+
+        <p class="arrow" aria-hidden="true"><svg width="26" height="40" viewBox="0 0 26 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3v29"/><path d="M4 24l9 9 9-9"/></svg></p>
+
+        <!-- 05 -->
+        <section class="stage" aria-labelledby="s5">
+          <div class="stage-hd">
+            <span class="sn">05</span>
+            <div>
+              <span class="slabel">Lab &middot; no PhysioEx this week</span>
+              <h3 id="s5">Where the reference ranges come from</h3>
+              <p class="sd">No Pearson this week. Week 1's lab is about the ruler itself: every lab panel you will ever read has a reference range column, and this week you build one by hand, learn what that column claims and what it stays silent about, and watch what happens to "normal" when the population underneath it moves.</p>
+              <p class="slinks">
+                <a class="slink key" href="reference-range-lab.html" target="_top">Open the standards and ranges lab</a>
+                <a class="slink" href="assignment-physioex.html" target="_top">How labs are graded</a>
+                <a class="slink" href="clinical-physiology-lab-manual.html" target="_top">Lab manual</a>
+              </p>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- 06, STUDY. The coloured band. ---------- -->
+  <section class="band band-dark on-dark" aria-labelledby="h-study">
+    <div class="wrap">
+      <div class="b-head">
+        <p class="eyebrow">Step six &middot; Every day after</p>
+        <h2 id="h-study">Then keep it, with <em>practice cards</em>.</h2>
+        <p class="b-sub">Steps one to five are how you learn Week 1. This is how you still have it in Week 12. Rereading feels like studying and mostly is not. Both tools here make you produce the answer instead of recognizing it, which is the whole difference.</p>
+      </div>
+
+      <div class="path">
+
+        <section class="stage" aria-labelledby="s6">
+          <div class="stage-hd">
+            <span class="sn">06</span>
+            <div>
+              <span class="slabel">Practice cards</span>
+              <h3 id="s6">Mastery OS, a few minutes a day</h3>
+              <p class="sd">Spaced recall cards built from the same competency list as everything else. Nearly five thousand across the term, scheduled so you meet each one again right before you would have forgotten it. Ten minutes daily beats two hours the night before, and it is not close.</p>
+              <p class="slinks">
+                <a class="slink key" href="os/mastery-physio-os.html" target="_top">Start today's cards</a>
+                <a class="slink" href="mastery-canvas.html" target="_top">Draw from memory</a>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <p class="arrow" aria-hidden="true"><svg width="26" height="40" viewBox="0 0 26 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3v29"/><path d="M4 24l9 9 9-9"/></svg></p>
+
+        <section class="stage" aria-labelledby="s7">
+          <div class="stage-hd">
+            <span class="sn">07</span>
+            <div>
+              <span class="slabel">Before a midterm</span>
+              <h3 id="s7">Draw a pathway from memory and find out what you actually have</h3>
+              <p class="sd">Open the canvas, draw the reflex pathway with nothing in front of you, then save it as a PDF stamped from this course. If you cannot produce it without looking, you have not learned it yet, and it is much better to find that out now.</p>
+              <p class="slinks">
+                <a class="slink key" href="mastery-canvas.html" target="_top">Open the canvas</a>
+                <a class="slink" href="competency-study-guide.html" target="_top">What to draw</a>
+              </p>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- ADMIN ---------- -->
+  <section class="admin" aria-labelledby="h-admin">
+    <div class="wrap">
+      <h2 id="h-admin">Course administration</h2>
+      <div class="arow">
+        <a class="acard" href="syllabus-fall2026.html" target="_top">
+          <span class="ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/></svg></span>
+          <span class="txt"><span class="t">Syllabus</span><span class="s">How the course runs, and what is graded</span></span>
+        </a>
+        <a class="acard" href="course-schedule.html" target="_top">
+          <span class="ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M3 10h18M8 2v5M16 2v5"/></svg></span>
+          <span class="txt"><span class="t">Course schedule</span><span class="s">All fifteen weeks and every due date</span></span>
+        </a>
+        <a class="acard" href="syllabus-fall2026.html#s11" target="_top">
+          <span class="ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
+          <span class="txt"><span class="t">AI policy</span><span class="s">Where AI helps, and where it is closed</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer><div class="wrap">
+  <nav class="flinks" aria-label="Course links">
+    <a href="course-start.html" target="_top">Course home</a><span class="dot" aria-hidden="true">&middot;</span>
+    <a href="syllabus-fall2026.html" target="_top">Syllabus</a><span class="dot" aria-hidden="true">&middot;</span>
+    <a href="course-schedule.html" target="_top">Schedule</a><span class="dot" aria-hidden="true">&middot;</span>
+    <a href="https://yccd.instructure.com/courses/42616" target="_blank" rel="noopener">Canvas</a><span class="dot" aria-hidden="true">&middot;</span>
+    <a href="https://yccd.instructure.com/courses/42616/discussion_topics/711800" target="_blank" rel="noopener">Dr. Rennie&rsquo;s Virtual Office</a><span class="dot" aria-hidden="true">&middot;</span>
+    <a href="syllabus-fall2026.html#s15" target="_top">Getting help</a><span class="dot" aria-hidden="true">&middot;</span>
+    <a href="syllabus-fall2026.html#s13" target="_top">Accessibility</a><span class="dot" aria-hidden="true">&middot;</span>
+    <a href="mailto:srennie@yccd.edu?subject=BIO%20005%20site%20problem%20on%20course-materials.html">Report a problem</a>
+  </nav>
+  <p class="fleg">BIO 005 Human Physiology<span class="sep" aria-hidden="true">&middot;</span>Yuba College<span class="sep" aria-hidden="true">&middot;</span>Fall 2026<span class="sep" aria-hidden="true">&middot;</span>Dr. Sharilyn Rennie</p>
+</div></footer>
+
+<script>
+/* ============================================================
+   Week strip. Weeks come from the fallback list below so this
+   page never renders empty, with or without the schedule file.
+   ============================================================ */
+(function(){
+  "use strict";
+  var TERM_START = new Date(2026, 8, 8);           /* Sep 8 2026, month is 0-based */
+  var TITLES = [
+    "How physiology works and what keeps you steady",
+    "The chemistry that does work in the body",
+    "Getting across the membrane",
+    "The action potential",
+    "The nervous system, from sensing to moving",
+    "How muscle makes force",
+    "Hormones, the slow control system",
+    "Reproduction, and the clearest positive feedback loop",
+    "The heart as a pump",
+    "Pressure, flow, and holding blood pressure steady",
+    "Blood, and how the body defends itself",
+    "Digestion, and how you use food for fuel",
+    "Breathing, gas transport, and blood pH",
+    "The kidney, and body fluid balance",
+    "The slow lever on pH, and putting it all together"
+  ];
+  var MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  function weekStart(i){                            /* i is 0-based */
+    var d = new Date(TERM_START.getTime());
+    d.setDate(d.getDate() + i * 7);
+    return d;
+  }
+  function label(d){ return MON[d.getMonth()] + " " + d.getDate(); }
+
+  /* Which week is it? Before the term starts, Week 1. */
+  var now = new Date();
+  var ms = now - TERM_START;
+  var cur = ms < 0 ? 1 : Math.min(15, Math.floor(ms / (7 * 864e5)) + 1);
+
+  var strip = document.getElementById("strip");
+  for (var i = 0; i < 15; i++){
+    var n = i + 1;
+    var future = n > cur;
+
+    /* Every week 1 to 15 has a page. The ones that are not written yet are
+       real placeholder pages carrying that week's title, its open date and a
+       pointer to the reading, so a future week is a normal link. It is only
+       dimmed, to show it has not opened. */
+    var a = document.createElement("a");
+    a.className = "wk" + (future ? " future" : "");
+    a.href = "week-" + (n < 10 ? "0" + n : n) + ".html";
+    a.target = "_top";
+    a.setAttribute("role", "listitem");
+    a.setAttribute("aria-label", "Week " + n + ", " + TITLES[i] +
+      (n === cur ? ", this week" : future ? ", opens later in the term" : ""));
+    if (n === cur) { a.setAttribute("aria-current", "true"); }
+    a.innerHTML = '<span class="n">' + n + '</span><span class="d">' + label(weekStart(i)) + '</span>';
+    strip.appendChild(a);
+  }
+
+  document.getElementById("nowline").innerHTML =
+    (ms < 0 ? "The term starts Tuesday September 8. First up, <b>Week 1, " + TITLES[0] + "</b>."
+            : "You are in <b>Week " + cur + ", " + TITLES[cur - 1] + "</b>. Earlier weeks stay open, so you can go back whenever you need to.");
+
+  /* Bring the current week into view without yanking the page around. */
+  var here = strip.querySelector('[aria-current="true"]');
+  if (here && here.scrollIntoView){
+    try { here.scrollIntoView({ block: "nearest", inline: "center" }); } catch(e){}
+  }
+})();
+
+/* Iframe height sender, for Canvas and Kajabi. */
+(function(){
+  var ID = "bio005-course-materials";
+  function send(){
+    var h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+    try { window.parent.postMessage({ id:ID, frameId:ID, type:"resize", height:h }, "*"); } catch(e){}
+  }
+  window.addEventListener("load", send);
+  window.addEventListener("resize", send);
+  if (typeof ResizeObserver !== "undefined"){ try { new ResizeObserver(send).observe(document.body); } catch(e){} }
+  setTimeout(send, 400); setTimeout(send, 1500);
+})();
+</script>
+</body>
+</html>
