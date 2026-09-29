@@ -15,6 +15,7 @@ Target: WCAG 2.2 AA minimum, AAA where achievable. Result: **AA met throughout, 
 |---|---|---|---|
 | 1.1.1 Non-text content | A | Pass | Logo figures, capnogram trace, aurora glow, and progress dots are decorative and `aria-hidden`. Progress is also given in text. |
 | 1.3.1 Info and relationships | A | Pass | One h1 per screen (intro, level menu, trainer). Steps use `fieldset` and `legend` with an h2 inside. The ABG values are a `<dl>`. The normal ranges are a `<table>` with `scope`. |
+| 1.3.1 Tic-tac-toe grid | A | Pass | The grid is a real `<table>` with a hidden caption, column headers, and row headers. Each filled cell includes hidden text ("placed here" or "your current pick"), so screen reader users get the same information as the color and dashed-border styling. Filled cells are white text on navy (19:1), and tentative picks are navy text on navy-tint (16.5:1). |
 | 1.4.1 Use of color | A | Pass | Every state has text: "Correct.", "Not yet.", "Correct answer", "Your answer", "Completed", "Recommended". Help and wrong states also use a dashed border. |
 | 1.4.3 / 1.4.6 Contrast | AA / AAA | Pass | Every text pair is 7:1 or higher (section 3). |
 | 1.4.10 Reflow | AA | Pass | No horizontal scroll at 320 px or 390 px on the intro, menu, or trainer. |
