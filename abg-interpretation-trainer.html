@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABG Interpretation Trainer | MedMasters Collaborative</title>
+<meta name="description" content="A leveled teaching trainer for arterial blood gas interpretation. Students pick a starting level and work step by step through pH, PaCO2, HCO3, base excess, the primary disorder, compensation, and oxygenation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* MedMasters Collaborative brand (live course-site tokens) */
+    --navy: #08101F;
+    --navy-2: #121B30;          /* raised surface on navy */
+    --navy-line: #2A3552;       /* hairlines on navy, decorative */
+    --navy-tint: #ECEFF4;
+    --maroon: #7A2A22;
+    --maroon-dark: #5E201A;
+    --gold: #DCB45C;            /* on navy only, never text on light */
+    --straw: #E8CE85;
+    --bone: #F4EFE8;            /* text on navy only */
+    --ink: #08101F;
+    --ink-muted: #4A5468;
+    --mist: #B9BFCC;            /* secondary text on navy, 10.3:1 */
+    --page: #FAFAF9;
+    --card: #FFFFFF;
+    --border: #767C8C;          /* control borders, 4.2:1 on white */
+    --rule: #D7DBE2;
+    --shadow-rest: 0 1px 3px rgba(11,21,48,0.10);
+    --shadow-hover: 0 12px 26px rgba(11,21,48,0.16);
+    --shadow-float: 0 18px 40px rgba(0,0,0,0.35);
+  }
+
+  * { box-sizing: border-box; }
+  em, i, cite, dfn, var, address { font-style: normal; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    color: var(--ink);
+    background: var(--navy);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  [hidden] { display: none !important; }
+  button { font-family: inherit; cursor: pointer; }
+
+  .skip {
+    position: absolute; left: -9999px; top: 0; z-index: 300;
+    background: var(--gold); color: var(--navy);
+    padding: 10px 16px; border-radius: 0 0 8px 0; font-weight: 800; text-decoration: none;
+  }
+  .skip:focus { left: 0; }
+  .vh {
+    position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+
+  /* Focus: maroon on light surfaces, gold on navy */
+  :focus-visible { outline: 3px solid var(--maroon); outline-offset: 3px; border-radius: 6px; }
+  .on-navy :focus-visible { outline-color: var(--gold); }
+  [tabindex="-1"]:focus { outline: none; }
+
+  .eyebrow {
+    text-transform: uppercase; letter-spacing: 0.14em;
+    font-size: 12px; font-weight: 800; margin: 0 0 10px;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    border: 0; border-radius: 12px; padding: 14px 26px; min-height: 48px;
+    font-weight: 700; font-size: 16px; text-decoration: none;
+    transition: transform 200ms ease, box-shadow 200ms ease, background-color 200ms ease, color 200ms ease;
+  }
+  .btn-primary { background: var(--maroon); color: #fff; }
+  .btn-primary:hover { background: var(--maroon-dark); transform: translateY(-2px); }
+  .btn-gold { background: var(--gold); color: var(--navy); }
+  .btn-gold:hover { background: var(--straw); transform: translateY(-2px); }
+  .btn-ghost { background: transparent; color: var(--bone); border: 1.5px solid rgba(244,239,232,0.55); }
+  .btn-ghost:hover { border-color: var(--gold); color: #fff; }
+  .btn-quiet { background: #fff; color: var(--ink); border: 1.5px solid var(--border); }
+  .btn-quiet:hover { border-color: var(--ink); }
+  .textbtn {
+    background: none; border: 0; padding: 10px 4px; min-height: 44px;
+    font-weight: 600; font-size: 15px; text-decoration: underline; text-underline-offset: 3px;
+  }
+  .on-navy .textbtn { color: var(--mist); }
+  .on-navy .textbtn:hover { color: #fff; }
+
+  /* ===================== Screens ===================== */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* Aurora background shared by intro and menu */
+  .navy-stage {
+    position: relative; overflow: hidden;
+    min-height: max(640px, 100svh);
+    background: var(--navy); color: var(--bone);
+  }
+  .aurora { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+  .aurora span {
+    position: absolute; border-radius: 50%;
+    filter: blur(60px); opacity: 0.55;
+    animation: drift 18s ease-in-out infinite;
+  }
+  .aurora .a1 { width: 520px; height: 520px; background: #7A2A22; top: -160px; left: -120px; }
+  .aurora .a2 { width: 460px; height: 460px; background: #DCB45C; bottom: -180px; right: -100px; animation-delay: -6s; opacity: 0.32; }
+  .aurora .a3 { width: 420px; height: 420px; background: #1E2A47; top: 40%; left: 45%; animation-delay: -11s; }
+  @keyframes drift {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(40px,-30px) scale(1.08); }
+    66% { transform: translate(-30px,25px) scale(0.96); }
+  }
+
+  /* ===================== Intro ===================== */
+  .intro-inner {
+    position: relative; z-index: 2;
+    max-width: 820px; margin: 0 auto;
+    min-height: max(640px, 100svh);
+    padding: 56px 20px 64px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+  }
+  .logo-figures { display: flex; gap: 10px; align-items: flex-end; margin-bottom: 26px; }
+  .logo-figures svg { width: 46px; height: auto; opacity: 0; transform: translateY(20px) scale(0.8); transform-origin: center bottom; }
+  .logo-figures.go svg { animation: rise 620ms cubic-bezier(.2,.8,.2,1) forwards; }
+  .logo-figures.go svg:nth-child(1) { animation-delay: 150ms; }
+  .logo-figures.go svg:nth-child(2) { animation-delay: 550ms; }
+  .logo-figures.go svg:nth-child(3) { animation-delay: 950ms; }
+  @keyframes rise { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+  .readout {
+    font-size: clamp(34px, 7vw, 60px);
+    font-weight: 800; line-height: 1.05;
+    min-height: 1.15em; margin: 0 0 8px;
+    color: #fff; letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+  }
+  .readout .caret {
+    display: inline-block; width: 0.08em; height: 0.9em; margin-left: 0.06em;
+    background: var(--gold); vertical-align: -0.08em;
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .trace { width: min(560px, 90vw); height: 64px; margin: 6px 0 18px; }
+  .trace path { fill: none; stroke: var(--gold); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .trace .sweep { stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: sweep 4.2s linear infinite; }
+  .trace .ghost { stroke: var(--navy-line); }
+  @keyframes sweep { to { stroke-dashoffset: 0; } }
+
+  .reveal { opacity: 0; visibility: hidden; transform: translateY(16px); transition: opacity 600ms ease, transform 600ms ease, visibility 0s linear 600ms; }
+  .reveal.go { opacity: 1; visibility: visible; transform: none; transition: opacity 600ms ease, transform 600ms ease, visibility 0s; }
+  .intro-title h1 {
+    font-size: clamp(26px, 4.6vw, 40px); font-weight: 800;
+    margin: 8px 0 8px; color: #fff; letter-spacing: -0.01em; line-height: 1.15;
+  }
+  .intro-sub { max-width: 560px; margin: 0 auto 28px; font-size: 1.08rem; color: var(--bone); }
+  .intro-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .skip-intro { position: absolute; top: 14px; right: 16px; z-index: 3; }
+
+  /* ===================== Menu ===================== */
+  .menu-inner { position: relative; z-index: 2; max-width: 1080px; margin: 0 auto; padding: 48px 20px 56px; }
+  .menu-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 26px; }
+  .wordmark { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; color: #fff; }
+  .wordmark .mm { color: var(--gold); }
+  .wordmark svg { width: 18px; height: auto; }
+  .mini-figs { display: inline-flex; gap: 3px; align-items: flex-end; }
+  .menu-inner .menu-title { font-size: clamp(28px, 4.6vw, 42px); font-weight: 800; color: #fff; margin: 0 0 8px; letter-spacing: -0.01em; line-height: 1.15; }
+  .menu-lead { color: var(--bone); margin: 0 0 28px; max-width: 640px; font-size: 1.05rem; }
+
+  .mode-pick { border: 0; padding: 0; margin: 0 0 26px; min-width: 0; }
+  .mode-pick legend { font-weight: 700; color: #fff; padding: 0; margin-bottom: 10px; }
+  .seg { display: inline-flex; flex-wrap: wrap; gap: 6px; padding: 6px; border-radius: 14px; background: var(--navy-2); border: 1px solid var(--navy-line); }
+  .seg label { position: relative; }
+  .seg input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .seg span {
+    display: flex; flex-direction: column; min-width: 180px; padding: 10px 18px; border-radius: 10px;
+    color: var(--mist); font-weight: 700; text-align: left; transition: background-color 200ms ease, color 200ms ease;
+  }
+  .seg small { font-weight: 500; font-size: 0.85rem; }
+  .seg input:checked + span { background: var(--gold); color: var(--navy); }
+  .seg input:focus-visible + span { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+  .level-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  @media (max-width: 880px) { .level-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .level-grid { grid-template-columns: minmax(0, 1fr); } }
+  .level-card {
+    width: 100%; height: 100%; text-align: left;
+    display: flex; flex-direction: column; gap: 6px;
+    background: var(--card); color: var(--ink);
+    border: 0; border-radius: 16px; padding: 20px 20px 18px;
+    box-shadow: var(--shadow-float);
+    opacity: 0; transform: translateY(14px);
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+  .level-grid.go .level-card { animation: cardIn 520ms cubic-bezier(.2,.8,.2,1) forwards; }
+  @keyframes cardIn { to { opacity: 1; transform: none; } }
+  .level-grid.go li:nth-child(2) .level-card { animation-delay: 70ms; }
+  .level-grid.go li:nth-child(3) .level-card { animation-delay: 140ms; }
+  .level-grid.go li:nth-child(4) .level-card { animation-delay: 210ms; }
+  .level-grid.go li:nth-child(5) .level-card { animation-delay: 280ms; }
+  .level-grid.go li:nth-child(6) .level-card { animation-delay: 350ms; }
+  .level-card:hover { transform: translateY(-4px); box-shadow: 0 22px 48px rgba(0,0,0,0.45); }
+  .lc-num { font-size: 12px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--maroon); }
+  .lc-name { font-size: 1.2rem; font-weight: 800; line-height: 1.25; }
+  .lc-desc { color: var(--ink-muted); font-size: 0.95rem; }
+  .lc-foot { margin-top: auto; padding-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 99px; padding: 4px 12px; font-size: 0.8rem; font-weight: 700; }
+  .chip-done { background: var(--navy-tint); color: var(--navy); border: 1.5px solid var(--navy); }
+  .chip-rec { background: var(--navy); color: var(--gold); }
+  .chip-go { color: var(--maroon); font-weight: 700; font-size: 0.9rem; margin-left: auto; }
+  .menu-foot #menuStats:empty { display: none; }
+  .menu-foot { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; color: var(--mist); }
+
+  /* ===================== Trainer ===================== */
+  #screen-trainer { background: var(--page); min-height: max(640px, 100svh); }
+  .topbar {
+    background: var(--navy); color: #fff;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    padding: 10px 20px;
+  }
+  .topbar .wordmark { font-size: 15px; }
+  .topbar-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill {
+    background: var(--navy-2); color: #fff; border: 1px solid var(--navy-line);
+    border-radius: 99px; padding: 8px 16px; min-height: 40px; font-weight: 700; font-size: 14px;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .pill:hover { border-color: var(--gold); }
+  .pill svg { width: 16px; height: 16px; }
+
+  .monitor { background: var(--navy); color: #fff; padding: 8px 20px 26px; }
+  .monitor-inner { max-width: 880px; margin: 0 auto; }
+  .monitor-head { display: flex; justify-content: space-between; align-items: center; gap: 10px 20px; flex-wrap: wrap; margin-bottom: 14px; }
+  .monitor-level { margin: 0; font-size: 1rem; font-weight: 700; color: var(--bone); }
+  .monitor-level strong { color: var(--gold); }
+  .streak { display: flex; align-items: center; gap: 10px; color: var(--mist); font-size: 0.9rem; font-weight: 600; margin: 0; }
+  .dots { display: inline-flex; gap: 6px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--gold); }
+  .dot.on { background: var(--gold); }
+  .values { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 0; }
+  @media (max-width: 640px) { .values { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .vtile { background: var(--navy-2); border: 1px solid var(--navy-line); border-radius: 12px; padding: 12px 8px 10px; text-align: center; }
+  .vtile dt { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; color: var(--gold); }
+  .vtile dd { margin: 2px 0 0; }
+  .vnum { display: block; font-size: clamp(1.45rem, 3.6vw, 2.1rem); font-weight: 800; color: #fff; line-height: 1.15; font-variant-numeric: tabular-nums; }
+  .vunit { display: block; font-size: 0.78rem; color: var(--mist); }
+  .values.flash .vnum { animation: flash 700ms ease; }
+  @keyframes flash { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  .work { max-width: 760px; margin: 0 auto; padding: 26px 16px 48px; }
+  .trail { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .trail li { border-radius: 99px; padding: 6px 12px; font-size: 0.85rem; font-weight: 700; background: #fff; box-shadow: var(--shadow-rest); display: inline-flex; gap: 6px; align-items: center; }
+  .trail li.clean { border: 1.5px solid var(--navy); background: var(--navy-tint); }
+  .trail li.helped { border: 1.5px dashed var(--maroon); color: var(--maroon); }
+  .trail .tk { font-weight: 800; }
+
+  .card {
+    background: var(--card); border-radius: 16px; padding: 26px 24px;
+    box-shadow: var(--shadow-rest);
+  }
+  .enter { animation: enter 380ms cubic-bezier(.2,.8,.2,1); }
+  @keyframes enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  .step-count { display: block; font-size: 12px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--maroon); margin-bottom: 4px; }
+  .step-title { font-size: 1.35rem; font-weight: 800; margin: 0 0 6px; line-height: 1.3; color: var(--ink); }
+  .step-prompt { margin: 0 0 16px; color: var(--ink-muted); font-size: 1.02rem; }
+  .step-prompt strong { color: var(--ink); }
+  fieldset.q { border: 0; padding: 0; margin: 0; min-width: 0; }
+  fieldset.q > legend { padding: 0; width: 100%; }
+
+  .tip { margin: 0 0 16px; padding: 12px 14px; border-radius: 10px; background: var(--navy-tint); font-size: 0.97rem; }
+  .tip strong { color: var(--maroon); }
+
+  .options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .options.list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (max-width: 560px) { .options.list { grid-template-columns: minmax(0, 1fr); } .options { gap: 6px; } .options .opt-box { padding: 8px 4px; } .opt-sub { font-size: 0.78rem; } }
+  .opt { position: relative; display: block; }
+  .opt input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+  .opt-box {
+    display: flex; flex-direction: column; justify-content: center; height: 100%;
+    min-height: 54px; padding: 10px 12px; border-radius: 12px;
+    border: 1.5px solid var(--border); background: #fff; color: var(--ink);
+    font-weight: 700; text-align: center; line-height: 1.3;
+    transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, transform 180ms ease;
+  }
+  .opt-sub { display: block; font-size: 0.85rem; font-weight: 500; color: inherit; opacity: 0.9; }
+  .opt input:not(:disabled):hover + .opt-box { border-color: var(--ink); transform: translateY(-1px); }
+  .opt input:focus-visible + .opt-box { outline: 3px solid var(--maroon); outline-offset: 3px; }
+  .opt input:checked + .opt-box { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .opt input:disabled { cursor: default; }
+  .opt-tag { display: none; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 4px; }
+  .opt.is-answer .opt-box, .opt.is-answer input:checked + .opt-box { background: var(--maroon); border-color: var(--maroon); color: #fff; }
+  .opt.is-answer .tag-answer { display: block; }
+  .opt.is-miss .tag-yours { display: block; }
+
+  .step-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .fb { margin: 16px 0 0; padding: 14px 16px; border-radius: 12px; font-size: 1rem; }
+  .fb:empty { display: none; }
+  .fb.right { background: var(--navy-tint); border: 1.5px solid var(--navy); }
+  .fb.wrong, .fb.helped { background: #fff; border: 1.5px dashed var(--maroon); }
+  .fb-label { font-weight: 800; }
+  .fb.wrong .fb-label, .fb.helped .fb-label { color: var(--maroon); }
+
+  /* On my own */
+  .solo-block + .solo-block { margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--rule); }
+  .solo-block legend { font-size: 1.05rem; font-weight: 800; margin-bottom: 10px; }
+  .value-line { font-weight: 700; margin: 14px 0 8px; }
+  .solo-block .value-line:first-of-type { margin-top: 0; }
+  .sfb { margin: 10px 0 0; font-weight: 600; }
+  .sfb:empty { display: none; }
+  .solo-block.is-right .sfb { color: var(--navy); }
+  .solo-block.is-wrong .sfb { color: var(--maroon); }
+  .lock-note { flex-basis: 100%; margin: 0; font-size: 0.93rem; color: var(--ink-muted); }
+  .btn-review { background: #fff; color: var(--ink); border: 1.5px solid var(--navy); }
+  .btn-review[aria-disabled="true"] { border: 1.5px dashed var(--border); color: var(--ink-muted); cursor: not-allowed; }
+  .summary { margin-top: 16px; padding: 14px 16px; border-radius: 12px; font-weight: 600; }
+  .summary:empty { display: none; }
+  .summary.all-right { background: var(--navy-tint); border: 1.5px solid var(--navy); }
+  .summary.some-wrong { background: #fff; border: 1.5px dashed var(--maroon); }
+
+  /* Review */
+  .result { border-radius: 16px; padding: 22px 22px; margin-bottom: 18px; }
+  .result.clean { background: var(--navy); color: #fff; }
+  .result.clean .result-head { color: var(--gold); }
+  .result.help { background: #fff; box-shadow: var(--shadow-rest); }
+  .result-head { font-size: 1.3rem; font-weight: 800; margin: 0 0 6px; }
+  .result p { margin: 0 0 8px; }
+  .result .levelup { font-weight: 700; }
+  .result.clean .levelup { color: var(--straw); }
+  .result-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .answer-line { font-size: 1.15rem; font-weight: 800; margin: 0 0 14px; }
+  .review-card details + details { border-top: 1px solid var(--rule); }
+  .review-card summary {
+    cursor: pointer; list-style: none; font-weight: 800; font-size: 1.05rem;
+    padding: 14px 0; min-height: 48px; display: flex; align-items: center; gap: 12px;
+  }
+  .review-card summary::-webkit-details-marker { display: none; }
+  .review-card summary::before {
+    content: ""; width: 8px; height: 8px; flex: none;
+    border-right: 2.5px solid var(--maroon); border-bottom: 2.5px solid var(--maroon);
+    transform: rotate(-45deg); transition: transform 200ms ease;
+  }
+  .review-card details[open] > summary::before { transform: rotate(45deg); }
+  .details-body { padding: 0 0 14px; }
+  .steps { margin: 0; padding-left: 1.5em; }
+  .steps li { margin: 0 0 12px; padding-left: 4px; }
+  .steps li::marker { font-weight: 800; color: var(--maroon); }
+  .why-h { font-weight: 800; margin: 10px 0 4px; }
+  .why { margin: 0 0 8px; padding: 0; list-style: none; }
+  .why li { padding: 10px 0; border-bottom: 1px solid var(--rule); }
+  .why li:last-child { border-bottom: 0; }
+  .why .picked { font-weight: 800; color: var(--maroon); }
+  .calc { margin: 0 0 12px; }
+
+  /* Reference dialog */
+  dialog {
+    border: 0; border-radius: 16px; padding: 0; max-width: min(720px, calc(100vw - 24px));
+    width: 100%; max-height: calc(100svh - 40px); box-shadow: var(--shadow-float); color: var(--ink);
+  }
+  dialog::backdrop { background: rgba(8,16,31,0.72); }
+  .dlg-head { position: sticky; top: 0; background: var(--navy); color: #fff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .dlg-head h2 { margin: 0; font-size: 1.2rem; font-weight: 800; }
+  .dlg-body { padding: 18px 20px 24px; }
+  .dlg-body h3 { font-size: 1.05rem; font-weight: 800; color: var(--maroon); margin: 20px 0 8px; }
+  .dlg-body h3:first-child { margin-top: 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+  th, td { text-align: left; padding: 9px 6px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  thead th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-muted); }
+  tbody tr:last-child th, tbody tr:last-child td { border-bottom: 0; }
+  @media (max-width: 420px) { table { font-size: 0.85rem; } th, td { padding: 8px 3px; } thead th { font-size: 0.68rem; letter-spacing: 0.02em; } }
+  .terms { margin: 0; }
+  .terms dt { font-weight: 800; margin-top: 12px; }
+  .terms dd { margin: 2px 0 0; color: var(--ink-muted); }
+  .eq { font-weight: 800; }
+
+  .site-foot { background: var(--navy); color: var(--mist); text-align: center; font-size: 0.88rem; padding: 18px 16px; }
+  .site-foot span + span::before { content: "·"; margin: 0 10px; color: var(--gold); }
+
+  sub, sup { font-size: 0.72em; line-height: 0; }
+
+  body.still .aurora span, body.still .trace .sweep, body.still .readout .caret { animation-play-state: paused; }
+  .step-title:focus, .monitor-level:focus, .menu-title:focus, .result-head:focus { outline: none; }
+  .step-title:focus-visible, .result-head:focus-visible { outline: 3px solid var(--maroon); outline-offset: 4px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    .logo-figures svg, .level-card { opacity: 1 !important; transform: none !important; }
+    .reveal { opacity: 1 !important; visibility: visible !important; transform: none !important; }
+    .trace .sweep { stroke-dashoffset: 0 !important; }
+    .readout .caret { display: none; }
+  }
+  @media (forced-colors: active) {
+    .opt input:checked + .opt-box, .opt.is-answer .opt-box, .seg input:checked + span { outline: 3px solid Highlight; }
+    .dot.on { background: CanvasText; }
+    .fb, .summary, .trail li { border: 1px solid CanvasText; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+
+<main id="main">
+
+  <!-- ===================== INTRO ===================== -->
+  <section id="screen-intro" class="screen navy-stage on-navy" aria-labelledby="intro-h1">
+    <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+    <div class="skip-intro"><button type="button" class="textbtn" data-motion aria-pressed="false">Pause motion</button> <button type="button" class="textbtn" id="btnSkipIntro">Skip intro</button></div>
+    <div class="intro-inner">
+      <div class="logo-figures" id="logoFigures" aria-hidden="true">
+        <svg viewBox="0 0 40 52" aria-hidden="true" focusable="false"><circle cx="20" cy="12" r="9" fill="#08101F" stroke="#FFFFFF" stroke-width="2.4"/><path d="M20 19 C9 19 6 32 6 48 L34 48 C34 32 31 19 20 19 Z" fill="#08101F" stroke="#FFFFFF" stroke-width="2.4"/></svg>
+        <svg viewBox="0 0 40 52" aria-hidden="true" focusable="false"><circle cx="20" cy="12" r="9" fill="#7A2A22"/><path d="M20 19 C9 19 6 32 6 48 L34 48 C34 32 31 19 20 19 Z" fill="#7A2A22"/></svg>
+        <svg viewBox="0 0 40 52" aria-hidden="true" focusable="false"><circle cx="20" cy="12" r="9" fill="#DCB45C"/><path d="M20 19 C9 19 6 32 6 48 L34 48 C34 32 31 19 20 19 Z" fill="#DCB45C"/></svg>
+      </div>
+
+      <p class="readout" aria-hidden="true"><span id="typed"></span><span class="caret"></span></p>
+
+      <!-- Capnogram-style trace: baseline, upstroke, alveolar plateau, downstroke -->
+      <svg class="trace" viewBox="0 0 560 64" aria-hidden="true" focusable="false">
+        <path class="ghost" d="M0 54 H40 L52 16 Q56 12 64 12 L128 8 L136 54 H180 L192 16 Q196 12 204 12 L268 8 L276 54 H320 L332 16 Q336 12 344 12 L408 8 L416 54 H460 L472 16 Q476 12 484 12 L548 8 L556 54 H560"/>
+        <path class="sweep" d="M0 54 H40 L52 16 Q56 12 64 12 L128 8 L136 54 H180 L192 16 Q196 12 204 12 L268 8 L276 54 H320 L332 16 Q336 12 344 12 L408 8 L416 54 H460 L472 16 Q476 12 484 12 L548 8 L556 54 H560"/>
+      </svg>
+
+      <div class="intro-title reveal" id="introTitle">
+        <p class="eyebrow" style="color:var(--gold)">MedMasters Collaborative · Respiratory Physiology</p>
+        <h1 id="intro-h1">ABG Interpretation Trainer</h1>
+        <p class="intro-sub">Learn to read an arterial blood gas the way clinicians do, one step at a time. Pick your starting level, and the cases get harder as you get them right.</p>
+        <div class="intro-actions">
+          <button type="button" class="btn btn-gold" id="btnToMenu">Choose where to start</button>
+          <button type="button" class="btn btn-ghost" id="btnContinue" hidden>Continue</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MENU ===================== -->
+  <section id="screen-menu" class="screen navy-stage on-navy" aria-labelledby="menu-h1">
+    <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+    <div class="menu-inner">
+      <div class="menu-top">
+        <p class="wordmark" style="margin:0">
+          <span class="mini-figs" aria-hidden="true">
+            <svg viewBox="0 0 40 52"><circle cx="20" cy="12" r="9" fill="#08101F" stroke="#FFFFFF" stroke-width="3"/><path d="M20 19 C9 19 6 32 6 48 L34 48 C34 32 31 19 20 19 Z" fill="#08101F" stroke="#FFFFFF" stroke-width="3"/></svg>
+            <svg viewBox="0 0 40 52"><circle cx="20" cy="12" r="9" fill="#7A2A22"/><path d="M20 19 C9 19 6 32 6 48 L34 48 C34 32 31 19 20 19 Z" fill="#7A2A22"/></svg>
+            <svg viewBox="0 0 40 52"><circle cx="20" cy="12" r="9" fill="#DCB45C"/><path d="M20 19 C9 19 6 32 6 48 L34 48 C34 32 31 19 20 19 Z" fill="#DCB45C"/></svg>
+          </span>
+          <span>Med<span class="mm">Masters</span> Collaborative</span>
+        </p>
+        <button type="button" class="textbtn" id="btnReplay">Replay intro</button>
+      </div>
+
+      <h1 id="menu-h1" class="menu-title" tabindex="-1">Where do you want to start?</h1>
+      <p class="menu-lead">New to blood gases? Start at Level 1. Already comfortable? Jump ahead. Three clean cases in a row, every step right on the first try with no hints, completes a level.</p>
+
+      <fieldset class="mode-pick">
+        <legend>How do you want to work?</legend>
+        <div class="seg">
+          <label for="mode-guided"><input type="radio" name="mode" id="mode-guided" value="guided"><span>Guided<small>one step at a time, with hints</small></span></label>
+          <label for="mode-solo"><input type="radio" name="mode" id="mode-solo" value="solo"><span>On my own<small>every step at once</small></span></label>
+        </div>
+      </fieldset>
+
+      <ol class="level-grid" id="levelGrid" aria-label="Levels"></ol>
+
+      <div class="menu-foot">
+        <span id="menuStats"></span>
+        <button type="button" class="textbtn" id="btnReset">Reset my progress</button>
+        <button type="button" class="textbtn" data-motion aria-pressed="false">Pause motion</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TRAINER ===================== -->
+  <section id="screen-trainer" class="screen" aria-labelledby="trainer-h1">
+    <div class="topbar on-navy">
+      <p class="wordmark" style="margin:0">
+        <span class="mini-figs" aria-hidden="true">
+          <svg viewBox="0 0 40 52"><circle cx="20" cy="12" r="9" fill="#08101F" stroke="#FFFFFF" stroke-width="3"/><path d="M20 19 C9 19 6 32 6 48 L34 48 C34 32 31 19 20 19 Z" fill="#08101F" stroke="#FFFFFF" stroke-width="3"/></svg>
+          <svg viewBox="0 0 40 52"><circle cx="20" cy="12" r="9" fill="#7A2A22"/><path d="M20 19 C9 19 6 32 6 48 L34 48 C34 32 31 19 20 19 Z" fill="#7A2A22"/></svg>
+          <svg viewBox="0 0 40 52"><circle cx="20" cy="12" r="9" fill="#DCB45C"/><path d="M20 19 C9 19 6 32 6 48 L34 48 C34 32 31 19 20 19 Z" fill="#DCB45C"/></svg>
+        </span>
+        <span>ABG Trainer</span>
+      </p>
+      <div class="topbar-actions">
+        <button type="button" class="pill" id="btnLevels">
+          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 3h12M2 8h12M2 13h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Levels</button>
+        <button type="button" class="pill" id="btnRef" aria-haspopup="dialog">
+          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="2.5" y="1.5" width="11" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5.5 5.5h5M5.5 8.5h5M5.5 11.5h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Normal ranges</button>
+        <button type="button" class="pill" id="btnNew">New case</button>
+      </div>
+    </div>
+
+    <div class="monitor on-navy">
+      <div class="monitor-inner">
+        <div class="monitor-head">
+          <h1 class="monitor-level" id="trainer-h1" tabindex="-1"><strong id="lvlLabel">Level 1</strong> <span id="lvlName"></span> · Case <span id="caseNumber">1</span></h1>
+          <p class="streak"><span class="dots" id="dots" aria-hidden="true"></span><span id="streakText"></span></p>
+        </div>
+        <dl class="values" id="values" aria-label="ABG results, patient breathing room air">
+          <div class="vtile"><dt>pH</dt><dd><span class="vnum" id="val-ph"></span><span class="vunit">&nbsp;</span></dd></div>
+          <div class="vtile"><dt>PaCO<sub>2</sub></dt><dd><span class="vnum" id="val-paco2"></span><span class="vunit">mmHg</span></dd></div>
+          <div class="vtile"><dt>HCO<sub>3</sub><sup>−</sup></dt><dd><span class="vnum" id="val-hco3"></span><span class="vunit">mEq/L</span></dd></div>
+          <div class="vtile"><dt><span aria-hidden="true">BE</span><span class="vh">Base excess</span></dt><dd><span class="vnum" id="val-be"></span><span class="vunit">mEq/L</span></dd></div>
+          <div class="vtile"><dt>PaO<sub>2</sub></dt><dd><span class="vnum" id="val-pao2"></span><span class="vunit">mmHg</span></dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="work" id="workspace" tabindex="-1">
+      <ul class="trail" id="trail" aria-label="Steps finished"></ul>
+      <div id="stage"></div>
+    </div>
+  </section>
+
+  <div class="vh" role="status" aria-live="polite" id="announcer"></div>
+</main>
+
+<!-- Reference dialog -->
+<dialog id="refDialog" aria-labelledby="refTitle">
+  <div class="dlg-head on-navy">
+    <h2 id="refTitle">Normal ranges and key terms</h2>
+    <button type="button" class="pill" id="btnRefClose">Close</button>
+  </div>
+  <div class="dlg-body">
+    <h3>Normal ranges</h3>
+    <table>
+      <caption class="vh">Normal arterial blood gas ranges and what low and high values mean</caption>
+      <thead><tr><th scope="col">Value</th><th scope="col">Normal</th><th scope="col">Low means</th><th scope="col">High means</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">pH</th><td>7.35 to 7.45</td><td>Acidic</td><td>Alkaline</td></tr>
+        <tr><th scope="row">PaCO<sub>2</sub></th><td>35 to 45 mmHg</td><td>Alkaline</td><td>Acidic</td></tr>
+        <tr><th scope="row">HCO<sub>3</sub><sup>−</sup></th><td>22 to 26 mEq/L</td><td>Acidic</td><td>Alkaline</td></tr>
+        <tr><th scope="row">Base excess</th><td>−2 to +2 mEq/L</td><td>Acidic (base deficit)</td><td>Alkaline</td></tr>
+        <tr><th scope="row">PaO<sub>2</sub></th><td>80 to 100 mmHg</td><td>Hypoxemia</td><td>Only on added O<sub>2</sub></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Why is high CO<sub>2</sub> acidic?</h3>
+    <p>CO<sub>2</sub> combines with water to make carbonic acid, which releases H<sup>+</sup>:</p>
+    <p class="eq">CO<sub>2</sub> + H<sub>2</sub>O ⇌ H<sub>2</sub>CO<sub>3</sub> ⇌ H<sup>+</sup> + HCO<sub>3</sub><sup>−</sup></p>
+    <p>More CO<sub>2</sub> means more H<sup>+</sup>, so pH falls. That is why PaCO<sub>2</sub> runs opposite to pH: high PaCO<sub>2</sub> is acidic and low PaCO<sub>2</sub> is alkaline. HCO<sub>3</sub><sup>−</sup> is a base, so it runs the same direction as pH.</p>
+
+    <h3>Key terms</h3>
+    <dl class="terms">
+      <dt>Acidemia and alkalemia</dt>
+      <dd>The state of the blood itself: pH below 7.35 is acidemia, pH above 7.45 is alkalemia.</dd>
+      <dt>Acidosis and alkalosis</dt>
+      <dd>The process pushing pH in that direction. You can have an acidosis even when compensation has brought the pH back into the normal range.</dd>
+      <dt>Primary disorder</dt>
+      <dd>The problem that started the change. Its value moves pH in the same direction that pH actually went.</dd>
+      <dt>Compensation</dt>
+      <dd>The other system's response. The lungs adjust PaCO<sub>2</sub> within minutes to hours; the kidneys adjust HCO<sub>3</sub><sup>−</sup> over several days. Compensation pushes pH back toward normal, so the compensating value moves opposite to the primary one.</dd>
+      <dt>Base excess (BE)</dt>
+      <dd>How much acid or base it would take to bring the blood back to pH 7.40 if PaCO<sub>2</sub> were a normal 40 mmHg, at body temperature, 37 °C (98.6 °F). Because it removes the effect of CO<sub>2</sub>, base excess shows only the metabolic (kidney) side. A negative value is called a base deficit and means a metabolic acid load. A positive value means extra base.</dd>
+      <dt>Mixed disorder</dt>
+      <dd>Two primary problems at once. In the mixed disorders in this trainer, the lungs and the metabolic side both push pH the same way, so neither one is compensating.</dd>
+      <dt>Hypoxemia</dt>
+      <dd>Low oxygen in arterial blood, shown by a PaO<sub>2</sub> below 80 mmHg.</dd>
+    </dl>
+  </div>
+</dialog>
+
+<footer class="site-foot">
+  <span>ABG Interpretation Trainer</span><span>Dr. Sharilyn Rennie</span><span>MedMasters Collaborative</span>
+</footer>
+
+<script>
+/* ============================================================
+   1. REFERENCE RANGES AND CALCULATIONS
+   ============================================================ */
+const REF = {
+  ph:    { low: 7.35, high: 7.45, mid: 7.40 },
+  paco2: { low: 35,   high: 45,   mid: 40 },
+  hco3:  { low: 22,   high: 26,   mid: 24 },
+  be:    { low: -2,   high: 2 },
+  pao2:  { low: 80,   high: 100 }
+};
+
+const H = {
+  ph: 'pH',
+  paco2: 'PaCO<sub>2</sub>',
+  hco3:  'HCO<sub>3</sub><sup>−</sup>',
+  be: 'Base excess',
+  pao2:  'PaO<sub>2</sub>'
+};
+
+/* Henderson-Hasselbalch: pH = 6.1 + log10(HCO3 / (0.03 x PaCO2)) */
+function phFromHH(hco3, paco2) { return 6.1 + Math.log10(hco3 / (0.03 * paco2)); }
+
+/* Standard base excess, Van Slyke equation (CLSI C46-A2):
+   SBE = 0.93 x (HCO3 - 24.4 + 14.8 x (pH - 7.40))
+   Calculated from the displayed pH and HCO3 so all values agree. */
+function calcBE(pH, hco3) { return Math.round(0.93 * (hco3 - 24.4 + 14.8 * (pH - 7.40)) * 10) / 10; }
+function fmtBE(be) {
+  if (be === 0) return '0.0';
+  return (be > 0 ? '+' : '−') + Math.abs(be).toFixed(1);
+}
+
+/* ============================================================
+   2. CLASSIFIER: the single source of truth.
+   Every case is generated, then graded by this function.
+   The answer key IS this function's output.
+   ============================================================ */
+function statusOf(kind, v) {
+  if (kind === 'ph')    return v < REF.ph.low ? 'acidic' : v > REF.ph.high ? 'alkaline' : 'normal';
+  if (kind === 'paco2') return v > REF.paco2.high ? 'acidic' : v < REF.paco2.low ? 'alkaline' : 'normal';
+  if (kind === 'hco3')  return v < REF.hco3.low ? 'acidic' : v > REF.hco3.high ? 'alkaline' : 'normal';
+  if (kind === 'be')    return v < REF.be.low ? 'acidic' : v > REF.be.high ? 'alkaline' : 'normal';
+  if (kind === 'pao2')  return v < REF.pao2.low ? 'hypoxemia' : 'normal';
+}
+function opposite(dir) { return dir === 'acidic' ? 'alkaline' : 'acidic'; }
+
+/* valid:false means the numbers do not form one clean teaching pattern
+   (pH exactly 7.40 with abnormal values, one abnormal value with a normal
+   pH, etc.). Those are never shown to students. */
+function interpret(pH, paco2, hco3) {
+  const s = { ph: statusOf('ph', pH), paco2: statusOf('paco2', paco2), hco3: statusOf('hco3', hco3) };
+
+  if (s.ph === 'normal' && s.paco2 === 'normal' && s.hco3 === 'normal') {
+    return { valid: true, status: s, disorder: 'normal', comp: 'na', side: null, primary: null, compensator: null };
+  }
+
+  let side;
+  if (s.ph !== 'normal') {
+    side = s.ph;
+  } else {
+    if (s.paco2 === 'normal' || s.hco3 === 'normal') return { valid: false, status: s };
+    if (pH === REF.ph.mid) return { valid: false, status: s };
+    side = pH < REF.ph.mid ? 'acidic' : 'alkaline';
+  }
+
+  const respDrives = s.paco2 === side;
+  const metDrives  = s.hco3 === side;
+  if (respDrives && metDrives) {
+    if (s.ph === 'normal') return { valid: false, status: s };
+    return { valid: true, status: s, disorder: 'mixed_' + (side === 'acidic' ? 'acidosis' : 'alkalosis'),
+             comp: 'na', side, primary: 'both', compensator: null };
+  }
+  if (!respDrives && !metDrives) return { valid: false, status: s };
+
+  const primary = respDrives ? 'paco2' : 'hco3';
+  const compensator = respDrives ? 'hco3' : 'paco2';
+  const disorder = (respDrives ? 'respiratory' : 'metabolic') + '_' + (side === 'acidic' ? 'acidosis' : 'alkalosis');
+
+  let comp;
+  if (s[compensator] === 'normal') comp = 'uncompensated';
+  else if (s[compensator] === opposite(side)) comp = s.ph === 'normal' ? 'fully' : 'partially';
+  else return { valid: false, status: s };
+
+  return { valid: true, status: s, disorder, comp, side, primary, compensator };
+}
+
+/* ============================================================
+   3. EXPECTED COMPENSATION (standard bedside rules)
+   Metabolic acidosis: Winter's formula, PaCO2 = 1.5 x HCO3 + 8 (±2)
+   Metabolic alkalosis: PaCO2 rises about 0.7 per 1 mEq/L HCO3 (±5)
+   Respiratory acidosis: HCO3 rises 1 per 10 mmHg (acute), 3.5 (chronic)
+   Respiratory alkalosis: HCO3 falls 2 per 10 mmHg (acute), 4 to 5 (chronic)
+   ============================================================ */
+function expected(disorder, paco2, hco3) {
+  if (disorder === 'metabolic_acidosis') { const c = 1.5 * hco3 + 8; return { lo: c - 2, hi: c + 2, c }; }
+  if (disorder === 'metabolic_alkalosis') { const c = 0.7 * (hco3 - 24) + 40; return { lo: c - 5, hi: c + 5, c }; }
+  if (disorder === 'respiratory_acidosis') { const d = (paco2 - 40) / 10; return { acute: 24 + d, chronic: 24 + 3.5 * d }; }
+  if (disorder === 'respiratory_alkalosis') { const d = (40 - paco2) / 10; return { acute: 24 - 2 * d, chronicLo: 24 - 5 * d, chronicHi: 24 - 4 * d }; }
+  return null;
+}
+
+/* Physiologic plausibility: compensation must match what the body
+   actually does (no over-compensation, no impossible values). */
+function plausible(r, pH, paco2, hco3) {
+  if (pH < 7.00 || pH > 7.65) return false;
+  const e = expected(r.disorder, paco2, hco3);
+  switch (r.disorder) {
+    case 'normal':
+      return pH >= 7.36 && pH <= 7.44 && paco2 >= 36 && paco2 <= 44;
+    case 'mixed_acidosis':
+      return paco2 >= 46 && paco2 <= 70 && hco3 >= 12 && hco3 <= 21;
+    case 'mixed_alkalosis':
+      return paco2 >= 25 && paco2 <= 34 && hco3 >= 27 && hco3 <= 36;
+    case 'metabolic_acidosis':
+      if (r.comp === 'uncompensated') return hco3 <= 20 && paco2 >= 38 && paco2 <= 42;
+      return paco2 >= e.lo && paco2 <= e.hi && hco3 >= 8;
+    case 'metabolic_alkalosis':
+      if (r.comp === 'uncompensated') return hco3 >= 29 && paco2 >= 38 && paco2 <= 44;
+      return paco2 >= e.lo && paco2 <= e.hi && paco2 <= 55 && hco3 <= 45;
+    case 'respiratory_acidosis':
+      if (r.comp === 'uncompensated') return paco2 >= 48 && paco2 <= 80 && hco3 >= 24 && hco3 <= 26;
+      return paco2 <= 80 && hco3 >= Math.floor(e.acute) && hco3 <= e.chronic + 2;
+    case 'respiratory_alkalosis':
+      if (r.comp === 'uncompensated') return paco2 >= 20 && paco2 <= 32 && hco3 >= 22 && hco3 <= 24;
+      return paco2 >= 20 && hco3 <= Math.ceil(e.acute) && hco3 >= e.chronicLo - 2;
+  }
+  return false;
+}
+
+/* ============================================================
+   4. CASE BANK: every whole-number PaCO2/HCO3 pair, pH from
+   Henderson-Hasselbalch, graded by the classifier, filtered for
+   plausibility, and sorted by answer.
+   ============================================================ */
+const BANK = {};
+(function buildBank() {
+  for (let hco3 = 8; hco3 <= 45; hco3++) {
+    for (let paco2 = 18; paco2 <= 80; paco2++) {
+      const pH = Math.round(phFromHH(hco3, paco2) * 100) / 100;
+      const r = interpret(pH, paco2, hco3);
+      if (!r.valid || !plausible(r, pH, paco2, hco3)) continue;
+      // Base excess must tell the same metabolic story as HCO3 so the two never contradict
+      const be = calcBE(pH, hco3);
+      if (statusOf('be', be) !== r.status.hco3) continue;
+      const key = r.disorder + '|' + r.comp;
+      (BANK[key] = BANK[key] || []).push({ pH, paco2, hco3, be });
+    }
+  }
+})();
+
+/* ============================================================
+   5. LEVELS
+   ============================================================ */
+const RA = 'respiratory_acidosis', RK = 'respiratory_alkalosis', MA = 'metabolic_acidosis', MK = 'metabolic_alkalosis';
+const MIXED = ['mixed_acidosis', 'mixed_alkalosis'];
+const SINGLE = [RA, RK, MA, MK];
+const pool = (list, comp, w) => list.map(d => [d + '|' + comp, w]);
+
+const LEVELS = [
+  { n: 1, name: 'Respiratory basics',
+    desc: 'Uncompensated respiratory acidosis and alkalosis. The best place to learn the steps.',
+    pools: pool([RA, RK], 'uncompensated', 1), autoTips: true, mixed: false },
+  { n: 2, name: 'Metabolic basics',
+    desc: 'Uncompensated metabolic disorders, mixed with respiratory ones so you learn to tell them apart.',
+    pools: [...pool([MA, MK], 'uncompensated', 2), ...pool([RA, RK], 'uncompensated', 1)], autoTips: true, mixed: false },
+  { n: 3, name: 'Partial compensation',
+    desc: 'The other system has started to respond, but pH is still out of range.',
+    pools: [...pool(SINGLE, 'partially', 3), ...pool(SINGLE, 'uncompensated', 1)], autoTips: false, mixed: false },
+  { n: 4, name: 'Full compensation',
+    desc: 'pH is back in range, so the side of 7.40 points to the cause. Includes normal ABGs.',
+    pools: [...pool([RA, RK, MK], 'fully', 3), [MA + '|fully', 1], ['normal|na', 3], ...pool(SINGLE, 'partially', 1)], autoTips: false, mixed: false },
+  { n: 5, name: 'Mixed disorders',
+    desc: 'Two problems at once, both pushing pH the same way. Single disorders are mixed in too.',
+    pools: [...MIXED.map(m => [m + '|na', 5]), ...pool(SINGLE, 'uncompensated', 1), ...pool(SINGLE, 'partially', 1), ...pool(SINGLE, 'fully', 1)], autoTips: false, mixed: true },
+  { n: 6, name: 'Mastery mix',
+    desc: 'Every case type together, including mixed disorders and normal ABGs.',
+    pools: [...pool(SINGLE, 'uncompensated', 1), ...pool(SINGLE, 'partially', 1), ...pool(SINGLE, 'fully', 1), ['normal|na', 1], ...MIXED.map(m => [m + '|na', 1.5])], autoTips: false, mixed: true }
+];
+const CLEAN_TO_PASS = 3;
+
+/* ============================================================
+   6. CASE GENERATION
+   ============================================================ */
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function randInt(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+function weightedPick(pairs) {
+  const live = pairs.filter(([k]) => BANK[k] && BANK[k].length);
+  const total = live.reduce((s, [, w]) => s + w, 0);
+  let r = Math.random() * total;
+  for (const [k, w] of live) { if ((r -= w) <= 0) return k; }
+  return live[live.length - 1][0];
+}
+
+let lastKey = null;
+function generateCase(level) {
+  for (let tries = 0; tries < 30; tries++) {
+    const bucketKey = weightedPick(LEVELS[level - 1].pools);
+    const v = pick(BANK[bucketKey]);
+    const key = v.pH + '|' + v.paco2 + '|' + v.hco3;
+    if (key === lastKey) continue;
+    lastKey = key;
+    const pao2 = Math.random() < 0.7 ? randInt(80, 100) : randInt(55, 79);
+    return { ...v, pao2, truth: interpret(v.pH, v.paco2, v.hco3), oxy: statusOf('pao2', pao2) };
+  }
+  const v = BANK[weightedPick(LEVELS[level - 1].pools)][0];
+  return { ...v, pao2: 90, truth: interpret(v.pH, v.paco2, v.hco3), oxy: 'normal' };
+}
+
+/* ============================================================
+   7. LABELS AND OPTION SETS
+   ============================================================ */
+const DIR_LABEL = { acidic: 'Acidic', normal: 'Normal', alkaline: 'Alkaline' };
+const DISORDER_LABEL = {
+  respiratory_acidosis: 'Respiratory acidosis',
+  respiratory_alkalosis: 'Respiratory alkalosis',
+  metabolic_acidosis: 'Metabolic acidosis',
+  metabolic_alkalosis: 'Metabolic alkalosis',
+  mixed_acidosis: 'Mixed respiratory and metabolic acidosis',
+  mixed_alkalosis: 'Mixed respiratory and metabolic alkalosis',
+  normal: 'Normal ABG (no acid-base disorder)'
+};
+const COMP_LABEL = { uncompensated: 'Uncompensated', partially: 'Partially compensated', fully: 'Fully compensated', na: 'Not applicable' };
+const OXY_LABEL = { normal: 'Normal oxygenation', hypoxemia: 'Hypoxemia' };
+
+function mixedOn() { return LEVELS[state.level - 1].mixed; }
+function disorderKeys() { return [...SINGLE, ...(mixedOn() ? MIXED : []), 'normal']; }
+
+const GROUPS = {
+  ph:    () => [['acidic', 'Acidic', 'below 7.35'], ['normal', 'Normal', '7.35 to 7.45'], ['alkaline', 'Alkaline', 'above 7.45']],
+  paco2: () => [['acidic', 'Acidic', 'high, above 45'], ['normal', 'Normal', '35 to 45'], ['alkaline', 'Alkaline', 'low, below 35']],
+  hco3:  () => [['acidic', 'Acidic', 'low, below 22'], ['normal', 'Normal', '22 to 26'], ['alkaline', 'Alkaline', 'high, above 26']],
+  be:    () => [['acidic', 'Acidic', 'below −2, base deficit'], ['normal', 'Normal', '−2 to +2'], ['alkaline', 'Alkaline', 'above +2']],
+  disorder: () => disorderKeys().map(k => [k, DISORDER_LABEL[k], '']),
+  comp:  () => Object.keys(COMP_LABEL).map(k => [k, COMP_LABEL[k], k === 'na' ? (mixedOn() ? 'normal ABG or mixed disorder' : 'normal ABG') : '']),
+  oxy:   () => [['normal', 'Normal oxygenation', '80 to 100 mmHg'], ['hypoxemia', 'Hypoxemia', 'below 80 mmHg']]
+};
+
+function optionsHTML(group, name) {
+  return GROUPS[group]().map(([val, label, sub], i) => {
+    const id = `${name}-${i}`;
+    return `<label class="opt" for="${id}">
+      <input type="radio" name="${name}" id="${id}" value="${val}">
+      <span class="opt-box">${label}${sub ? `<span class="opt-sub">${sub}</span>` : ''}
+        <span class="opt-tag tag-answer">Correct answer</span>
+        <span class="opt-tag tag-yours">Your answer</span>
+      </span>
+    </label>`;
+  }).join('');
+}
+
+/* ============================================================
+   8. PROGRESS (saved only in this browser; no personal data)
+   ============================================================ */
+const STORE_KEY = 'abgTrainer.progress.v1';
+const state = { level: 1, unlocked: 1, completed: [], streak: 0, mode: 'guided', clean: 0, cases: 0 };
+
+function loadProgress() {
+  try {
+    const s = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+    if (!s) return;
+    const lv = n => Number.isInteger(n) && n >= 1 && n <= LEVELS.length;
+    if (lv(s.unlocked)) state.unlocked = s.unlocked;
+    if (lv(s.level) && s.level <= state.unlocked) state.level = s.level;
+    if (Array.isArray(s.completed)) state.completed = s.completed.filter(lv);
+    if (Number.isInteger(s.streak) && s.streak >= 0) state.streak = s.streak;
+    if (s.mode === 'guided' || s.mode === 'solo') state.mode = s.mode;
+    if (Number.isInteger(s.clean)) state.clean = s.clean;
+    if (Number.isInteger(s.cases)) state.cases = s.cases;
+  } catch (e) { /* storage unavailable: progress lasts for this visit only */ }
+}
+function saveProgress() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+/* ============================================================
+   9. CASE STATE
+   ============================================================ */
+let current = null;
+let caseNum = 0;
+let caseDone = false;       // counted toward progress
+let reviewShown = false;
+let guided = null;          // guided-mode step state
+let soloChecked = false;
+
+function $(id) { return document.getElementById(id); }
+function checkedVal(name) { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : ''; }
+function announce(msg) { const a = $('announcer'); a.textContent = ''; setTimeout(() => { a.textContent = msg; }, 50); }
+
+function answerKey() {
+  const t = current.truth;
+  return { ph: t.status.ph, paco2: t.status.paco2, hco3: t.status.hco3, be: statusOf('be', current.be),
+           disorder: t.disorder, comp: t.comp, oxy: current.oxy };
+}
+function answerLabel(step, v) {
+  if (['ph', 'paco2', 'hco3', 'be'].includes(step)) return DIR_LABEL[v];
+  if (step === 'disorder') return DISORDER_LABEL[v];
+  if (step === 'comp') return COMP_LABEL[v];
+  return OXY_LABEL[v];
+}
+
+/* ============================================================
+   10. TEACHING TEXT (used by guided feedback and the case review)
+   ============================================================ */
+const fmt1 = n => (Math.round(n * 10) / 10).toFixed(1);
+function phStr() { return current.pH.toFixed(2); }
+
+function teachPH() {
+  const t = current.truth, s = t.status;
+  if (s.ph === 'normal') {
+    return t.disorder === 'normal'
+      ? `pH ${phStr()} is inside the normal range of 7.35 to 7.45.`
+      : `pH ${phStr()} is inside the normal range of 7.35 to 7.45. It sits on the ${t.side} side of 7.40, and that small lean is the clue to which problem came first.`;
+  }
+  return `pH ${phStr()} is ${s.ph === 'acidic' ? 'below 7.35, so the blood is acidic (acidemia)' : 'above 7.45, so the blood is alkaline (alkalemia)'}.`;
+}
+
+function teachValue(kind) {
+  const v = current[kind], st = current.truth.status[kind];
+  const unit = kind === 'paco2' ? 'mmHg' : 'mEq/L';
+  const range = kind === 'paco2' ? '35 to 45' : '22 to 26';
+  let level;
+  if (st === 'normal') level = `within the normal range (${range})`;
+  else if (kind === 'paco2') level = st === 'acidic' ? 'high (above 45)' : 'low (below 35)';
+  else level = st === 'acidic' ? 'low (below 22)' : 'high (above 26)';
+  const effect = st === 'normal' ? 'It is not pushing pH either way, so it is normal.' : st === 'acidic' ? 'That pushes pH down, so it is acidic.' : 'That pushes pH up, so it is alkaline.';
+  const why = kind === 'paco2'
+    ? (st === 'acidic' ? ' Extra CO<sub>2</sub> forms more carbonic acid.' : st === 'alkaline' ? ' Less CO<sub>2</sub> means less carbonic acid.' : '')
+    : (st === 'acidic' ? ' Less base is available to buffer acid.' : st === 'alkaline' ? ' Extra base soaks up H<sup>+</sup>.' : '');
+  return `${H[kind]} ${v} ${unit} is ${level}. ${effect}${why}`;
+}
+
+function teachBE() {
+  const t = current.truth, be = current.be, st = statusOf('be', be);
+  let level, meaning;
+  if (st === 'normal') {
+    level = 'within the normal range (−2 to +2)';
+    meaning = t.primary === 'paco2'
+      ? 'The metabolic side has not changed, which fits a breathing problem the kidneys have not had time to adjust to.'
+      : 'The metabolic side is balanced.';
+  } else if (st === 'acidic') {
+    level = 'below −2, which is a base deficit (acidic)';
+    meaning = t.primary === 'paco2'
+      ? 'The kidneys have been getting rid of base to offset the low CO<sub>2</sub>. That is metabolic compensation.'
+      : 'The body has lost base or gained acid that does not come from CO<sub>2</sub>. That matches the low HCO<sub>3</sub><sup>−</sup>.';
+  } else {
+    level = 'above +2, which means extra base (alkaline)';
+    meaning = t.primary === 'paco2'
+      ? 'The kidneys have been holding on to base to offset the high CO<sub>2</sub>. That is metabolic compensation.'
+      : 'The body has gained base or lost acid. That matches the high HCO<sub>3</sub><sup>−</sup>.';
+  }
+  return `Base excess ${fmtBE(be)} mEq/L is ${level}. Base excess removes the effect of CO<sub>2</sub>, so it shows only the metabolic side. ${meaning}`;
+}
+
+function teachDisorder() {
+  const t = current.truth;
+  if (t.disorder === 'normal') return 'pH, PaCO<sub>2</sub>, HCO<sub>3</sub><sup>−</sup>, and base excess are all normal, so there is no acid-base disorder.';
+  if (t.primary === 'both') {
+    return `PaCO<sub>2</sub> and HCO<sub>3</sub><sup>−</sup> both push pH in the ${t.side} direction. When the lungs and the metabolic side are both driving the change, two problems are happening at once: a <strong>${DISORDER_LABEL[t.disorder].toLowerCase()}</strong>. That is why the pH is so far from normal.`;
+  }
+  const sysName = t.primary === 'paco2' ? 'the lungs (respiratory)' : 'the kidneys and metabolism (metabolic)';
+  return `${H[t.primary]} is the value that moved in the same direction as pH (${t.side}). That makes it the cause, so the problem started with ${sysName}: <strong>${DISORDER_LABEL[t.disorder].toLowerCase()}</strong>.`;
+}
+
+function teachComp() {
+  const t = current.truth;
+  if (t.disorder === 'normal') return 'With no disorder, there is nothing to compensate for, so compensation is <strong>not applicable</strong>.';
+  if (t.primary === 'both') return 'Compensation means one system moves the opposite way to pull pH back toward normal. Here neither system is doing that, because both push pH the same way. Compensation is <strong>not applicable</strong>.';
+  const c = t.compensator, organ = c === 'paco2' ? 'lungs' : 'kidneys';
+  const cRange = c === 'paco2' ? '35 to 45 mmHg' : '22 to 26 mEq/L';
+  if (t.comp === 'uncompensated') {
+    return `The compensating value, ${H[c]}, is ${current[c]}, still inside its normal range (${cRange}). The ${organ} have not responded yet, so this is <strong>uncompensated</strong>.`;
+  }
+  const moved = `The compensating value, ${H[c]}, is ${current[c]}. It has moved outside its normal range in the opposite direction from the primary change, so the ${organ} are working to pull pH back toward normal.`;
+  return t.comp === 'partially'
+    ? `${moved} pH is still outside 7.35 to 7.45, so this is <strong>partially compensated</strong>.`
+    : `${moved} pH is back inside 7.35 to 7.45, so this is <strong>fully compensated</strong>.`;
+}
+
+function teachOxy() {
+  return current.oxy === 'normal'
+    ? `PaO<sub>2</sub> ${current.pao2} mmHg is within 80 to 100, so oxygenation is normal.`
+    : `PaO<sub>2</sub> ${current.pao2} mmHg is below 80, so the patient has <strong>hypoxemia</strong> (low oxygen in arterial blood).`;
+}
+
+const TEACH = { ph: teachPH, paco2: () => teachValue('paco2'), hco3: () => teachValue('hco3'), be: teachBE,
+                disorder: teachDisorder, comp: teachComp, oxy: teachOxy };
+
+/* Why a specific wrong choice doesn't fit. Written to steer, not to hand over the answer. */
+function whyNotValue(kind, choice) {
+  const v = kind === 'ph' ? phStr() : kind === 'be' ? fmtBE(current.be) : current[kind];
+  const range = { ph: '7.35 to 7.45', paco2: '35 to 45 mmHg', hco3: '22 to 26 mEq/L', be: '−2 to +2 mEq/L' }[kind];
+  const truth = kind === 'be' ? statusOf('be', current.be) : current.truth.status[kind];
+  const reversed = choice !== 'normal' && truth !== 'normal' && choice !== truth;
+  if (reversed && kind === 'paco2') return `You have the direction flipped. CO<sub>2</sub> acts like an acid in the blood, so a high PaCO<sub>2</sub> is acidic and a low PaCO<sub>2</sub> is alkaline. Is ${v} high or low?`;
+  if (reversed && kind === 'hco3') return `You have the direction flipped. HCO<sub>3</sub><sup>−</sup> is a base, so a high value is alkaline and a low value is acidic. Is ${v} high or low?`;
+  if (reversed && kind === 'be') return `You have the direction flipped. A negative base excess is a base deficit, which is acidic. A positive base excess is extra base, which is alkaline. Is ${v} negative or positive?`;
+  if (reversed) return `pH below 7.35 is acidic and above 7.45 is alkaline. Which side is ${v} on?`;
+  if (choice === 'normal') return `The normal range is ${range}. Compare ${v} carefully with both ends of that range.`;
+  return `The normal range is ${range}. Is ${v} really outside it?`;
+}
+
+function whyNotDisorder(k) {
+  const t = current.truth, s = t.status, pH = phStr();
+  const paSt = s.paco2 === 'normal' ? 'normal' : s.paco2 === 'acidic' ? 'high' : 'low';
+  const hcSt = s.hco3 === 'normal' ? 'normal' : s.hco3 === 'acidic' ? 'low' : 'high';
+  const pair = `PaCO<sub>2</sub> is ${current.paco2} (${paSt}) and HCO<sub>3</sub><sup>−</sup> is ${current.hco3} (${hcSt})`;
+
+  if (k === 'normal') {
+    return s.ph !== 'normal'
+      ? `pH ${pH} is outside 7.35 to 7.45, so an acid-base disorder is present.`
+      : 'pH is normal, but PaCO<sub>2</sub> and HCO<sub>3</sub><sup>−</sup> are both abnormal. A normal pH with two abnormal values means the body has compensated for a disorder, not that nothing is wrong.';
+  }
+  if (k.startsWith('mixed_')) {
+    const dir = k === 'mixed_acidosis' ? 'acidic' : 'alkaline';
+    const need = dir === 'acidic'
+      ? 'a high PaCO<sub>2</sub> and a low HCO<sub>3</sub><sup>−</sup> at the same time, both pushing pH down'
+      : 'a low PaCO<sub>2</sub> and a high HCO<sub>3</sub><sup>−</sup> at the same time, both pushing pH up';
+    const tail = t.disorder === 'normal' ? 'Every value here is normal.'
+      : t.primary === 'both' ? `Here ${pair}, which push pH the ${t.side} way, not the ${dir} way.`
+      : `Here ${pair}. Only one of them is pushing pH the way it went. The other is ${s[t.compensator] === 'normal' ? 'still normal' : 'moving the opposite way, which is compensation'}.`;
+    return `This would need ${need}. ${tail}`;
+  }
+
+  const [sys, proc] = k.split('_');
+  const dir = proc === 'acidosis' ? 'acidic' : 'alkaline';
+  const kind = sys === 'respiratory' ? 'paco2' : 'hco3';
+  const need = kind === 'paco2'
+    ? (dir === 'acidic' ? 'a high PaCO<sub>2</sub> (above 45)' : 'a low PaCO<sub>2</sub> (below 35)')
+    : (dir === 'acidic' ? 'a low HCO<sub>3</sub><sup>−</sup> (below 22)' : 'a high HCO<sub>3</sub><sup>−</sup> (above 26)');
+  const st = s[kind];
+
+  if (t.disorder === 'normal') return `This would need ${need} and a pH outside the normal range. Every value here is normal.`;
+  if (t.primary === 'both' && dir === t.side) {
+    const other = kind === 'paco2' ? 'hco3' : 'paco2';
+    return `${H[kind]} ${current[kind]} does push pH ${dir === 'acidic' ? 'down' : 'up'}. But ${H[other]} ${current[other]} pushes pH the same way. Naming only the ${sys} problem leaves the other one unexplained.`;
+  }
+  if (dir !== t.side) {
+    const where = s.ph === 'normal' ? `pH ${pH} sits on the ${t.side} side of 7.40` : `pH ${pH} is ${t.side}`;
+    return st === dir
+      ? `${H[kind]} ${current[kind]} does push toward ${dir}. But ${where}, so this change is working against the pH shift. That makes it the compensation, not the cause.`
+      : `A ${proc} would push pH toward ${dir}, but ${where}. The pH moved the other way.`;
+  }
+  const stWord = st === 'normal' ? 'normal' : (kind === 'paco2' ? (st === 'acidic' ? 'high' : 'low') : (st === 'acidic' ? 'low' : 'high'));
+  return `pH is on the ${dir} side, but a ${sys} ${proc} would need ${need}. ${H[kind]} is ${current[kind]} (${stWord})${st === 'normal' ? ', so this system is not causing the change.' : ', which moves pH the opposite way, so this system is compensating.'}`;
+}
+
+function whyNotComp(k) {
+  const t = current.truth, s = t.status, pH = phStr();
+  if (t.disorder === 'normal') return 'There is no acid-base disorder, so there is nothing to compensate for.';
+  if (t.primary === 'both') return 'In this mixed disorder, PaCO<sub>2</sub> and HCO<sub>3</sub><sup>−</sup> both push pH the same way. Neither one is moving in the opposite direction, so there is no compensation to rate.';
+  const c = t.compensator, cs = s[c], cName = H[c];
+  if (k === 'na') return 'A single disorder is present, so you always judge how far the body has compensated.';
+  if (k === 'uncompensated') return `Uncompensated means the compensating value is still normal. ${cName} is ${current[c]}, outside its normal range, so compensation has started.`;
+  if (k === 'partially') return cs === 'normal'
+    ? `Partial compensation needs ${cName} to have moved outside its normal range. It is ${current[c]}, still normal, so compensation has not started.`
+    : `Partial compensation means pH is still abnormal. pH ${pH} is back inside 7.35 to 7.45.`;
+  return cs === 'normal'
+    ? `Full compensation needs the compensating value to have moved and pH to be back to normal. ${cName} is still normal and pH ${pH} is still abnormal.`
+    : `Full compensation means pH is back inside 7.35 to 7.45. pH ${pH} is still outside that range.`;
+}
+
+function whyNotOxy(k) {
+  return current.oxy === 'normal'
+    ? `Hypoxemia means PaO<sub>2</sub> below 80 mmHg. ${current.pao2} is in the normal range.`
+    : `Normal oxygenation needs a PaO<sub>2</sub> of at least 80 mmHg. ${current.pao2} is below that.`;
+}
+
+function whyNot(step, choice) {
+  if (['ph', 'paco2', 'hco3', 'be'].includes(step)) return whyNotValue(step, choice);
+  if (step === 'disorder') return whyNotDisorder(choice);
+  if (step === 'comp') return whyNotComp(choice);
+  return whyNotOxy(choice);
+}
+
+/* ============================================================
+
+/* ============================================================
+   11. STEP DEFINITIONS (guided mode)
+   ============================================================ */
+const STEPS = [
+  { id: 'ph', short: 'pH', title: 'Is the pH acidic, normal, or alkaline?',
+    prompt: () => `pH is <strong>${phStr()}</strong>.`,
+    tip: () => 'Always start with pH. It tells you whether the blood as a whole is acidic or alkaline. Normal is 7.35 to 7.45.' },
+  { id: 'paco2', short: 'PaCO<sub>2</sub>', title: 'Is the PaCO<sub>2</sub> acidic, normal, or alkaline?',
+    prompt: () => `PaCO<sub>2</sub> is <strong>${current.paco2} mmHg</strong>.`,
+    tip: () => 'PaCO<sub>2</sub> is the respiratory value. It works backward from pH: CO<sub>2</sub> forms carbonic acid, so high PaCO<sub>2</sub> (above 45) is acidic and low PaCO<sub>2</sub> (below 35) is alkaline.' },
+  { id: 'hco3', short: 'HCO<sub>3</sub><sup>−</sup>', title: 'Is the HCO<sub>3</sub><sup>−</sup> acidic, normal, or alkaline?',
+    prompt: () => `HCO<sub>3</sub><sup>−</sup> is <strong>${current.hco3} mEq/L</strong>.`,
+    tip: () => 'HCO<sub>3</sub><sup>−</sup> is the metabolic value. It is a base, so it runs the same way as pH: low (below 22) is acidic and high (above 26) is alkaline.' },
+  { id: 'be', short: 'Base excess', title: 'Is the base excess acidic, normal, or alkaline?',
+    prompt: () => `Base excess is <strong>${fmtBE(current.be)} mEq/L</strong>.`,
+    tip: () => 'Base excess is a second look at the metabolic side, with the effect of CO<sub>2</sub> removed. Normal is −2 to +2. A negative value (base deficit) is acidic and a positive value is alkaline. It should agree with HCO<sub>3</sub><sup>−</sup>.' },
+  { id: 'disorder', short: 'Disorder', title: 'What is the primary disorder?',
+    prompt: () => 'Use your answers from the first four steps.',
+    tip: () => 'Find the value that moved the same way as pH. If it is PaCO<sub>2</sub>, the disorder is respiratory. If it is HCO<sub>3</sub><sup>−</sup>, it is metabolic.'
+      + (mixedOn() ? ' If both moved the same way as pH, it is a mixed disorder.' : '')
+      + ' If pH is normal but the other values are not, use the side of 7.40 that pH leans toward.' },
+  { id: 'comp', short: 'Compensation', title: 'How much has the body compensated?',
+    prompt: () => 'Look at the value that did not cause the problem.',
+    tip: () => 'Still normal means uncompensated. Moved the opposite way with pH still abnormal means partially compensated. Moved the opposite way with pH back in range means fully compensated. With no disorder, or a mixed disorder, compensation is not applicable.' },
+  { id: 'oxy', short: 'Oxygenation', title: 'How is oxygenation?',
+    prompt: () => `PaO<sub>2</sub> is <strong>${current.pao2} mmHg</strong>.`,
+    tip: () => 'Oxygenation is a separate question from acid-base balance. Normal PaO<sub>2</sub> on room air is 80 to 100 mmHg. Below 80 is hypoxemia.' }
+];
+const LIST_STEPS = ['disorder', 'comp', 'oxy'];
+
+/* ============================================================
+   12. SCREENS AND MOTION
+   ============================================================ */
+const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function showScreen(id, focusEl) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
+  window.scrollTo(0, 0);
+  if (focusEl) focusEl.focus({ preventScroll: true });
+}
+
+document.querySelectorAll('[data-motion]').forEach(b => b.addEventListener('click', () => {
+  const still = document.body.classList.toggle('still');
+  document.querySelectorAll('[data-motion]').forEach(x => {
+    x.setAttribute('aria-pressed', String(still));
+    x.textContent = still ? 'Play motion' : 'Pause motion';
+  });
+}));
+
+/* ============================================================
+   13. INTRO
+   ============================================================ */
+// A real, internally consistent reading: uncompensated respiratory acidosis
+const READOUTS = ['pH 7.30', 'PaCO₂ 55', 'HCO₃⁻ 26', 'Read the blood gas.'];
+let introTimers = [];
+
+function runIntro() {
+  introTimers.forEach(clearTimeout); introTimers = [];
+  const figs = $('logoFigures'), title = $('introTitle'), typed = $('typed');
+  const cont = $('btnContinue');
+  cont.hidden = state.cases === 0;
+  cont.textContent = `Continue Level ${state.level}`;
+  figs.classList.remove('go'); title.classList.remove('go'); typed.textContent = '';
+  showScreen('screen-intro');
+  void figs.offsetWidth;
+
+  if (reduceMotion()) { finishIntro(false); return; }
+  $('btnSkipIntro').hidden = false;
+  figs.classList.add('go');
+  let t = 1200;
+  READOUTS.forEach((str, idx) => {
+    for (let i = 1; i <= str.length; i++) introTimers.push(setTimeout(() => { typed.textContent = str.slice(0, i); }, t += 60));
+    if (idx < READOUTS.length - 1) {
+      t += 650;
+      for (let i = str.length - 1; i >= 0; i--) introTimers.push(setTimeout(() => { typed.textContent = str.slice(0, i); }, t += 22));
+      t += 180;
+    }
+  });
+  introTimers.push(setTimeout(() => finishIntro(false), t + 250));
+}
+
+function finishIntro(moveFocus) {
+  introTimers.forEach(clearTimeout); introTimers = [];
+  $('logoFigures').classList.add('go');
+  $('typed').textContent = READOUTS[READOUTS.length - 1];
+  $('introTitle').classList.add('go');
+  $('btnSkipIntro').hidden = true;
+  if (moveFocus) $('btnToMenu').focus();
+}
+
+/* ============================================================
+   14. LEVEL MENU
+   ============================================================ */
+function recommendedLevel() {
+  const next = LEVELS.find(l => !state.completed.includes(l.n));
+  return next ? next.n : null;
+}
+
+function showMenu() {
+  introTimers.forEach(clearTimeout); introTimers = [];
+  const rec = recommendedLevel();
+  $('levelGrid').innerHTML = LEVELS.map(l => {
+    const done = state.completed.includes(l.n);
+    const chips = (done ? '<span class="chip chip-done">Completed</span>' : '')
+      + (l.n === rec ? '<span class="chip chip-rec">Recommended</span>' : '');
+    return `<li><button type="button" class="level-card" data-level="${l.n}">
+      <span class="lc-num">Level ${l.n}</span>
+      <span class="lc-name">${l.name}</span>
+      <span class="lc-desc">${l.desc}</span>
+      <span class="lc-foot">${chips}<span class="chip-go" aria-hidden="true">Start →</span></span>
+    </button></li>`;
+  }).join('');
+  $('menuStats').textContent = state.cases
+    ? `Cases finished: ${state.cases} · Clean cases: ${state.clean} · Levels completed: ${state.completed.length} of ${LEVELS.length}`
+    : '';
+  document.querySelector(`input[name="mode"][value="${state.mode}"]`).checked = true;
+  const grid = $('levelGrid');
+  grid.classList.remove('go'); void grid.offsetWidth; grid.classList.add('go');
+  showScreen('screen-menu', $('menu-h1'));
+}
+
+function chooseLevel(n) {
+  if (n !== state.level) { state.level = n; state.streak = 0; }
+  saveProgress();
+  showScreen('screen-trainer');
+  loadCase(true);
+}
+
+/* ============================================================
+   15. TRAINER: MONITOR AND CASE LOADING
+   ============================================================ */
+function renderMonitor() {
+  const l = LEVELS[state.level - 1];
+  const done = state.completed.includes(l.n);
+  const shown = Math.min(state.streak, CLEAN_TO_PASS);
+  $('lvlLabel').textContent = `Level ${l.n}`;
+  $('lvlName').textContent = l.name;
+  $('caseNumber').textContent = caseNum;
+  $('dots').innerHTML = Array.from({ length: CLEAN_TO_PASS }, (_, i) => `<span class="dot ${i < shown ? 'on' : ''}"></span>`).join('');
+  $('streakText').textContent = done
+    ? `Level complete · ${state.streak} clean in a row`
+    : `${shown} of ${CLEAN_TO_PASS} clean in a row`;
+}
+
+let soloFirst = null;   // { clean, helped } from the first check in On my own mode
+
+function loadCase(focus) {
+  current = generateCase(state.level);
+  caseNum++;
+  caseDone = false;
+  reviewShown = false;
+  lastProgressMsg = '';
+  soloChecked = false;
+  soloFirst = null;
+
+  $('val-ph').textContent = phStr();
+  $('val-paco2').textContent = current.paco2;
+  $('val-hco3').textContent = current.hco3;
+  $('val-be').textContent = fmtBE(current.be);
+  $('val-pao2').textContent = current.pao2;
+  const v = $('values'); v.classList.remove('flash'); void v.offsetWidth; v.classList.add('flash');
+
+  $('trail').innerHTML = '';
+  renderMonitor();
+  if (state.mode === 'guided') {
+    guided = { attempts: {}, result: {}, first: {}, hinted: {} };
+    renderStep(0, focus);
+  } else {
+    renderSolo(focus);
+  }
+  announce(`Case ${caseNum}. pH ${phStr()}, PaCO2 ${current.paco2}, HCO3 ${current.hco3}, base excess ${fmtBE(current.be).replace('−', 'minus ')}, PaO2 ${current.pao2}.`);
+}
+
+/* ============================================================
+   16. GUIDED MODE
+   ============================================================ */
+function renderStep(i, focus) {
+  const st = STEPS[i], lvl = LEVELS[state.level - 1];
+  $('stage').innerHTML = `
+    <article class="card enter" data-step="${st.id}" data-index="${i}">
+      <fieldset class="q" aria-describedby="sprompt">
+        <legend><span class="step-count">Step ${i + 1} of ${STEPS.length}</span><h2 class="step-title" id="stitle" tabindex="-1">${st.title}</h2></legend>
+        <p class="step-prompt" id="sprompt">${st.prompt()}</p>
+        <div class="tip" id="stip" ${lvl.autoTips ? '' : 'hidden'}><strong>Tip:</strong> ${st.tip()}</div>
+        <div class="options ${LIST_STEPS.includes(st.id) ? 'list' : ''}">${optionsHTML(st.id, 'g-' + st.id)}</div>
+      </fieldset>
+      <div class="step-actions">
+        <button type="button" class="btn btn-primary" data-act="check">Check</button>
+        ${lvl.autoTips ? '' : '<button type="button" class="btn btn-quiet" data-act="hint" aria-expanded="false" aria-controls="stip">Show a hint</button>'}
+        <button type="button" class="btn btn-primary" data-act="next" hidden>${i < STEPS.length - 1 ? 'Next step' : 'See the case review'}</button>
+      </div>
+      <div class="fb" id="sfb" role="status" aria-live="polite"></div>
+    </article>`;
+  if (focus) $('stitle').focus({ preventScroll: true });
+}
+
+function stageClick(e) {
+  const b = e.target.closest('button[data-act]');
+  if (!b) return;
+  const card = b.closest('[data-step]');
+  const act = b.dataset.act;
+  if (card) {
+    const step = card.dataset.step, i = Number(card.dataset.index);
+    if (act === 'hint') {
+      const tip = $('stip'), open = tip.hidden;
+      tip.hidden = !open;
+      b.setAttribute('aria-expanded', String(open));
+      b.textContent = open ? 'Hide the hint' : 'Show a hint';
+      if (open) guided.hinted[step] = true;
+    } else if (act === 'check') checkStep(step);
+    else if (act === 'next') nextStep(step, i);
+    return;
+  }
+  if (act === 'solo-check') soloCheck();
+  else if (act === 'solo-review') soloReview();
+  else if (act === 'next-case') { loadCase(true); scrollToWork(); }
+  else if (act === 'next-level') { chooseLevel(state.level + 1); scrollToWork(); }
+  else if (act === 'levels') showMenu();
+}
+
+function scrollToWork() {
+  $('screen-trainer').scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'start' });
+}
+
+function checkStep(step) {
+  const name = 'g-' + step, choice = checkedVal(name), fb = $('sfb');
+  if (!choice) {
+    fb.className = 'fb wrong';
+    fb.innerHTML = '<span class="fb-label">Choose an answer first.</span>';
+    const first = document.querySelector(`input[name="${name}"]`);
+    if (first) first.focus();
+    return;
+  }
+  const key = answerKey()[step];
+  if (!(step in guided.first)) guided.first[step] = choice;
+  const tries = guided.attempts[step] = (guided.attempts[step] || 0) + 1;
+
+  if (choice === key) {
+    guided.result[step] = (tries === 1 && !guided.hinted[step]) ? 'clean' : 'helped';
+    fb.className = 'fb right';
+    fb.innerHTML = `<span class="fb-label">Correct.</span> ${TEACH[step]()}`;
+    finishStep(step, false);
+  } else if (tries === 1) {
+    fb.className = 'fb wrong';
+    fb.innerHTML = `<span class="fb-label">Not yet. Try again.</span> ${whyNot(step, choice)}`;
+  } else {
+    guided.result[step] = 'helped';
+    fb.className = 'fb helped';
+    fb.innerHTML = `<span class="fb-label">Here is the answer: ${answerLabel(step, key)}.</span> ${TEACH[step]()}`;
+    finishStep(step, true);
+  }
+}
+
+function finishStep(step, revealed) {
+  const key = answerKey()[step];
+  document.querySelectorAll(`input[name="g-${step}"]`).forEach(inp => {
+    inp.disabled = true;
+    if (revealed) {
+      const opt = inp.closest('.opt');
+      opt.classList.toggle('is-answer', inp.value === key);
+      opt.classList.toggle('is-miss', inp.checked && inp.value !== key);
+    }
+  });
+  const card = document.querySelector('#stage [data-step]');
+  card.querySelector('[data-act="check"]').hidden = true;
+  const hint = card.querySelector('[data-act="hint"]');
+  if (hint) hint.hidden = true;
+  const next = card.querySelector('[data-act="next"]');
+  next.hidden = false;
+  next.focus();
+}
+
+function addTrail(step, clean) {
+  const st = STEPS.find(s => s.id === step);
+  const li = document.createElement('li');
+  li.className = clean ? 'clean' : 'helped';
+  li.innerHTML = `<span class="tk" aria-hidden="true">${clean ? '✓' : '•'}</span><span>${st.short}: ${answerLabel(step, answerKey()[step])}<span class="vh">${clean ? ', right on the first try' : ', needed help'}</span></span>`;
+  $('trail').appendChild(li);
+}
+
+function nextStep(step, i) {
+  addTrail(step, guided.result[step] === 'clean');
+  if (i < STEPS.length - 1) {
+    renderStep(i + 1, true);
+  } else {
+    const clean = STEPS.every(s => guided.result[s.id] === 'clean');
+    const helped = STEPS.filter(s => guided.result[s.id] !== 'clean').map(s => stepShortName(s.id));
+    completeCase(clean);
+    renderReview(guided.first, clean, helped);
+  }
+}
+
+function stepShortName(id) {
+  return { ph: 'pH', paco2: 'PaCO2', hco3: 'HCO3', be: 'base excess', disorder: 'primary disorder', comp: 'compensation', oxy: 'oxygenation' }[id];
+}
+
+/* ============================================================
+   17. ON MY OWN MODE
+   ============================================================ */
+function renderSolo(focus) {
+  const vals = [
+    ['ph', 'pH', phStr(), ''],
+    ['paco2', 'PaCO<sub>2</sub>', current.paco2, ' mmHg'],
+    ['hco3', 'HCO<sub>3</sub><sup>−</sup>', current.hco3, ' mEq/L'],
+    ['be', 'Base excess', fmtBE(current.be), ' mEq/L']
+  ];
+  $('stage').innerHTML = `
+    <article class="card enter">
+      <span class="step-count">All steps at once</span>
+      <h2 class="step-title" id="stitle" tabindex="-1">Interpret this blood gas</h2>
+      <p class="step-prompt">Answer every part, then check. The case review opens after your first check.</p>
+
+      <fieldset class="q solo-block" id="blk-values">
+        <legend>1. Is each value acidic, normal, or alkaline?</legend>
+        ${vals.map(([id, label, v, unit]) => `
+          <p class="value-line" id="lbl-${id}">${label} ${v}${unit}</p>
+          <div class="options" role="radiogroup" aria-labelledby="lbl-${id}">${optionsHTML(id, id)}</div>`).join('')}
+        <p class="sfb" id="sfb-values"></p>
+      </fieldset>
+      <fieldset class="q solo-block" id="blk-disorder">
+        <legend>2. What is the primary disorder?</legend>
+        <div class="options list">${optionsHTML('disorder', 'disorder')}</div>
+        <p class="sfb" id="sfb-disorder"></p>
+      </fieldset>
+      <fieldset class="q solo-block" id="blk-comp">
+        <legend>3. How much has the body compensated?</legend>
+        <div class="options list">${optionsHTML('comp', 'comp')}</div>
+        <p class="sfb" id="sfb-comp"></p>
+      </fieldset>
+      <fieldset class="q solo-block" id="blk-oxy">
+        <legend>4. How is oxygenation? PaO<sub>2</sub> is ${current.pao2} mmHg.</legend>
+        <div class="options list">${optionsHTML('oxy', 'oxy')}</div>
+        <p class="sfb" id="sfb-oxy"></p>
+      </fieldset>
+
+      <div class="step-actions">
+        <button type="button" class="btn btn-primary" data-act="solo-check" id="btnSoloCheck">Check my answers</button>
+        <button type="button" class="btn btn-review" data-act="solo-review" id="btnSoloReview" aria-disabled="true" aria-describedby="lockNote">Open the case review</button>
+        <p class="lock-note" id="lockNote">The case review unlocks after you check your answers once.</p>
+      </div>
+      <div class="summary" id="summary" role="status" aria-live="polite"></div>
+    </article>`;
+  if (focus) $('stitle').focus({ preventScroll: true });
+}
+
+const SOLO_NAMES = ['ph', 'paco2', 'hco3', 'be', 'disorder', 'comp', 'oxy'];
+
+function soloCheck() {
+  if (reviewShown) return;
+  const key = answerKey();
+  const missing = SOLO_NAMES.filter(n => !checkedVal(n));
+  const sum = $('summary');
+  if (missing.length) {
+    sum.className = 'summary some-wrong';
+    sum.textContent = `Answer every part before checking. ${missing.length} ${missing.length === 1 ? 'choice is' : 'choices are'} still blank.`;
+    const firstBlank = document.querySelector(`#stage input[name="${missing[0]}"]`);
+    if (firstBlank) firstBlank.focus();
+    return;
+  }
+  const right = {};
+  SOLO_NAMES.forEach(n => right[n] = checkedVal(n) === key[n]);
+  const wrongVals = ['ph', 'paco2', 'hco3', 'be'].filter(n => !right[n]).map(stepShortName);
+  const listJoin = a => a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
+  soloMark('values', wrongVals.length === 0, wrongVals.length ? `Not yet. Recheck ${listJoin(wrongVals)} against the normal ranges.` : 'Correct. All four values are classified right.');
+  soloMark('disorder', right.disorder, right.disorder ? 'Correct.' : 'Not yet. Which value moved pH in the direction it actually went?');
+  soloMark('comp', right.comp, right.comp ? 'Correct.' : 'Not yet. Look at the compensating value first, then at pH.');
+  soloMark('oxy', right.oxy, right.oxy ? 'Correct.' : 'Not yet. Compare PaO2 with 80 to 100 mmHg.');
+
+  const nRight = SOLO_NAMES.filter(n => right[n]).length;
+  const all = nRight === SOLO_NAMES.length;
+  if (!soloChecked) {
+    soloChecked = true;
+    soloFirst = { clean: all, helped: SOLO_NAMES.filter(n => !right[n]).map(stepShortName), picked: {} };
+    SOLO_NAMES.forEach(n => soloFirst.picked[n] = checkedVal(n));
+    completeCase(all);
+    $('btnSoloReview').setAttribute('aria-disabled', 'false');
+    $('lockNote').textContent = 'The case review is unlocked. Opening it shows the answers and ends this case.';
+  }
+  sum.className = 'summary ' + (all ? 'all-right' : 'some-wrong');
+  sum.textContent = all
+    ? 'Everything is correct. Open the case review to see the reasoning.'
+    : `${nRight} of ${SOLO_NAMES.length} answers are correct. Change the ones marked "Not yet" and check again, or open the case review.`;
+}
+
+function soloMark(block, ok, msg) {
+  $('blk-' + block).className = 'q solo-block ' + (ok ? 'is-right' : 'is-wrong');
+  $('sfb-' + block).textContent = msg;
+}
+
+function soloReview() {
+  if ($('btnSoloReview').getAttribute('aria-disabled') === 'true') {
+    $('summary').className = 'summary some-wrong';
+    $('summary').textContent = 'Check your answers first. The case review unlocks after one check.';
+    return;
+  }
+  renderReview(soloFirst.picked, soloFirst.clean, soloFirst.helped);
+}
+
+/* ============================================================
+   18. PROGRESS
+   ============================================================ */
+let lastProgressMsg = '';
+function completeCase(clean) {
+  if (caseDone) return;
+  caseDone = true;
+  state.cases++;
+  if (clean) { state.clean++; state.streak++; } else { state.streak = 0; }
+  const lv = state.level;
+  lastProgressMsg = '';
+  if (clean && state.streak >= CLEAN_TO_PASS && !state.completed.includes(lv)) {
+    state.completed.push(lv);
+    lastProgressMsg = lv < LEVELS.length
+      ? `Level ${lv} complete. Level ${lv + 1}, ${LEVELS[lv].name}, is next.`
+      : 'Level 6 complete. You have finished every level of the trainer.';
+    announce(lastProgressMsg);
+  }
+  saveProgress();
+  renderMonitor();
+}
+
+/* ============================================================
+   19. CASE REVIEW
+   ============================================================ */
+function renderReview(picked, clean, helped) {
+  reviewShown = true;
+  const t = current.truth;
+  const answer = t.disorder === 'normal' ? 'Normal ABG'
+    : t.primary === 'both' ? DISORDER_LABEL[t.disorder]
+    : `${COMP_LABEL[t.comp]} ${DISORDER_LABEL[t.disorder].toLowerCase()}`;
+  const answerFull = `${answer}, ${current.oxy === 'normal' ? 'normal oxygenation' : 'with hypoxemia'}`;
+  const canLevel = lastProgressMsg && state.level < LEVELS.length;
+
+  const result = `
+    <section class="result ${clean ? 'clean on-navy' : 'help'} enter" aria-labelledby="rhead">
+      <h2 class="result-head" id="rhead" tabindex="-1">${clean ? 'Clean case. Every step right on the first try.' : 'Case finished'}</h2>
+      ${clean ? '' : `<p>You needed help with ${helped.join(', ')}. The walkthrough below covers each step.</p>`}
+      ${lastProgressMsg ? `<p class="levelup">${lastProgressMsg}</p>` : ''}
+      <div class="result-actions">
+        ${canLevel ? `<button type="button" class="btn ${clean ? 'btn-gold' : 'btn-primary'}" data-act="next-level">Go to Level ${state.level + 1}</button>` : ''}
+        <button type="button" class="btn ${canLevel ? (clean ? 'btn-ghost' : 'btn-quiet') : (clean ? 'btn-gold' : 'btn-primary')}" data-act="next-case">Next case</button>
+        <button type="button" class="btn ${clean ? 'btn-ghost' : 'btn-quiet'}" data-act="levels">Choose a level</button>
+      </div>
+    </section>`;
+
+  const order = ['ph', 'paco2', 'hco3', 'be', 'disorder', 'comp', 'oxy'];
+  const whyList = (step, keys) => keys.filter(k => k !== answerKey()[step]).map(k =>
+    `<li><strong>${answerLabel(step, k)}.</strong>${picked[step] === k ? ' <span class="picked">(your answer)</span>' : ''} ${whyNot(step, k)}</li>`).join('');
+
+  $('stage').innerHTML = result + `
+    <article class="card review-card enter" aria-labelledby="revTitle">
+      <h2 class="vh" id="revTitle">Case review</h2>
+      <p class="answer-line">Answer: ${answerFull}.</p>
+      <details open>
+        <summary>Walk through every step</summary>
+        <div class="details-body"><ol class="steps">${order.map(id => `<li>${TEACH[id]()}</li>`).join('')}</ol></div>
+      </details>
+      <details>
+        <summary>Why the other choices don't fit</summary>
+        <div class="details-body">
+          <p class="why-h">Primary disorder</p><ul class="why">${whyList('disorder', disorderKeys())}</ul>
+          <p class="why-h">Compensation</p><ul class="why">${whyList('comp', Object.keys(COMP_LABEL))}</ul>
+          <p class="why-h">Oxygenation</p><ul class="why">${whyList('oxy', ['normal', 'hypoxemia'])}</ul>
+        </div>
+      </details>
+      <details>
+        <summary>Go deeper: expected compensation and the math</summary>
+        <div class="details-body">${goDeeper()}</div>
+      </details>
+    </article>`;
+  $('rhead').focus({ preventScroll: true });
+  $('rhead').scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'nearest' });
+}
+
+function goDeeper() {
+  const t = current.truth;
+  const hh = phFromHH(current.hco3, current.paco2);
+  let formula = '';
+  const e = expected(t.disorder, current.paco2, current.hco3);
+  if (t.disorder === 'metabolic_acidosis') {
+    formula = `<p class="calc"><strong>Winter's formula.</strong> Expected PaCO<sub>2</sub> = 1.5 × HCO<sub>3</sub><sup>−</sup> + 8 (±2) = 1.5 × ${current.hco3} + 8 = ${fmt1(e.c)}, so ${fmt1(e.lo)} to ${fmt1(e.hi)} mmHg once the lungs have fully responded. Measured PaCO<sub>2</sub> is ${current.paco2}. ${
+      t.comp === 'uncompensated' ? 'It is still in the normal range, so the breathing response has not started yet.' : 'That fits the expected range, so the lungs are compensating appropriately.'}</p>`;
+  } else if (t.disorder === 'metabolic_alkalosis') {
+    formula = `<p class="calc"><strong>Expected respiratory compensation.</strong> PaCO<sub>2</sub> rises about 0.7 mmHg for each 1 mEq/L rise in HCO<sub>3</sub><sup>−</sup>: 40 + 0.7 × (${current.hco3} − 24) = ${fmt1(e.c)}, so about ${fmt1(e.lo)} to ${fmt1(e.hi)} mmHg. Measured PaCO<sub>2</sub> is ${current.paco2}. ${
+      t.comp === 'uncompensated' ? 'It is still normal, so the lungs have not slowed breathing yet.' : 'That fits, so the lungs are compensating by slowing breathing.'}</p>`;
+  } else if (t.disorder === 'respiratory_acidosis') {
+    formula = `<p class="calc"><strong>Expected metabolic compensation.</strong> For each 10 mmHg rise in PaCO<sub>2</sub>, HCO<sub>3</sub><sup>−</sup> rises about 1 mEq/L within minutes (acute, from buffering) and about 3.5 mEq/L after several days (chronic, as the kidneys keep more HCO<sub>3</sub><sup>−</sup>). Some references use 4. For a PaCO<sub>2</sub> of ${current.paco2}, that predicts about ${fmt1(e.acute)} (acute) to ${fmt1(e.chronic)} (chronic). Measured HCO<sub>3</sub><sup>−</sup> is ${current.hco3}.</p>`;
+  } else if (t.disorder === 'respiratory_alkalosis') {
+    formula = `<p class="calc"><strong>Expected metabolic compensation.</strong> For each 10 mmHg fall in PaCO<sub>2</sub>, HCO<sub>3</sub><sup>−</sup> falls about 2 mEq/L quickly (acute) and about 4 to 5 mEq/L after several days (chronic, as the kidneys excrete more HCO<sub>3</sub><sup>−</sup>). For a PaCO<sub>2</sub> of ${current.paco2}, that predicts about ${fmt1(e.acute)} (acute) down to ${fmt1(e.chronicLo)} to ${fmt1(e.chronicHi)} (chronic). Measured HCO<sub>3</sub><sup>−</sup> is ${current.hco3}.</p>`;
+  } else if (t.primary === 'both') {
+    formula = `<p class="calc"><strong>Spotting mixed disorders in practice.</strong> The mixed cases here are the easier kind to recognize, because both values push pH the same way. Clinicians also find hidden mixed disorders with the compensation formulas. For example, in a metabolic acidosis, a PaCO<sub>2</sub> higher than Winter's formula (1.5 × HCO<sub>3</sub><sup>−</sup> + 8, ±2) predicts means a respiratory acidosis is also present.</p>`;
+  }
+  const beCalc = `<p class="calc"><strong>Base excess calculation.</strong> Standard base excess comes from the Van Slyke equation: BE = 0.93 × (HCO<sub>3</sub><sup>−</sup> − 24.4 + 14.8 × (pH − 7.40)) = 0.93 × (${current.hco3} − 24.4 + 14.8 × (${phStr()} − 7.40)) = ${fmtBE(current.be)} mEq/L. Blood gas analyzers report it for you. Some labs use −3 to +3 as the normal range instead of −2 to +2.</p>`;
+  const hhText = `<p class="calc"><strong>Henderson-Hasselbalch check.</strong> pH = 6.1 + log(HCO<sub>3</sub><sup>−</sup> ÷ (0.03 × PaCO<sub>2</sub>)) = 6.1 + log(${current.hco3} ÷ ${fmt1(0.03 * current.paco2)}) = ${hh.toFixed(2)}. That matches the reported pH, so these values are internally consistent.</p>`;
+  const clinical = t.comp === 'fully'
+    ? `<p class="calc"><strong>A note for clinical settings.</strong> This trainer uses the standard classification taught in physiology courses. In real patients, compensation usually brings pH close to normal without fully reaching it. Chronic respiratory alkalosis is the main exception. So when clinicians see a normal pH with two abnormal values, they also consider whether two disorders are happening at once.</p>` : '';
+  return `${formula}${beCalc}${hhText}${clinical}
+        <p class="calc"><strong>About PaO<sub>2</sub>.</strong> This trainer uses 80 to 100 mmHg as normal on room air. Normal PaO<sub>2</sub> drifts somewhat lower with age, and a patient on supplemental oxygen can have a PaO<sub>2</sub> above 100.</p>
+`;
+}
+
+/* ============================================================
+   20. WIRING
+   ============================================================ */
+loadProgress();
+
+$('btnSkipIntro').addEventListener('click', () => finishIntro(true));
+$('btnToMenu').addEventListener('click', showMenu);
+$('btnContinue').addEventListener('click', () => chooseLevel(state.level));
+$('btnReplay').addEventListener('click', runIntro);
+$('levelGrid').addEventListener('click', e => {
+  const b = e.target.closest('.level-card');
+  if (b) chooseLevel(Number(b.dataset.level));
+});
+document.querySelectorAll('input[name="mode"]').forEach(r => r.addEventListener('change', () => {
+  state.mode = checkedVal('mode');
+  saveProgress();
+}));
+
+let resetArmed = null;
+$('btnReset').addEventListener('click', () => {
+  const b = $('btnReset');
+  if (!resetArmed) {
+    b.textContent = 'Select again to confirm reset';
+    resetArmed = setTimeout(() => { b.textContent = 'Reset my progress'; resetArmed = null; }, 5000);
+    return;
+  }
+  clearTimeout(resetArmed); resetArmed = null;
+  Object.assign(state, { level: 1, unlocked: 1, completed: [], streak: 0, clean: 0, cases: 0 });
+  saveProgress();
+  b.textContent = 'Reset my progress';
+  showMenu();
+  announce('Progress reset.');
+});
+
+$('btnLevels').addEventListener('click', showMenu);
+$('btnNew').addEventListener('click', () => loadCase(true));
+$('stage').addEventListener('click', stageClick);
+
+const dlg = $('refDialog');
+$('btnRef').addEventListener('click', () => dlg.showModal());
+$('btnRefClose').addEventListener('click', () => dlg.close());
+dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+
+runIntro();
+
+/* ============================================================
+   21. IFRAME HEIGHT SENDER (Kajabi / Canvas embed support)
+   ============================================================ */
+(function () {
+  const params = new URLSearchParams(location.search);
+  const frameId = params.get('id') || window.name || 'abg-interpretation-trainer';
+  let last = 0;
+  function sendHeight() {
+    const h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight,
+                       document.body.offsetHeight, document.documentElement.offsetHeight);
+    if (h === last) return;
+    last = h;
+    try { window.parent.postMessage({ type: 'resize', id: frameId, height: h }, '*'); } catch (e) {}
+  }
+  if ('ResizeObserver' in window) new ResizeObserver(sendHeight).observe(document.body);
+  window.addEventListener('load', sendHeight);
+  window.addEventListener('resize', sendHeight);
+  document.addEventListener('toggle', sendHeight, true);
+  setTimeout(sendHeight, 100);
+  setTimeout(sendHeight, 500);
+})();
+</script>
+</body>
+</html>
