@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab Environment, Attendance, and Devices | BIO 004 Human Anatomy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1E3D4C; --navy-deep:#142a36; --navy-tint:#EDF1F3;
+    --gold:#B8924A; --terra:#C2734D; --terra-dark:#A0522D;
+    --white:#FFFFFF; --offwhite:#FAFAF9;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--offwhite); color:var(--navy);
+    font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:17px; line-height:1.65;
+  }
+  .skip{
+    position:absolute; left:-9999px; top:0; background:var(--navy); color:#fff;
+    padding:.75rem 1.25rem; z-index:100; border-radius:0 0 6px 0; font-weight:600;
+  }
+  .skip:focus{left:0}
+  .wrap{max-width:54rem; margin:0 auto; padding:2.5rem 1.25rem 4rem}
+  .card{
+    background:var(--white); border-radius:10px; padding:2.25rem 2.5rem;
+    box-shadow:0 1px 3px rgba(0,0,0,.08);
+  }
+  .eyebrow{
+    font-family:'DM Sans',sans-serif; font-size:12px; font-weight:700;
+    letter-spacing:.09em; text-transform:uppercase; color:var(--terra-dark);
+    margin:0 0 .6rem;
+  }
+  h1{font-size:2rem; font-weight:800; color:var(--navy); margin:0 0 .5rem; line-height:1.2}
+  h2{font-size:1.3rem; font-weight:600; color:var(--terra-dark); margin:2.25rem 0 .7rem; line-height:1.3}
+  h3{font-size:1.05rem; font-weight:700; color:var(--navy); margin:1.5rem 0 .5rem}
+  .meta{font-family:'DM Sans',sans-serif; font-size:.9rem; color:var(--navy); opacity:.75; margin:0 0 1.5rem}
+  p{margin:0 0 1rem}
+  ul,ol{margin:0 0 1.1rem; padding-left:1.45rem}
+  li{margin:.35rem 0}
+  .note{background:var(--navy-tint); border-radius:8px; padding:1.15rem 1.5rem; margin:1.5rem 0}
+  .note :last-child{margin-bottom:0}
+  .note h3{margin-top:0}
+  .flag{background:var(--white); border-radius:8px; padding:1.15rem 1.5rem; margin:1.5rem 0; box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .flag :last-child{margin-bottom:0}
+  .flag-lead{font-weight:700; color:var(--terra-dark)}
+  .toc ol{columns:2; column-gap:2.5rem; padding-left:1.35rem; margin:.5rem 0 0}
+  .toc li{margin:.3rem 0; break-inside:avoid}
+  a{color:var(--navy); text-decoration:underline; text-underline-offset:3px}
+  a:hover{color:var(--terra-dark)}
+  a:focus-visible{outline:3px solid var(--gold); outline-offset:3px; border-radius:3px}
+  .back{
+    display:inline-block; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:500;
+    margin-bottom:1.5rem; text-decoration:none; color:var(--navy);
+    border-bottom:1px solid var(--navy); padding-bottom:2px;
+  }
+  .back:hover{color:var(--terra-dark); border-bottom-color:var(--terra-dark)}
+  .sign{font-weight:700; color:var(--navy); margin-top:2rem}
+  @media (max-width:640px){
+    .wrap{padding:1.5rem 1rem 3rem}
+    .card{padding:1.5rem 1.35rem}
+    h1{font-size:1.55rem}
+    .toc ol{columns:1}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to the announcement</a>
+
+<div class="wrap">
+
+  <a class="back" href="faculty-tools.html" target="_top">Back to the course home</a>
+
+  <main id="main" class="card">
+
+    <p class="eyebrow">BIO 004 &middot; Human Anatomy &middot; Announcement</p>
+    <h1>Lab Learning Environment, Attendance, and Device Policy Updates</h1>
+    <p class="meta">Posted September 20, 2026</p>
+
+    <p>I apologize that this announcement is long, but you need to read it from beginning to end. It contains important updates and clarifications about lab, attendance, TBLs, Brain Dumps, graded activities, and our digital device policy.</p>
+
+    <div class="note">
+      <p>Whether or not you choose to read the entire announcement, you are responsible for the information in it and will be held accountable for these expectations moving forward.</p>
+    </div>
+
+    <p>My goal is not to make the class more restrictive. I want to give you as much freedom as possible to choose how you learn, while also protecting the learning environment for everyone in the room.</p>
+
+    <nav class="toc" aria-labelledby="toc-heading">
+      <h3 id="toc-heading">What this covers</h3>
+      <ol>
+        <li><a href="#s1">Choose the study method that works for you</a></li>
+        <li><a href="#s2">Protect the learning environment</a></li>
+        <li><a href="#s3">Earplugs yes, earbuds no</a></li>
+        <li><a href="#s4">Devices during graded activities</a></li>
+        <li><a href="#s5">TBL: IRAT through TRAT is one period</a></li>
+        <li><a href="#s6">Previous device warnings</a></li>
+        <li><a href="#s7">Work periods and scheduled breaks</a></li>
+        <li><a href="#s8">The table outside the lab</a></li>
+        <li><a href="#s9">Arriving late for TBLs and Brain Dumps</a></li>
+        <li><a href="#s10">Attendance and planned absences</a></li>
+      </ol>
+    </nav>
+
+    <h2 id="s1">1. Choose the study method that works for you</h2>
+    <p>You may use any study method that works for you during lab. My first recommendation is the Round Table method, but you are not required to use it. You may:</p>
+    <ul>
+      <li>Use the Round Table method</li>
+      <li>Use the whiteboards</li>
+      <li>Work with a partner or group</li>
+      <li>Work independently</li>
+      <li>Quiz one another</li>
+      <li>Draw and label structures</li>
+      <li>Use another study method that works for you</li>
+      <li>Move between different methods during the same lab period</li>
+    </ul>
+    <p>You are not required to use the same study method as the rest of your group or table. If you want to do Round Table and the people at your table do not, you may find another group that is doing Round Table and join them. If you need quiet study time, you may find a quieter space in the lab and work independently.</p>
+    <p>You may also do both. You might spend part of the lab working collaboratively and another part working quietly on your own. The choice is yours. Consider setting up a plan for yourself, or for your group, where you do both. You have a Pomodoro clock that can help you structure it.</p>
+    <p>Please also understand that when someone at your table chooses to work somewhere else, join another group, or study independently, they are not rejecting you or your group. They are making a decision about what they need to learn effectively at that particular moment. That is completely acceptable. Please do not interpret another person's study choice as a personal rejection or criticism. Your group is a resource. It is not an obligation to study in exactly the same way for the entire lab period.</p>
+
+    <h3>Whatever you choose, include recall</h3>
+    <p>Whatever method you choose, I strongly recommend that you include active recall. Recall means putting your resources aside and asking your brain to retrieve the information without looking at the answer. Looking at a labeled structure and thinking, "I know that," is very different from looking at that same structure without a label and being able to identify it.</p>
+    <p>Try things such as:</p>
+    <ul>
+      <li>Cover the labels and identify structures</li>
+      <li>Have someone quiz you</li>
+      <li>Identify structures on an unfamiliar model</li>
+      <li>Find structures on the cadaver without using a list</li>
+      <li>Draw or label something from memory and then check yourself</li>
+    </ul>
+    <p>I prefer that you complete Loops and other activities that can easily be done at home outside of lab whenever possible. While you are in lab, take advantage of the resources you cannot easily replicate at home: cadavers, models, histology slides, microscopes, and other laboratory materials.</p>
+
+    <h2 id="s2">2. Protect the learning environment</h2>
+    <p>Please remember that we do not all learn in the same way, and we do not all go home to the same environment. Some of you have a quiet place to study at home. Others may go home to roommates, family, children, pets, televisions, traffic, or busy households where uninterrupted study time is difficult to find. Some of you have very busy jobs and limited time for quality study.</p>
+    <p>We also do not have unlimited library hours or quiet study spaces that accommodate everyone's schedules. I want our lab to be a place where everyone has an opportunity to get meaningful work done. That means:</p>
+    <ul>
+      <li>You are absolutely allowed to talk while you work. Round Tables and other collaborative methods require conversation.</li>
+      <li>Keep conversations at a quiet study volume.</li>
+      <li>Your conversation should not interfere with someone studying nearby, even if that person is wearing earplugs.</li>
+      <li>Do not allow unrelated personal conversation to dominate your table.</li>
+      <li>Save longer personal conversations for scheduled breaks.</li>
+    </ul>
+    <p>Someone at your table may desperately want to study but may be uncomfortable asking everyone else to stop talking. Please do not make another person responsible for asking the group to quiet down.</p>
+    <p>At times, I may play low background music in the room for those who work better with some background sound. If you need additional noise reduction, you may wear regular non-electronic earplugs.</p>
+
+    <h2 id="s3">3. Earplugs are allowed. Earbuds and headphones are not.</h2>
+    <p>There is an important distinction. Non-electronic earplugs are permitted. Electronic earbuds and headphones are not. Earbuds, AirPods, headphones, and other electronic listening devices may not be worn in your ears during class. This includes:</p>
+    <ul>
+      <li>Lecture</li>
+      <li>Lab</li>
+      <li>Independent study periods</li>
+      <li>Group work</li>
+      <li>Brain Dumps</li>
+      <li>TBLs</li>
+      <li>Quizzes</li>
+      <li>Lab practicals</li>
+      <li>Lecture exams</li>
+      <li>Other graded activities</li>
+    </ul>
+    <p>The rule still applies if:</p>
+    <ul>
+      <li>You are not listening to music</li>
+      <li>Your phone is put away</li>
+      <li>You are using noise-canceling mode</li>
+      <li>You are wearing only one earbud</li>
+      <li>You tell me the device is turned off</li>
+    </ul>
+    <p>I cannot determine what an electronic device in your ear is or is not transmitting or receiving, so the rule has to be consistent. Electronic listening devices stay out of your ears during class. If you need noise reduction during an appropriate study period, use regular non-electronic earplugs.</p>
+
+    <h2 id="s4">4. Electronic devices during graded activities</h2>
+    <p>The device policy is especially important during anything graded.</p>
+    <div class="flag">
+      <p class="flag-lead">If an earbud, AirPod, headphone, or other unauthorized electronic listening device is seen in your ear during a graded activity, you will receive a zero for that activity.</p>
+      <p>This includes Brain Dumps, quizzes, TBLs, lab practicals, lecture exams, and any other activity for which you are earning points.</p>
+    </div>
+    <p>I do not have to determine whether you were actually listening to something or receiving information. Once an unauthorized electronic device is being worn during an assessment, I cannot verify the integrity of that assessment. The same principle applies to unauthorized phone or device use during graded work.</p>
+    <p>If you have an approved accommodation involving headphones, electronic devices, audio, breaks, or assistive technology, follow your approved accommodation. You are also welcome to talk with me privately if we need to clarify how your accommodation will work during a particular activity.</p>
+
+    <h2 id="s5">5. TBL: the IRAT through the TRAT is one assessment period</h2>
+    <p>During Team-Based Learning, the IRAT and TRAT are one continuous assessment period. Once the IRAT begins, your phone and other unauthorized electronic devices must remain completely put away until the TRAT has been completed.</p>
+    <p>Do not take your phone out between the IRAT and TRAT. The TRAT uses the same questions you have just answered individually. If you access your phone between the two portions, I cannot verify that you did not look up answers before discussing those questions with your team.</p>
+    <div class="flag">
+      <p class="flag-lead">If you take out or use your phone after beginning the IRAT and before completion of the TRAT:</p>
+      <ul>
+        <li>You will receive a zero on your individual IRAT.</li>
+        <li>You will receive a zero for your TRAT and team portion for that TBL.</li>
+        <li>You will not be permitted to participate in the team discussion or TRAT for that activity.</li>
+      </ul>
+      <p>Turning in your IRAT does not end the assessment period.</p>
+    </div>
+    <p>If you finish your IRAT before your teammates, wait quietly for the team portion to begin. Do not use your phone, earbuds, smartwatch, headphones, or other unauthorized electronic devices. The assessment period ends when the TRAT is complete.</p>
+
+    <h2 id="s6">6. Previous device warnings</h2>
+    <p>There have already been instances of phones and electronic listening devices being used during class. If I, one of our embedded tutors, or another faculty member has seen you using a prohibited device and spoken to you about it, that conversation was your warning. A warning from an embedded tutor or another faculty member counts the same as a warning directly from me.</p>
+    <p>Please review the digital device policy and its consequences. Once you have received a warning, subsequent violations will be handled according to that policy. There should no longer be any confusion about earbuds or headphones. Do not wear electronic listening devices during class, and never have an unauthorized electronic device out or in your ears during graded work.</p>
+
+    <h2 id="s7">7. Work periods and scheduled breaks</h2>
+    <p>I will put a Pomodoro clock on the TV to help structure our lab time. We will generally use 50 minutes of focused work followed by a scheduled break.</p>
+    <p>During the work period:</p>
+    <ul>
+      <li>Remain in the lab</li>
+      <li>Participate in the class</li>
+      <li>Use whichever study method works for you</li>
+      <li>Keep conversations at a quiet study volume</li>
+      <li>Keep personal conversations limited</li>
+      <li>Keep electronic devices put away</li>
+    </ul>
+    <p>During your scheduled break, you may step outside, check your phone, have personal conversations, get something to drink, or simply take a break.</p>
+    <p>Of course, you may briefly step out when necessary to use the restroom or get water. However, repeatedly leaving the instructional area or being gone for 10 to 20 minutes at a time is considered non-participation in lab. Please remind me if I forget to put the Pomodoro clock on the TV.</p>
+
+    <h2 id="s8">8. The table outside the lab is not an alternative classroom</h2>
+    <p>The table outside the lab is not an alternative study or device area for Anatomy during our scheduled class time. That space is available for Anatomy students during a scheduled break, and for students from other classes who are studying and waiting for their class to begin.</p>
+    <p>During an Anatomy work period, you should not leave the lab to sit at the outside table and use your phone, laptop, tablet, earbuds, or other personal electronic devices. Leaving the classroom to use a device does not create an exception to the device policy.</p>
+    <p>If you choose to remain outside using a device rather than being in the classroom and participating in scheduled lab, you will be considered not present for that portion of lab and your attendance will be recorded accordingly.</p>
+    <p>The scheduled breaks are specifically intended to give you predictable opportunities to step outside, check your phone, take care of personal business, talk with friends, or simply take a break.</p>
+    <p>If you have an approved accommodation that affects breaks, leaving the classroom, device use, or another part of these expectations, follow your approved accommodation or talk with me privately if something needs clarification.</p>
+
+    <h2 id="s9">9. Arriving late for TBLs and Brain Dumps</h2>
+    <p>Please arrive on time for TBLs and Brain Dumps. Once a TBL or Brain Dump has been handed out and the activity has begun, you may not begin the activity late and you will not be able to earn the points associated with that activity for that day. These are in-class activities, so points missed because you arrived after the activity began cannot be made up. Please plan accordingly.</p>
+
+    <h2 id="s10">10. Attendance and planned absences</h2>
+    <p>I am aware that several people have or are planning vacations, trips, or other time away from class. In some cases, this involves missing two or three class meetings in a row. Please remember that you are allowed to miss three classes before you may be dropped from the course.</p>
+    <p>The reason for an absence does not change the amount of instructional time missed. The reason may be completely understandable: illness, family emergency, vacation, work, or personal circumstances. But the missed instructional time is still missed instructional time.</p>
+    <p>There is also an academic reason I want you to take this seriously. Anatomy is extremely difficult to catch up in after multiple consecutive absences. When you miss class, you are not simply missing something you can read later. You may be missing:</p>
+    <ul>
+      <li>Cadaver time</li>
+      <li>Model work</li>
+      <li>Microscopy</li>
+      <li>Laboratory practice</li>
+      <li>Active recall</li>
+      <li>Brain Dumps</li>
+      <li>TBLs</li>
+      <li>Opportunities to identify weaknesses before an exam</li>
+    </ul>
+    <p>In my experience, even very strong students experience a substantial decline in performance after missing several consecutive class meetings.</p>
+    <p>If you already know that you are planning an extended absence, particularly several consecutive class meetings, please think carefully about whether this is the right semester for you to take Anatomy. Consider:</p>
+    <ul>
+      <li>How much instructional time you will miss</li>
+      <li>Where those absences fall relative to exams and lab practicals</li>
+      <li>Withdrawal deadlines</li>
+      <li>Financial implications</li>
+      <li>Whether you realistically have enough time to recover from the missed material</li>
+    </ul>
+    <p>It may make more sense to take Anatomy during a semester when you can consistently be present rather than investing your time and money in the course when you already know that you will miss a substantial portion of it.</p>
+    <p>I cannot individually recreate several days of laboratory instruction after you return, and the course will continue moving forward while you are gone. I also do not work with you to make up the work, and you are not able to make up exams. Exams take considerable time to create for all instructors, often several hours. You must be present for the exam or take the zero.</p>
+
+    <h2>Moving forward</h2>
+    <p>Again, the purpose of these expectations is not to make lab more restrictive. I want you to have freedom in deciding how you learn. You do not have to study the same way as your team, and you do not have to use the same method for the entire lab period. In return, I need everyone to protect the learning environment and the integrity of our graded activities.</p>
+
+    <div class="note">
+      <h3>The most important points</h3>
+      <ul>
+        <li>Choose the study method that works for you.</li>
+        <li>You do not have to choose the same method as your group.</li>
+        <li>Do not take it personally if someone chooses to study differently or moves to another group or area.</li>
+        <li>Include active recall in your studying.</li>
+        <li>Use the cadavers, models, microscopes, and other lab resources while you have access to them.</li>
+        <li>Keep conversations at a quiet study volume.</li>
+        <li>Save extended personal conversations for breaks.</li>
+        <li>Remain in the lab during work periods.</li>
+        <li>Use scheduled breaks for phones and personal business.</li>
+        <li>Do not wear earbuds, AirPods, headphones, or other electronic listening devices during class.</li>
+        <li>Never have an unauthorized electronic device out or in your ears during graded work.</li>
+        <li>During TBL, the IRAT through completion of the TRAT is one continuous device-free assessment period.</li>
+        <li>Arrive on time for TBLs, Brain Dumps, and other graded activities.</li>
+        <li>Take attendance seriously, particularly when considering planned multi-day absences.</li>
+      </ul>
+    </div>
+
+    <p>Most importantly, remember that the person sitting next to you may need something different from you in order to learn. You may have a quiet place to study when you go home. They may not. You may learn best by talking through the material. Someone else may need quiet concentration. You may want to work with your usual group today. One of your teammates may realize that they need to work independently today. All of those choices are okay.</p>
+    <p>Give one another the freedom to make the learning choices that work best at that moment, while being considerate of the environment you are creating for everyone around you.</p>
+    <p>Thank you for taking the time to read this entire announcement. You are responsible for understanding and following these expectations moving forward.</p>
+    <p>I am happy to have each of you in this class, and I do hope your semester is going well so far.</p>
+
+    <p class="sign">Dr. Sharilyn Rennie</p>
+
+  </main>
+</div>
+
+<script>
+(function () {
+  var frameId = (function () {
+    try {
+      var m = window.location.search.match(/[?&]id=([^&]+)/);
+      return m ? decodeURIComponent(m[1]) : 'bio004-lab-policy-announcement';
+    } catch (e) { return 'bio004-lab-policy-announcement'; }
+  })();
+
+  function sendHeight() {
+    var h = Math.max(
+      document.body.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.scrollHeight,
+      document.documentElement.offsetHeight
+    );
+    try { window.parent.postMessage({ id: frameId, height: h }, '*'); } catch (e) {}
+  }
+
+  window.addEventListener('load', sendHeight);
+  window.addEventListener('resize', sendHeight);
+  if (window.ResizeObserver) {
+    new ResizeObserver(sendHeight).observe(document.body);
+  }
+  sendHeight();
+})();
+</script>
+
+</body>
+</html>

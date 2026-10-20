@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TBL Builder, competency driven &middot; Teaching Resources</title>
+<style>
+@import url('https://cdn.jsdelivr.net/npm/@fontsource-variable/plus-jakarta-sans/index.css');
+@import url('https://cdn.jsdelivr.net/npm/@fontsource-variable/figtree/index.css');
+
+:root{
+  --navy:#0B1530; --navy-mid:#1F2D44; --navy-tint:#E7EAF0;
+  --terra:#8B3A2E; --terra-dark:#5E201A;
+  --gold:#C9A14A; --gold-text:#6E5018;
+  --muted:#4E5464; --placeholder:#8C93A1;
+  --rule:#DCE0E6; --control:#8C90A0; --rule-faint:#EBEEF2;
+  --page:#FFFFFF; --soft:#FAFAF9;
+  --rest:0 1px 3px rgba(11,21,48,.08), 0 1px 2px rgba(11,21,48,.05);
+  --display:'Plus Jakarta Sans Variable','Plus Jakarta Sans',system-ui,sans-serif;
+  --body:'Figtree Variable','Figtree',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+em,i,cite,dfn,var,address{font-style:normal;}
+html,body{font-size:17px;line-height:1.6;}
+body{font-family:var(--body);background:var(--page);color:var(--navy);-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4,h5{font-family:var(--display);letter-spacing:-.01em;}
+a{color:var(--terra);}
+:focus-visible{outline:3px solid var(--terra);outline-offset:3px;border-radius:6px;}
+
+.skip{position:absolute;left:-9999px;top:0;z-index:100;background:var(--navy);color:#FFF;padding:12px 18px;border-radius:0 0 8px 0;font-size:14px;font-weight:700;text-decoration:none;}
+.skip:focus{left:0;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+
+.wrap{max-width:1040px;margin:0 auto;padding:0 max(22px,4vw);}
+.site-header{padding:20px 0;border-bottom:.5px solid rgba(11,21,48,.10);}
+.site-header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.logo{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--navy);}
+.logo svg{height:40px;width:auto;}
+.logo .t{font-family:var(--display);font-size:19px;font-weight:800;line-height:1;}
+.logo .t .a{color:var(--terra);}
+.logo .s{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;opacity:.72;display:block;margin-top:3px;}
+.back{font-size:13px;font-weight:700;color:var(--terra);text-decoration:none;}
+.back:hover{text-decoration:underline;}
+
+.eyebrow{font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--terra);margin:26px 0 10px;display:flex;align-items:center;gap:10px;}
+.eyebrow::before{content:"";width:26px;height:2px;background:var(--terra);}
+h1{font-size:40px;font-weight:800;line-height:1.08;margin:0 0 8px;}
+h1 .a{color:var(--terra);}
+.lead{font-size:17px;color:var(--muted);max-width:66ch;margin:0 0 26px;}
+
+.panel{background:#FFF;border:1px solid var(--rule);border-radius:12px;box-shadow:var(--rest);padding:24px;margin:0 0 22px;}
+.panel > h2{font-size:21px;font-weight:800;margin:0 0 4px;}
+.panel > .hint{font-size:14px;color:var(--muted);margin:0 0 18px;}
+
+.grid{display:grid;gap:16px;}
+.g2{grid-template-columns:repeat(auto-fit,minmax(230px,1fr));}
+.g3{grid-template-columns:repeat(auto-fit,minmax(165px,1fr));}
+.g4{grid-template-columns:repeat(auto-fit,minmax(140px,1fr));}
+
+label{display:block;font-family:var(--display);font-size:13px;font-weight:700;margin:0 0 6px;color:var(--navy);}
+input[type=text],input[type=number],input[type=date],select,textarea{
+  width:100%;font-family:var(--body);font-size:15.5px;line-height:1.5;color:var(--navy);
+  background:#FFF;border:1px solid var(--control);border-radius:8px;padding:10px 12px;}
+textarea{min-height:74px;resize:vertical;}
+input::placeholder,textarea::placeholder{color:var(--placeholder);}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%234E5464' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:12px;padding-right:34px;}
+.fieldnote{font-size:12.5px;color:var(--muted);margin-top:5px;}
+
+.btn{font-family:var(--display);font-size:14px;font-weight:700;border-radius:8px;padding:10px 16px;border:1px solid transparent;cursor:pointer;background:var(--navy);color:#FFF;transition:background .15s;}
+.btn:hover{background:var(--navy-mid);}
+.btn.secondary{background:#FFF;color:var(--navy);border-color:var(--control);}
+.btn.secondary:hover{background:var(--soft);}
+.btn.terra{background:var(--terra);}
+.btn.terra:hover{background:var(--terra-dark);}
+.btn.small{font-size:13px;padding:7px 12px;}
+.btn.danger{background:#FFF;color:var(--terra-dark);border-color:var(--control);}
+.btn.danger:hover{background:#F7EFED;}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+.btn[aria-pressed="true"]{background:var(--navy);color:#FFF;border-color:var(--navy);}
+
+/* competency picker */
+.picker{border:1px solid var(--rule);border-radius:10px;max-height:460px;overflow:auto;background:#FFF;}
+.wk{position:sticky;top:0;background:var(--navy);color:#FFF;font-family:var(--display);font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:8px 14px;z-index:1;}
+.crow{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-top:1px solid var(--rule-faint);}
+.crow:hover{background:var(--soft);}
+.crow input{margin-top:4px;width:18px;height:18px;flex:0 0 auto;accent-color:#0B1530;}
+.cbody{flex:1 1 auto;min-width:0;}
+.cname{font-family:var(--display);font-size:15px;font-weight:700;display:block;}
+.crow label{font-weight:400;}
+.ccan{font-size:13.5px;font-weight:500;color:var(--muted);display:block;margin-top:2px;}
+.chips{margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;}
+.chip{font-family:var(--display);font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-radius:99px;padding:2px 9px;border:1px solid var(--control);color:var(--muted);}
+.chip.core{color:var(--terra-dark);border-color:var(--terra);}
+.chip.high{color:var(--gold-text);border-color:var(--gold);}
+.chip.dok{color:var(--navy);border-color:var(--navy);}
+
+.kinds{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px 16px;}
+.kinds label{display:flex;align-items:center;gap:9px;font-weight:500;font-family:var(--body);font-size:14.5px;margin:0;cursor:pointer;}
+.kinds input{width:18px;height:18px;flex:0 0 auto;accent-color:#0B1530;}
+.tally{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--soft);border:1px solid var(--rule);border-radius:10px;padding:13px 16px;margin:0 0 16px;}
+.tally .read{font-family:var(--display);font-size:14px;font-weight:700;}
+.tally.over .read{color:var(--terra-dark);}
+.bar{flex:1 1 200px;height:10px;border-radius:99px;background:var(--navy-tint);overflow:hidden;min-width:170px;}
+.fill{display:block;height:100%;width:0;background:var(--navy);transition:width .25s ease;}
+.tally.over .fill{background:var(--terra);}
+.status{font-size:14px;font-weight:600;color:var(--muted);min-height:1.4em;}
+
+.item{border:1px solid var(--rule);border-radius:10px;padding:16px;margin:0 0 14px;background:#FFF;box-shadow:var(--rest);}
+.itemhead{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;margin-bottom:4px;}
+.itemnum{font-family:var(--display);font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--terra);}
+.itemcomp{font-size:13.5px;color:var(--muted);margin:0 0 12px;}
+.opts{display:grid;gap:8px;margin-top:10px;}
+.opt{display:flex;gap:10px;align-items:center;}
+.opt .ltr{font-family:var(--display);font-weight:800;width:20px;flex:0 0 auto;}
+.opt input[type=radio]{width:18px;height:18px;flex:0 0 auto;accent-color:#0B1530;}
+
+/* plan */
+.plan{background:#FFF;border:1px solid var(--rule);border-radius:12px;box-shadow:var(--rest);padding:30px;}
+.plan .ph{font-family:var(--display);font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--terra);margin:0 0 6px;}
+.plan h3.title{font-size:27px;font-weight:800;margin:0 0 4px;}
+.plan .meta{font-size:14px;color:var(--muted);margin:0 0 22px;}
+.plan h4.sec{font-size:16px;font-weight:800;margin:26px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--rule-faint);}
+.plan ul,.plan ol{margin:0;padding-left:22px;}
+.plan li{margin:0 0 7px;}
+.plan .phase{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--rule-faint);}
+.plan .phase:first-of-type{border-top:none;}
+.plan .phase .n{font-weight:700;}
+.plan .phase .m{color:var(--muted);white-space:nowrap;}
+.plan .pitem{border:1px solid var(--rule);border-radius:10px;padding:14px 18px;margin:0 0 12px;}
+.plan .pitem h5{font-size:15.5px;font-weight:800;margin:0 0 2px;}
+.plan .pitem .tag{font-size:12.5px;color:var(--muted);margin:0 0 8px;}
+.plan .pitem ol{margin-top:6px;}
+.plan .key{font-family:var(--display);font-size:12px;font-weight:800;color:var(--terra-dark);}
+.plan .v{white-space:pre-wrap;}
+.plan .empty{color:var(--muted);}
+.notelinks{display:flex;flex-wrap:wrap;gap:8px;}
+.notelinks a{font-family:var(--display);font-size:12.5px;font-weight:700;text-decoration:none;border:1px solid var(--control);border-radius:99px;padding:4px 12px;color:var(--navy);}
+.notelinks a:hover{background:var(--soft);}
+
+footer{padding:26px 0 44px;margin-top:34px;border-top:.5px solid rgba(11,21,48,.10);color:var(--muted);font-size:13px;font-weight:600;}
+
+@media(max-width:640px){h1{font-size:31px;}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;}}
+@media print{
+  .site-header,.eyebrow,h1,.lead,.builder,footer,.skip{display:none!important;}
+  body{font-size:11.5pt;}
+  .wrap{max-width:none;padding:0;}
+  .plan{border:none;box-shadow:none;padding:0;}
+  .plan .pitem,.plan .phase{break-inside:avoid;page-break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="faculty-tools.html">
+      <span><svg viewBox="40 10 125 148" aria-hidden="true" focusable="false"><g transform="translate(0,18)"><g transform="translate(60,0) rotate(8 0 130)"><circle cx="0" cy="20" r="10" fill="#0B1530"/><path d="M 0,32 C -10,32 -16,36 -16,42 C -16,55 -13,68 -11,82 C -10,100 -12,118 -14,130 L 14,130 C 12,118 10,100 11,82 C 13,68 16,55 16,42 C 16,36 10,32 0,32 Z" fill="#0B1530"/></g><g transform="translate(100,0)"><circle cx="0" cy="10" r="11" fill="#8B3A2E"/><path d="M 0,22 C -11,22 -17,26 -17,34 C -17,52 -14,70 -12,86 C -11,108 -13,122 -15,132 L 15,132 C 13,122 11,108 12,86 C 14,70 17,52 17,34 C 17,26 11,22 0,22 Z" fill="#8B3A2E"/></g><g transform="translate(140,0) rotate(-8 0 130)"><circle cx="0" cy="20" r="10" fill="#C9A14A"/><path d="M 0,32 C -10,32 -16,36 -16,42 C -16,55 -13,68 -11,82 C -10,100 -12,118 -14,130 L 14,130 C 12,118 10,100 11,82 C 13,68 16,55 16,42 C 16,36 10,32 0,32 Z" fill="#C9A14A"/></g></g></svg></span>
+      <span><span class="t">Teaching <span class="a">Resources</span></span><span class="s">Dr. Sharilyn Rennie</span></span>
+    </a>
+    <a class="back" href="team-based-learning.html">&larr; Team-Based Learning</a>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+<div class="wrap">
+
+  <div class="eyebrow">Team-Based Learning</div>
+  <h1>TBL Builder, <span class="a">competency driven</span></h1>
+  <p class="lead">Pick the competencies the session has to move, and the readiness assurance test, the application activity and the timing are built around them. Competencies load live from your BIO 004 course repo, so this stays current when you edit them there. Every RAT item carries the competency it tests and links to the notes page that covers it.</p>
+
+  <div class="builder">
+
+    <!-- 1. SOURCE -->
+    <section class="panel" aria-labelledby="h-src">
+      <h2 id="h-src">1. Competency source</h2>
+      <p class="hint">Loads competenciesfall2026.js from new-build-bio4-solano. You can also choose a file: the JS list, a JSON array, or a CSV with a Competency column, which is how the physiology list loads.</p>
+      <div class="btnrow">
+        <button type="button" class="btn" id="btn-fetch">Load from the course site</button>
+        <button type="button" class="btn secondary" id="btn-file">Choose a file</button>
+        <input type="file" id="file-comp" accept=".js,.json,.csv,application/json,text/javascript,text/csv" class="sr-only" aria-label="Choose a competency file">
+      </div>
+      <p class="status" id="src-status" aria-live="polite" style="margin-top:12px;">No competencies loaded yet.</p>
+    </section>
+
+    <!-- 2. SCOPE -->
+    <section class="panel" aria-labelledby="h-scope">
+      <h2 id="h-scope">2. Choose the competencies</h2>
+      <p class="hint">Filter first, then tick. You can tick across different weeks and systems in one session.</p>
+
+      <div class="grid g4">
+        <div>
+          <label for="f-week">Week</label>
+          <select id="f-week"><option value="">All weeks</option></select>
+        </div>
+        <div>
+          <label for="f-sys">System</label>
+          <select id="f-sys"><option value="">All systems</option></select>
+        </div>
+        <div>
+          <label for="f-yield">Priority</label>
+          <select id="f-yield">
+            <option value="">Any priority</option>
+            <option value="core">Core only</option>
+            <option value="core,high">Core and high</option>
+            <option value="high">High only</option>
+            <option value="support">Support only</option>
+          </select>
+        </div>
+        <div>
+          <label for="f-dok">DOK</label>
+          <select id="f-dok">
+            <option value="">Any DOK</option>
+            <option value="1">DOK 1</option>
+            <option value="2">DOK 2</option>
+            <option value="3">DOK 3</option>
+            <option value="2,3">DOK 2 and 3</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:14px;">
+        <label for="f-find">Search the competency text</label>
+        <input type="text" id="f-find" placeholder="Examples: epiphyseal, cranial nerve, serous membrane">
+      </div>
+
+      <div class="btnrow" style="margin:16px 0 12px;">
+        <button type="button" class="btn secondary small" id="sel-shown">Select everything shown</button>
+        <button type="button" class="btn secondary small" id="sel-none">Clear selection</button>
+        <span class="status" id="filter-count"></span>
+      </div>
+
+      <div class="picker" id="picker" role="group" aria-label="Competencies"></div>
+
+      <div class="tally" id="tally" style="margin-top:16px;">
+        <span class="read" id="tally-read">Nothing selected yet.</span>
+        <span class="bar"><span class="fill" id="tally-fill"></span></span>
+        <span class="sr-only" id="tally-live" aria-live="polite"></span>
+      </div>
+
+      <fieldset style="border:1px solid var(--rule);border-radius:10px;padding:16px;margin-top:18px;">
+        <legend style="font-family:var(--display);font-size:13px;font-weight:700;padding:0 6px;">Materials to pull into the readiness prep</legend>
+        <p class="fieldnote" style="margin:0 0 10px;">Everything in the course repo is indexed. Untick anything you do not want on the handout.</p>
+        <div class="kinds" id="kinds"></div>
+      </fieldset>
+    </section>
+
+    <!-- 3. SESSION -->
+    <section class="panel" aria-labelledby="h-sess">
+      <h2 id="h-sess">3. Session settings</h2>
+      <div class="grid g2">
+        <div>
+          <label for="s-title">Session title</label>
+          <input type="text" id="s-title" placeholder="Examples: Bone tissue and the skeleton">
+        </div>
+        <div>
+          <label for="s-date">Date</label>
+          <input type="date" id="s-date">
+        </div>
+      </div>
+      <div class="grid g4" style="margin-top:16px;">
+        <div>
+          <label for="s-len">Class minutes</label>
+          <input type="number" id="s-len" min="30" max="360" step="5" value="110">
+        </div>
+        <div>
+          <label for="s-teams">Number of teams</label>
+          <input type="number" id="s-teams" min="1" max="20" step="1" value="6">
+        </div>
+        <div>
+          <label for="s-rat">RAT items</label>
+          <input type="number" id="s-rat" min="4" max="30" step="1" value="10">
+        </div>
+        <div>
+          <label for="s-appeal">Appeals minutes</label>
+          <input type="number" id="s-appeal" min="0" max="40" step="5" value="10">
+        </div>
+      </div>
+      <div class="btnrow" style="margin-top:18px;">
+        <button type="button" class="btn terra" id="btn-build">Build the session</button>
+        <span class="status" id="build-status" aria-live="polite"></span>
+      </div>
+      <p class="fieldnote">Building lays out the RAT slots and the 4S activity from what you ticked, spreading items across competencies and weighting core ahead of support. It does not invent anatomy. You write the stems, and each slot tells you exactly which competency and notes page it has to come from.</p>
+    </section>
+
+    <!-- 4. RAT -->
+    <section class="panel" aria-labelledby="h-rat" id="rat-panel" hidden>
+      <h2 id="h-rat">4. Readiness assurance test</h2>
+      <p class="hint">Same items for iRAT and tRAT. The key letters were shuffled for you so the answers are not all sitting on B and C.</p>
+      <div id="ratlist"></div>
+      <div class="btnrow">
+        <button type="button" class="btn secondary small" id="add-rat">Add an item</button>
+        <button type="button" class="btn secondary small" id="reshuffle">Reshuffle the key letters</button>
+      </div>
+    </section>
+
+    <!-- 5. 4S -->
+    <section class="panel" aria-labelledby="h-4s" id="app-panel" hidden>
+      <h2 id="h-4s">5. Application activity, 4S</h2>
+      <p class="hint">One significant problem, the same for every team, answered with one specific choice, reported simultaneously.</p>
+      <div>
+        <label for="a-sig">Significant. The problem and why it matters</label>
+        <textarea id="a-sig" placeholder="Examples: A 68 year old on long term prednisone fractures a vertebra lifting a grocery bag. Which tissue change explains it?"></textarea>
+      </div>
+      <div style="margin-top:14px;">
+        <label for="a-same">Same. What every team receives</label>
+        <textarea id="a-same" placeholder="Examples: the same radiograph and the same three lab values, on the handout and on screen"></textarea>
+      </div>
+      <div style="margin-top:14px;">
+        <label for="a-spec">Specific. The choice they must commit to</label>
+        <textarea id="a-spec" placeholder="Examples: pick the single structure most responsible, from trabecular bone, periosteum, epiphyseal line, articular cartilage"></textarea>
+      </div>
+      <div style="margin-top:14px;">
+        <label for="a-sim">Simultaneous. How they report at once</label>
+        <input type="text" id="a-sim" value="Lettered cards held up on the count of three">
+      </div>
+      <div style="margin-top:14px;">
+        <label for="a-draw">Drawing synthesis check</label>
+        <textarea id="a-draw" placeholder="Examples: each team draws the remodeling cycle and marks where the steroid changes the balance"></textarea>
+        <p class="fieldnote" id="draw-note"></p>
+      </div>
+    </section>
+
+    <!-- 6. EXPORT -->
+    <section class="panel" aria-labelledby="h-exp">
+      <h2 id="h-exp">6. Save and export</h2>
+      <p class="hint">Drafts save in this browser only. Nothing is uploaded. Use the file export to move a session to another computer.</p>
+      <div class="btnrow">
+        <button type="button" class="btn" id="btn-save">Save draft</button>
+        <button type="button" class="btn secondary" id="btn-load">Load saved draft</button>
+        <button type="button" class="btn secondary" id="btn-export">Export to file</button>
+        <button type="button" class="btn secondary" id="btn-import">Import from file</button>
+        <button type="button" class="btn terra" id="btn-print">Print the session</button>
+        <button type="button" class="btn danger" id="btn-clear">Clear everything</button>
+        <input type="file" id="file-in" accept="application/json,.json" class="sr-only" aria-label="Choose a session file to import">
+      </div>
+      <p class="status" id="status" aria-live="polite" style="margin-top:12px;"></p>
+    </section>
+
+  </div>
+
+  <h2 class="eyebrow" style="margin-top:38px;font-size:12px;">Session plan</h2>
+  <div class="plan" id="plan"></div>
+
+</div>
+</main>
+
+<footer><div class="wrap">TBL Builder &middot; Teaching Resources &middot; Dr. Sharilyn Rennie</div></footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var KEY = 'tr-tbl-competency-v1';
+  var SITE = 'https://drsrennie-stack.github.io/new-build-bio4-solano/';
+  var COMP_URL = SITE + 'competenciesfall2026.js';
+
+  /* Every teaching resource in the course repo, generated from the repo file
+     list. Each entry: kind, path, label, systems it covers, module number.
+     A resource with module 0 is not module specific. */
+  var RESOURCES = [
+    ["notes","accessory-digestive-organs.html","Accessory digestive organs",["Digestive"],0],
+    ["workbook","accessory-digestive-organs-workbook.html","Accessory digestive organs, workbook",["Digestive"],0],
+    ["lab-sprint","accessory-digestive-organs-lab-sprint.html","Accessory digestive organs, lab sprint",["Digestive"],0],
+    ["notes","alimentary-canal.html","Alimentary canal",["Digestive"],0],
+    ["workbook","alimentary-canal-workbook.html","Alimentary canal, workbook",["Digestive"],0],
+    ["lab-sprint","alimentary-canal-lab-sprint.html","Alimentary canal, lab sprint",["Digestive"],0],
+    ["notes","anatomical-terminology.html","Anatomical terminology",["Foundations"],0],
+    ["workbook","anatomical-terminology-workbook.html","Anatomical terminology, workbook",["Foundations"],0],
+    ["lab-sprint","anatomical-terminology-lab-sprint.html","Anatomical terminology, lab sprint",["Foundations"],0],
+    ["notes","ans.html","ANS",["Nervous System"],0],
+    ["workbook","ans-workbook.html","ANS, workbook",["Nervous System"],0],
+    ["concept-videos","ans-concept-videos.html","ANS, concept videos",["Nervous System"],0],
+    ["study-guide","ans-study-guide.html","ANS, study guide",["Nervous System"],0],
+    ["notes","appendicular-skeleton-lower.html","Appendicular skeleton lower",["Skeletal"],0],
+    ["workbook","appendicular-skeleton-lower-workbook.html","Appendicular skeleton lower, workbook",["Skeletal"],0],
+    ["lab-sprint","appendicular-skeleton-lower-lab-sprint.html","Appendicular skeleton lower, lab sprint",["Skeletal"],0],
+    ["notes","appendicular-skeleton-upper.html","Appendicular skeleton upper",["Skeletal"],0],
+    ["workbook","appendicular-skeleton-upper-workbook.html","Appendicular skeleton upper, workbook",["Skeletal"],0],
+    ["lab-sprint","appendicular-skeleton-upper-lab-sprint.html","Appendicular skeleton upper, lab sprint",["Skeletal"],0],
+    ["notes","articulations.html","Articulations",["Joints"],0],
+    ["workbook","articulations-workbook.html","Articulations, workbook",["Joints"],0],
+    ["notes","axial-skeleton-skull.html","Axial skeleton skull",["Skeletal"],0],
+    ["workbook","axial-skeleton-skull-workbook.html","Axial skeleton skull, workbook",["Skeletal"],0],
+    ["lab-sprint","axial-skeleton-skull-lab-sprint.html","Axial skeleton skull, lab sprint",["Skeletal"],0],
+    ["notes","axial-skeleton-spine.html","Axial skeleton spine",["Skeletal"],0],
+    ["workbook","axial-skeleton-spine-workbook.html","Axial skeleton spine, workbook",["Skeletal"],0],
+    ["lab-sprint","axial-skeleton-spine-lab-sprint.html","Axial skeleton spine, lab sprint",["Skeletal"],0],
+    ["notes","blood.html","Blood",["Blood"],0],
+    ["workbook","blood-workbook.html","Blood, workbook",["Blood"],0],
+    ["concept-videos","blood-concept-videos.html","Blood, concept videos",["Blood"],0],
+    ["notes","blood-vessel-disorders.html","Blood vessel disorders",["Cardiovascular", "Regional Vessels & Nerves", "Blood"],0],
+    ["workbook","blood-vessel-disorders-workbook.html","Blood vessel disorders, workbook",["Cardiovascular", "Regional Vessels & Nerves", "Blood"],0],
+    ["notes","blood-vessels.html","Blood vessels",["Cardiovascular", "Regional Vessels & Nerves", "Blood"],0],
+    ["workbook","blood-vessels-workbook.html","Blood vessels, workbook",["Cardiovascular", "Regional Vessels & Nerves", "Blood"],0],
+    ["lab-sprint","blood-vessels-lab-sprint.html","Blood vessels, lab sprint",["Cardiovascular", "Regional Vessels & Nerves", "Blood"],0],
+    ["concept-videos","blood-vessels-concept-videos.html","Blood vessels, concept videos",["Cardiovascular", "Regional Vessels & Nerves", "Blood"],0],
+    ["study-guide","blood-vessels-study-guide.html","Blood vessels, study guide",["Cardiovascular", "Regional Vessels & Nerves", "Blood"],0],
+    ["notes","body-cavities.html","Body cavities",["Foundations"],0],
+    ["workbook","body-cavities-workbook.html","Body cavities, workbook",["Foundations"],0],
+    ["lab-sprint","body-cavities-lab-sprint.html","Body cavities, lab sprint",["Foundations"],0],
+    ["notes","bone-histology.html","Bone histology",["Cells & Tissues", "Skeletal"],0],
+    ["workbook","bone-histology-workbook.html","Bone histology, workbook",["Cells & Tissues", "Skeletal"],0],
+    ["lab-sprint","bone-histology-lab-sprint.html","Bone histology, lab sprint",["Cells & Tissues", "Skeletal"],0],
+    ["notes","cardiac-conduction.html","Cardiac conduction",["Cardiovascular"],0],
+    ["workbook","cardiac-conduction-workbook.html","Cardiac conduction, workbook",["Cardiovascular"],0],
+    ["lab-sprint","cardiac-conduction-lab-sprint.html","Cardiac conduction, lab sprint",["Cardiovascular"],0],
+    ["concept-videos","cardiac-conduction-concept-videos.html","Cardiac conduction, concept videos",["Cardiovascular"],0],
+    ["notes","cardiac-electrophysiology.html","Cardiac electrophysiology",["Cardiovascular"],0],
+    ["study-guide","cardiac-electrophysiology-study-guide.html","Cardiac electrophysiology, study guide",["Cardiovascular"],0],
+    ["notes","cell-anatomy.html","Cell anatomy",["Cells & Tissues"],0],
+    ["workbook","cell-anatomy-workbook.html","Cell anatomy, workbook",["Cells & Tissues"],0],
+    ["notes","cns-brain.html","CNS brain",["Nervous System"],0],
+    ["workbook","cns-brain-workbook.html","CNS brain, workbook",["Nervous System"],0],
+    ["notes","cns-brainstem.html","CNS brainstem",["Nervous System"],0],
+    ["workbook","cns-brainstem-workbook.html","CNS brainstem, workbook",["Nervous System"],0],
+    ["lab-sprint","cns-brainstem-lab-sprint.html","CNS brainstem, lab sprint",["Nervous System"],0],
+    ["notes","cns-meninges-csf.html","CNS meninges and CSF",["Nervous System"],0],
+    ["workbook","cns-meninges-csf-workbook.html","CNS meninges and CSF, workbook",["Nervous System"],0],
+    ["lab-sprint","cns-meninges-csf-lab-sprint.html","CNS meninges and CSF, lab sprint",["Nervous System"],0],
+    ["notes","cns-spinal-cord.html","CNS spinal cord",["Nervous System"],0],
+    ["workbook","cns-spinal-cord-workbook.html","CNS spinal cord, workbook",["Nervous System"],0],
+    ["lab-sprint","cns-spinal-cord-lab-sprint.html","CNS spinal cord, lab sprint",["Nervous System"],0],
+    ["notes","cranial-nerves.html","Cranial nerves",["Nervous System"],0],
+    ["workbook","cranial-nerves-workbook.html","Cranial nerves, workbook",["Nervous System"],0],
+    ["lab-sprint","cranial-nerves-lab-sprint.html","Cranial nerves, lab sprint",["Nervous System"],0],
+    ["concept-videos","cranial-nerves-concept-videos.html","Cranial nerves, concept videos",["Nervous System"],0],
+    ["study-guide","cranial-nerves-study-guide.html","Cranial nerves, study guide",["Nervous System"],0],
+    ["notes","endocrine.html","Endocrine",["Endocrine"],0],
+    ["workbook","endocrine-workbook.html","Endocrine, workbook",["Endocrine"],0],
+    ["concept-videos","endocrine-concept-videos.html","Endocrine, concept videos",["Endocrine"],0],
+    ["notes","heart.html","Heart",["Cardiovascular"],0],
+    ["workbook","heart-workbook.html","Heart, workbook",["Cardiovascular"],0],
+    ["lab-sprint","heart-lab-sprint.html","Heart, lab sprint",["Cardiovascular"],0],
+    ["concept-videos","heart-concept-videos.html","Heart, concept videos",["Cardiovascular"],0],
+    ["study-guide","heart-study-guide.html","Heart, study guide",["Cardiovascular"],0],
+    ["notes","integumentary.html","Integumentary",["Integumentary"],0],
+    ["workbook","integumentary-workbook.html","Integumentary, workbook",["Integumentary"],0],
+    ["lab-sprint","integumentary-lab-sprint.html","Integumentary, lab sprint",["Integumentary"],0],
+    ["concept-videos","integumentary-concept-videos.html","Integumentary, concept videos",["Integumentary"],0],
+    ["notes","joints.html","Joints",["Joints"],0],
+    ["concept-videos","joints-concept-videos.html","Joints, concept videos",["Joints"],0],
+    ["notes","lymphatic-system.html","Lymphatic system",["Lymphatic & Immune"],0],
+    ["workbook","lymphatic-system-workbook.html","Lymphatic system, workbook",["Lymphatic & Immune"],0],
+    ["study-guide","lymphatic-system-study-guide.html","Lymphatic system, study guide",["Lymphatic & Immune"],0],
+    ["notes","muscle-fascicles.html","Muscle fascicles",["Muscular"],0],
+    ["workbook","muscle-fascicles-workbook.html","Muscle fascicles, workbook",["Muscular"],0],
+    ["concept-videos","muscle-fascicles-concept-videos.html","Muscle fascicles, concept videos",["Muscular"],0],
+    ["notes","muscle-structure.html","Muscle structure",["Muscular"],0],
+    ["workbook","muscle-structure-workbook.html","Muscle structure, workbook",["Muscular"],0],
+    ["lab-sprint","muscle-structure-lab-sprint.html","Muscle structure, lab sprint",["Muscular"],0],
+    ["concept-videos","muscle-structure-concept-videos.html","Muscle structure, concept videos",["Muscular"],0],
+    ["notes","muscular-system.html","Muscular system",["Muscular"],0],
+    ["concept-videos","muscular-system-concept-videos.html","Muscular system, concept videos",["Muscular"],0],
+    ["study-guide","muscular-system-study-guide.html","Muscular system, study guide",["Muscular"],0],
+    ["notes","nerve-plexuses.html","Nerve plexuses",["Nervous System", "Regional Vessels & Nerves"],0],
+    ["workbook","nerve-plexuses-workbook.html","Nerve plexuses, workbook",["Nervous System", "Regional Vessels & Nerves"],0],
+    ["lab-sprint","nerve-plexuses-lab-sprint.html","Nerve plexuses, lab sprint",["Nervous System", "Regional Vessels & Nerves"],0],
+    ["notes","nervous-tissue.html","Nervous tissue",["Cells & Tissues", "Nervous System"],0],
+    ["workbook","nervous-tissue-workbook.html","Nervous tissue, workbook",["Cells & Tissues", "Nervous System"],0],
+    ["concept-videos","nervous-tissue-concept-videos.html","Nervous tissue, concept videos",["Cells & Tissues", "Nervous System"],0],
+    ["study-guide","nervous-tissue-study-guide.html","Nervous tissue, study guide",["Cells & Tissues", "Nervous System"],0],
+    ["notes","neuronal-integration.html","Neuronal integration",["Nervous System"],0],
+    ["workbook","neuronal-integration-workbook.html","Neuronal integration, workbook",["Nervous System"],0],
+    ["notes","pns.html","PNS",["Nervous System"],0],
+    ["workbook","pns-workbook.html","PNS, workbook",["Nervous System"],0],
+    ["concept-videos","pns-concept-videos.html","PNS, concept videos",["Nervous System"],0],
+    ["notes","pregnancy-and-birth.html","Pregnancy and birth",["Reproductive"],0],
+    ["workbook","pregnancy-and-birth-workbook.html","Pregnancy and birth, workbook",["Reproductive"],0],
+    ["notes","reproductive-female.html","Reproductive female",["Reproductive"],0],
+    ["workbook","reproductive-female-workbook.html","Reproductive female, workbook",["Reproductive"],0],
+    ["lab-sprint","reproductive-female-lab-sprint.html","Reproductive female, lab sprint",["Reproductive"],0],
+    ["concept-videos","reproductive-female-concept-videos.html","Reproductive female, concept videos",["Reproductive"],0],
+    ["notes","reproductive-male.html","Reproductive male",["Reproductive"],0],
+    ["workbook","reproductive-male-workbook.html","Reproductive male, workbook",["Reproductive"],0],
+    ["lab-sprint","reproductive-male-lab-sprint.html","Reproductive male, lab sprint",["Reproductive"],0],
+    ["concept-videos","reproductive-male-concept-videos.html","Reproductive male, concept videos",["Reproductive"],0],
+    ["notes","respiratory.html","Respiratory",["Respiratory"],0],
+    ["workbook","respiratory-workbook.html","Respiratory, workbook",["Respiratory"],0],
+    ["lab-sprint","respiratory-lab-sprint.html","Respiratory, lab sprint",["Respiratory"],0],
+    ["concept-videos","respiratory-concept-videos.html","Respiratory, concept videos",["Respiratory"],0],
+    ["study-guide","respiratory-study-guide.html","Respiratory, study guide",["Respiratory"],0],
+    ["notes","tissues.html","Tissues",["Cells & Tissues"],0],
+    ["workbook","tissues-workbook.html","Tissues, workbook",["Cells & Tissues"],0],
+    ["lab-sprint","tissues-lab-sprint.html","Tissues, lab sprint",["Cells & Tissues"],0],
+    ["concept-videos","tissues-concept-videos.html","Tissues, concept videos",["Cells & Tissues"],0],
+    ["notes","urinary-system.html","Urinary system",["Urinary"],0],
+    ["workbook","urinary-system-workbook.html","Urinary system, workbook",["Urinary"],0],
+    ["lab-sprint","urinary-system-lab-sprint.html","Urinary system, lab sprint",["Urinary"],0],
+    ["pdf-notes","BIO004-M1-Cavities-Notes.pdf","Cavities notes",["Foundations"],1],
+    ["pdf-drawing","BIO004-M1-Cell-Drawing-Sheet.pdf","Cell drawing sheet",["Cells & Tissues"],1],
+    ["pdf-notes","BIO004-M1-Cell-Notes.pdf","Cell notes",["Cells & Tissues"],1],
+    ["pdf-worksheet","BIO004-M1-Cell-Worksheet.pdf","Cell worksheet",["Cells & Tissues"],1],
+    ["pdf-packet","BIO004-M1-Histology-Microscope-Packet.pdf","Histology Microscope packet",["Cells & Tissues"],1],
+    ["pdf-drawing","BIO004-M1-Integumentary-Drawing-Sheet.pdf","Integumentary drawing sheet",["Integumentary"],1],
+    ["pdf-notes","BIO004-M1-Integumentary-Notes.pdf","Integumentary notes",["Integumentary"],1],
+    ["pdf-worksheet","BIO004-M1-Integumentary-Worksheet.pdf","Integumentary worksheet",["Integumentary"],1],
+    ["pdf-drawing","BIO004-M1-Intro-Drawing-Sheet.pdf","Intro drawing sheet",["Foundations"],1],
+    ["pdf-notes","BIO004-M1-Intro-Notes.pdf","Intro notes",["Foundations"],1],
+    ["pdf-worksheet","BIO004-M1-Intro-Worksheet.pdf","Intro worksheet",["Foundations"],1],
+    ["pdf-drawing","BIO004-M1-Tissues-Drawing-Sheet.pdf","Tissues drawing sheet",["Cells & Tissues"],1],
+    ["pdf-notes","BIO004-M1-Tissues-Notes.pdf","Tissues notes",["Cells & Tissues"],1],
+    ["pdf-worksheet","BIO004-M1-Tissues-Worksheet.pdf","Tissues worksheet",["Cells & Tissues"],1],
+    ["pdf-drawing","BIO004-M2-Appendicular-Drawing-Sheet.pdf","Appendicular drawing sheet",["Skeletal"],2],
+    ["pdf-worksheet","BIO004-M2-Appendicular-Worksheet.pdf","Appendicular worksheet",["Skeletal"],2],
+    ["pdf-drawing","BIO004-M2-Axial-Drawing-Sheet.pdf","Axial drawing sheet",["Skeletal"],2],
+    ["pdf-worksheet","BIO004-M2-Axial-Worksheet.pdf","Axial worksheet",["Skeletal"],2],
+    ["pdf-drawing","BIO004-M2-Bone-Drawing-Sheet.pdf","Bone drawing sheet",["Skeletal"],2],
+    ["pdf-notes","BIO004-M2-Bone-Notes.pdf","Bone notes",["Skeletal"],2],
+    ["pdf-worksheet","BIO004-M2-Bone-Worksheet.pdf","Bone worksheet",["Skeletal"],2],
+    ["pdf-drawing","BIO004-M2-Joints-Drawing-Sheet.pdf","Joints drawing sheet",["Joints"],2],
+    ["pdf-notes","BIO004-M2-Joints-Notes.pdf","Joints notes",["Joints"],2],
+    ["pdf-worksheet","BIO004-M2-Joints-Worksheet.pdf","Joints worksheet",["Joints"],2],
+    ["pdf-notes","BIO004-M2-Lower-Limb-Notes.pdf","Lower Limb notes",["Skeletal"],2],
+    ["pdf-notes","BIO004-M2-Skull-Notes.pdf","Skull notes",["Skeletal"],2],
+    ["pdf-notes","BIO004-M2-Spine-Notes.pdf","Spine notes",["Skeletal"],2],
+    ["pdf-notes","BIO004-M2-Upper-Limb-Notes.pdf","Upper Limb notes",["Skeletal"],2],
+    ["pdf-notes","BIO004-M3-Arm-Muscles-Notes.pdf","Arm Muscles notes",["Muscular"],3],
+    ["pdf-notes","BIO004-M3-Back-Thorax-Notes.pdf","Back Thorax notes",["Muscular"],3],
+    ["pdf-notes","BIO004-M3-Blood-Notes.pdf","Blood notes",["Blood"],3],
+    ["pdf-notes","BIO004-M3-Conduction-Notes.pdf","Conduction notes",["Cardiovascular"],3],
+    ["pdf-notes","BIO004-M3-Fascicles-Notes.pdf","Fascicles notes",["Muscular"],3],
+    ["pdf-drawing","BIO004-M3-Heart-Drawing-Sheet.pdf","Heart drawing sheet",["Cardiovascular"],3],
+    ["pdf-notes","BIO004-M3-Heart-Notes.pdf","Heart notes",["Cardiovascular"],3],
+    ["pdf-worksheet","BIO004-M3-Heart-Worksheet.pdf","Heart worksheet",["Cardiovascular"],3],
+    ["pdf-drawing","BIO004-M3-Limb-Vessels-Drawing-Sheet.pdf","Limb Vessels drawing sheet",["Cardiovascular", "Regional Vessels & Nerves"],3],
+    ["pdf-notes","BIO004-M3-Limb-Vessels-Notes.pdf","Limb Vessels notes",["Cardiovascular", "Regional Vessels & Nerves"],3],
+    ["pdf-worksheet","BIO004-M3-Limb-Vessels-Worksheet.pdf","Limb Vessels worksheet",["Cardiovascular", "Regional Vessels & Nerves"],3],
+    ["pdf-drawing","BIO004-M3-Muscle-Drawing-Sheet.pdf","Muscle drawing sheet",["Muscular"],3],
+    ["pdf-notes","BIO004-M3-Muscle-Notes.pdf","Muscle notes",["Muscular"],3],
+    ["pdf-worksheet","BIO004-M3-Muscle-Worksheet.pdf","Muscle worksheet",["Muscular"],3],
+    ["pdf-notes","BIO004-M3-Vessel-Disorders-Notes.pdf","Vessel Disorders notes",["Cardiovascular", "Regional Vessels & Nerves"],3],
+    ["pdf-drawing","BIO004-M3-Vessels-Blood-Drawing-Sheet.pdf","Vessels Blood drawing sheet",["Cardiovascular", "Regional Vessels & Nerves", "Blood"],3],
+    ["pdf-worksheet","BIO004-M3-Vessels-Blood-Worksheet.pdf","Vessels Blood worksheet",["Cardiovascular", "Regional Vessels & Nerves", "Blood"],3],
+    ["pdf-notes","BIO004-M3-Vessels-Notes.pdf","Vessels notes",["Cardiovascular", "Regional Vessels & Nerves"],3],
+    ["pdf-notes","BIO004-M4-Accessory-Notes.pdf","Accessory notes",["Digestive"],4],
+    ["pdf-notes","BIO004-M4-Alimentary-Notes.pdf","Alimentary notes",["Digestive"],4],
+    ["pdf-drawing","BIO004-M4-Digest-Drawing-Sheet.pdf","Digest drawing sheet",["Digestive"],4],
+    ["pdf-worksheet","BIO004-M4-Digest-Worksheet.pdf","Digest worksheet",["Digestive"],4],
+    ["pdf-notes","BIO004-M4-Endocrine-Notes.pdf","Endocrine notes",["Endocrine"],4],
+    ["pdf-notes","BIO004-M4-Female-Repro-Notes.pdf","Female Repro notes",["Reproductive"],4],
+    ["pdf-notes","BIO004-M4-Lymphatic-Notes.pdf","Lymphatic notes",["Lymphatic & Immune"],4],
+    ["pdf-notes","BIO004-M4-Male-Repro-Notes.pdf","Male Repro notes",["Reproductive"],4],
+    ["pdf-notes","BIO004-M4-Pregnancy-Notes.pdf","Pregnancy notes",["Reproductive"],4],
+    ["pdf-drawing","BIO004-M4-Repro-Drawing-Sheet.pdf","Repro drawing sheet",["Reproductive"],4],
+    ["pdf-worksheet","BIO004-M4-Repro-Worksheet.pdf","Repro worksheet",["Reproductive"],4],
+    ["pdf-drawing","BIO004-M4-Resp-Drawing-Sheet.pdf","Resp drawing sheet",["Respiratory"],4],
+    ["pdf-worksheet","BIO004-M4-Resp-Worksheet.pdf","Resp worksheet",["Respiratory"],4],
+    ["pdf-notes","BIO004-M4-Respiratory-Notes.pdf","Respiratory notes",["Respiratory"],4],
+    ["pdf-drawing","BIO004-M4-Review-Drawing-Sheet.pdf","Review drawing sheet",[],4],
+    ["pdf-worksheet","BIO004-M4-Review-Worksheet.pdf","Review worksheet",[],4],
+    ["pdf-drawing","BIO004-M4-Urinary-Drawing-Sheet.pdf","Urinary drawing sheet",["Urinary"],4],
+    ["pdf-notes","BIO004-M4-Urinary-Notes.pdf","Urinary notes",["Urinary"],4],
+    ["pdf-worksheet","BIO004-M4-Urinary-Worksheet.pdf","Urinary worksheet",["Urinary"],4],
+    ["pdf-notes","BIO004-M5-Ans-Notes.pdf","ANS notes",["Nervous System"],5],
+    ["pdf-drawing","BIO004-M5-Brain-Drawing-Sheet.pdf","Brain drawing sheet",["Nervous System"],5],
+    ["pdf-notes","BIO004-M5-Brain-Notes.pdf","Brain notes",["Nervous System"],5],
+    ["pdf-worksheet","BIO004-M5-Brain-Worksheet.pdf","Brain worksheet",["Nervous System"],5],
+    ["pdf-notes","BIO004-M5-Brainstem-Notes.pdf","Brainstem notes",["Nervous System"],5],
+    ["pdf-drawing","BIO004-M5-Cord-Drawing-Sheet.pdf","Cord drawing sheet",["Nervous System"],5],
+    ["pdf-notes","BIO004-M5-Cord-Notes.pdf","Cord notes",["Nervous System"],5],
+    ["pdf-worksheet","BIO004-M5-Cord-Worksheet.pdf","Cord worksheet",["Nervous System"],5],
+    ["pdf-notes","BIO004-M5-Cranial-Notes.pdf","Cranial notes",["Nervous System"],5],
+    ["pdf-notes","BIO004-M5-Integration-Notes.pdf","Integration notes",["Nervous System"],5],
+    ["pdf-notes","BIO004-M5-Meninges-Notes.pdf","Meninges notes",["Nervous System"],5],
+    ["pdf-notes","BIO004-M5-Nervous-Tissue-Notes.pdf","Nervous Tissue notes",["Cells & Tissues", "Nervous System"],5],
+    ["pdf-notes","BIO004-M5-Plexus-Notes.pdf","Plexus notes",["Nervous System"],5],
+    ["pdf-drawing","BIO004-M5-Pns-Drawing-Sheet.pdf","PNS drawing sheet",["Nervous System"],5],
+    ["pdf-notes","BIO004-M5-Pns-Notes.pdf","PNS notes",["Nervous System"],5],
+    ["pdf-worksheet","BIO004-M5-Pns-Worksheet.pdf","PNS worksheet",["Nervous System"],5],
+    ["pdf-drawing","BIO004-M5-Review-Drawing-Sheet.pdf","Review drawing sheet",[],5],
+    ["pdf-worksheet","BIO004-M5-Review-Worksheet.pdf","Review worksheet",[],5],
+    ["pdf-drawing","BIO004-M5-Tissue-Drawing-Sheet.pdf","Tissue drawing sheet",["Cells & Tissues"],5],
+    ["pdf-worksheet","BIO004-M5-Tissue-Worksheet.pdf","Tissue worksheet",["Cells & Tissues"],5],
+    ["packet","BIO004-Module1-Packet.html","Module 1 packet",[],1],
+    ["structure","BIO004-Module1-StructureList.pdf","Module 1 structure list",[],1],
+    ["structure","module-1-structure-list.html","Module 1 structure list, online",[],1],
+    ["packet","BIO004-Module2-Packet.html","Module 2 packet",[],2],
+    ["structure","BIO004-Module2-StructureList.pdf","Module 2 structure list",[],2],
+    ["structure","module-2-structure-list.html","Module 2 structure list, online",[],2],
+    ["packet","BIO004-Module3-Packet.html","Module 3 packet",[],3],
+    ["structure","BIO004-Module3-StructureList.pdf","Module 3 structure list",[],3],
+    ["structure","module-3-structure-list.html","Module 3 structure list, online",[],3],
+    ["packet","BIO004-Module4-Packet.html","Module 4 packet",[],4],
+    ["structure","BIO004-Module4-StructureList.pdf","Module 4 structure list",[],4],
+    ["structure","module-4-structure-list.html","Module 4 structure list, online",[],4],
+    ["packet","BIO004-Module5-Packet.html","Module 5 packet",[],5],
+    ["structure","BIO004-Module5-StructureList.pdf","Module 5 structure list",[],5],
+    ["structure","module-5-structure-list.html","Module 5 structure list, online",[],5],
+    ["course","bio004-digital-atlas.html","Digital anatomy atlas",[],0],
+    ["course","bio004-spaced-recall.html","Spaced recall",[],0],
+    ["course","loops.html","Loops",[],0],
+    ["course","bio004-braindump-bank-fall2026.html","Brain dump bank",[],0],
+    ["course","BIO004-Brain-Dump-Scoring.pdf","Brain dump scoring",[],0],
+    ["course","anatomy-structure-list-systems.html","Structure list by system",[],0],
+    ["course","bio004-competency-packet.html","Competency packet, online",[],0],
+    ["course","BIO004-Fall2026-Competency-Packet.pdf","Competency packet PDF",[],0]
+  ];
+
+  var KIND_LABEL = {
+    'notes':'Notes pages', 'workbook':'Workbooks', 'lab-sprint':'Lab sprints',
+    'concept-videos':'Concept videos', 'study-guide':'Study guides',
+    'pdf-notes':'Notes PDFs', 'pdf-worksheet':'Worksheets', 'pdf-drawing':'Drawing sheets',
+    'pdf-packet':'Packets', 'packet':'Module packets', 'structure':'Structure lists',
+    'course':'Course wide'
+  };
+  var KIND_ORDER = ['notes','workbook','lab-sprint','concept-videos','study-guide',
+                    'pdf-notes','pdf-worksheet','pdf-drawing','pdf-packet','packet','structure','course'];
+  /* Module boundaries by position in her ordered anatomy list, taken from the
+     competency packet: exams carry 25, 30, 41, 36 and the rest. */
+  var MODULE_CUTS = [25,55,96,132];
+
+  var ALL = [];                 // every competency loaded
+  var UNIT = 'Week';            // what the grouping column is called in this source
+  var picked = {};              // id -> true
+  var state = { title:'', date:'', len:110, teams:6, ratN:10, appeal:10,
+                sig:'', same:'', spec:'', sim:'Lettered cards held up on the count of three', draw:'',
+                items:[], compIds:[] };
+
+  function $(id){ return document.getElementById(id); }
+  function el(tag, attrs, kids){
+    var n=document.createElement(tag);
+    if(attrs) for(var k in attrs){
+      if(k==='class') n.className=attrs[k];
+      else if(k==='text') n.textContent=attrs[k];
+      else if(k==='html') n.innerHTML=attrs[k];
+      else n.setAttribute(k,attrs[k]);
+    }
+    (kids||[]).forEach(function(c){ n.appendChild(c); });
+    return n;
+  }
+  function say(m){ $('status').textContent=m; }
+
+  /* ---------- loading competencies ---------- */
+  function ingest(list, where, unitWord){
+    UNIT = unitWord || 'Week';
+    if(!Array.isArray(list) || !list.length){ $('src-status').textContent='That source held no competencies.'; return false; }
+    ALL = list.filter(function(c){ return c && c.name; });
+    var ordered = (ALL.length>170 && ALL.length<210 && ALL[0] && ALL[0].facets);
+    ALL.forEach(function(c,i){
+      if(ordered){
+        var m=5;
+        for(var k=0;k<MODULE_CUTS.length;k++){ if(i < MODULE_CUTS[k]){ m=k+1; break; } }
+        c.module = m;
+      } else {
+        c.module = Number(c.week)||0;
+      }
+    });
+    buildFilters();
+    renderPicker();
+    var wk = {}; ALL.forEach(function(c){ wk[c.week]=1; });
+    $('src-status').textContent = ALL.length + ' competencies loaded from ' + where + ', across ' +
+      Object.keys(wk).length + ' ' + UNIT.toLowerCase() + 's and ' + uniq('general').length + ' systems.';
+    return true;
+  }
+  function uniq(k){
+    var s={}; ALL.forEach(function(c){ if(c[k]!==undefined && c[k]!=='') s[c[k]]=1; });
+    return Object.keys(s);
+  }
+
+  $('btn-fetch').addEventListener('click', function(){
+    $('src-status').textContent='Loading from the course site...';
+    var s=document.createElement('script');
+    s.src = COMP_URL + '?t=' + Date.now();
+    s.onload = function(){
+      var list = window.BIO004_COMPETENCIES;
+      if(!ingest(list||[], 'the course site', 'Week')){
+        $('src-status').textContent='The file loaded but window.BIO004_COMPETENCIES was empty.';
+      }
+      s.parentNode.removeChild(s);
+    };
+    s.onerror = function(){
+      $('src-status').textContent='Could not reach the course site. Use Choose a file and pick competenciesfall2026.js.';
+      s.parentNode.removeChild(s);
+    };
+    document.head.appendChild(s);
+  });
+
+  $('btn-file').addEventListener('click', function(){ $('file-comp').click(); });
+  /* CSV parser that respects quoted fields and embedded commas. */
+  function parseCSV(text){
+    var rows=[], row=[], cur='', q=false, i=0;
+    text=text.replace(/\r\n?/g,'\n');
+    while(i<text.length){
+      var ch=text[i];
+      if(q){
+        if(ch==='"'){ if(text[i+1]==='"'){ cur+='"'; i++; } else q=false; }
+        else cur+=ch;
+      } else {
+        if(ch==='"') q=true;
+        else if(ch===','){ row.push(cur); cur=''; }
+        else if(ch==='\n'){ row.push(cur); rows.push(row); row=[]; cur=''; }
+        else cur+=ch;
+      }
+      i++;
+    }
+    if(cur.length||row.length){ row.push(cur); rows.push(row); }
+    return rows.filter(function(r){ return r.some(function(c){ return String(c).trim(); }); });
+  }
+
+  /* Map a spreadsheet export onto the same shape the JS list uses.
+     Handles her physiology columns (#, Module, Module title, Topic,
+     Competency, You should be able to, Lecture, Lab, DOK, Yield, ID)
+     and anything close to them. */
+  function fromCSV(text){
+    var rows=parseCSV(text);
+    while(rows.length && rows[0].length && String(rows[0][0]).trim().charAt(0)==='#' && rows[0].length<3) rows.shift();
+    if(rows.length<2) return null;
+    var head=rows[0].map(function(h){ return String(h).trim().toLowerCase(); });
+    function col(){
+      for(var a=0;a<arguments.length;a++){
+        var want=arguments[a];
+        for(var j=0;j<head.length;j++) if(head[j]===want) return j;
+      }
+      for(var b=0;b<arguments.length;b++){
+        var part=arguments[b];
+        for(var k=0;k<head.length;k++) if(head[k].indexOf(part)>=0) return k;
+      }
+      return -1;
+    }
+    var iId=col('id'), iWk=col('module','unit','week'), iGen=col('module title','unit title','system','general'),
+        iSys=col('topic','system'), iName=col('competency','name'),
+        iCan=col('you should be able to','can','objective','description'),
+        iDok=col('dok'), iY=col('yield','priority'), iLec=col('lecture'), iLab=col('lab'), iEst=col('est','minutes');
+    if(iName<0 && iCan<0) return null;
+    var out=[];
+    for(var r=1;r<rows.length;r++){
+      var row=rows[r];
+      var get=function(j){ return j>=0 && row[j]!==undefined ? String(row[j]).trim() : ''; };
+      var name=get(iName) || get(iCan).slice(0,70);
+      if(!name) continue;
+      var facets=[];
+      if(get(iLec)) facets.push('lecture');
+      if(get(iLab)) facets.push('lab');
+      var y=get(iY).toLowerCase();
+      out.push({
+        id: get(iId) || ('row-'+r),
+        week: Number(get(iWk))||0,
+        system: get(iSys) || get(iGen) || '',
+        general: get(iGen) || get(iSys) || 'Uncategorised',
+        name: name,
+        can: get(iCan),
+        dok: Number(get(iDok))||0,
+        yield: (y==='core'||y==='high'||y==='support') ? y : 'high',
+        est: Number(get(iEst))||0,
+        facets: facets
+      });
+    }
+    return out.length ? out : null;
+  }
+
+  $('file-comp').addEventListener('change', function(){
+    var f=$('file-comp').files[0]; if(!f) return;
+    var r=new FileReader();
+    r.onload=function(){
+      var txt=String(r.result), list=null, how='';
+      if(/\.csv$/i.test(f.name) || (txt.indexOf(',')>=0 && txt.indexOf('window.')<0 && txt.indexOf('[')<0)){
+        list=fromCSV(txt); how=' as a spreadsheet';
+      }
+      if(!list){ try { list=JSON.parse(txt); } catch(e){} }
+      if(!list){
+        var m=txt.match(/COMPETENCIES\s*=\s*(\[[\s\S]*?\])\s*;?\s*$/);
+        if(!m) m=txt.match(/(\[[\s\S]*\])/);
+        if(m){ try { list=(new Function('return '+m[1]))(); } catch(e){} }
+      }
+      if(!list) list=fromCSV(txt);
+      if(!list){ $('src-status').textContent='That file could not be read as a competency list. It accepts competenciesfall2026.js, a JSON array, or a CSV with a Competency column.'; }
+      else ingest(list,'the file you chose'+how, how ? 'Module' : 'Week');
+      $('file-comp').value='';
+    };
+    r.readAsText(f);
+  });
+
+  /* ---------- filters and picker ---------- */
+  function buildFilters(){
+    var w=$('f-week'), s=$('f-sys');
+    w.textContent=''; s.textContent='';
+    w.appendChild(el('option',{value:'',text:'All '+UNIT.toLowerCase()+'s'}));
+    uniq('week').map(Number).sort(function(a,b){return a-b;}).forEach(function(x){
+      w.appendChild(el('option',{value:String(x),text:UNIT+' '+x}));
+    });
+    var wl=document.querySelector('label[for="f-week"]'); if(wl) wl.textContent=UNIT;
+    s.appendChild(el('option',{value:'',text:'All systems'}));
+    uniq('general').sort().forEach(function(x){ s.appendChild(el('option',{value:x,text:x})); });
+  }
+
+  function shown(){
+    var w=$('f-week').value, sy=$('f-sys').value,
+        y=$('f-yield').value ? $('f-yield').value.split(',') : null,
+        d=$('f-dok').value ? $('f-dok').value.split(',') : null,
+        q=$('f-find').value.trim().toLowerCase();
+    return ALL.filter(function(c){
+      if(w && String(c.week)!==w) return false;
+      if(sy && c.general!==sy) return false;
+      if(y && y.indexOf(String(c.yield))<0) return false;
+      if(d && d.indexOf(String(c.dok))<0) return false;
+      if(q){
+        var hay=((c.name||'')+' '+(c.can||'')+' '+(c.system||'')+' '+(c.general||'')).toLowerCase();
+        if(hay.indexOf(q)<0) return false;
+      }
+      return true;
+    });
+  }
+
+  function renderPicker(){
+    var host=$('picker'); host.textContent='';
+    var list=shown();
+    $('filter-count').textContent = list.length + ' shown of ' + ALL.length + '.';
+    if(!list.length){ host.appendChild(el('p',{class:'fieldnote',style:'padding:16px;',text:'Nothing matches those filters.'})); renderTally(); return; }
+    var lastWeek=null;
+    list.forEach(function(c){
+      if(c.week!==lastWeek){
+        lastWeek=c.week;
+        host.appendChild(el('div',{class:'wk',text:UNIT+' '+c.week}));
+      }
+      var row=el('div',{class:'crow'});
+      var cb=el('input',{type:'checkbox',id:'p-'+c.id});
+      cb.checked=!!picked[c.id];
+      cb.addEventListener('change',function(){
+        if(cb.checked) picked[c.id]=true; else delete picked[c.id];
+        renderTally();
+      });
+      var body=el('div',{class:'cbody'});
+      var lab=el('label',{for:'p-'+c.id,style:'margin:0;cursor:pointer;'});
+      lab.appendChild(el('span',{class:'cname',text:c.name}));
+      lab.appendChild(el('span',{class:'ccan',text:c.can||''}));
+      body.appendChild(lab);
+      var chips=el('div',{class:'chips'});
+      chips.appendChild(el('span',{class:'chip '+(c.yield==='core'?'core':c.yield==='high'?'high':''),text:c.yield||'support'}));
+      if(c.dok) chips.appendChild(el('span',{class:'chip dok',text:'DOK '+c.dok}));
+      if(c.general) chips.appendChild(el('span',{class:'chip',text:c.general}));
+      if(c.est) chips.appendChild(el('span',{class:'chip',text:c.est+' min'}));
+      (c.facets||[]).forEach(function(f){ chips.appendChild(el('span',{class:'chip',text:f})); });
+      body.appendChild(chips);
+      row.appendChild(cb); row.appendChild(body);
+      host.appendChild(row);
+    });
+    renderTally();
+  }
+
+  function pickedList(){ return ALL.filter(function(c){ return picked[c.id]; }); }
+
+  function renderTally(){
+    var p=pickedList();
+    var mins=p.reduce(function(a,c){ return a+(Number(c.est)||0); },0);
+    var cap=Number($('s-len').value)||0;
+    var core=p.filter(function(c){return c.yield==='core';}).length;
+    var t=$('tally');
+    var txt;
+    if(!p.length) txt='Nothing selected yet.';
+    else if(mins) {
+      txt = p.length + (p.length===1?' competency':' competencies') + ' selected, ' + core + ' core. '
+          + 'Your own study estimate for this much material is ' + mins + ' minutes against a ' + cap + ' minute class.';
+    } else {
+      txt = p.length + (p.length===1?' competency':' competencies') + ' selected, ' + core + ' core. '
+          + 'This list carries no study estimates, so there is nothing to weigh against the ' + cap + ' minute class.';
+    }
+    t.className='tally'+(p.length && mins && mins>cap*1.6 ? ' over':'');
+    $('tally-read').textContent=txt;
+    $('tally-live').textContent=txt;
+    $('tally-fill').style.width = (cap && mins) ? Math.min(100, Math.round(mins/(cap*1.6)*100))+'%' : '0';
+    var drawn=p.filter(function(c){ return (c.facets||[]).indexOf('draw')>=0; });
+    $('draw-note').textContent = drawn.length
+      ? drawn.length + ' of the selected competencies are tagged draw: ' + drawn.map(function(c){return c.name;}).join('; ') + '.'
+      : 'None of the selected competencies carry the draw facet. A synthesis drawing is still worth setting.';
+    renderPlan();
+  }
+
+  ['f-week','f-sys','f-yield','f-dok'].forEach(function(id){ $(id).addEventListener('change', renderPicker); });
+  $('f-find').addEventListener('input', renderPicker);
+  $('sel-shown').addEventListener('click', function(){ shown().forEach(function(c){ picked[c.id]=true; }); renderPicker(); });
+  $('sel-none').addEventListener('click', function(){ picked={}; renderPicker(); });
+
+  /* ---------- notes matching ---------- */
+  function resourcesFor(comps){
+    var sys={}, mods={};
+    comps.forEach(function(c){ sys[c.general]=1; if(c.module) mods[c.module]=1; });
+    var want = {};
+    document.querySelectorAll('.kindbox:checked').forEach(function(b){ want[b.value]=1; });
+    var out=[];
+    RESOURCES.forEach(function(r){
+      if(!want[r[0]]) return;
+      // A resource that names its systems has to match one of them. A
+      // resource with no system tag (module packets, structure lists) matches
+      // on module. Course wide material always comes along.
+      if(r[0]==='course'){ out.push(r); return; }
+      if(r[3].length){ if(r[3].some(function(x){ return sys[x]; })) out.push(r); return; }
+      if(r[4] && mods[r[4]]) out.push(r);
+    });
+    return out;
+  }
+
+  /* ---------- building the session ---------- */
+  function shuffledKeys(n){
+    var base=[], L=['A','B','C','D'];
+    for(var i=0;i<n;i++) base.push(L[i%4]);
+    for(var j=base.length-1;j>0;j--){
+      var k=Math.floor(Math.random()*(j+1)), t=base[j]; base[j]=base[k]; base[k]=t;
+    }
+    return base;
+  }
+
+  function weightedOrder(comps){
+    // core first, then high, then support; round robin within each so no
+    // single system takes over the test.
+    var rank={core:0,high:1,support:2};
+    var buckets=[[],[],[]];
+    comps.forEach(function(c){ buckets[rank[c.yield]!==undefined?rank[c.yield]:2].push(c); });
+    var out=[];
+    buckets.forEach(function(b){
+      var bySys={};
+      b.forEach(function(c){ (bySys[c.general]=bySys[c.general]||[]).push(c); });
+      var keys=Object.keys(bySys), more=true;
+      while(more){
+        more=false;
+        keys.forEach(function(k){ if(bySys[k].length){ out.push(bySys[k].shift()); more=true; } });
+      }
+    });
+    return out;
+  }
+
+  function buildSession(){
+    var p=pickedList();
+    if(!p.length){ $('build-status').textContent='Tick at least one competency first.'; return; }
+    pullSettings();
+    var order=weightedOrder(p);
+    var n=Math.max(1, Number(state.ratN)||10);
+    var keys=shuffledKeys(n);
+    var items=[];
+    for(var i=0;i<n;i++){
+      var c=order[i % order.length];
+      items.push({ compId:c.id, stem:'', a:'', b:'', c:'', d:'', key:keys[i], why:'' });
+    }
+    state.items=items;
+    state.compIds=p.map(function(c){ return c.id; });
+    renderItems();
+    $('rat-panel').hidden=false;
+    $('app-panel').hidden=false;
+    renderPlan();
+    $('build-status').textContent = n + ' RAT slots laid out across ' + Math.min(n,order.length) + ' competencies.';
+    $('rat-panel').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
+  function compById(id){ for(var i=0;i<ALL.length;i++) if(ALL[i].id===id) return ALL[i]; return null; }
+
+  function renderItems(){
+    var host=$('ratlist'); host.textContent='';
+    state.items.forEach(function(it,i){
+      var c=compById(it.compId);
+      var box=el('div',{class:'item'});
+      var head=el('div',{class:'itemhead'});
+      head.appendChild(el('span',{class:'itemnum',text:'Item '+(i+1)}));
+      var rm=el('button',{type:'button',class:'btn danger small'});
+      rm.textContent='Remove'; rm.setAttribute('aria-label','Remove item '+(i+1));
+      rm.addEventListener('click',function(){ state.items.splice(i,1); renderItems(); renderPlan(); });
+      head.appendChild(rm);
+      box.appendChild(head);
+      box.appendChild(el('p',{class:'itemcomp',text: c ? (c.name + '  ·  ' + (c.can||'') + '  ·  DOK ' + (c.dok||'?') + ', ' + (c.yield||'')) : 'Competency not found'}));
+
+      var sw=el('div');
+      sw.appendChild(el('label',{for:'i-stem-'+i,text:'Stem'}));
+      var st=el('textarea',{id:'i-stem-'+i,placeholder:'Examples: write the question this competency would be tested by, in plain student language'});
+      st.value=it.stem;
+      st.addEventListener('input',function(){ state.items[i].stem=st.value; renderPlan(); });
+      sw.appendChild(st);
+      box.appendChild(sw);
+
+      var opts=el('div',{class:'opts'});
+      ['a','b','c','d'].forEach(function(L){
+        var row=el('div',{class:'opt'});
+        var rid='i-'+L+'-'+i;
+        row.appendChild(el('span',{class:'ltr',text:L.toUpperCase()}));
+        var rb=el('input',{type:'radio',name:'key-'+i,id:'k-'+L+'-'+i,value:L.toUpperCase()});
+        rb.checked = (it.key===L.toUpperCase());
+        rb.addEventListener('change',function(){ state.items[i].key=L.toUpperCase(); renderPlan(); });
+        rb.setAttribute('aria-label','Mark option '+L.toUpperCase()+' correct for item '+(i+1));
+        row.appendChild(rb);
+        var inp=el('input',{type:'text',id:rid,'aria-label':'Option '+L.toUpperCase()+' for item '+(i+1),placeholder:'Examples: option '+L.toUpperCase()});
+        inp.value=it[L];
+        inp.addEventListener('input',function(){ state.items[i][L]=inp.value; renderPlan(); });
+        row.appendChild(inp);
+        opts.appendChild(row);
+      });
+      box.appendChild(opts);
+
+      var ww=el('div',{style:'margin-top:12px;'});
+      ww.appendChild(el('label',{for:'i-why-'+i,text:'Rationale, correct and distractors'}));
+      var wy=el('textarea',{id:'i-why-'+i,placeholder:'Examples: why the key is right, and what each wrong option represents so the appeal discussion has somewhere to go'});
+      wy.value=it.why;
+      wy.addEventListener('input',function(){ state.items[i].why=wy.value; renderPlan(); });
+      ww.appendChild(wy);
+      box.appendChild(ww);
+
+      host.appendChild(box);
+    });
+  }
+
+  $('add-rat').addEventListener('click', function(){
+    var p=pickedList(); if(!p.length){ say('Tick competencies first.'); return; }
+    var order=weightedOrder(p);
+    state.items.push({compId:order[state.items.length % order.length].id,stem:'',a:'',b:'',c:'',d:'',key:'ABCD'[state.items.length%4],why:''});
+    renderItems(); renderPlan();
+  });
+  $('reshuffle').addEventListener('click', function(){
+    var keys=shuffledKeys(state.items.length);
+    state.items.forEach(function(it,i){ it.key=keys[i]; });
+    renderItems(); renderPlan();
+    say('Key letters reshuffled.');
+  });
+
+  /* ---------- timing ---------- */
+  function phases(){
+    var cap=Number(state.len)||0, ap=Number(state.appeal)||0, n=state.items.length||1;
+    var irat=Math.max(5, Math.round(n*1.0));
+    var trat=Math.max(5, Math.round(n*1.6));
+    var open=5, wrap=5;
+    var app=Math.max(0, cap-(open+irat+trat+ap+wrap));
+    return [
+      ['Opening and readiness check', open],
+      ['iRAT, individual', irat],
+      ['tRAT, teams', trat],
+      ['Appeals', ap],
+      ['4S application activity', app],
+      ['Synthesis drawing and close', wrap]
+    ];
+  }
+
+  /* ---------- plan ---------- */
+  function line(k,v){
+    var d=el('div',{style:'margin:0 0 9px;'});
+    d.appendChild(el('span',{class:'key',text:k}));
+    d.appendChild(el('br'));
+    var s=el('span',{class:'v'});
+    if(v && String(v).trim()) s.textContent=v; else { s.className='v empty'; s.textContent='Not written yet.'; }
+    d.appendChild(s);
+    return d;
+  }
+
+  function renderPlan(){
+    var p=$('plan'); p.textContent='';
+    var comps=pickedList();
+
+    p.appendChild(el('p',{class:'ph',text:'TBL session plan'}));
+    p.appendChild(el('h3',{class:'title',text: state.title || 'Untitled session'}));
+    var bits=[];
+    if(state.date) bits.push(state.date);
+    bits.push((Number(state.len)||0)+' minutes');
+    bits.push((Number(state.teams)||0)+' teams');
+    bits.push(comps.length+' competencies');
+    p.appendChild(el('p',{class:'meta',text:bits.join('  ·  ')}));
+
+    // competencies
+    p.appendChild(el('h4',{class:'sec',text:'Competencies this session has to move'}));
+    if(!comps.length) p.appendChild(el('p',{class:'empty',text:'None selected.'}));
+    else {
+      var ul=el('ul');
+      comps.forEach(function(c){
+        var li=el('li');
+        li.appendChild(el('strong',{text:c.name}));
+        li.appendChild(document.createTextNode('. '+(c.can||'')));
+        li.appendChild(el('span',{class:'chip '+(c.yield==='core'?'core':c.yield==='high'?'high':''),style:'margin-left:7px;',text:(c.yield||'')+' · DOK '+(c.dok||'?')}));
+        ul.appendChild(li);
+      });
+      p.appendChild(ul);
+    }
+
+    // every resource that covers the selected competencies
+    p.appendChild(el('h4',{class:'sec',text:'Pre-class readiness prep, from your own materials'}));
+    var rr=resourcesFor(comps);
+    if(!comps.length) p.appendChild(el('p',{class:'empty',text:'Select competencies to pull the matching materials.'}));
+    else if(!rr.length) p.appendChild(el('p',{class:'empty',text:'No materials matched. Check the resource types above.'}));
+    else {
+      var mods={}; comps.forEach(function(c){ if(c.module) mods[c.module]=1; });
+      p.appendChild(el('p',{style:'margin-bottom:12px;',text:
+        'Read and work these before class. ' + rr.length + ' items from the course site, covering module ' +
+        Object.keys(mods).sort().join(', ') + '.'}));
+      var byKind={};
+      rr.forEach(function(r){ (byKind[r[0]]=byKind[r[0]]||[]).push(r); });
+      KIND_ORDER.forEach(function(k){
+        if(!byKind[k]) return;
+        var row=el('div',{style:'margin:0 0 12px;'});
+        row.appendChild(el('strong',{text:KIND_LABEL[k]+' ('+byKind[k].length+')'}));
+        var links=el('div',{class:'notelinks',style:'margin-top:5px;'});
+        byKind[k].forEach(function(r){
+          links.appendChild(el('a',{href:SITE+r[1],target:'_blank',rel:'noopener',text:r[2]}));
+        });
+        row.appendChild(links);
+        p.appendChild(row);
+      });
+    }
+
+    // timing
+    p.appendChild(el('h4',{class:'sec',text:'Timing'}));
+    var total=0;
+    phases().forEach(function(ph){
+      total+=ph[1];
+      var d=el('div',{class:'phase'});
+      d.appendChild(el('span',{class:'n',text:ph[0]}));
+      d.appendChild(el('span',{class:'m',text:ph[1]+' min'}));
+      p.appendChild(d);
+    });
+    p.appendChild(el('p',{class:'meta',style:'margin-top:10px;',text:'Total '+total+' of '+(Number(state.len)||0)+' minutes.'}));
+
+    // RAT
+    p.appendChild(el('h4',{class:'sec',text:'Readiness assurance test, iRAT then tRAT'}));
+    if(!state.items.length) p.appendChild(el('p',{class:'empty',text:'Not built yet.'}));
+    state.items.forEach(function(it,i){
+      var c=compById(it.compId);
+      var box=el('div',{class:'pitem'});
+      box.appendChild(el('h5',{text:'Item '+(i+1)+'. '+(it.stem || 'Stem not written yet')}));
+      box.appendChild(el('p',{class:'tag',text: (c ? c.name+'  ·  DOK '+(c.dok||'?')+'  ·  '+(c.yield||'') : 'Competency not found') + '  ·  Key ' + it.key}));
+      var ol=el('ol',{type:'A'});
+      ['a','b','c','d'].forEach(function(L){
+        var li=el('li',{text: it[L] || 'blank'});
+        if(it.key===L.toUpperCase()) li.appendChild(el('span',{class:'key',text:'  correct'}));
+        ol.appendChild(li);
+      });
+      box.appendChild(ol);
+      if(it.why && it.why.trim()) box.appendChild(line('Rationale', it.why));
+      p.appendChild(box);
+    });
+    if(state.items.length){
+      var counts={A:0,B:0,C:0,D:0};
+      state.items.forEach(function(it){ counts[it.key]=(counts[it.key]||0)+1; });
+      p.appendChild(el('p',{class:'meta',text:'Key spread: A '+counts.A+', B '+counts.B+', C '+counts.C+', D '+counts.D+'.'}));
+    }
+
+    // appeals
+    p.appendChild(el('h4',{class:'sec',text:'Appeals'}));
+    p.appendChild(el('p',{text:'Teams may appeal in writing during the appeals window. An appeal names the item, states the reading or notes page that supports their answer, and says why the wording allowed it. Appeals are settled after class, not argued in the room.'}));
+
+    // 4S
+    p.appendChild(el('h4',{class:'sec',text:'Application activity, 4S'}));
+    p.appendChild(line('Significant', state.sig));
+    p.appendChild(line('Same', state.same));
+    p.appendChild(line('Specific', state.spec));
+    p.appendChild(line('Simultaneous', state.sim));
+    p.appendChild(el('h4',{class:'sec',text:'Synthesis drawing'}));
+    p.appendChild(line('Prompt', state.draw));
+  }
+
+  /* ---------- settings ---------- */
+  function pullSettings(){
+    state.title=$('s-title').value; state.date=$('s-date').value;
+    state.len=$('s-len').value; state.teams=$('s-teams').value;
+    state.ratN=$('s-rat').value; state.appeal=$('s-appeal').value;
+    state.sig=$('a-sig').value; state.same=$('a-same').value;
+    state.spec=$('a-spec').value; state.sim=$('a-sim').value; state.draw=$('a-draw').value;
+  }
+  function pushSettings(){
+    $('s-title').value=state.title||''; $('s-date').value=state.date||'';
+    $('s-len').value=state.len||110; $('s-teams').value=state.teams||6;
+    $('s-rat').value=state.ratN||10; $('s-appeal').value=state.appeal||10;
+    $('a-sig').value=state.sig||''; $('a-same').value=state.same||'';
+    $('a-spec').value=state.spec||''; $('a-sim').value=state.sim||''; $('a-draw').value=state.draw||'';
+  }
+  ['s-title','s-date','s-len','s-teams','s-rat','s-appeal','a-sig','a-same','a-spec','a-sim','a-draw'].forEach(function(id){
+    $(id).addEventListener('input', function(){ pullSettings(); renderTally(); renderPlan(); });
+  });
+
+  $('btn-build').addEventListener('click', buildSession);
+
+  /* ---------- save, export ---------- */
+  function snapshot(){ pullSettings(); state.compIds=Object.keys(picked); return state; }
+  function restore(next){
+    state = {
+      title:next.title||'', date:next.date||'', len:next.len||110, teams:next.teams||6,
+      ratN:next.ratN||10, appeal:next.appeal||10,
+      sig:next.sig||'', same:next.same||'', spec:next.spec||'', sim:next.sim||'', draw:next.draw||'',
+      items:Array.isArray(next.items)?next.items:[], compIds:Array.isArray(next.compIds)?next.compIds:[]
+    };
+    picked={}; state.compIds.forEach(function(id){ picked[id]=true; });
+    pushSettings(); renderPicker();
+    if(state.items.length){ $('rat-panel').hidden=false; $('app-panel').hidden=false; renderItems(); }
+    renderPlan();
+  }
+
+  $('btn-save').addEventListener('click', function(){
+    try { localStorage.setItem(KEY, JSON.stringify(snapshot())); say('Draft saved in this browser.'); }
+    catch(e){ say('This browser would not save the draft. Use Export to file instead.'); }
+  });
+  $('btn-load').addEventListener('click', function(){
+    try {
+      var raw=localStorage.getItem(KEY);
+      if(!raw){ say('No saved draft found in this browser.'); return; }
+      restore(JSON.parse(raw)); say('Saved draft loaded.');
+    } catch(e){ say('The saved draft could not be read.'); }
+  });
+  $('btn-export').addEventListener('click', function(){
+    var s=snapshot();
+    var name=(s.title||'tbl-session').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    var blob=new Blob([JSON.stringify(s,null,2)],{type:'application/json'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=(name||'tbl-session')+'.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(a.href); },1000);
+    say('Session file downloaded.');
+  });
+  $('btn-import').addEventListener('click', function(){ $('file-in').click(); });
+  $('file-in').addEventListener('change', function(){
+    var f=$('file-in').files[0]; if(!f) return;
+    var r=new FileReader();
+    r.onload=function(){
+      try { restore(JSON.parse(r.result)); say('Session imported from '+f.name+'.'); }
+      catch(e){ say('That file could not be read as a session.'); }
+      $('file-in').value='';
+    };
+    r.readAsText(f);
+  });
+  $('btn-print').addEventListener('click', function(){ pullSettings(); renderPlan(); window.print(); });
+  $('btn-clear').addEventListener('click', function(){
+    if(!window.confirm('Clear the whole session and start over? A saved draft stays saved.')) return;
+    picked={};
+    restore({});
+    $('rat-panel').hidden=true; $('app-panel').hidden=true;
+    $('build-status').textContent='';
+    say('Cleared.');
+  });
+
+  /* ---------- resource type checkboxes ---------- */
+  function renderKinds(){
+    var host=$('kinds'); host.textContent='';
+    var counts={};
+    RESOURCES.forEach(function(r){ counts[r[0]]=(counts[r[0]]||0)+1; });
+    KIND_ORDER.forEach(function(k){
+      if(!counts[k]) return;
+      var id='kind-'+k;
+      var lab=el('label',{for:id});
+      var cb=el('input',{type:'checkbox',id:id,value:k,class:'kindbox'});
+      cb.checked = (k!=='course');
+      cb.addEventListener('change', renderPlan);
+      lab.appendChild(cb);
+      lab.appendChild(document.createTextNode(KIND_LABEL[k]+' ('+counts[k]+')'));
+      host.appendChild(lab);
+    });
+  }
+
+  /* ---------- start ---------- */
+  renderKinds();
+  pushSettings();
+  renderPlan();
+  $('btn-fetch').click();
+})();
+</script>
+
+<script>
+(function(){function h(){try{parent.postMessage({type:'resize',id:'teaching-resources',height:Math.max(document.documentElement.scrollHeight,document.body?document.body.scrollHeight:0)},'*');}catch(e){}}window.addEventListener('load',h);window.addEventListener('resize',h);if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);})();
+</script>
+</body>
+</html>

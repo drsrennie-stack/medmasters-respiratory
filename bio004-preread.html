@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pre-read &middot; BIO 004 Human Anatomy &middot; Fall 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- ============================================================
+     THE PRE-READ FOR ONE CLASS DAY. PREVIEW, NOT LINKED YET.
+
+     Reads schedule-alt-fall2026.js. One page serves every class
+     day: bio004-preread.html?day=2026-10-26&sec=mw
+
+     It walks a student through, in this order:
+       1. what happens in class that day, start to finish
+       2. the lecture side: the notes section by section, then
+          drawing on the competency note sheets, then the videos and
+          a second-color correction
+       3. the lab side: the structure list, the lab sprint, the
+          muscle chart where it applies, drawing, self-testing
+       4. what the TBL and the brain dump will ask of them
+
+     The note and sheet outlines are read live from the notes
+     pages themselves, so when a notes page changes, the
+     walkthrough changes with it. If that read fails (for
+     example, the file was opened from a laptop rather than the
+     site) the student still gets every link, just without the
+     section list.
+
+     Ticks use localStorage['bio004-done'], the same key and the
+     same "ISO|file.html" format as the Today page and calendar.
+     ============================================================ -->
+
+<style>
+  :root{
+    --navy:#08101F; --navy-tint:#ECEFF4;
+    --terra:#8B1D1D; --terra-dark:#6B1616;
+    --gold:#DCB45C; --gold-text:#6F5316;
+    --white:#FFFFFF; --offwhite:#FAFAF9; --gray:#4F5D66; --gray-light:#D1D5DB;
+    --radius:10px;
+    --shadow-rest:0 1px 3px rgba(0,0,0,0.08);
+    --shadow-hover:0 8px 16px rgba(0,0,0,0.10);
+    --t:transform 200ms ease, box-shadow 200ms ease;
+    --font:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:var(--font);color:var(--navy);background:var(--offwhite);line-height:1.6;font-size:16px;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:860px;margin:0 auto;padding:24px 16px 56px;}
+  .skip{position:absolute;left:-9999px;background:var(--terra-dark);color:#fff;padding:10px 16px;border-radius:8px;font-weight:700;z-index:50;}
+  .skip:focus{left:16px;top:16px;}
+  :focus-visible{outline:3px solid var(--terra-dark);outline-offset:2px;border-radius:6px;}
+  a{color:var(--terra-dark);}
+
+  .cover{background:var(--navy);border-radius:var(--radius);padding:clamp(20px,4vw,32px);color:#fff;box-shadow:0 10px 26px rgba(8,16,31,.22);}
+  .eyebrow{font-size:.74rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 8px;}
+  h1{font-weight:800;font-size:clamp(26px,4.6vw,38px);line-height:1.08;letter-spacing:-.02em;margin:0;}
+  h1 span{color:var(--gold);}
+  .cover p.sub{margin:10px 0 0;color:#E7EAF0;font-size:1rem;}
+
+  .pickers{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0 0;}
+  .pickers label{display:flex;flex-direction:column;gap:4px;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);}
+  .pickers select{font:inherit;font-size:.95rem;letter-spacing:0;text-transform:none;font-weight:600;color:var(--navy);background:#fff;border:0;border-radius:8px;padding:9px 12px;min-width:220px;max-width:100%;}
+
+  .card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow-rest);padding:clamp(18px,3vw,26px);margin-top:18px;}
+  .card h2{font-weight:800;font-size:1.3rem;margin:0 0 4px;letter-spacing:-.01em;}
+  .card .k{font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--terra-dark);margin:0 0 6px;}
+  .card h3{font-weight:700;font-size:1.05rem;margin:22px 0 6px;color:var(--terra-dark);}
+  .card p{margin:6px 0;}
+  .note{background:var(--navy-tint);border-radius:8px;padding:12px 14px;margin:12px 0 0;font-size:.95rem;}
+
+  /* the day, start to finish */
+  .flow{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:10px;}
+  .flow li{display:grid;grid-template-columns:118px 1fr;gap:12px;align-items:start;background:#fff;border:1px solid var(--navy-tint);border-radius:8px;padding:10px 12px;}
+  .flow .when{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);padding-top:3px;}
+  .flow .what{font-weight:600;}
+  .flow .what small{display:block;font-weight:500;color:var(--gray);font-size:.88rem;margin-top:2px;}
+  .flow li.hot{border:1px solid var(--gold);}
+  .flow li.hot .when{color:var(--gold-text);}
+  @media(max-width:520px){.flow li{grid-template-columns:1fr;gap:2px;}}
+
+  /* steps */
+  ol.steps{counter-reset:st;list-style:none;margin:10px 0 0;padding:0;display:grid;gap:12px;}
+  ol.steps > li{counter-increment:st;position:relative;padding:14px 14px 14px 54px;border:1px solid var(--navy-tint);border-radius:8px;}
+  ol.steps > li::before{content:counter(st);position:absolute;left:14px;top:13px;width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;font-weight:800;font-size:.9rem;display:flex;align-items:center;justify-content:center;}
+  ol.steps > li > strong{display:block;font-size:1.02rem;}
+  .why{color:var(--gray);font-size:.93rem;margin:4px 0 0;}
+
+  /* a tickable material row */
+  .mats{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px;}
+  .mrow{display:flex;align-items:flex-start;gap:10px;}
+  .mrow input{position:absolute;opacity:0;width:1px;height:1px;}
+  .mrow .box{flex:0 0 auto;width:26px;height:26px;border-radius:7px;border:2px solid var(--gray-light);background:#fff;cursor:pointer;position:relative;margin-top:1px;}
+  .mrow .box::after{content:'';position:absolute;left:8px;top:3px;width:6px;height:12px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) scale(0);transition:transform 160ms ease;}
+  .mrow input:checked + .box{background:var(--navy);border-color:var(--navy);}
+  .mrow input:checked + .box::after{transform:rotate(45deg) scale(1);}
+  .mrow input:focus-visible + .box{outline:3px solid var(--terra-dark);outline-offset:2px;}
+  .mrow .body{flex:1 1 auto;min-width:0;}
+  .mrow a.mlink{font-weight:700;text-decoration:none;color:var(--navy);border-bottom:1px solid var(--gold);}
+  .mrow a.mlink:hover{color:var(--terra-dark);}
+  .mrow.done a.mlink{opacity:.6;}
+  .mrow .ext{font-size:.85rem;color:var(--gray);}
+
+  /* the outline read from a notes page */
+  details.outline{margin:6px 0 0;}
+  details.outline summary{cursor:pointer;font-size:.9rem;font-weight:600;color:var(--terra-dark);padding:4px 0;}
+  details.outline ol{margin:6px 0 4px;padding-left:22px;font-size:.93rem;}
+  details.outline li{margin:3px 0;}
+  details.outline li ul{margin:2px 0;padding-left:18px;color:var(--gray);}
+
+  .prog{margin:14px 0 0;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);}
+  .empty{padding:28px;text-align:center;color:var(--gray);}
+
+  .tbl-how{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:10px;}
+  .tbl-how div{border:1px solid var(--navy-tint);border-radius:8px;padding:12px;}
+  .tbl-how b{display:block;margin-bottom:2px;}
+
+  footer{margin-top:34px;text-align:center;color:var(--gray);font-size:.9rem;}
+  footer .by{font-weight:700;color:var(--navy);}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none !important;scroll-behavior:auto !important;}}
+  @media print{
+    .pickers,.skip{display:none;}
+    body{background:#fff;}
+    .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid-page;}
+    .cover{background:#fff;color:var(--navy);box-shadow:none;border:1px solid #ccc;}
+    .cover p.sub{color:var(--navy);} h1 span,.eyebrow{color:var(--terra-dark);}
+    details.outline{display:block;} details.outline > *{display:block;}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="wrap">
+  <main id="main">
+
+    <section class="cover" aria-labelledby="title">
+      <p class="eyebrow">BIO 004 &middot; Human Anatomy &middot; Pre-read (not graded)</p>
+      <h1 id="title">Get ready for <span id="titleDay">class</span></h1>
+      <p class="sub" id="titleSub">Pick your section and the class day.</p>
+      <div class="pickers">
+        <label for="secPick">Your section
+          <select id="secPick">
+            <option value="mw">Mon / Wed, CRN 80650</option>
+            <option value="tr-am">Tue / Thu morning, CRN 80654</option>
+            <option value="tr-eve">Tue / Thu evening, CRN 80655</option>
+          </select>
+        </label>
+        <label for="dayPick">Class day
+          <select id="dayPick"></select>
+        </label>
+      </div>
+    </section>
+
+    <div id="out" aria-live="polite"></div>
+
+  </main>
+
+  <footer>
+    <div class="by">Dr. Sharilyn Rennie</div>
+    <div>Professor of Anatomy &amp; Physiology</div>
+  </footer>
+</div>
+
+<script src="schedule-alt-fall2026.js"></script>
+<script>
+(function(){
+  'use strict';
+  var A = window.BIO004_ALT;
+  var out = document.getElementById('out');
+  var secPick = document.getElementById('secPick');
+  var dayPick = document.getElementById('dayPick');
+
+  var DOWL=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  function pad(n){ return n<10?'0'+n:''+n; }
+  function parse(s){ var p=s.split('-').map(Number); return new Date(p[0],p[1]-1,p[2]); }
+  function iso(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+  function longDate(s){ var d=parse(s); return DOWL[d.getDay()]+', '+MONTHS[d.getMonth()]+' '+d.getDate(); }
+  function shortDate(s){ var d=parse(s); return DOWL[d.getDay()].slice(0,3)+' '+MONTHS[d.getMonth()].slice(0,3)+' '+d.getDate(); }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function join(a){ if(a.length<2) return a.join(''); return a.slice(0,-1).join(', ')+' and '+a[a.length-1]; }
+
+  /* ---------- section and day, from the URL, then storage ---------- */
+  var SKEY='bio004-section';
+  function qp(name){ var m=location.search.match(new RegExp('[?&]'+name+'=([^&#]+)')); return m?decodeURIComponent(m[1]):null; }
+  var sec = qp('sec');
+  if(!A.TIMES[sec]){ try{ sec=localStorage.getItem(SKEY); }catch(e){ sec=null; } }
+  if(!A.TIMES[sec]) sec='mw';
+  /* A link that names only the day (the calendar and Today pages send these)
+     still lands on the right class: if the remembered section has no class
+     that day, use the track that does. */
+  (function(){ var dq=qp('day'); if(dq && !A.day(sec,dq)){ var alt=A.track(sec)==='mw' ? 'tr-am' : 'mw'; if(A.day(alt,dq)) sec=alt; } })();
+
+  /* ---------- ticks, shared with Today and the calendar ---------- */
+  var DONE_KEY='bio004-done';
+  function readDone(){ try{ return JSON.parse(localStorage.getItem(DONE_KEY)||'{}')||{}; }catch(e){ return {}; } }
+  function writeDone(o){ try{ localStorage.setItem(DONE_KEY, JSON.stringify(o)); }catch(e){} }
+
+  function classDays(){ return A.sessions(sec).filter(function(s){ return s.kind!=='holiday'; }); }
+  function defaultDay(){
+    var t=iso(new Date()), list=classDays();
+    for(var i=0;i<list.length;i++){ if(list[i].d>=t) return list[i].d; }
+    return list.length ? list[list.length-1].d : null;
+  }
+
+  function fillDays(selected){
+    var list=classDays();
+    dayPick.innerHTML=list.map(function(s){
+      var lab = s.kind==='exam' ? 'Exam '+s.exam : (s.kind==='d1' ? 'Lecture TBL '+s.tbl.n : (s.tbl ? 'Lab TBL '+s.tbl.n : (s.lab.mode==='review' ? 'Review lab' : 'Lecture and lab')));
+      return '<option value="'+s.d+'"'+(s.d===selected?' selected':'')+'>'+esc(shortDate(s.d)+' · '+lab)+'</option>';
+    }).join('');
+  }
+
+  /* ---------- material rows ---------- */
+  var DAY='';
+  function row(pair, opts){
+    opts = opts || {};
+    var u=pair[0], t=pair[1], ext=/^https?:/.test(u);
+    var file = u.split('#')[0];
+    var id='m'+Math.random().toString(36).slice(2,9);
+    var done=!!readDone()[DAY+'|'+file+(u.indexOf('#')>-1?u.slice(u.indexOf('#')):'')];
+    var tgt = ext ? ' target="_blank" rel="noopener"' : ' target="_top"';
+    return '<li class="mrow'+(done?' done':'')+'">'
+      + '<input type="checkbox" id="'+id+'" data-k="'+esc(u)+'"'+(done?' checked':'')+'>'
+      + '<label class="box" for="'+id+'"><span class="sr" style="position:absolute;left:-9999px">Mark done: '+esc(t)+'</span></label>'
+      + '<div class="body"><a class="mlink" href="'+esc(u)+'"'+tgt+'>'+esc(t)+'</a>'
+      + (ext?' <span class="ext">(opens in a new tab)</span>':'')
+      + (opts.outline ? '<div class="ol-slot" data-src="'+esc(file)+'" data-kind="'+opts.outline+'"></div>' : '')
+      + (opts.after ? '<p class="why">'+opts.after+'</p>' : '')
+      + '</div></li>';
+  }
+  function rows(list, opts){ return '<ul class="mats">'+list.map(function(p){ return row(p,opts); }).join('')+'</ul>'; }
+
+  function gather(keys, table, field){
+    var seen={}, outL=[];
+    (keys||[]).forEach(function(k){ ((table[k]||{})[field]||[]).forEach(function(p){ if(!seen[p[0]]){ seen[p[0]]=1; outL.push(p); } }); });
+    return outL;
+  }
+  function lecNames(keys){ return join((keys||[]).map(function(k){ return A.LECTURE[k].name; })); }
+  function labNames(keys){ return join((keys||[]).map(function(k){ return A.LAB[k].name; })); }
+
+  /* ---------- the day, start to finish ---------- */
+  function flow(s){
+    var T=A.TIMES[sec];
+    var lecStart=T.lecT.split(' to ')[0], labStart=T.labT.split(' to ')[0];
+    var labEnd=T.labT.split(' to ')[1].split(',')[0];
+    var items=[];
+    if(s.kind==='d1'){
+      items.push(['hot', lecStart, 'Lecture TBL '+s.tbl.n+': '+lecNames(s.tbl.topics), 'iRAT on your own, then the tRAT with your team, then appeals. Closed notes for the iRAT and tRAT.']);
+      items.push(['', 'Rest of lecture', s.app||'TBL application activity', 'Your team applies the TBL material to a problem. Bring your notes and your note sheets.']);
+      items.push(['', labStart, 'Lab: '+labNames(s.labTopic), (s.lab.text||A.MODE[s.lab.mode])]);
+      items.push(['hot', 'Before '+labEnd, 'Lab brain dump: '+labNames(s.bd.topics), 'Five minutes, closed notes, at the end of class. Everything you can name, draw and connect from today\'s lab.']);
+    } else {
+      items.push(['', lecStart, 'Lecture: '+s.lec, s.prepOnly ? 'Before class: start '+lecNames(s.lecTopic)+'.' : 'Topic: '+lecNames(s.lecTopic)+'.']);
+      if(s.tbl){
+        items.push(['hot', labStart, 'Lab TBL '+s.tbl.n+': '+labNames(s.tbl.topics), 'The first 1.5 hours of lab. iRAT on your own, then the tRAT with your team, then the application activity. Expect images, models and slides to identify.']);
+        items.push(['', 'Rest of lab', 'Lab: '+labNames(s.labTopic), (s.lab.text||A.MODE[s.lab.mode])]);
+      } else {
+        items.push(['', labStart, 'Lab: '+labNames(s.labTopic), (s.lab.text||A.MODE[s.lab.mode])]);
+      }
+      items.push(['hot', 'Before '+labEnd, 'Lecture brain dump: '+lecNames(s.bd.topics), 'Five minutes, closed notes, at the end of class.']);
+    }
+    return '<ol class="flow">'+items.map(function(i){
+      return '<li class="'+i[0]+'"><span class="when">'+esc(i[1])+'</span><span class="what">'+esc(i[2])+(i[3]?'<small>'+esc(i[3])+'</small>':'')+'</span></li>';
+    }).join('')+'</ol>';
+  }
+
+  /* when this lecture topic comes back: its Lecture TBL, or a lecture brain dump */
+  function whatsNext(s, keys){
+    var list=A.sessions(sec), hit=function(a){ return (a||[]).some(function(k){ return keys.indexOf(k)>-1; }); };
+    for(var i=0;i<list.length;i++){
+      var x=list[i]; if(x.d<=s.d) continue;
+      if(x.kind==='d1' && x.tbl && hit(x.tbl.topics)) return { tbl:x.tbl.n, d:x.d };
+      if(x.bd && x.bd.kind==='lecture' && hit(x.bd.topics)) return { bd:true, d:x.d };
+      if(x.kind==='exam') return { exam:x.exam, d:x.d };
+    }
+    return {};
+  }
+  function laterText(n){
+    if(n.tbl) return 'This topic is Lecture TBL '+n.tbl+' on '+longDate(n.d)+'. ';
+    if(n.bd)  return 'This topic is on the lecture brain dump on '+longDate(n.d)+'. ';
+    if(n.exam) return 'This topic is on Exam '+n.exam+' on '+longDate(n.d)+'. ';
+    return '';
+  }
+
+  /* ---------- lecture walkthrough ---------- */
+  function lectureCard(s){
+    if(s.prepTopic){
+      var R=A.LECTURE[s.prepTopic[0]];
+      return '<section class="card" aria-labelledby="lecH"><p class="k">Part 1 &middot; Lecture</p>'
+        + '<h2 id="lecH">Before class: review your muscles</h2>'
+        + '<p>Go through the origin, insertion and action of every muscle in these sections. Lecture TBL '+s.tbl.n+' is on '+esc(lecNames(s.tbl.topics))+', which you prepared for last class.</p>'
+        + rows(R.notes) + rows([A.MUSCLE_CHART].concat(R.guide)) + '</section>';
+    }
+    var isTbl = s.kind==='d1';
+    var keys = isTbl ? s.tbl.topics : s.lecTopic;
+    var notes=gather(keys,A.LECTURE,'notes'), draw=gather(keys,A.LECTURE,'draw'),
+        comps=keys.filter(function(k){ return A.LECTURE[k].comps; }).map(function(k){ var c=A.LECTURE[k].comps;
+          return ['bio004-competency-packet.html#c'+c[0], 'Competencies '+c[0]+' to '+c[1]+' in your competency packet ('+A.short(k)+')']; }),
+        onSheet=keys.some(function(k){ return A.LECTURE[k].drawSheet; }),
+        videos=gather(keys,A.LECTURE,'videos'), slides=gather(keys,A.LECTURE,'slides'), guide=gather(keys,A.LECTURE,'guide'), workbooks=gather(keys,A.LECTURE,'workbooks');
+    var RECALL=[['mastery-os-fall-2026.html#s-recall','Mastery OS: spaced recall for this topic'],['https://drsrennie-stack.github.io/loops/','Loops: quick visual practice']];
+    var later = isTbl ? {} : whatsNext(s, keys);
+    var h='<section class="card" aria-labelledby="lecH">'
+      + '<p class="k">Part 1 &middot; Lecture</p>'
+      + '<h2 id="lecH">'+(isTbl ? 'Prepare for Lecture TBL '+s.tbl.n : s.prepOnly ? 'Start '+esc(lecNames(keys))+' before class' : 'Come ready for today\'s lecture')+'</h2>'
+      + '<p>'+(s.prepOnly
+          ? 'In class today is the '+esc(s.lec)+'. Before class, start '+esc(lecNames(keys))+': read the notes and start your note sheets. There is no lecture on it in class, so this reading is how you learn it.'
+          : isTbl
+          ? 'The TBL opens class and it is on '+esc(lecNames(keys))+'. Nothing in it is new to you if you have done the steps below. Do them in this order. The order matters more than the hours.'
+          : 'Today\'s lecture is on '+esc(lecNames(keys))+'. You do not need to master it before class, but you need to have read the notes and started your note sheets, so the lecture is the second time you meet it, not the first.')+'</p>'
+      + '<ol class="steps">'
+      + '<li><strong>Read the notes, one section at a time</strong>'
+      +   '<p class="why">Read with your note sheets beside you, but do not draw yet. At the end of each section, look away and say what it was about in one sentence. If you cannot, read that section again before you move on.</p>'
+      +   rows(notes,{outline:'notes'})+'</li>'
+      + '<li><strong>Draw it on your note sheets</strong>'
+      +   '<p class="why">'+(onSheet
+            ? 'For this topic you draw on the drawing sheet. Each frame tells you what to draw and what to label. '
+            : 'Each competency has two prompts and one open box. Pick one prompt and draw it in the box. ')
+      +   'Draw from your notes in one color. Stop while part of the box is still empty. That empty part is what the videos fill in. '
+      +   'The competency numbers below match your paper competency packet, so you can see exactly what you are expected to be able to do.</p>'
+      +   rows(draw.concat(comps))+'</li>'
+      + '<li><strong>Watch the videos, then correct in a second color</strong>'
+      +   '<p class="why">Watch the concept videos with your drawings open. Fix and add to them in a second color. Whatever you add in that color is what you did not know yet, so it is what to review first.</p>'
+      +   rows(videos)+'</li>'
+      + (isTbl
+          ? '<li><strong>The night before: test yourself cold</strong>'
+            + '<p class="why">Cover everything. Redraw your note sheet boxes from memory, then check. Whatever you could not redraw is what to reread before class. Use your recall cards for ten minutes.</p>'
+            + rows([['bio004-draw.html','Draw from memory'],['bio004-spaced-recall.html','Recall cards']].concat(RECALL).concat(guide))+'</li>'
+          : '<li><strong>'+(later.tbl ? 'After class: get ready for the TBL' : 'After class: finish your note sheets')+'</strong>'
+            + '<p class="why">'+esc(laterText(later))+'Finish your note sheets within two days of this lecture while it is fresh, then use spaced recall later in the week.</p>'+rows(RECALL)+'</li>')
+      + '</ol>';
+    if(slides.length) h += '<h3>For review after class</h3>'+rows(slides);
+    if(workbooks.length) h += '<h3>Extra practice</h3>'+rows(workbooks);
+    if(isTbl){
+      h += '<h3>How the TBL runs</h3><div class="tbl-how">'
+        + '<div><b>iRAT</b>On your own, closed notes. It shows you, and me, what you understood from the pre-read.</div>'
+        + '<div><b>tRAT</b>The same questions with your team. Explain your reasoning to each other before you scratch.</div>'
+        + '<div><b>Appeals</b>If your team thinks a question was unclear or had a second defensible answer, make the case in writing with your notes.</div>'
+        + '<div><b>Application</b>The rest of lecture. Your team uses what you prepared to work through a problem together.</div></div>';
+    }
+    return h+'</section>';
+  }
+
+  /* ---------- lab walkthrough ---------- */
+  function labCard(s){
+    var isTbl = s.kind==='d2' && !!s.tbl;
+    var keys = isTbl ? s.tbl.topics.concat(s.labTopic.filter(function(k){ return s.tbl.topics.indexOf(k)<0; })) : s.labTopic, mode = s.lab.mode;
+    var how = mode==='lab'
+      ? 'Work the structure list and lab sprint before class, so you walk in already knowing the names.'
+      : mode==='model'
+      ? 'Today is the first time you see this block in lab. It is on the models. Many of the structures will be tagged for you, but not all of them. You are responsible for finding the untagged ones on your structure list, identifying them, and making your own study materials for them, so bring the list and something to build those materials in.'
+      : mode==='cadaver'
+      ? 'You saw this block on the models last class. Today it is on the cadaver, and you tag the structures yourself, so come able to find them without the tags.'
+      : mode==='split'
+      ? 'Today runs two stations. '+s.lab.text+' Work the structure list and lab sprint for both before class, and come able to find the cadaver structures without tags.'
+      : mode==='both'
+      ? 'This block gets one lab. You start on the models, with many of the structures tagged for you, then move to the cadaver and tag the structures yourself, so come having already worked the lab sprint.'
+      : 'This is a review lab. You tag the structures yourself, then spend the time on whatever you still need. Come with your structure list marked so you know what that is.';
+    var lists=gather(keys,A.LAB,'list'), sprints=gather(keys,A.LAB,'sprints'),
+        notes=gather(keys,A.LAB,'notes'), sheets=gather(keys,A.LAB,'sheets');
+    var muscle = keys.some(function(k){ return A.LAB[k].muscle; });
+    var h='<section class="card" aria-labelledby="labH">'
+      + '<p class="k">Part 2 &middot; Lab</p>'
+      + '<h2 id="labH">'+(isTbl ? 'Prepare for Lab TBL '+s.tbl.n : (s.kind==='d1' ? 'Prepare for today\'s lab and the lab brain dump' : (mode==='review' ? 'Prepare for today\'s review lab' : 'Prepare for today\'s lab')))+'</h2>'
+      + '<p>'+(isTbl
+          ? 'The Lab TBL takes the first 1.5 hours of lab and covers '+esc(labNames(s.tbl.topics))+'. '
+          : 'Today\'s lab is '+esc(labNames(keys))+'. '+(s.kind==='d1' ? 'Class ends with a lab brain dump on it. ' : ''))+esc(how)+'</p>'
+      + '<ol class="steps">'
+      + '<li><strong>Open the structure list and read the names once</strong>'
+      +   '<p class="why">This is the master list. Everything on it is testable. Read through once so the names look familiar. Do not try to memorize from the list.</p>'
+      +   rows(lists)+'</li>'
+      + '<li><strong>Work the lab sprint: structures and questions</strong>'
+      +   '<p class="why">Open each category. For every structure, find it on the images, say where it sits next to its neighbors, and answer the "Also be ready to answer" questions out loud.</p>'
+      +   rows(sprints)+'</li>'
+      + (notes.length
+          ? '<li><strong>Use the notes for anything you cannot place</strong>'
+            + '<p class="why">The lab sprint tells you what to find. The notes tell you why it is there. Look up only the structures you could not place.</p>'
+            + rows(notes)+'</li>' : '')
+      + (muscle
+          ? '<li><strong>Fill the muscle chart for every muscle on the list</strong>'
+            + '<p class="why">Origin, insertion, action and innervation. Say the action out loud while you move that part of your own body. If you can feel it, you will remember it.</p>'
+            + rows([A.MUSCLE_CHART])+'</li>' : '')
+      + '<li><strong>Draw it from memory, then check</strong>'
+      +   '<p class="why">Sketch the region and label it without looking. Check against the images and correct in a second color. Do this once before class and once within a day after.</p>'
+      +   rows([['bio004-draw.html','Draw from memory']])+'</li>'
+      + '<li><strong>'+(isTbl ? 'Test yourself the way the TBL will' : mode==='review' ? 'Make your list for lab' : 'In lab: find every structure, then teach it')+'</strong>'
+      +   '<p class="why">'+(isTbl
+            ? 'Use the Spiral Rounds in the lab sprint with a partner. Point and name, then name and point. Anything you hesitate on goes on a list for lab.'
+            : mode==='review'
+            ? 'Go down the structure list and mark every structure you cannot find on an image without help. That marked list is what you work on in lab.'
+            : 'Find each structure on at least two models or images. Then point to one and have a teammate name it, and switch. Your brain dump at the end of class comes straight from this.')+'</p></li>'
+      + '</ol></section>';
+    return h;
+  }
+
+  /* ---------- brain dump card ---------- */
+  function dumpCard(s){
+    var lab = s.bd.kind==='lab';
+    var name = lab ? labNames(s.bd.topics) : lecNames(s.bd.topics);
+    return '<section class="card" aria-labelledby="bdH">'
+      + '<p class="k">Part 3 &middot; End of class</p>'
+      + '<h2 id="bdH">'+(lab?'Lab':'Lecture')+' brain dump: '+esc(name)+'</h2>'
+      + '<p>Five minutes, closed notes, on a blank page. Write and draw everything you can about '+esc(name)+': the structures, where they sit, what connects to what. A labeled drawing counts more than a list of words.</p>'
+      + '<p>'+(lab
+          ? 'It is on today\'s lab, so the best preparation is the work you do in lab. Name things out loud, draw the region once during lab, and test your teammates.'
+          : 'It is on the lecture topic from earlier this week. Redraw your note sheet boxes from memory the night before and you will be ready.')+'</p>'
+      + rows([['mastery-os-fall-2026.html#s-dumps','Brain dump practice']])
+      + '</section>';
+  }
+
+  function render(){
+    DAY = dayPick.value;
+    var s = A.day(sec, DAY);
+    var T = A.TIMES[sec];
+    document.getElementById('titleDay').textContent = DAY ? longDate(DAY) : 'class';
+    if(!s){ out.innerHTML='<div class="card empty">No class on this day for your section.</div>'; return; }
+    document.getElementById('titleSub').textContent = T.label+'. Lecture '+T.lecT+'. Lab '+T.labT+'.';
+    var h='';
+    if(s.kind==='exam'){
+      h='<section class="card"><p class="k">Exam day</p><h2>Exam '+s.exam+'</h2><p>Lecture exam and lab practical, both today. No pre-read. Use the study guides and lab sprints for this exam from the course calendar.</p>'
+        + rows([['bio004-exam-modules.html','What this exam covers'],['mastery-os-fall-2026.html','Mastery OS: build a cram plan'],['mastery-os-fall-2026.html#s-weak','Mastery OS: your weakest topics first'],['bio004-course-calendar.html','Course calendar']])+'</section>';
+      out.innerHTML=h; wire(); return;
+    }
+    h += '<section class="card" aria-labelledby="dayH"><p class="k">'+(s.kind==='d1'?'Lecture TBL day':(s.tbl?'Lab TBL day':(s.lab.mode==='review'?'Review lab day':'Lecture and lab day')))+'</p>'
+      + '<h2 id="dayH">What happens in class</h2>'+flow(s)
+      + (s.note?'<p class="note">'+esc(s.note)+'</p>':'')+'</section>';
+    /* lecture comes first on both days now that Lab TBL is gone */
+    h += lectureCard(s) + labCard(s) + dumpCard(s);
+    h += '<p class="prog" id="prog"></p>';
+    out.innerHTML = h;
+    wire();
+    loadOutlines();
+  }
+
+  function wire(){
+    var boxes = out.querySelectorAll('.mrow input');
+    function prog(){
+      var n=0; boxes.forEach(function(b){ if(b.checked) n++; });
+      var p=document.getElementById('prog'); if(p) p.textContent = n+' of '+boxes.length+' done';
+    }
+    boxes.forEach(function(b){
+      b.addEventListener('change', function(){
+        var d=readDone(), k=DAY+'|'+b.getAttribute('data-k');
+        if(b.checked) d[k]=1; else delete d[k];
+        writeDone(d);
+        b.closest('.mrow').classList.toggle('done', b.checked);
+        prog();
+      });
+    });
+    prog();
+  }
+
+  /* ---------- read the outline of a notes page or sheet ----------
+     Only same-site pages, only headings that carry an id or sit
+     under a panel. Nothing is invented: if the read fails, the
+     slot stays empty and the link still works. */
+  var CACHE={};
+  function fetchDoc(u){
+    if(CACHE[u]) return CACHE[u];
+    CACHE[u] = fetch(u, {cache:'no-cache'}).then(function(r){ if(!r.ok) throw 0; return r.text(); })
+      .then(function(t){ return new DOMParser().parseFromString(t,'text/html'); });
+    return CACHE[u];
+  }
+  var SKIP=/^(on this page|contents|concept videos)/i;
+  function outlineNotes(doc, file){
+    var items=[];
+    doc.querySelectorAll('main h2[id], article h2[id], body h2[id]').forEach(function(h){
+      var t=h.textContent.replace(/\s+/g,' ').trim();
+      if(!t || SKIP.test(t)) return;
+      if(items.some(function(i){ return i.id===h.id; })) return;
+      items.push({id:h.id, t:t});
+    });
+    if(!items.length) return '';
+    return '<details class="outline"><summary>The '+items.length+' sections, in reading order</summary><ol>'
+      + items.map(function(i){ return '<li><a href="'+esc(file)+'#'+esc(i.id)+'" target="_top">'+esc(i.t)+'</a></li>'; }).join('')
+      + '</ol></details>';
+  }
+  function outlineSheet(doc){
+    var parts=[], cur=null;
+    doc.querySelectorAll('h2, h3').forEach(function(h){
+      var t=h.textContent.replace(/\s+/g,' ').trim();
+      if(h.tagName==='H2'){
+        if(/organize|draw|apply/i.test(t)){ cur={t:t, subs:[]}; parts.push(cur); } else cur=null;
+      } else if(cur && !/^your chunks/i.test(t)){ cur.subs.push(t); }
+    });
+    if(!parts.length) return '';
+    return '<details class="outline"><summary>What is on each panel</summary><ol>'
+      + parts.map(function(p){ return '<li>'+esc(p.t)+(p.subs.length?'<ul>'+p.subs.map(function(x){ return '<li>'+esc(x)+'</li>'; }).join('')+'</ul>':'')+'</li>'; }).join('')
+      + '</ol></details>';
+  }
+  function loadOutlines(){
+    if(location.protocol==='file:') return;
+    out.querySelectorAll('.ol-slot').forEach(function(slot){
+      var u=slot.getAttribute('data-src'), kind=slot.getAttribute('data-kind');
+      fetchDoc(u).then(function(doc){
+        slot.innerHTML = kind==='sheet' ? outlineSheet(doc) : outlineNotes(doc,u);
+      }).catch(function(){});
+    });
+  }
+
+  /* ---------- pickers ---------- */
+  secPick.value = sec;
+  var startDay = qp('day');
+  if(!A.day(sec, startDay)) startDay = defaultDay();
+  fillDays(startDay);
+  render();
+
+  secPick.addEventListener('change', function(){
+    sec = secPick.value;
+    try{ localStorage.setItem(SKEY, sec); }catch(e){}
+    var keep = A.day(sec, dayPick.value) ? dayPick.value : defaultDay();
+    /* same week, other track: move Mon to Tue, Wed to Thu and back */
+    if(!A.day(sec, dayPick.value)){
+      var d=parse(dayPick.value); d.setDate(d.getDate() + (sec==='mw' ? -1 : 1));
+      if(A.day(sec, iso(d))) keep = iso(d);
+    }
+    fillDays(keep); render(); syncUrl();
+  });
+  dayPick.addEventListener('change', function(){ render(); syncUrl(); });
+  function syncUrl(){
+    try{
+      var q='?sec='+encodeURIComponent(sec)+'&day='+encodeURIComponent(dayPick.value);
+      var f=qp('frameId'); if(f) q+='&frameId='+encodeURIComponent(f);
+      history.replaceState(null,'',location.pathname+q);
+    }catch(e){}
+  }
+})();
+</script>
+
+<!-- iframe height sender, measures body only so the frame can shrink -->
+<script>
+(function(){
+  'use strict';
+  var frameId=null;
+  try{ var m=location.search.match(/[?&]frameId=([^&#]+)/); if(m) frameId=decodeURIComponent(m[1]); }catch(e){}
+  var last=0;
+  function postHeight(){
+    var b=document.body; if(!b) return;
+    var h=Math.max(b.scrollHeight, b.offsetHeight, Math.ceil(b.getBoundingClientRect().height));
+    if(Math.abs(h-last)<2) return;
+    last=h;
+    try{ parent.postMessage({frameId:frameId,id:frameId,type:'resize',height:h},'*'); }catch(e){}
+  }
+  window.addEventListener('load',postHeight);
+  window.addEventListener('resize',postHeight);
+  if(window.ResizeObserver){ try{ new ResizeObserver(postHeight).observe(document.body); }catch(e){} }
+  document.addEventListener('click',function(){ window.setTimeout(postHeight,60); });
+  document.addEventListener('toggle',function(){ window.setTimeout(postHeight,60); }, true);
+  postHeight();
+})();
+</script>
+</body>
+</html>

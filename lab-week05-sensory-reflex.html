@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Week 5 Lab &middot; Sensory and Reflex Lab &middot; BIO 005</title>
+<link rel="stylesheet" href="assets/fonts-site.css">
+<link rel="stylesheet" href="assets/brandbar.css">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<!--
+  ============================================================
+  BIO 005 Human Physiology, Yuba College, Fall 2026
+  lab-week05-sensory-reflex.html
+
+  WEEK 5 LAB. PhysioEx 10.0 has no sensory exercise, so this
+  replaces it. Students collect real data on themselves with
+  no equipment beyond a ruler, a paperclip, a phone and this
+  printed packet.
+
+  Competencies: 79, 107, 116, 117, 128
+  (see physioex-lab-map-fall2026.md).
+
+  WHY THIS ONE IS WORTH THE BUILD: the numbers are theirs. There
+  is no answer key on the internet for their own reaction time,
+  so the analysis has to be real.
+
+  HONESTY / SAFETY, DO NOT REMOVE:
+  Every test here is a physiology demonstration, not a clinical
+  screen. Printed charts cannot be calibrated well enough to
+  measure vision, and phone speakers cannot be calibrated at all
+  to measure hearing. The packet says so plainly, more than once,
+  and tells students what to do if something looks off rather
+  than letting them self-diagnose from a worksheet.
+
+  Reaction time conversion, ruler drop:
+    t = sqrt(2d/g), so t(ms) = 45.15 * sqrt(d in cm)
+
+  Print: US Letter, portrait, 0.5in margins, three pages.
+  Page 3 MUST print at 100 percent, no "fit to page", or the
+  charts are the wrong size. There is a calibration bar on it.
+
+  Canvas: iframe it, the height sender is at the bottom.
+  ============================================================
+-->
+<style>
+:root{
+  --ink:#0B1530; --maroon:#8B3A2E; --maroon-dk:#6E2D24;
+  --muted:#4A5265; --faint:#505663; --hair:#C7CBD4; --grid:#D8DBE1;
+  --f:'Be Vietnam Pro',system-ui,-apple-system,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--f);background:#EEECEA;color:var(--ink);font-size:14px;line-height:1.5}
+em,i,cite,dfn,var{font-style:normal}
+h1,h2,h3{font-family:var(--f);margin:0;letter-spacing:-.01em}
+p{margin:0}
+a{color:var(--maroon-dk)}
+:focus-visible{outline:3px solid var(--maroon);outline-offset:3px;border-radius:3px}
+.skip{position:absolute;left:-9999px;top:0;z-index:80;background:var(--ink);color:#fff;padding:12px 18px;font-weight:700;text-decoration:none}
+.skip:focus{left:0}
+
+.note{max-width:8.5in;margin:20px auto 12px;padding:0 .5in;font-size:13.5px;color:#3A4250}
+.note b{color:var(--ink)}
+.note p+p{margin-top:8px}
+
+.sheet{background:#fff;width:8.5in;min-height:11in;margin:0 auto 18px;padding:.5in .5in .45in}
+
+.rh{display:flex;justify-content:space-between;align-items:flex-end;
+    border-bottom:1.5px solid var(--ink);padding-bottom:5px;margin-bottom:8px}
+.rh .l{font-size:9px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--maroon-dk)}
+.rh h1{font-size:17px;font-weight:800;margin-top:2px}
+.rh .r{font-size:9px;color:var(--faint);text-align:right;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+
+.idbar{display:flex;gap:14px;margin-bottom:8px}
+.idbar div{flex:1;border-bottom:1px solid var(--ink);height:26px;display:flex;align-items:flex-end;
+  font-size:8.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);padding-bottom:2px}
+.idbar div.w{flex:0 0 92px}
+
+.blk{border:1px solid var(--ink);margin-bottom:4px}
+.bh{display:flex;align-items:baseline;gap:9px;padding:5px 9px;border-bottom:1px solid var(--hair);background:#F2F3F5}
+.bn{font-size:15px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;flex:none}
+.bt{font-size:11.5px;font-weight:800;flex:0 1 auto}
+.bs{font-size:9px;color:var(--muted);margin-left:auto;text-align:right;flex:0 1 42%}
+.fill{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 25px,var(--grid) 25px,var(--grid) 25.6px)}
+.h-a{height:.44in} .h-b{height:.52in} .h-c{height:.62in}
+
+.how{padding:5px 9px 6px;font-size:10px;color:var(--muted);line-height:1.4}
+.how b{color:var(--ink);font-weight:800}
+.how ol{margin:0;padding-left:16px}
+.how li{margin-bottom:1px}
+.how li:last-child{margin-bottom:0}
+.warn{margin-top:5px;padding-top:5px;border-top:.6px solid var(--grid);color:var(--maroon-dk);font-weight:700;font-size:10px}
+
+table{width:100%;border-collapse:collapse}
+th{font-size:8.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);
+  text-align:left;padding:4px 9px;border-bottom:1px solid var(--hair);border-right:.6px solid var(--grid)}
+th:last-child{border-right:0}
+td{height:20px;border-bottom:.6px solid var(--grid);border-right:.6px solid var(--grid);padding:0 9px;font-size:10px}
+td:last-child{border-right:0}
+tr:last-child td{border-bottom:0}
+td.lbl{font-size:9.5px;font-weight:800;color:var(--muted);background:#FAFAFA}
+
+.conv{display:flex;flex-wrap:wrap;gap:0;border-top:.6px solid var(--grid)}
+.conv div{flex:1 0 16.6%;padding:4px 6px;font-size:9px;text-align:center;border-right:.6px solid var(--grid);color:var(--muted)}
+.conv div:last-child{border-right:0}
+.conv b{display:block;font-size:10.5px;color:var(--ink)}
+
+.foot{display:flex;justify-content:space-between;font-size:8.5px;color:var(--faint);margin-top:5px;
+  letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+
+/* ---------- page 3, the charts ---------- */
+.cal{border:1px solid var(--maroon);padding:9px;margin-bottom:10px}
+.cal p{font-size:10.5px;color:var(--maroon-dk);font-weight:700}
+.calbar{margin-top:7px;height:.28in;width:4in;border:1px solid var(--ink);
+  background-image:repeating-linear-gradient(to right,var(--ink) 0,var(--ink) .8px,transparent .8px,transparent .5in)}
+.calnote{font-size:9px;color:var(--muted);font-weight:500;margin-top:4px}
+
+/* Sized in real millimetres, not inches. An inch-based scale labeled in mm
+   drifts by 2.4mm by the right-hand end, which matters when a student is
+   setting a paperclip to 6mm. */
+.mmscale{height:.34in;width:150mm;border:1px solid var(--ink);border-top:0;
+  background-image:repeating-linear-gradient(to right,var(--ink) 0,var(--ink) .6px,transparent .6px,transparent 1mm);
+  margin-top:6px}
+.mmlab{display:flex;width:150mm;font-size:8px;color:var(--faint);font-weight:700;margin-top:2px}
+.mmlab span{flex:0 0 25mm}
+.mmlab span:last-child{flex:0 0 0}
+
+.bsrow{display:flex;align-items:center;justify-content:flex-start;gap:0;padding:14px 0 10px}
+.bsdot{width:.3in;height:.3in;border-radius:50%;background:var(--ink);flex:none}
+.bsgap{width:2.06in;flex:none}
+.bscross{width:.34in;height:.34in;flex:none;position:relative}
+.bscross::before,.bscross::after{content:"";position:absolute;background:var(--ink)}
+.bscross::before{left:50%;top:0;width:2px;height:100%;transform:translateX(-50%)}
+.bscross::after{top:50%;left:0;height:2px;width:100%;transform:translateY(-50%)}
+
+.acu{padding:8px 0 4px}
+.acu p{margin-bottom:3px;letter-spacing:.02em;color:var(--ink)}
+.a1{font-size:22px;font-weight:700}
+.a2{font-size:16px;font-weight:700}
+.a3{font-size:12px;font-weight:600}
+.a4{font-size:9px;font-weight:600}
+.a5{font-size:7px;font-weight:600}
+.a6{font-size:5.5px;font-weight:600}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{
+  body{background:#fff}
+  .sheet{width:auto;min-height:0;margin:0;padding:0}
+  .sheet+.sheet{break-before:page}
+  .blk,.cal{break-inside:avoid}
+  .note,.b005-back{display:none}
+  @page{size:letter portrait;margin:.5in}
+}
+
+/* Wide tables scroll in their own box rather than pushing the page
+   sideways. Added Sep 6 2026 with the MedMasters type change: Open Sans
+   is wider than Plus Jakarta, so tables that just fitted at 320px no
+   longer did. tabindex makes the scroll box keyboard reachable, which
+   WCAG 2.1.1 requires of any scrollable region. */
+.tblscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+.tblscroll:focus-visible{outline:3px solid var(--maroon,#8B3A2E);outline-offset:2px}
+.tblscroll table{min-width:100%}
+
+/* ---- Small-screen reflow, Sep 6 2026 ------------------------------------
+   WCAG 1.4.10 asks for no horizontal scrolling at 320 CSS px. Two things
+   broke it here. Neither is new to the MedMasters change, but Open Sans is
+   a wider face than Plus Jakarta so both got worse and both are now fixed.
+
+   1. The print sheet is 8.5in wide by design. On paper that is right. On a
+      phone it is 816px inside a 320px window. It now shrinks on screen and
+      keeps its exact paper width when printing.
+   2. The header row would not wrap, so the back button hung off the edge. */
+@media screen and (max-width:900px){
+  .sheet{width:auto!important;max-width:100%!important;min-height:0!important;
+         padding:22px 18px!important}
+}
+@media screen and (max-width:640px){
+  .site-header-inner{flex-wrap:wrap;gap:10px}
+  .hdr-btn{white-space:normal}
+}
+
+/* Small-screen reflow, Sep 6 2026. WCAG 1.4.10 wants no horizontal scroll
+   at 320 CSS px. This page had one fixed-width element that did not
+   collapse. Screen only; print keeps its own widths. */
+@media screen and (max-width:640px){
+  .sheet{width:auto!important;max-width:100%!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the lab</a>
+
+<div class="mm-brandbar"><div class="mm-wrap">
+  <a class="mm-mark" href="faculty-tools.html" target="_top">
+    <svg viewBox="40 10 125 148" width="22" height="26" role="img" aria-label="BIO 005 Human Physiology, course home">
+      <g transform="translate(0,18)">
+        <g transform="translate(60,0) rotate(8 0 130)"><circle cx="0" cy="20" r="10" fill="#0B1530"/><path d="M 0,32 C -10,32 -16,36 -16,42 C -16,55 -13,68 -11,82 C -10,100 -12,118 -14,130 L 14,130 C 12,118 10,100 11,82 C 13,68 16,55 16,42 C 16,36 10,32 0,32 Z" fill="#0B1530"/></g>
+        <g transform="translate(100,0)"><circle cx="0" cy="10" r="11" fill="#8B3A2E"/><path d="M 0,22 C -11,22 -17,26 -17,34 C -17,52 -14,70 -12,86 C -11,108 -13,122 -15,132 L 15,132 C 13,122 11,108 12,86 C 14,70 17,52 17,34 C 17,26 11,22 0,22 Z" fill="#8B3A2E"/></g>
+        <g transform="translate(140,0) rotate(-8 0 130)"><circle cx="0" cy="20" r="10" fill="#C9A14A"/><path d="M 0,32 C -10,32 -16,36 -16,42 C -16,55 -13,68 -11,82 C -10,100 -12,118 -14,130 L 14,130 C 12,118 10,100 11,82 C 13,68 16,55 16,42 C 16,36 10,32 0,32 Z" fill="#C9A14A"/></g>
+      </g>
+    </svg>
+    <span><span class="mm-wm">BIO <b>005</b></span><span class="mm-wmsub">Human Physiology</span></span>
+  </a>
+  <span class="mm-course">BIO 005 &middot; Fall 2026</span>
+</div></div>
+
+
+<p class="note"><b>Print all three pages, then run the tests on yourself.</b> There is no PhysioEx this week. PhysioEx does not have a sensory exercise, so this is your Week 5 lab. Everything here works at home with a ruler, a paperclip, your phone and this packet.</p>
+<p class="note"><b>Print page 3 at 100 percent.</b> Turn off "fit to page" and "shrink to fit," or the charts come out the wrong size and your measurements will be wrong. There is a bar on page 3 to check it with.</p>
+<p class="note">These are demonstrations of how your sensory and reflex systems work. They are not eye exams, hearing tests, or medical screens, and nothing here can tell you whether anything is wrong with you. If something you notice while doing this worries you, that is a question for an actual clinician, not for a worksheet. When you are done, carry your results onto your <a href="lab-report-form.html" target="_top">weekly lab analysis sheet</a> and upload everything together.</p>
+
+<main id="main">
+
+<!-- ======================= PAGE 1 ======================= -->
+<section class="sheet">
+
+  <div class="rh">
+    <div>
+      <p class="l">BIO 005 &middot; Human Physiology &middot; Yuba College</p>
+      <h1>Week 5 lab: your own sensory and reflex data</h1>
+    </div>
+    <p class="r">Fall 2026<br>Dr. Sharilyn Rennie</p>
+  </div>
+
+  <div class="idbar">
+    <div>Name</div>
+    <div class="w">Date</div>
+    <div>Who helped you (you need one partner for test 1)</div>
+  </div>
+
+  <!-- 1 REACTION TIME -->
+  <div class="blk">
+    <div class="bh"><span class="bn">1</span><span class="bt">Reaction time, the ruler drop</span>
+      <span class="bs">How long it takes a signal to go eye, brain, hand. Needs a 12 inch ruler and one other person.</span></div>
+    <div class="how">
+      <ol>
+        <li>Rest your forearm on a table with your hand off the edge, thumb and finger about an inch apart.</li>
+        <li>Your partner holds the ruler so the zero end sits between your fingers. You watch the ruler, not their hand.</li>
+        <li>They drop it without warning. You catch it. Write down the centimetre mark where your fingers closed.</li>
+        <li>Five drops with your dominant hand, then five with the other. Then five more with your dominant hand while you count backwards out loud from 100 by threes.</li>
+      </ol>
+      <p class="warn">Do not let your partner count down or give any signal. The whole point is that you cannot predict it.</p>
+    </div>
+    <div class="tblscroll" tabindex="0" role="region" aria-label="Table, scroll sideways to see all columns"><table>
+      <tr><th style="width:1.9in">Condition</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th style="width:1.05in">Average cm</th><th style="width:1.05in">Average ms</th></tr>
+      <tr><td class="lbl">Dominant hand</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="lbl">Other hand</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="lbl">Dominant, while counting</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    </table></div>
+    <div class="conv">
+      <div>5 cm<b>101 ms</b></div><div>10 cm<b>143 ms</b></div><div>15 cm<b>175 ms</b></div>
+      <div>20 cm<b>202 ms</b></div><div>25 cm<b>226 ms</b></div><div>30 cm<b>247 ms</b></div>
+    </div>
+    <div class="how" style="padding-top:5px"><b>In between those?</b> Milliseconds = 45.15 &times; the square root of your centimetres. Show the arithmetic somewhere on the page.</div>
+  </div>
+
+  <!-- 2 TWO POINT -->
+  <div class="blk">
+    <div class="bh"><span class="bn">2</span><span class="bt">Two point discrimination, the paperclip test</span>
+      <span class="bs">How close two touches can get before your skin stops telling them apart. Needs a bent paperclip and the mm scale on page 3.</span></div>
+    <div class="how">
+      <ol>
+        <li>Bend a paperclip into a U with two straight ends. Set the ends 20 mm apart against the scale on page 3.</li>
+        <li>Close your eyes. Your partner touches the skin lightly with either both ends or one end, mixing them up, and you say "one" or "two" each time.</li>
+        <li>Narrow the gap by 2 mm and go again. Your threshold is the smallest gap where you still get it right.</li>
+        <li>Test all five sites. Press only hard enough to feel it, the same amount every time.</li>
+      </ol>
+      <p class="warn">Include the one-point touches. Without them you will just say "two" every time and get a meaningless number.</p>
+    </div>
+    <div class="tblscroll" tabindex="0" role="region" aria-label="Table, scroll sideways to see all columns"><table>
+      <tr><th style="width:2.2in">Where you tested</th><th style="width:1.5in">Threshold, mm</th><th>What it felt like near the threshold</th></tr>
+      <tr><td class="lbl">Fingertip</td><td></td><td></td></tr>
+      <tr><td class="lbl">Palm</td><td></td><td></td></tr>
+      <tr><td class="lbl">Back of the forearm</td><td></td><td></td></tr>
+      <tr><td class="lbl">Back of the neck</td><td></td><td></td></tr>
+      <tr><td class="lbl">Lip or fingertip of the other hand</td><td></td><td></td></tr>
+    </table></div>
+  </div>
+
+  <!-- 3 ORTHOSTATIC -->
+  <div class="blk">
+    <div class="bh"><span class="bn">3</span><span class="bt">Standing up, and what your heart does about it</span>
+      <span class="bs">Autonomic control caught in the act. Needs a clock with a second hand or your phone timer.</span></div>
+    <div class="how">
+      <ol>
+        <li>Lie down flat, or sit fully reclined, for five quiet minutes. Do not skip this part.</li>
+        <li>Count your pulse for a full 30 seconds and double it. That is your baseline.</li>
+        <li>Stand up. Start counting immediately and take a 30 second count in each window below.</li>
+        <li>Do the whole thing next to a wall or a bed.</li>
+      </ol>
+      <p class="warn">If you feel lightheaded at any point, sit or lie down straight away and stop the test. Write down that it happened, that is real data, and finish the rest of the packet without it.</p>
+    </div>
+    <div class="tblscroll" tabindex="0" role="region" aria-label="Table, scroll sideways to see all columns"><table>
+      <tr><th style="width:2.2in">When</th><th style="width:1.6in">Beats per minute</th><th>Anything you noticed</th></tr>
+      <tr><td class="lbl">Lying down, baseline</td><td></td><td></td></tr>
+      <tr><td class="lbl">0 to 30 seconds after standing</td><td></td><td></td></tr>
+      <tr><td class="lbl">1 to 1.5 minutes standing</td><td></td><td></td></tr>
+      <tr><td class="lbl">3 to 3.5 minutes standing</td><td></td><td></td></tr>
+    </table></div>
+  </div>
+
+  <div class="foot">
+    <span>Page 1 of 3 &middot; keep all three pages together</span>
+    <span>Due Sunday 10:00 pm</span>
+  </div>
+
+</section>
+
+<!-- ======================= PAGE 2 ======================= -->
+<section class="sheet">
+
+  <div class="rh">
+    <div>
+      <p class="l">BIO 005 &middot; Human Physiology &middot; Yuba College</p>
+      <h1>Week 5 lab, page 2: vision, hearing, balance</h1>
+    </div>
+    <p class="r">Fall 2026<br>Dr. Sharilyn Rennie</p>
+  </div>
+
+  <!-- 4 VISION -->
+  <div class="blk">
+    <div class="bh"><span class="bn">4</span><span class="bt">Vision, using the charts on page 3</span>
+      <span class="bs">Three quick things. Keep your usual glasses or contacts on, and say so in the table.</span></div>
+    <div class="how">
+      <ol>
+        <li><b>Blind spot.</b> Hold page 3 at arm's length. Cover your left eye, look straight at the cross, and bring the page slowly toward your face. The dot disappears, then comes back. Measure your distance from the page the moment it vanishes. Swap eyes and watch the cross go instead.</li>
+        <li><b>The fan.</b> One eye at a time, from about 16 inches, looking at the center. Do all the spokes look equally dark, or are some directions softer?</li>
+        <li><b>Near text.</b> Page 3 at 16 inches, one eye at a time. Smallest line you can read cleanly.</li>
+      </ol>
+      <p class="warn">This shows you how the eye is built. It is not an eye exam, and a printed page cannot measure your vision. If a spoke really does look different, take that to an optometrist.</p>
+    </div>
+    <div class="tblscroll" tabindex="0" role="region" aria-label="Table, scroll sideways to see all columns"><table>
+      <tr><th style="width:2.2in">&nbsp;</th><th>Right eye</th><th>Left eye</th></tr>
+      <tr><td class="lbl">Blind spot distance, inches</td><td></td><td></td></tr>
+      <tr><td class="lbl">Fan: all spokes even? If not, which direction</td><td></td><td></td></tr>
+      <tr><td class="lbl">Smallest line read at 16 in</td><td></td><td></td></tr>
+      <tr><td class="lbl">Glasses or contacts on?</td><td></td><td></td></tr>
+    </table></div>
+  </div>
+
+  <!-- 5 HEARING AND BALANCE -->
+  <div class="blk">
+    <div class="bh"><span class="bn">5</span><span class="bt">Hearing range, and standing still with your eyes shut</span>
+      <span class="bs">Needs any free tone generator on your phone, and a wall to stand next to.</span></div>
+    <div class="how">
+      <ol>
+        <li><b>Set the volume low first</b>, comfortable at 1000 Hz, then do not touch it again.</li>
+        <li>Climb from 1000 Hz: 4000, 8000, 12000, 14000, 16000, 18000. Write down the highest you can honestly still hear. Then go down: 200, 100, 60, 30 Hz, and write down the lowest.</li>
+        <li>If someone older or younger is around, run the high end on them and note both ages.</li>
+        <li><b>Balance.</b> Feet together, arms at your sides, next to a wall. Time how long you stay steady with your eyes open, then closed. Stop at 60 seconds either way.</li>
+      </ol>
+      <p class="warn">Phone speakers and earbuds are not calibrated, so this shows the shape of your hearing range, not your hearing level. Keep the volume low and stop if a tone is uncomfortable. Stay within arm's reach of the wall for the balance test.</p>
+    </div>
+    <div class="tblscroll" tabindex="0" role="region" aria-label="Table, scroll sideways to see all columns"><table>
+      <tr><th style="width:2.6in">&nbsp;</th><th>Result</th><th>Age, if you tested someone else</th></tr>
+      <tr><td class="lbl">Highest frequency you could hear, Hz</td><td></td><td></td></tr>
+      <tr><td class="lbl">Lowest frequency you could hear, Hz</td><td></td><td></td></tr>
+      <tr><td class="lbl">Someone else's highest frequency, Hz</td><td></td><td></td></tr>
+      <tr><td class="lbl">Balance, eyes open, seconds steady</td><td></td><td></td></tr>
+      <tr><td class="lbl">Balance, eyes closed, seconds steady</td><td></td><td></td></tr>
+    </table></div>
+  </div>
+
+  <!-- 6 SORT -->
+  <div class="blk">
+    <div class="bh"><span class="bn">6</span><span class="bt">Sort your five results into the ones that got worse and the ones that did not</span>
+      <span class="bs">Counting backwards, using your other hand, closing your eyes, moving to hairier skin, standing up. Something was taken away in each one. What?</span></div>
+    <div class="fill h-c"></div>
+  </div>
+
+  <!-- 7 CHAIN -->
+  <div class="blk">
+    <div class="bh"><span class="bn">7</span><span class="bt">Closing your eyes made you wobble. Trace why, step by step.</span>
+      <span class="bs">Start with the eyes closing. End with the muscle that had to fire. Name the receptors you are relying on in between.</span></div>
+    <div class="fill h-c"></div>
+  </div>
+
+  <div class="blk">
+    <div class="how" style="padding:7px 9px"><b>Your prediction goes on the other sheet, not this one.</b> Before you run whichever test you were least sure about, write down what you expected to happen in block 2 of your weekly lab analysis sheet. Do that before you have the number, not after.</div>
+  </div>
+
+  <div class="foot">
+    <span>Page 2 of 3</span>
+    <span>Due Sunday 10:00 pm</span>
+  </div>
+
+</section>
+
+<!-- ======================= PAGE 3, THE CHARTS ======================= -->
+<section class="sheet">
+
+  <div class="rh">
+    <div>
+      <p class="l">BIO 005 &middot; Human Physiology &middot; Yuba College</p>
+      <h1>Week 5 lab, page 3: the test charts</h1>
+    </div>
+    <p class="r">Print at 100%<br>No fit to page</p>
+  </div>
+
+  <div class="cal">
+    <p>Check this first. The bar below must measure exactly 4 inches, with a tick every half inch.</p>
+    <div class="calbar" role="img" aria-label="Calibration bar, four inches long with a tick every half inch"></div>
+    <p class="calnote">If it does not measure 4 inches, your printer scaled the page. Print again with scaling set to 100 percent, actual size, or none. Every measurement on this page depends on it.</p>
+    <div class="mmscale" role="img" aria-label="Millimetre scale, six inches long"></div>
+    <div class="mmlab"><span>0 mm</span><span>25</span><span>50</span><span>75</span><span>100</span><span>125</span><span>150</span></div>
+    <p class="calnote">Set your paperclip against this scale for test 2.</p>
+  </div>
+
+  <div class="blk">
+    <div class="bh"><span class="bn">A</span><span class="bt">Blind spot</span>
+      <span class="bs">Cover the left eye, stare at the cross, bring the page slowly toward you. The dot vanishes when its image lands on your optic disc.</span></div>
+    <div class="bsrow" style="padding-left:.6in">
+      <span class="bsdot" role="img" aria-label="Solid dot"></span>
+      <span class="bsgap"></span>
+      <span class="bscross" role="img" aria-label="Cross"></span>
+    </div>
+  </div>
+
+  <div class="blk">
+    <div class="bh"><span class="bn">B</span><span class="bt">The fan</span>
+      <span class="bs">One eye at a time, from about 16 inches, looking at the center. Do all the spokes look equally dark?</span></div>
+    <div style="padding:8px 9px;text-align:center">
+      <svg width="230" height="230" viewBox="0 0 230 230" role="img" aria-label="A radial fan of eighteen evenly spaced black lines meeting at a central point, like the spokes of a wheel, with the clock positions marked around the outside.">
+        <g stroke="#0B1530" stroke-width="2.4">
+          <line x1="115" y1="115" x2="115" y2="17"/><line x1="115" y1="115" x2="115" y2="213"/>
+          <line x1="115" y1="115" x2="17" y2="115"/><line x1="115" y1="115" x2="213" y2="115"/>
+          <line x1="115" y1="115" x2="184.3" y2="45.7"/><line x1="115" y1="115" x2="45.7" y2="184.3"/>
+          <line x1="115" y1="115" x2="184.3" y2="184.3"/><line x1="115" y1="115" x2="45.7" y2="45.7"/>
+          <line x1="115" y1="115" x2="164.0" y2="30.1"/><line x1="115" y1="115" x2="66.0" y2="199.9"/>
+          <line x1="115" y1="115" x2="199.9" y2="66.0"/><line x1="115" y1="115" x2="30.1" y2="164.0"/>
+          <line x1="115" y1="115" x2="199.9" y2="164.0"/><line x1="115" y1="115" x2="30.1" y2="66.0"/>
+          <line x1="115" y1="115" x2="164.0" y2="199.9"/><line x1="115" y1="115" x2="66.0" y2="30.1"/>
+        </g>
+        <circle cx="115" cy="115" r="7" fill="#fff"/>
+        <circle cx="115" cy="115" r="2.4" fill="#0B1530"/>
+        <text x="115" y="10" text-anchor="middle" font-size="9" font-weight="700" fill="#505663" font-family="Be Vietnam Pro, sans-serif">12</text>
+        <text x="223" y="118" text-anchor="middle" font-size="9" font-weight="700" fill="#505663" font-family="Be Vietnam Pro, sans-serif">3</text>
+        <text x="115" y="226" text-anchor="middle" font-size="9" font-weight="700" fill="#505663" font-family="Be Vietnam Pro, sans-serif">6</text>
+        <text x="7" y="118" text-anchor="middle" font-size="9" font-weight="700" fill="#505663" font-family="Be Vietnam Pro, sans-serif">9</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="blk">
+    <div class="bh"><span class="bn">C</span><span class="bt">Near text</span>
+      <span class="bs">Hold the page 16 inches away, one eye at a time. Which is the smallest line you can read cleanly?</span></div>
+    <div class="acu" style="padding-left:9px;padding-right:9px">
+      <p class="a1">1 &nbsp; The sensory neuron fires</p>
+      <p class="a2">2 &nbsp; Threshold is reached at the axon hillock</p>
+      <p class="a3">3 &nbsp; Sodium rushes in and the membrane depolarises</p>
+      <p class="a4">4 &nbsp; The signal crosses the synapse and the next cell decides what to do with it</p>
+      <p class="a5">5 &nbsp; Receptor density is high in the fingertip and low on the back, which is why the thresholds differ</p>
+      <p class="a6">6 &nbsp; Your brain fills in the blind spot so convincingly that you spent your whole life not noticing it was there</p>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>Page 3 of 3 &middot; this page is the equipment, do not write on it</span>
+    <span>Dr. Sharilyn Rennie</span>
+  </div>
+
+</section>
+</main>
+
+<script>
+/* Canvas iframe height sender. Same contract as the assignment pages. */
+(function(){
+  var ID = "bio005-lab-week05";
+  function send(){
+    var h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+    try{ window.parent.postMessage({id:ID,frameId:ID,type:"resize",height:h}, "*"); }catch(e){}
+  }
+  window.addEventListener("load", send); window.addEventListener("resize", send);
+  if (typeof ResizeObserver !== "undefined"){ try{ new ResizeObserver(send).observe(document.body); }catch(e){} }
+  setTimeout(send,400); setTimeout(send,1500);
+})();
+</script>
+<script src="bio005-back.js"></script>
+<script src="bio005-nav.js" defer></script>
+<footer class="mm-foot"><div class="mm-wrap">
+  <nav class="mm-flinks" aria-label="Course links">
+    <a href="faculty-tools.html" target="_top">Course home</a><span class="mm-dot" aria-hidden="true">&middot;</span>
+    <a href="course-questions.html" target="_top">Answered questions</a><span class="mm-dot" aria-hidden="true">&middot;</span>
+    <a href="syllabus-fall2026.html" target="_top">Syllabus</a><span class="mm-dot" aria-hidden="true">&middot;</span>
+    <a href="course-schedule.html" target="_top">Schedule</a><span class="mm-dot" aria-hidden="true">&middot;</span>
+    <a href="clinical-physiology-lab-manual.html" target="_top">Lab manual</a><span class="mm-dot" aria-hidden="true">&middot;</span>
+    <a href="accessibility.html" target="_top">Accessibility</a><span class="mm-dot" aria-hidden="true">&middot;</span>
+    <a href="https://yccd.instructure.com/courses/42616" target="_blank" rel="noopener">Canvas</a><span class="mm-dot" aria-hidden="true">&middot;</span>
+    <a href="https://yccd.instructure.com/courses/42616/discussion_topics/711800" target="_blank" rel="noopener">Virtual Office</a>
+  </nav>
+  <p class="mm-fleg">BIO 005 Human Physiology &middot; Fall 2026 &middot; Dr. Sharilyn Rennie<br>
+     If a page does not work for you, tell me in the Virtual Office and I will fix it.</p>
+</div></footer>
+</body>
+</html>

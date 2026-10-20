@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lecture Writer &middot; Teaching Resources</title>
+<style>
+@import url('https://cdn.jsdelivr.net/npm/@fontsource-variable/plus-jakarta-sans/index.css');
+@import url('https://cdn.jsdelivr.net/npm/@fontsource-variable/figtree/index.css');
+
+:root{
+  --navy:#0B1530;
+  --navy-mid:#1F2D44;
+  --navy-tint:#E7EAF0;
+  --terra:#8B3A2E;
+  --terra-dark:#5E201A;
+  --gold:#C9A14A;
+  --gold-text:#6E5018;
+  --muted:#4E5464;
+  --placeholder:#8C93A1;
+  --rule:#DCE0E6;
+  --control:#8C90A0;
+  --rule-faint:#EBEEF2;
+  --page:#FFFFFF;
+  --card:#FFFFFF;
+  --soft:#FAFAF9;
+  --rest:0 1px 3px rgba(11,21,48,.08), 0 1px 2px rgba(11,21,48,.05);
+  --lift:0 8px 16px rgba(11,21,48,.10), 0 3px 6px rgba(11,21,48,.06);
+  --display:'Plus Jakarta Sans Variable','Plus Jakarta Sans',system-ui,sans-serif;
+  --body:'Figtree Variable','Figtree',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+em,i,cite,dfn,var,address{font-style:normal;}
+html,body{font-size:17px;line-height:1.6;}
+body{font-family:var(--body);background:var(--page);color:var(--navy);-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4,h5{font-family:var(--display);letter-spacing:-.01em;}
+a{color:var(--terra);}
+:focus-visible{outline:3px solid var(--terra);outline-offset:3px;border-radius:6px;}
+
+.skip{position:absolute;left:-9999px;top:0;z-index:100;background:var(--navy);color:#FFF;padding:12px 18px;border-radius:0 0 8px 0;font-size:14px;font-weight:700;text-decoration:none;}
+.skip:focus{left:0;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+
+.wrap{max-width:1000px;margin:0 auto;padding:0 max(22px,4vw);}
+.site-header{padding:20px 0;border-bottom:.5px solid rgba(11,21,48,.10);}
+.site-header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.logo{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--navy);}
+.logo svg{height:40px;width:auto;}
+.logo .t{font-family:var(--display);font-size:19px;font-weight:800;line-height:1;}
+.logo .t .a{color:var(--terra);}
+.logo .s{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;opacity:.72;display:block;margin-top:3px;}
+.back{font-size:13px;font-weight:700;color:var(--terra);text-decoration:none;}
+.back:hover{text-decoration:underline;}
+
+.eyebrow{font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--terra);margin:26px 0 10px;display:flex;align-items:center;gap:10px;}
+.eyebrow::before{content:"";width:26px;height:2px;background:var(--terra);}
+h1{font-size:40px;font-weight:800;line-height:1.08;margin:0 0 8px;}
+h1 .a{color:var(--terra);}
+.lead{font-size:17px;color:var(--muted);max-width:64ch;margin:0 0 26px;}
+
+.panel{background:var(--card);border:1px solid var(--rule);border-radius:12px;box-shadow:var(--rest);padding:24px;margin:0 0 22px;}
+.panel > h2{font-size:21px;font-weight:800;margin:0 0 4px;}
+.panel > .hint{font-size:14px;color:var(--muted);margin:0 0 18px;}
+
+.grid{display:grid;gap:16px;}
+.g2{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));}
+.g3{grid-template-columns:repeat(auto-fit,minmax(170px,1fr));}
+
+label{display:block;font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:.02em;margin:0 0 6px;color:var(--navy);}
+input[type=text],input[type=number],select,textarea{
+  width:100%;font-family:var(--body);font-size:15.5px;line-height:1.5;color:var(--navy);
+  background:#FFF;border:1px solid var(--control);border-radius:8px;padding:10px 12px;
+}
+textarea{min-height:82px;resize:vertical;}
+input::placeholder,textarea::placeholder{color:var(--placeholder);}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%234E5464' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:12px;padding-right:34px;}
+.fieldnote{font-size:12.5px;color:var(--muted);margin-top:5px;}
+
+.btn{font-family:var(--display);font-size:14px;font-weight:700;border-radius:8px;padding:10px 16px;border:1px solid transparent;cursor:pointer;background:var(--navy);color:#FFF;transition:background .15s,transform .15s,box-shadow .15s;}
+.btn:hover{background:var(--navy-mid);}
+.btn.secondary{background:#FFF;color:var(--navy);border-color:var(--control);}
+.btn.secondary:hover{background:var(--soft);}
+.btn.terra{background:var(--terra);}
+.btn.terra:hover{background:var(--terra-dark);}
+.btn.small{font-size:13px;padding:7px 12px;}
+.btn.danger{background:#FFF;color:var(--terra-dark);border-color:var(--control);}
+.btn.danger:hover{background:#F7EFED;}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+
+.obj{display:grid;grid-template-columns:1fr 132px auto;gap:12px;align-items:end;padding:14px 0;border-top:1px solid var(--rule-faint);}
+.obj:first-of-type{border-top:none;}
+.seg{border:1px solid var(--rule);border-radius:10px;padding:18px;margin:0 0 16px;background:#FFF;box-shadow:var(--rest);}
+.seghead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 14px;flex-wrap:wrap;}
+.segnum{font-family:var(--display);font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--terra);}
+
+.meter{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--soft);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;margin:0 0 18px;}
+.meter .bar{flex:1 1 220px;height:10px;border-radius:99px;background:var(--navy-tint);overflow:hidden;min-width:180px;}
+.meter .fill{display:block;height:100%;width:0;background:var(--navy);transition:width .25s ease;}
+.meter.over .fill{background:var(--terra);}
+.meter .read{font-family:var(--display);font-size:14px;font-weight:700;}
+.meter.over .read{color:var(--terra-dark);}
+
+.status{font-size:14px;font-weight:600;color:var(--muted);min-height:1.4em;}
+
+/* Preview */
+.plan{background:#FFF;border:1px solid var(--rule);border-radius:12px;box-shadow:var(--rest);padding:30px;}
+.plan .ph{font-family:var(--display);font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--terra);margin:0 0 6px;}
+.plan h3.title{font-size:27px;font-weight:800;margin:0 0 4px;}
+.plan .meta{font-size:14px;color:var(--muted);margin:0 0 22px;}
+.plan h4.sec{font-size:16px;font-weight:800;margin:26px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--rule-faint);}
+.plan ol.objs{margin:0;padding-left:22px;}
+.plan ol.objs li{margin:0 0 7px;}
+.plan .dok{font-family:var(--display);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-text);background:rgba(201,161,74,.10);border-radius:99px;padding:2px 9px;margin-left:7px;white-space:nowrap;}
+.plan .pseg{border:1px solid var(--rule);border-radius:10px;padding:18px 20px;margin:0 0 14px;}
+.plan .pseg h5{font-size:17px;font-weight:800;margin:0 0 3px;}
+.plan .pseg .st{font-size:13px;color:var(--muted);margin:0 0 12px;}
+.plan .row{margin:0 0 11px;}
+.plan .row .k{font-family:var(--display);font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);display:block;margin-bottom:2px;}
+.plan .row .v{font-size:15px;white-space:pre-wrap;}
+.plan .empty{color:var(--muted);}
+
+footer{padding:26px 0 44px;margin-top:34px;border-top:.5px solid rgba(11,21,48,.10);color:var(--muted);font-size:13px;font-weight:600;}
+
+@media(max-width:640px){
+  h1{font-size:31px;}
+  .obj{grid-template-columns:1fr;align-items:stretch;}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;}}
+
+@media print{
+  .site-header,.eyebrow,h1,.lead,.builder,.exportbar,footer,.skip{display:none!important;}
+  body{font-size:11.5pt;}
+  .wrap{max-width:none;padding:0;}
+  .plan{border:none;box-shadow:none;padding:0;}
+  .plan .pseg{break-inside:avoid;page-break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="faculty-tools.html">
+      <span><svg viewBox="40 10 125 148" aria-hidden="true" focusable="false"><g transform="translate(0,18)"><g transform="translate(60,0) rotate(8 0 130)"><circle cx="0" cy="20" r="10" fill="#0B1530"/><path d="M 0,32 C -10,32 -16,36 -16,42 C -16,55 -13,68 -11,82 C -10,100 -12,118 -14,130 L 14,130 C 12,118 10,100 11,82 C 13,68 16,55 16,42 C 16,36 10,32 0,32 Z" fill="#0B1530"/></g><g transform="translate(100,0)"><circle cx="0" cy="10" r="11" fill="#8B3A2E"/><path d="M 0,22 C -11,22 -17,26 -17,34 C -17,52 -14,70 -12,86 C -11,108 -13,122 -15,132 L 15,132 C 13,122 11,108 12,86 C 14,70 17,52 17,34 C 17,26 11,22 0,22 Z" fill="#8B3A2E"/></g><g transform="translate(140,0) rotate(-8 0 130)"><circle cx="0" cy="20" r="10" fill="#C9A14A"/><path d="M 0,32 C -10,32 -16,36 -16,42 C -16,55 -13,68 -11,82 C -10,100 -12,118 -14,130 L 14,130 C 12,118 10,100 11,82 C 13,68 16,55 16,42 C 16,36 10,32 0,32 Z" fill="#C9A14A"/></g></g></svg></span>
+      <span><span class="t">Teaching <span class="a">Resources</span></span><span class="s">Dr. Sharilyn Rennie</span></span>
+    </a>
+    <a class="back" href="lectures-slides.html">&larr; Lectures &amp; Slides</a>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+<div class="wrap">
+
+  <div class="eyebrow">Lectures &amp; Slides</div>
+  <h1>Lecture <span class="a">Writer</span></h1>
+  <p class="lead">Start from your objectives and build the lecture around them. Each segment holds the teaching sequence, the figure you will show, the clinical connection, a retrieval check, and a drawing prompt. Print the plan or hand the outline to the slide builder.</p>
+
+  <div class="builder">
+
+    <!-- SETUP -->
+    <section class="panel" aria-labelledby="h-setup">
+      <h2 id="h-setup">1. Set up the lecture</h2>
+      <p class="hint">The type code follows your naming pattern: A for anatomy, AL for anatomy lab, P for physiology.</p>
+      <div class="grid g2">
+        <div>
+          <label for="f-course">Course</label>
+          <input type="text" id="f-course" placeholder="Examples: BIO 004 Human Anatomy">
+        </div>
+        <div>
+          <label for="f-title">Lecture title</label>
+          <input type="text" id="f-title" placeholder="Examples: Bone tissue and remodeling">
+        </div>
+      </div>
+      <div class="grid g3" style="margin-top:16px;">
+        <div>
+          <label for="f-code">Type code</label>
+          <select id="f-code">
+            <option value="A">A, anatomy</option>
+            <option value="AL">AL, anatomy lab</option>
+            <option value="P">P, physiology</option>
+          </select>
+        </div>
+        <div>
+          <label for="f-week">Week or session</label>
+          <input type="text" id="f-week" placeholder="Examples: Week 3, Day 2">
+        </div>
+        <div>
+          <label for="f-len">Class length in minutes</label>
+          <input type="number" id="f-len" min="10" max="360" step="5" value="75">
+        </div>
+      </div>
+      <div style="margin-top:16px;">
+        <label for="f-hook">Opening hook</label>
+        <textarea id="f-hook" placeholder="Examples: A 68 year old falls and fractures her hip. Why did that bone give way when the same fall at 30 would not have broken it?"></textarea>
+        <p class="fieldnote">One question or case that makes the day's material matter before you teach any of it.</p>
+      </div>
+    </section>
+
+    <!-- OBJECTIVES -->
+    <section class="panel" aria-labelledby="h-obj">
+      <h2 id="h-obj">2. Objectives</h2>
+      <p class="hint">Write what students should be able to do by the end. Tag each one with its depth of knowledge level so you can see whether the lecture stays at recall.</p>
+      <div id="objlist"></div>
+      <div class="btnrow" style="margin-top:14px;">
+        <button type="button" class="btn secondary small" id="add-obj">Add objective</button>
+        <span class="status" id="dok-summary" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <!-- SEGMENTS -->
+    <section class="panel" aria-labelledby="h-seg">
+      <h2 id="h-seg">3. Segments</h2>
+      <p class="hint">Break the class into working blocks. The timing bar tells you when you have written more lecture than you have minutes.</p>
+
+      <div class="meter" id="meter">
+        <span class="read" id="meter-read">0 of 75 minutes used</span>
+        <span class="bar"><span class="fill" id="meter-fill"></span></span>
+        <span class="sr-only" id="meter-live" aria-live="polite"></span>
+      </div>
+
+      <div id="seglist"></div>
+      <div class="btnrow">
+        <button type="button" class="btn secondary small" id="add-seg">Add segment</button>
+        <button type="button" class="btn secondary small" id="seed-seg">Build one segment per objective</button>
+      </div>
+    </section>
+
+    <!-- ACTIONS -->
+    <section class="panel exportbar" aria-labelledby="h-act">
+      <h2 id="h-act">4. Save and export</h2>
+      <p class="hint">Drafts save in this browser only. Nothing is uploaded anywhere. Use the file export to move a draft to another computer.</p>
+      <div class="btnrow">
+        <button type="button" class="btn" id="btn-save">Save draft</button>
+        <button type="button" class="btn secondary" id="btn-load">Load saved draft</button>
+        <button type="button" class="btn secondary" id="btn-export">Export to file</button>
+        <button type="button" class="btn secondary" id="btn-import">Import from file</button>
+        <button type="button" class="btn terra" id="btn-print">Print the plan</button>
+        <button type="button" class="btn secondary" id="btn-outline">Copy outline for slides</button>
+        <button type="button" class="btn danger" id="btn-clear">Clear everything</button>
+        <input type="file" id="file-in" accept="application/json,.json" class="sr-only" aria-label="Choose a lecture draft file to import">
+      </div>
+      <p class="status" id="status" aria-live="polite" style="margin-top:12px;"></p>
+    </section>
+
+  </div>
+
+  <h2 class="eyebrow" style="margin-top:38px;font-size:12px;">Preview</h2>
+  <div class="plan" id="plan"></div>
+
+</div>
+</main>
+
+<footer><div class="wrap">Lecture Writer &middot; Teaching Resources &middot; Dr. Sharilyn Rennie</div></footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var KEY = 'tr-lecture-writer-draft-v1';
+  var DOK = ['1 Recall','2 Skill or concept','3 Strategic thinking','4 Extended thinking'];
+
+  var state = { course:'', title:'', code:'A', week:'', len:75, hook:'', objectives:[], segments:[] };
+
+  function el(tag, attrs, kids){
+    var n = document.createElement(tag);
+    if (attrs) for (var k in attrs){
+      if (k === 'class') n.className = attrs[k];
+      else if (k === 'text') n.textContent = attrs[k];
+      else n.setAttribute(k, attrs[k]);
+    }
+    (kids||[]).forEach(function(c){ n.appendChild(c); });
+    return n;
+  }
+  function $(id){ return document.getElementById(id); }
+  function say(msg){ $('status').textContent = msg; }
+
+  /* ---------- objectives ---------- */
+  function renderObjectives(){
+    var host = $('objlist');
+    host.textContent = '';
+    if (!state.objectives.length){
+      host.appendChild(el('p',{class:'fieldnote',text:'No objectives yet. Add the first one to get started.'}));
+    }
+    state.objectives.forEach(function(o, i){
+      var row = el('div',{class:'obj'});
+
+      var c1 = el('div');
+      var id1 = 'obj-'+i;
+      c1.appendChild(el('label',{for:id1,text:'Objective '+(i+1)}));
+      var ta = el('input',{type:'text',id:id1,value:'',placeholder:'Examples: Explain how osteoblast and osteoclast activity together set bone density'});
+      ta.value = o.text;
+      ta.addEventListener('input', function(){ state.objectives[i].text = ta.value; renderPlan(); });
+      c1.appendChild(ta);
+
+      var c2 = el('div');
+      var id2 = 'dok-'+i;
+      c2.appendChild(el('label',{for:id2,text:'DOK level'}));
+      var sel = el('select',{id:id2});
+      DOK.forEach(function(d, di){
+        var op = el('option',{value:String(di+1),text:d});
+        if (String(di+1) === String(o.dok)) op.setAttribute('selected','selected');
+        sel.appendChild(op);
+      });
+      sel.value = String(o.dok);
+      sel.addEventListener('change', function(){ state.objectives[i].dok = sel.value; renderDokSummary(); renderPlan(); });
+      c2.appendChild(sel);
+
+      var c3 = el('div');
+      var rm = el('button',{type:'button',class:'btn danger small'});
+      rm.textContent = 'Remove';
+      rm.setAttribute('aria-label','Remove objective '+(i+1));
+      rm.addEventListener('click', function(){
+        state.objectives.splice(i,1);
+        state.segments.forEach(function(s){ if (String(s.obj) === String(i)) s.obj = ''; });
+        renderObjectives(); renderSegments(); renderPlan();
+      });
+      c3.appendChild(rm);
+
+      row.appendChild(c1); row.appendChild(c2); row.appendChild(c3);
+      host.appendChild(row);
+    });
+    renderDokSummary();
+  }
+
+  function renderDokSummary(){
+    var n = state.objectives.length;
+    if (!n){ $('dok-summary').textContent = ''; return; }
+    var low = state.objectives.filter(function(o){ return Number(o.dok) <= 1; }).length;
+    var msg = n + (n===1?' objective':' objectives') + '. ';
+    if (low === n) msg += 'All of them sit at recall. Consider pushing at least one to level 2 or 3.';
+    else msg += low + ' at recall, ' + (n-low) + ' above recall.';
+    $('dok-summary').textContent = msg;
+  }
+
+  /* ---------- segments ---------- */
+  var FIELDS = [
+    ['seq','Teaching sequence','What you actually do, in order. Examples: define the two cell types, show the remodeling cycle, then walk the estrogen drop through it'],
+    ['fig','Figure or visual','Examples: remodeling cycle diagram with the four stages labeled'],
+    ['clin','Clinical connection','Examples: why a postmenopausal patient loses trabecular bone first, and what that means for fracture site'],
+    ['check','Retrieval check','Examples: which cell would you expect to be more active in this patient, and what would that do to bone density'],
+    ['draw','Drawing prompt','Examples: draw the remodeling cycle and mark where the estrogen drop changes the balance']
+  ];
+
+  function renderSegments(){
+    var host = $('seglist');
+    host.textContent = '';
+    if (!state.segments.length){
+      host.appendChild(el('p',{class:'fieldnote',text:'No segments yet. Add one, or build one per objective.'}));
+    }
+    state.segments.forEach(function(s, i){
+      var box = el('div',{class:'seg'});
+
+      var head = el('div',{class:'seghead'});
+      head.appendChild(el('span',{class:'segnum',text:'Segment '+(i+1)}));
+      var ctrl = el('div',{class:'btnrow'});
+      if (i > 0){
+        var up = el('button',{type:'button',class:'btn secondary small'});
+        up.textContent = 'Move up';
+        up.setAttribute('aria-label','Move segment '+(i+1)+' up');
+        up.addEventListener('click', function(){
+          var t = state.segments[i-1]; state.segments[i-1] = state.segments[i]; state.segments[i] = t;
+          renderSegments(); renderPlan();
+        });
+        ctrl.appendChild(up);
+      }
+      var rm = el('button',{type:'button',class:'btn danger small'});
+      rm.textContent = 'Remove';
+      rm.setAttribute('aria-label','Remove segment '+(i+1));
+      rm.addEventListener('click', function(){ state.segments.splice(i,1); renderSegments(); renderMeter(); renderPlan(); });
+      ctrl.appendChild(rm);
+      head.appendChild(ctrl);
+      box.appendChild(head);
+
+      var top = el('div',{class:'grid g3'});
+
+      var t1 = el('div');
+      t1.appendChild(el('label',{for:'s-name-'+i,text:'Segment title'}));
+      var nm = el('input',{type:'text',id:'s-name-'+i,placeholder:'Examples: Remodeling in balance'});
+      nm.value = s.name;
+      nm.addEventListener('input', function(){ state.segments[i].name = nm.value; renderPlan(); });
+      t1.appendChild(nm);
+
+      var t2 = el('div');
+      t2.appendChild(el('label',{for:'s-min-'+i,text:'Minutes'}));
+      var mn = el('input',{type:'number',id:'s-min-'+i,min:'0',max:'240',step:'5'});
+      mn.value = s.min;
+      mn.addEventListener('input', function(){ state.segments[i].min = mn.value; renderMeter(); renderPlan(); });
+      t2.appendChild(mn);
+
+      var t3 = el('div');
+      t3.appendChild(el('label',{for:'s-obj-'+i,text:'Serves objective'}));
+      var os = el('select',{id:'s-obj-'+i});
+      os.appendChild(el('option',{value:'',text:'Not linked yet'}));
+      state.objectives.forEach(function(o, oi){
+        os.appendChild(el('option',{value:String(oi),text:(oi+1)+'. '+(o.text ? o.text.slice(0,42) : 'Untitled objective')}));
+      });
+      os.value = s.obj === undefined ? '' : String(s.obj);
+      os.addEventListener('change', function(){ state.segments[i].obj = os.value; renderPlan(); });
+      t3.appendChild(os);
+
+      top.appendChild(t1); top.appendChild(t2); top.appendChild(t3);
+      box.appendChild(top);
+
+      FIELDS.forEach(function(f){
+        var w = el('div',{style:'margin-top:14px;'});
+        w.appendChild(el('label',{for:'s-'+f[0]+'-'+i,text:f[1]}));
+        var ta = el('textarea',{id:'s-'+f[0]+'-'+i,placeholder:'Examples: '+f[2].replace(/^Examples: /,'')});
+        ta.value = s[f[0]] || '';
+        ta.addEventListener('input', function(){ state.segments[i][f[0]] = ta.value; renderPlan(); });
+        w.appendChild(ta);
+        box.appendChild(w);
+      });
+
+      host.appendChild(box);
+    });
+    renderMeter();
+  }
+
+  function totalMinutes(){
+    return state.segments.reduce(function(a,s){ return a + (Number(s.min)||0); }, 0);
+  }
+
+  function renderMeter(){
+    var used = totalMinutes();
+    var cap = Number(state.len) || 0;
+    var pct = cap ? Math.min(100, Math.round(used/cap*100)) : 0;
+    var over = cap && used > cap;
+    $('meter').className = 'meter' + (over ? ' over' : '');
+    $('meter-fill').style.width = pct + '%';
+    var txt = used + ' of ' + cap + ' minutes used';
+    if (over) txt += '. Over by ' + (used-cap) + '.';
+    else if (cap) txt += '. ' + (cap-used) + ' left.';
+    $('meter-read').textContent = txt;
+    $('meter-live').textContent = txt;
+  }
+
+  /* ---------- preview ---------- */
+  function block(k, v){
+    var d = el('div',{class:'row'});
+    d.appendChild(el('span',{class:'k',text:k}));
+    var s = el('span',{class:'v'});
+    if (v && v.trim()){ s.textContent = v; }
+    else { s.className = 'v empty'; s.textContent = 'Not written yet.'; }
+    d.appendChild(s);
+    return d;
+  }
+
+  function renderPlan(){
+    var p = $('plan');
+    p.textContent = '';
+
+    var code = state.code || 'A';
+    p.appendChild(el('p',{class:'ph',text:code + '  ·  Lecture plan'}));
+    p.appendChild(el('h3',{class:'title',text: state.title || 'Untitled lecture'}));
+
+    var bits = [];
+    if (state.course) bits.push(state.course);
+    if (state.week) bits.push(state.week);
+    bits.push((Number(state.len)||0) + ' minutes');
+    bits.push(totalMinutes() + ' minutes planned');
+    p.appendChild(el('p',{class:'meta',text:bits.join('  ·  ')}));
+
+    if (state.hook && state.hook.trim()){
+      p.appendChild(el('h4',{class:'sec',text:'Opening hook'}));
+      p.appendChild(el('p',{class:'v',text:state.hook}));
+    }
+
+    p.appendChild(el('h4',{class:'sec',text:'Objectives'}));
+    if (state.objectives.length){
+      var ol = el('ol',{class:'objs'});
+      state.objectives.forEach(function(o){
+        var li = el('li');
+        li.appendChild(document.createTextNode(o.text || 'Untitled objective'));
+        li.appendChild(el('span',{class:'dok',text:'DOK '+o.dok}));
+        ol.appendChild(li);
+      });
+      p.appendChild(ol);
+    } else {
+      p.appendChild(el('p',{class:'empty',text:'No objectives yet.'}));
+    }
+
+    p.appendChild(el('h4',{class:'sec',text:'Segments'}));
+    if (!state.segments.length){
+      p.appendChild(el('p',{class:'empty',text:'No segments yet.'}));
+    }
+    state.segments.forEach(function(s, i){
+      var box = el('div',{class:'pseg'});
+      box.appendChild(el('h5',{text:(i+1)+'. '+(s.name || 'Untitled segment')}));
+      var sub = [];
+      sub.push(((Number(s.min)||0)) + ' minutes');
+      if (s.obj !== '' && s.obj !== undefined && state.objectives[Number(s.obj)]){
+        sub.push('Objective ' + (Number(s.obj)+1));
+      }
+      box.appendChild(el('p',{class:'st',text:sub.join('  ·  ')}));
+      box.appendChild(block('Teaching sequence', s.seq));
+      box.appendChild(block('Figure or visual', s.fig));
+      box.appendChild(block('Clinical connection', s.clin));
+      box.appendChild(block('Retrieval check', s.check));
+      box.appendChild(block('Drawing prompt', s.draw));
+      p.appendChild(box);
+    });
+  }
+
+  /* ---------- outline for slides ---------- */
+  function outlineText(){
+    var lines = [];
+    lines.push((state.code||'A') + ' | ' + (state.title || 'Untitled lecture'));
+    if (state.course) lines.push(state.course + (state.week ? ' | ' + state.week : ''));
+    lines.push('');
+    if (state.hook && state.hook.trim()){ lines.push('HOOK: ' + state.hook.trim()); lines.push(''); }
+    if (state.objectives.length){
+      lines.push('OBJECTIVES');
+      state.objectives.forEach(function(o,i){ lines.push('  ' + (i+1) + '. ' + (o.text||'Untitled') + '  [DOK ' + o.dok + ']'); });
+      lines.push('');
+    }
+    state.segments.forEach(function(s,i){
+      lines.push('SLIDE GROUP ' + (i+1) + ': ' + (s.name || 'Untitled segment') + '  (' + (Number(s.min)||0) + ' min)');
+      if (s.seq && s.seq.trim())   lines.push('  sequence: ' + s.seq.trim());
+      if (s.fig && s.fig.trim())   lines.push('  figure:   ' + s.fig.trim());
+      if (s.clin && s.clin.trim()) lines.push('  clinical: ' + s.clin.trim());
+      if (s.check && s.check.trim())lines.push('  check:    ' + s.check.trim());
+      if (s.draw && s.draw.trim()) lines.push('  drawing:  ' + s.draw.trim());
+      lines.push('');
+    });
+    return lines.join('\n');
+  }
+
+  /* ---------- read and write the form ---------- */
+  function pullSetup(){
+    state.course = $('f-course').value;
+    state.title  = $('f-title').value;
+    state.code   = $('f-code').value;
+    state.week   = $('f-week').value;
+    state.len    = $('f-len').value;
+    state.hook   = $('f-hook').value;
+  }
+  function pushSetup(){
+    $('f-course').value = state.course || '';
+    $('f-title').value  = state.title || '';
+    $('f-code').value   = state.code || 'A';
+    $('f-week').value   = state.week || '';
+    $('f-len').value    = state.len || 75;
+    $('f-hook').value   = state.hook || '';
+  }
+  function bindSetup(){
+    ['f-course','f-title','f-code','f-week','f-len','f-hook'].forEach(function(id){
+      var n = $(id);
+      var ev = (n.tagName === 'SELECT') ? 'change' : 'input';
+      n.addEventListener(ev, function(){ pullSetup(); renderMeter(); renderPlan(); });
+    });
+  }
+
+  /* ---------- actions ---------- */
+  function newSegment(objIndex){
+    return { name:'', min:10, obj: (objIndex === undefined ? '' : String(objIndex)), seq:'', fig:'', clin:'', check:'', draw:'' };
+  }
+
+  function wire(){
+    $('add-obj').addEventListener('click', function(){
+      state.objectives.push({ text:'', dok:'2' });
+      renderObjectives(); renderSegments(); renderPlan();
+      var last = document.getElementById('obj-'+(state.objectives.length-1));
+      if (last) last.focus();
+    });
+
+    $('add-seg').addEventListener('click', function(){
+      state.segments.push(newSegment());
+      renderSegments(); renderPlan();
+      var last = document.getElementById('s-name-'+(state.segments.length-1));
+      if (last) last.focus();
+    });
+
+    $('seed-seg').addEventListener('click', function(){
+      if (!state.objectives.length){ say('Add at least one objective first.'); return; }
+      var cap = Number(state.len) || 0;
+      var per = cap ? Math.max(5, Math.round(cap / state.objectives.length / 5) * 5) : 10;
+      state.objectives.forEach(function(o, i){
+        var s = newSegment(i);
+        s.name = o.text ? o.text.slice(0,48) : 'Segment ' + (i+1);
+        s.min = per;
+        state.segments.push(s);
+      });
+      renderSegments(); renderPlan();
+      say('Added ' + state.objectives.length + ' segments, ' + per + ' minutes each. Adjust from here.');
+    });
+
+    $('btn-save').addEventListener('click', function(){
+      pullSetup();
+      try {
+        localStorage.setItem(KEY, JSON.stringify(state));
+        say('Draft saved in this browser.');
+      } catch(e){
+        say('This browser would not save the draft. Use Export to file instead.');
+      }
+    });
+
+    $('btn-load').addEventListener('click', function(){
+      try {
+        var raw = localStorage.getItem(KEY);
+        if (!raw){ say('No saved draft found in this browser.'); return; }
+        apply(JSON.parse(raw));
+        say('Saved draft loaded.');
+      } catch(e){
+        say('The saved draft could not be read.');
+      }
+    });
+
+    $('btn-export').addEventListener('click', function(){
+      pullSetup();
+      var name = (state.title || 'lecture').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+      var blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'lecture-' + (name || 'draft') + '.json';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+      say('Draft file downloaded.');
+    });
+
+    $('btn-import').addEventListener('click', function(){ $('file-in').click(); });
+
+    $('file-in').addEventListener('change', function(){
+      var f = $('file-in').files[0];
+      if (!f) return;
+      var r = new FileReader();
+      r.onload = function(){
+        try { apply(JSON.parse(r.result)); say('Draft imported from ' + f.name + '.'); }
+        catch(e){ say('That file could not be read as a lecture draft.'); }
+        $('file-in').value = '';
+      };
+      r.readAsText(f);
+    });
+
+    $('btn-print').addEventListener('click', function(){ pullSetup(); renderPlan(); window.print(); });
+
+    $('btn-outline').addEventListener('click', function(){
+      pullSetup();
+      var txt = outlineText();
+      if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(
+          function(){ say('Outline copied. Paste it into the slide builder.'); },
+          function(){ fallbackCopy(txt); }
+        );
+      } else { fallbackCopy(txt); }
+    });
+
+    $('btn-clear').addEventListener('click', function(){
+      if (!window.confirm('Clear the whole lecture and start over? A saved draft stays saved.')) return;
+      apply({ course:'', title:'', code:'A', week:'', len:75, hook:'', objectives:[], segments:[] });
+      say('Cleared.');
+    });
+  }
+
+  function fallbackCopy(txt){
+    var ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); say('Outline copied. Paste it into the slide builder.'); }
+    catch(e){ say('Copy did not work in this browser. Use Print or Export instead.'); }
+    document.body.removeChild(ta);
+  }
+
+  function apply(next){
+    state = {
+      course: next.course || '',
+      title:  next.title || '',
+      code:   next.code || 'A',
+      week:   next.week || '',
+      len:    next.len || 75,
+      hook:   next.hook || '',
+      objectives: Array.isArray(next.objectives) ? next.objectives : [],
+      segments:   Array.isArray(next.segments) ? next.segments : []
+    };
+    pushSetup(); renderObjectives(); renderSegments(); renderPlan();
+  }
+
+  /* ---------- start ---------- */
+  bindSetup();
+  wire();
+  pushSetup();
+  renderObjectives();
+  renderSegments();
+  renderPlan();
+})();
+</script>
+
+<script>
+(function(){function h(){try{parent.postMessage({type:'resize',id:'teaching-resources',height:Math.max(document.documentElement.scrollHeight,document.body?document.body.scrollHeight:0)},'*');}catch(e){}}window.addEventListener('load',h);window.addEventListener('resize',h);if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);})();
+</script>
+</body>
+</html>

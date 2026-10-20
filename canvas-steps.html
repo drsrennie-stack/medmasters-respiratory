@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BIOL 005 Canvas Step Map</title>
+<link rel="stylesheet" href="assets/fonts-site.css">
+<style>
+:root{
+  --navy:#0B1530;
+  --navy-deep:#060A18;
+  --navy-tint:#ECEFF4;
+  --maroon:#8B3A2E;
+  --maroon-dark:#6E2D24;
+  --gold:#C9A14A;
+  --gold-deep:#8A6D33;
+  --bone:#F5F1E8;
+  --white:#FFFFFF;
+  --page:#FAFAF9;
+  --ink:#16202F;
+  --ink-soft:#4A5464;
+  --line:#DFE3E8;
+  --shadow-rest:0 1px 3px rgba(11,21,48,.10);
+  --shadow-lift:0 8px 16px rgba(11,21,48,.12);
+  --display:"Open Sans","Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  --body:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--page);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.55;
+}
+.skip{
+  position:absolute;left:-9999px;top:0;z-index:50;
+  background:var(--navy);color:#fff;padding:10px 16px;border-radius:0 0 6px 0;
+}
+.skip:focus{left:0}
+a{color:var(--maroon-dark)}
+a:focus-visible,button:focus-visible,summary:focus-visible{
+  outline:3px solid var(--gold-deep);outline-offset:2px;border-radius:4px;
+}
+/* ---------- chrome ---------- */
+.brandbar{
+  background:var(--white);
+  border-bottom:1px solid var(--line);
+  padding:10px 20px;
+}
+.brandbar .wrap{
+  max-width:1120px;margin:0 auto;
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.mark{display:flex;gap:4px;align-items:flex-end}
+.mark span{display:block;width:7px;border-radius:3px 3px 0 0}
+.mark span:nth-child(1){height:16px;background:var(--navy)}
+.mark span:nth-child(2){height:21px;background:var(--maroon)}
+.mark span:nth-child(3){height:13px;background:var(--gold)}
+.wordmark{
+  font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:.01em;
+  color:var(--navy);
+}
+.wordmark .sub{display:block;font-family:var(--body);font-weight:500;font-size:12px;color:var(--ink-soft);letter-spacing:.04em;text-transform:uppercase}
+.band{
+  background:var(--maroon-dark);
+  color:#fff;
+  padding:22px 20px;
+}
+.band .wrap{max-width:1120px;margin:0 auto}
+.eyebrow{
+  font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--bone);margin:0 0 6px;
+}
+.band h1{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(22px,3.4vw,30px);line-height:1.2;margin:0;
+  text-wrap:balance;color:#fff;
+}
+.band p.lede{margin:8px 0 0;max-width:62ch;color:#F2E9E2;font-size:15px}
+main{max-width:1120px;margin:0 auto;padding-block:28px 56px;padding-left:20px;padding-right:20px}
+/* ---------- cards ---------- */
+.card{
+  background:var(--white);
+  border-radius:10px;
+  box-shadow:var(--shadow-rest);
+  padding:22px;
+}
+.card + .card{margin-top:18px}
+h2{
+  font-family:var(--display);font-weight:800;font-size:20px;margin:0 0 4px;color:var(--navy);
+  text-wrap:balance;
+}
+h3{font-family:var(--display);font-weight:800;font-size:16px;margin:0 0 4px;color:var(--navy)}
+p{margin:0 0 12px}
+p:last-child{margin-bottom:0}
+.muted{color:var(--ink-soft);font-size:14px}
+/* ---------- step view ---------- */
+.do{
+  font-size:17px;max-width:62ch;margin:0 0 18px;
+}
+.btnrow{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 6px}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--maroon-dark);color:#fff;text-decoration:none;
+  font-family:var(--body);font-weight:700;font-size:15px;
+  padding:13px 20px;border-radius:8px;border:1px solid var(--maroon-dark);
+  transition:transform 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
+  box-shadow:var(--shadow-rest);
+}
+.btn:hover{background:var(--maroon);transform:translateY(-2px);box-shadow:var(--shadow-lift)}
+.btn.secondary{
+  background:var(--white);color:var(--navy);border:1px solid var(--navy);
+}
+.btn.secondary:hover{background:var(--navy-tint);color:var(--navy)}
+.btn .tag{
+  font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.85;
+}
+.note{
+  margin-top:18px;padding:14px 16px;background:var(--navy-tint);border-radius:8px;
+  font-size:14px;color:var(--ink);
+}
+.hubstep .hubhead{display:grid;grid-template-columns:38px 1fr;gap:14px;align-items:start;margin-bottom:14px}
+.hubstep .hubnum{
+  font-family:var(--display);font-weight:800;font-size:22px;color:var(--maroon-dark);
+  font-variant-numeric:tabular-nums;line-height:1.2;
+}
+.hubstep h2{font-size:19px;margin:0 0 4px}
+.hubstep .muted{margin:0;max-width:66ch}
+@media (max-width:560px){ .hubstep .hubhead{grid-template-columns:28px 1fr;gap:10px} }
+.stagehead{background:var(--navy);color:#fff;padding:16px 22px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.stagehead h2{color:#fff;margin:0;font-size:19px}
+.stagehead .stagenum{
+  font-family:var(--display);font-weight:800;font-size:22px;color:var(--gold);
+  margin:0;min-width:20px;
+}
+.stagehead .muted{color:#C9CEDA;margin:0;flex-basis:100%;font-size:14px}
+.hubstep .hubnum{font-size:17px;letter-spacing:.01em}
+.newtab{
+  margin:12px 0 0;font-size:13px;color:var(--ink-soft);
+}
+.turnin{
+  margin-top:14px;font-size:14px;color:var(--ink-soft);
+}
+.stepnav{
+  display:flex;justify-content:space-between;gap:12px;margin-top:22px;flex-wrap:wrap;
+}
+.stepnav a{font-weight:700;text-decoration:none;font-size:14px}
+.stepnav a:hover{text-decoration:underline}
+/* ---------- map view ---------- */
+.legend{
+  display:flex;flex-wrap:wrap;gap:18px;margin:0 0 6px;font-size:14px;color:var(--ink-soft);
+}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dot.live{background:var(--maroon)}
+.dot.todo{background:#B9BEC7}
+.scroller{overflow-x:auto;margin-top:14px}
+table{border-collapse:collapse;width:100%;min-width:860px;font-size:14px}
+caption{text-align:left;font-size:14px;color:var(--ink-soft);padding-bottom:10px}
+th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:middle}
+thead th{
+  font-family:var(--body);font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-soft);white-space:nowrap;
+}
+thead th.stepcol{text-align:center;padding:6px 8px}
+thead th.stepcol .lbl{display:block;font-size:10px;letter-spacing:.10em;color:var(--ink-soft)}
+thead th.stepcol .no{
+  display:block;font-family:var(--display);font-weight:800;font-size:15px;
+  color:var(--navy);letter-spacing:0;text-transform:none;font-variant-numeric:tabular-nums;
+}
+tbody th{font-weight:700;color:var(--navy);white-space:nowrap;font-size:14px}
+tbody th .wk{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+tbody th .vid{margin-top:2px;letter-spacing:.04em;text-transform:none;font-weight:500}
+td.cell{text-align:center;padding:4px}
+td.cell a{
+  display:block;padding:8px 4px;border-radius:6px;text-decoration:none;
+  font-weight:700;color:var(--maroon-dark);font-variant-numeric:tabular-nums;
+}
+td.cell a:hover{background:var(--navy-tint)}
+td.cell a.todo{color:#7C8390}
+tr.now th,tr.now td{background:#FBF6F4}
+.rowtag{
+  display:inline-block;margin-left:8px;font-size:11px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--maroon-dark);
+}
+.steplist{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.steplist li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start}
+.steplist .num{
+  font-family:var(--display);font-weight:800;color:var(--maroon-dark);
+  font-variant-numeric:tabular-nums;font-size:15px;padding-top:1px;
+}
+.steplist .what{font-weight:700}
+.steplist .where{display:block;font-size:13px;color:var(--ink-soft)}
+.copyrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:center}
+button.copy{
+  font-family:var(--body);font-weight:700;font-size:13px;
+  background:var(--white);color:var(--navy);border:1px solid var(--navy);
+  padding:9px 14px;border-radius:8px;cursor:pointer;
+  transition:background-color 200ms ease;
+}
+button.copy:hover{background:var(--navy-tint)}
+code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:13px;background:var(--navy-tint);padding:2px 6px;border-radius:4px;
+}
+pre{
+  background:var(--navy-tint);padding:14px;border-radius:8px;overflow-x:auto;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;margin:12px 0 0;
+}
+.status{font-size:13px;color:var(--maroon-dark);font-weight:700;min-height:19px}
+.titles{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.titles li{
+  display:flex;justify-content:space-between;gap:12px;align-items:center;
+  border-bottom:1px solid var(--line);padding:6px 0;flex-wrap:wrap;
+}
+.titles .t{font-weight:600}
+footer{
+  background:var(--navy);color:var(--bone);padding:20px;margin-top:10px;font-size:13px;
+}
+footer .wrap{max-width:1120px;margin:0 auto;display:flex;gap:10px;flex-wrap:wrap}
+footer a{color:var(--bone)}
+@media (max-width:560px){
+  .steplist li{grid-template-columns:26px 1fr}
+  .btn{width:100%;justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+
+<div class="brandbar">
+  <div class="wrap">
+    <span class="mark" aria-hidden="true"><span></span><span></span><span></span></span>
+    <span class="wordmark">BIOL 005 Human Physiology<span class="sub">Yuba College &middot; Fall 2026</span></span>
+  </div>
+</div>
+
+<div class="band">
+  <div class="wrap">
+    <p class="eyebrow" id="eyebrow">Canvas build</p>
+    <h1 id="pagetitle">Canvas Step Map</h1>
+    <p class="lede" id="lede">Every module, every step, and the page each step sends students to.</p>
+  </div>
+</div>
+
+<main id="main"></main>
+
+<footer>
+  <div class="wrap">
+    <a href="https://yccd.instructure.com/courses/42616" target="_top">Back to Canvas</a> &middot;
+    <a href="faculty-tools.html" target="_blank" rel="noopener">Course home</a> &middot;
+    <a href="course-schedule.html" target="_blank" rel="noopener">Schedule</a> &middot;
+    <a href="syllabus-fall2026.html" target="_blank" rel="noopener">Syllabus</a> &middot;
+    <a href="clinical-physiology-lab-manual.html" target="_blank" rel="noopener">Lab manual</a> &middot;
+    <a href="accessibility.html" target="_blank" rel="noopener">Accessibility</a>
+  </div>
+</footer>
+
+<script src="bio005-preview.js"></script>
+<script>
+/* ============================================================
+   BIOL 005 Canvas step pages.
+   One file. Canvas iframes it once per step:
+     canvas-steps.html?week=1&step=1
+   No query string shows the whole map.
+   EDIT ONLY THE DATA BLOCK BELOW.
+   ============================================================ */
+
+var SITE = "https://drsrennie-stack.github.io/human-physiology-Fa26/";
+var CANVAS = "https://yccd.instructure.com/courses/42616";
+
+/* Canvas turn-in links, per week. Paste an assignment or discussion URL
+   here and the matching step grows a button that goes straight to it.
+   A blank one means that item is not posted in Canvas yet. */
+var TURNIN = {
+  1: { notesheet:"https://yccd.instructure.com/courses/42616/assignments/1241504",
+       lab:"https://yccd.instructure.com/courses/42616/assignments/1240111",
+       mastery:"https://yccd.instructure.com/courses/42616/assignments/1240401",
+       discussion:"" },
+  2: { notesheet:"https://yccd.instructure.com/courses/42616/assignments/1241524",
+       lab:"https://yccd.instructure.com/courses/42616/assignments/1240130",
+       mastery:"https://yccd.instructure.com/courses/42616/assignments/1241526",
+       discussion:"https://yccd.instructure.com/courses/42616/discussion_topics/712810" },
+  /* Sep 19 2026. Week 3 is catch up on Week 2 and carries no discussion of its
+     own. Topic 712811 was the Week 3 discussion and is being retired, so it is
+     deliberately not listed here. Week 8 is Midterm 1 and has none either. */
+  3: { notesheet:"https://yccd.instructure.com/courses/42616/assignments/1241525",
+       lab:"",
+       mastery:"https://yccd.instructure.com/courses/42616/assignments/1241527",
+       discussion:"", noDiscussion:true },
+  4: { notesheet:"", lab:"", mastery:"", discussion:"" },
+  5: { notesheet:"", lab:"", mastery:"", discussion:"" },
+  8: { notesheet:"", lab:"", mastery:"", discussion:"", noDiscussion:true }
+};
+function turnin(n, key){ return (TURNIN[n] && TURNIN[n][key]) || ""; }
+function noDiscussion(n){ return !!(TURNIN[n] && TURNIN[n].noDiscussion); }
+
+/* Week data. lab.href "" means the lab page is not built yet and the
+   button falls back to the lab door. Swap any href for a PDF the same way:
+   lab:{label:"Reference Range Lab", href:"print/week-01-lab.pdf"} */
+var WEEKS = [
+ {n:1,  opens:"2026-09-08", title:"How physiology works and what keeps you steady", comp:12,
+  videos:{page:"concept-videos-week01.html", count:20, label:"how physiology works"},
+  notes:"biol005-m01-maintain-control-notes.html",
+  comps:"week-01-competencies.html",
+  lab:{label:"Reference Range Lab", href:"reference-range-lab.html"},
+  patient:"The preseason physical"},
+ {n:2,  opens:"2026-09-14", title:"The cell: structure, transport and signaling", comp:25,
+  videos:{page:"concept-videos-week03.html", count:25, label:"the cell and signaling",
+          also:{page:"concept-videos-week04.html", count:38, label:"transport"}},
+  notes:"biol005-w02-cell-notes.html",
+  extraGaps:["The written notes page covers the cell and compartments. Transport and signaling are read from the notes PDF beside each concept video."],
+  lab:{label:"Osmosis and IV Fluids Lab", href:"osmosis-iv-fluids-lab.html"},
+  patient:"Fluid choice at the bedside"},
+ {n:3,  opens:"2026-09-21", title:"Catch up on the cell", comp:0, catchup:1,
+  lab:{label:"", href:""}, patient:"Arrival in the emergency department"},
+ {n:4,  opens:"2026-09-28", title:"Membrane potential, neurons and synapses", comp:29,
+  notes:"biol005-w02-transport-notes.html",
+  lab:{label:"", href:""},
+  patient:"Her potassium, hour by hour"},
+ {n:5,  opens:"2026-10-05", title:"Reflexes, and sensing the world", comp:25,
+  lab:{label:"Sensory and Reflex Lab", href:"lab-week05-sensory-reflex.html"},
+  patient:"Neurological and autonomic assessment"},
+ {n:6,  opens:"2026-10-12", title:"Muscle, and how movement gets commanded", comp:20,
+  lab:{label:"", href:""}, patient:""},
+ {n:7,  opens:"2026-10-19", title:"Hormones, the autonomic system, and reproduction", comp:22,
+  lab:{label:"Reading the Hormone Cycle", href:"lab-week08-hormone-cycle.html"},
+  patient:""},
+ {n:8,  opens:"2026-10-26", title:"Midterm 1", comp:0, exam:1,
+  lab:{label:"", href:""}, patient:""},
+ {n:9,  opens:"2026-11-02", title:"The heart as a pump", comp:21,
+  lab:{label:"", href:""}, patient:""},
+ {n:10, opens:"2026-11-09", title:"Pressure, flow, and holding blood pressure steady", comp:13,
+  lab:{label:"", href:""}, patient:""},
+ {n:11, opens:"2026-11-16", title:"Blood and how the body defends itself", comp:19,
+  lab:{label:"CBC and PCR Pattern Lab", href:"cbc-pcr-lab.html"},
+  patient:""},
+ {n:12, opens:"2026-11-23", title:"Digestion, and how you use food for fuel", comp:23,
+  lab:{label:"", href:""}, patient:""},
+ {n:13, opens:"2026-11-30", title:"Breathing, gas transport, and the fast pH lever", comp:24,
+  lab:{label:"Pulmonary Function Lab", href:"pulmonary-function-lab.html"},
+  patient:""},
+ {n:14, opens:"2026-12-07", title:"The kidney and body fluid balance", comp:21,
+  lab:{label:"", href:""}, patient:""},
+ {n:15, opens:"2026-12-14", title:"The slow pH lever, putting it together, and the final",
+  comp:7, exam:2,
+  lab:{label:"", href:""}, patient:""}
+];
+
+/* ============================================================
+   THE ONE GATE RULE, adopted Sep 19 2026.
+
+   A week opens at 08:00 Pacific on its Monday and stays open for the
+   rest of the term. That is the whole rule. It replaces the three that
+   used to disagree with each other: bio005-gate.js, which nothing
+   loaded, unlockAt() in week-navigator.html, and hgUnlock() in
+   welcome.html. Those three said Saturday noon, Saturday 8 pm and
+   Monday, which meant the site could tell one student three different
+   things about the same week.
+
+   A closed week is never a wall. It says the date and the time it
+   opens, in the student's own local time as well as Pacific, and it
+   gives them somewhere to go in the meantime. Nothing a student has a
+   right to is behind this: the schedule, the syllabus, the study
+   tools, the recall cards and the lab manual are open from day one.
+
+   This is a courtesy gate, not a lock. Anything running in a browser
+   can be worked around by changing a clock or reading the source. The
+   enforceable lock is the Canvas module availability date, which runs
+   on Canvas's servers. Set both, and set them to the same moment.
+   ============================================================ */
+var OPEN_HOUR_PT = 8;
+
+/* Name the closed weeks in the preview banner, so a preview session can never
+   be mistaken for the live site. Runs after WEEKS and weekOpensAt exist. */
+function announcePreview(){
+  if (!window.BIO005_PREVIEW || !window.BIO005_PREVIEW.on()) return;
+  var shut = WEEKS.filter(function(w){ return new Date() < weekOpensAt(w); })
+                  .map(function(w){ return w.n; });
+  var txt = shut.length
+    ? (shut.length === 1 ? "Week " + shut[0]
+       : "Weeks " + shut[0] + " to " + shut[shut.length-1])
+    : "nothing, every week is already open to students";
+  window.BIO005_PREVIEW.banner(txt);
+}
+
+function weekOpensAt(w){
+  /* Pacific is UTC-7 in daylight time and UTC-8 from Nov 1 2026. */
+  var parts = w.opens.split("-");
+  var y = +parts[0], m = +parts[1], d = +parts[2];
+  var std = (m > 11) || (m === 11 && d >= 1);
+  var offset = std ? 8 : 7;
+  return new Date(Date.UTC(y, m - 1, d, OPEN_HOUR_PT + offset, 0, 0));
+}
+function previewOn(){
+  return !!(window.BIO005_PREVIEW && window.BIO005_PREVIEW.on());
+}
+function weekIsOpen(w){
+  if (previewOn()) return true;          /* instructor preview, see bio005-preview.js */
+  return new Date() >= weekOpensAt(w);
+}
+function weekIsOpenForStudents(w){ return new Date() >= weekOpensAt(w); }
+function opensLabel(w){
+  var t = weekOpensAt(w);
+  var pt = t.toLocaleString("en-US", {timeZone:"America/Los_Angeles",
+    weekday:"long", month:"long", day:"numeric", hour:"numeric", minute:"2-digit"});
+  var mine = t.toLocaleString(undefined, {weekday:"long", month:"long",
+    day:"numeric", hour:"numeric", minute:"2-digit"});
+  return pt + " Pacific" + (mine === pt ? "" : ", which is " + mine + " where you are");
+}
+
+function pad(n){ return (n<10?"0":"") + n; }
+function lecturePage(w){ return w.videos ? w.videos.page : "lecture-week.html?week=" + w.n; }
+/* The old week-NN-notes.html pages follow the retired week map, so a week
+   only gets a written-notes button when a correct page is named above.
+   Add the filename to that week's notes field as each page is written. */
+function notesHref(w){ return w.notes || ""; }
+function videoCount(w){
+  if (!w.videos) return 0;
+  return w.videos.count + (w.videos.also ? w.videos.also.count : 0);
+}
+
+/* Step definitions. Each returns the Canvas title, the instruction,
+   and the buttons. Keep the titles matching Canvas exactly. */
+var EXAM_ORDER = ["ov","e1","e2","e3"];
+
+function examData(w, s){
+  var N = w.n, name = w.exam === 1 ? "Midterm 1" : "Midterm 2 and the final";
+  var D = {
+    "ov":{ title:"Week " + N + " | Overview",
+        canvas:"Week " + N + " | " + name,
+        do:"No new physiology this week. This week is the exam, and the review that gets you ready for it. Read the exam instructions all the way through before you start anything.",
+        btns:[{label:"How the exam works", href:"how-grading-works.html", kind:"primary"},
+              {label:"Course schedule", href:"course-schedule.html", kind:"secondary"}] },
+    "e1":{ title:"Week " + N + ", 1 | Review week, go back over your note sheets",
+        do:"Pull out every note sheet since the last exam and work from the boxes you left thinnest. Draw each one again from memory before you look.",
+        btns:[{label:"Recall cards, all weeks so far", href:"mastery-physio-os-standalone.html", kind:"primary"},
+              {label:"Draw it from memory", href:"mastery-canvas.html", kind:"secondary"}] },
+    "e2":{ title:"Week " + N + ", 2 | Take the exam",
+        do:"You draw and you explain out loud. The reasoning carries most of the points, so show the mechanism even when you are unsure of the answer.",
+        btns:[{label:"Practice round first", href:"practice-exam.html", kind:"secondary"}],
+        turnin:"The exam itself is the Canvas quiz below, recorded through Canvas Studio." },
+    "e3":{ title:"Week " + N + ", 3 | Upload your report",
+        do:"Upload what the practice rounds gave you, so I can see where the class stands going into grading.",
+        btns:[{label:"Open the practice exam", href:"practice-exam.html", kind:"primary"}],
+        turnin:"Upload on the Canvas assignment page." }
+  };
+  var d = D[s];
+  if (!d) return null;
+  if (!d.canvas) d.canvas = d.title;
+  return d;
+}
+
+function stepData(w, s){
+  if (w.exam) return examData(w, s);
+  var N = w.n, P = pad(N);
+  var D = {
+    "ov":{
+      title:"Week " + N + " | Overview",
+      canvas:"Week " + N + " | " + w.title,
+      do:"Four stages this week, in this order: Learn, Practice, Apply, Check. Everything you have to do sits under one of them. Work down from the top.",
+      btns:[
+        {label:"What Week " + N + " is about", href:"week-" + P + ".html", kind:"primary"},
+        {label:"The " + (w.final ? "final" : "competencies") + " for this week",
+         href: w.final ? "course-schedule.html" : "week-" + P + "-competencies.html", kind:"secondary"}
+      ]
+    },
+    "1a":{
+      title:"Week " + N + ", 1a | Cold attempt, before you read anything",
+      do:"Blank paper, ten minutes, no book and no notes. Write and draw everything you already believe about this week's topic. You will be wrong in places, and that is the point. You are finding out what you are walking in with.",
+      btns:[
+        {label:"What this week is about", href:"week-" + P + ".html", kind:"secondary"},
+        {label:"How the cold attempt works", href:"competency-brain-dump.html", kind:"secondary"}
+      ],
+      turnin:"Keep this page. You compare it against your check at the end of the week in 4b."
+    },
+    "1b":{
+      title:"Week " + N + ", 1b | Print your note sheet",
+      do:"Print the note sheet now. The boxes on it are this week's competencies, so it is your list and your paper in one. Everything in 1c and 1d gets written on this sheet, and the videos do not come until 1d.",
+      btns:[
+        {label:"Print the Week " + N + " note sheet", href:"note-sheet.html?week=" + N, kind:"primary", tag:"print"}
+      ].concat(w.comps ? [{label:"Competencies with worked examples", href:w.comps, kind:"secondary"}] : []
+      ).concat([
+        {label:"What this week is about", href:"week-" + P + ".html", kind:"secondary"}
+      ])
+    },
+    "1c":{
+      title:"Week " + N + ", 1c | First pass, in your first color",
+      do:"Before any video. Fill in the note sheet from the reading, using the notes PDF for each concept and your Silverthorn chapter. Keep it sparse, mind maps, lists, sequences, flow charts. Leave space in every box.",
+      btns: (w.videos
+        ? [{label:"Notes PDFs, all " + videoCount(w) + " concepts", href:w.videos.page, kind:"primary", tag:"read"}]
+        : []
+        ).concat(
+        notesHref(w)
+          ? [{label:"Week " + N + " written notes", href:notesHref(w), kind: w.videos ? "secondary" : "primary"}]
+          : []
+        ).concat([
+        {label:"Book problems for this week", href:"assignment-bookproblems.html?week=" + N, kind:"secondary"}
+      ])
+    },
+    "1d":{
+      title:"Week " + N + ", 1d | Second pass, in your second color",
+      do:"Now watch the lectures. Switch colors and add what the reading did not give you into the same boxes. Two colors, one sheet, so you can see which half came from where.",
+      btns:[
+        {label: w.videos
+            ? "Concept videos, " + w.videos.label + ", " + w.videos.count
+            : "Week " + N + " lectures",
+         href: lecturePage(w), kind:"primary", tag: w.videos ? "watch" : ""}
+      ].concat(w.videos && w.videos.also
+          ? [{label:"Concept videos, " + w.videos.also.label + ", " + w.videos.also.count,
+              href:w.videos.also.page, kind:"primary", tag:"watch"}]
+          : []
+      ).concat(notesHref(w) ? [{label:"Back to the written notes", href:notesHref(w), kind:"secondary"}] : [])
+    },
+    "1e":{
+      title:"Week " + N + ", 1e | Turn in your note sheet",
+      do:"Photograph or scan both sides of every page and upload. Handwritten only. Label the pages so I can tell which competency each box belongs to.",
+      btns: (turnin(N,"notesheet")
+        ? [{label:"Turn in your note sheet", href:turnin(N,"notesheet"), kind:"primary", tag:"canvas"}]
+        : []
+      ).concat([
+        {label:"What I am grading", href:"assignment-notesheet.html?week=" + N, kind:"secondary"}
+      ]),
+      turnin: turnin(N,"notesheet")
+        ? "The button above opens the Canvas assignment. Upload there."
+        : "Turn this in on the Canvas assignment page, using the Submit button below the instructions."
+    },
+    "2a":{
+      title:"Week " + N + ", 2a | Get it back out without looking",
+      do:"About an hour a day across the week, using more than one tool. Cover the sheet and get it back from memory. Short sessions on several days beat one long session on Thursday.",
+      btns:[
+        {label:"Recall cards for Week " + N, href:"mastery-physio-os-standalone.html?week=" + N, kind:"primary"},
+        {label:"Competency recall", href:"competency-recall.html?week=" + N, kind:"secondary"},
+        {label:"Draw it from memory", href:"mastery-canvas.html?week=" + N, kind:"secondary"}
+      ]
+    },
+    "3a":{
+      title:"Week " + N + ", 3a | Lab, " + (w.lab.label || "this week's lab"),
+      do:"Work the lab all the way through, then fill in the lab analysis sheet. You are measuring, calculating, collecting data, and interpreting it.",
+      btns:[
+        {label: w.lab.label ? "Open the " + w.lab.label : "Open this week's lab",
+         href: w.lab.href || "door-lab.html", kind:"primary"},
+        {label:"Print the lab analysis sheet", href:"lab-report-form.html?week=" + N, kind:"primary", tag:"print"}
+      ].concat(turnin(N,"lab")
+        ? [{label:"Turn in your lab", href:turnin(N,"lab"), kind:"primary", tag:"canvas"}]
+        : []
+      ).concat([
+        {label:"What I am grading", href:"assignment-physioex.html?week=" + N, kind:"secondary"}
+      ]),
+      turnin: turnin(N,"lab")
+        ? "The Turn in button opens the Canvas assignment. Upload your analysis sheet there."
+        : "Upload your lab analysis sheet on the Canvas assignment page."
+    },
+    "pf":{
+      title:"Week " + N + ", Patient file | " + (w.patient || "this week's case"),
+      do:"Your patient is yours for the whole term, kept by hand. Add this week's entry: one control loop drawn, and what this week's physiology changes about them. Nothing is turned in weekly.",
+      btns:[
+        {label:"Open your patient file", href:"BIO005-patient-file.html?week=" + N, kind:"primary"},
+        {label:"Print the drawing page", href:"mastery-canvas.html?week=" + N, kind:"secondary"}
+      ],
+      turnin:"Nothing to upload this week. The whole file is turned in as one PDF at the end of the term."
+    },
+    "3b":{
+      title: N===1
+        ? "Week 1, 3b | Two discussions this week"
+        : (noDiscussion(N)
+            ? "Week " + N + ", 3b | No discussion this week"
+            : "Week " + N + ", 3b | Discussion, due Friday"),
+      do: N===1
+        ? "Week 1 has two. The vision board introduces you to the class. The metacognition post is about how the week went. Both are due Friday."
+        : (noDiscussion(N)
+            ? "There is no discussion this week. Put the time into the note sheet and the lab instead, and the discussion comes back next week."
+            : "One post. Half of it is the physiology, half of it is how your learning went this week. Post by Friday, then read what your classmates wrote."),
+      btns: N===1
+        ? [{label:"Discussion 1, your vision board", href:"assignment-discussion-01-visionboard.html", kind:"primary"},
+           {label:"Discussion 2, how the week went", href:"assignment-discussion-metacognition.html?week=1", kind:"primary"}]
+        : (noDiscussion(N)
+            ? []
+            : (turnin(N,"discussion")
+                ? [{label:"Open the Week " + N + " discussion", href:turnin(N,"discussion"), kind:"primary", tag:"canvas"},
+                   {label:"What I am looking for", href:"assignment-discussion-metacognition.html?week=" + N, kind:"secondary"}]
+                : [{label:"This week's discussion prompt", href:"assignment-discussion-metacognition.html?week=" + N, kind:"primary"}])),
+      turnin: noDiscussion(N) ? "" : "Post in the Canvas discussion."
+    },
+    "4a":{
+      title:"Week " + N + ", 4a | Mastery Check, and upload your log",
+      do:"Take a practice round, then upload the report it gives you. Do one round or do ten. I read these to find what the class is missing, not to grade you.",
+      btns:[
+        {label:"Take the Mastery Check", href:"practice-exam.html?week=" + N, kind:"primary"}
+      ].concat(turnin(N,"mastery")
+        ? [{label:"Upload your log", href:turnin(N,"mastery"), kind:"primary", tag:"canvas"}]
+        : []
+      ).concat([
+        {label:"Brain dump, the check", href: N===1 ? "braindump-week01.html" : "note-sheet.html?week=" + N, kind:"secondary"}
+      ]),
+      turnin: turnin(N,"mastery")
+        ? "The Upload button opens the Mastery Check Log assignment in Canvas."
+        : "Upload your practice report on the Canvas assignment page."
+    },
+    "4b":{
+      title:"Week " + N + ", 4b | Brain dump, the check",
+      do:"Blank paper again, same as 1a, no notes. Then put the two pages side by side. What you can write now that you could not write on Monday is what this week actually moved.",
+      btns:[
+        {label:"Brain dump paper", href: N===1 ? "braindump-week01.html" : "note-sheet.html?week=" + N, kind:"primary", tag:"print"},
+        {label:"Draw it from memory", href:"mastery-canvas.html?week=" + N, kind:"secondary"}
+      ],
+      turnin:"This one is for you. Nothing to upload."
+    }
+  };
+  var d = D[s];
+  if (!d) return null;
+  if (!d.canvas) d.canvas = d.title;
+  return d;
+}
+
+/* THE FOUR STAGES.
+
+   One numbering system for the whole course. Every task a student has
+   sits under one of these four, and the letter says where in the stage
+   it falls. Nothing is numbered any other way. */
+var STAGES = [
+  { n:1, name:"Learn",    blurb:"Build what you need to know.",
+    steps:["1a","1b","1c","1d","1e"] },
+  { n:2, name:"Practice", blurb:"Get it back out without looking.",
+    steps:["2a"] },
+  { n:3, name:"Apply",    blurb:"Use the physiology on something real.",
+    steps:["3a","3b"] },
+  { n:0, name:"Patient file, the capstone",
+    blurb:"One patient, all term, kept by hand. Nothing turned in weekly.",
+    steps:["pf"] },
+  { n:4, name:"Check",    blurb:"Find out whether the way you studied worked.",
+    steps:["4a","4b"] }
+];
+var ORDER = ["ov","1a","1b","1c","1d","1e","2a","3a","3b","pf","4a","4b"];
+
+var STEP_SHORT = {
+  "ov":"Overview",
+  "1a":"Cold attempt",
+  "1b":"Print the note sheet",
+  "1c":"First pass",
+  "1d":"Second pass",
+  "1e":"Turn in the note sheet",
+  "2a":"Get it back out",
+  "3a":"Lab",
+  "3b":"Discussion",
+  "pf":"Patient file",
+  "4a":"Mastery Check",
+  "4b":"Brain dump, the check",
+  "e1":"Review week",
+  "e2":"Take the exam",
+  "e3":"Upload your report"
+};
+
+/* The Canvas modules built before the stages went in used Step 0 to
+   Step 9. Those iframes keep working: an old number lands on the step
+   that now carries the same work. */
+var LEGACY = ["ov","1b","1c","1d","1e","2a","3a","pf","3b","4a"];
+
+function orderFor(w){ return w.exam ? EXAM_ORDER : ORDER; }
+function stageOf(id){
+  for (var i=0;i<STAGES.length;i++){
+    if (STAGES[i].steps.indexOf(id) > -1) return STAGES[i];
+  }
+  return null;
+}
+
+/* What is genuinely not built yet for a week. Keep this honest, it is
+   shown to students and it is the list you work down. */
+function gapsFor(w){
+  var out = [];
+  if (w.exam) return out;
+  if (!w.videos) out.push("Concept videos for this week are not recorded yet. Read the written material and the book for now.");
+  if (!w.notes)  out.push("The written notes page for this week is not up yet.");
+  if (!w.lab.href) out.push("This week's lab page is not built yet. The lab button goes to the lab door until it is.");
+  if (w.extraGaps) out = out.concat(w.extraGaps);
+  return out;
+}
+function shortFor(w, id){ return STEP_SHORT[id] || id; }
+function stepIndex(w, id){ return orderFor(w).indexOf(id); }
+
+function el(tag, cls, html){
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (html !== undefined) e.innerHTML = html;
+  return e;
+}
+function esc(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function weekByN(n){
+  for (var i=0;i<WEEKS.length;i++){ if (WEEKS[i].n===n) return WEEKS[i]; }
+  return null;
+}
+
+/* ---------------- step view ---------------- */
+function renderStep(w, s){
+  var d = stepData(w, s);
+  var main = document.getElementById("main");
+  document.getElementById("eyebrow").textContent =
+    "Week " + w.n + " · " + w.title + (s===0 ? "" : " · Step " + s);
+  var heading = d.title.split("| ")[1] || d.title;
+  document.getElementById("pagetitle").textContent = heading;
+  document.getElementById("lede").textContent = s===0
+    ? "This week opens " + w.opens + ". Work down the steps in order."
+    : (function(){ var st = stageOf(s); return st ? (st.n ? "Stage " + st.n + ", " + st.name : st.name) : ""; }());
+  document.title = d.title + " | BIOL 005";
+
+  var card = el("section","card");
+  card.appendChild(el("p","do", esc(d.do)));
+
+  if (w.light && (s===6 || s===7)){
+    var skip = el("div","note",
+      "<strong>Not this week.</strong> Week 2 runs light so you have time to get your book. " +
+      "The lab and the patient case start in Week 3.");
+    card.appendChild(skip);
+    var goOn = el("div","btnrow");
+    goOn.appendChild(linkBtn({label:"Go back to the Week 2 page", href:"week-02.html", kind:"secondary"}));
+    card.appendChild(goOn);
+  } else {
+    var row = el("div","btnrow");
+    for (var i=0;i<d.btns.length;i++){ row.appendChild(linkBtn(d.btns[i])); }
+    card.appendChild(row);
+    card.appendChild(el("p","newtab","These open in a new tab. Close that tab when you are done and you are back here in Canvas."));
+    if (d.turnin) card.appendChild(el("p","turnin", esc(d.turnin)));
+  }
+
+  var nav = el("div","stepnav");
+  var ord = orderFor(w), at = ord.indexOf(s);
+  if (at > 0) nav.appendChild(navLink("← " + shortFor(w, ord[at-1]), w.n, ord[at-1]));
+  else nav.appendChild(el("span"));
+  if (at > -1 && at < ord.length - 1) nav.appendChild(navLink(shortFor(w, ord[at+1]) + " →", w.n, ord[at+1]));
+  card.appendChild(nav);
+
+  main.appendChild(card);
+}
+function linkBtn(b){
+  var a = el("a", "btn" + (b.kind === "secondary" ? " secondary" : ""));
+  a.href = b.href;
+  /* New tab, always. The Canvas page stays open behind it, so students
+     never have to find their way back. */
+  a.target = "_blank";
+  a.rel = "noopener";
+  a.innerHTML = (b.tag ? '<span class="tag">' + esc(b.tag) + '</span> ' : "") + esc(b.label);
+  a.setAttribute("aria-label", b.label + ", opens in a new tab");
+  return a;
+}
+function navLink(text, n, s){
+  /* Stays inside the Canvas frame on purpose. */
+  var a = el("a");
+  a.href = "?week=" + n + "&step=" + s;
+  a.textContent = text;
+  return a;
+}
+
+/* ---------------- one week, everything on one page ---------------- */
+function renderHub(w){
+  var main = document.getElementById("main");
+  document.getElementById("eyebrow").textContent = "Week " + w.n + " · opens " + w.opens;
+  document.getElementById("pagetitle").textContent = w.title;
+  document.getElementById("lede").textContent = w.exam
+    ? "No new physiology this week. Review, then the exam."
+    : w.comp + " competencies this week. Work down this page from the top. Each step has to happen before the next one makes sense.";
+  document.title = "Week " + w.n + ", " + w.title + " | BIOL 005";
+
+  var intro = el("section","card");
+  intro.appendChild(el("h2",null,"Everything for this week, in order"));
+  intro.appendChild(el("p","muted",
+    "This is the same list your Canvas module carries, gathered onto one page so you can see the whole week at once. " +
+    "Every link opens in a new tab, so this page stays where it is."));
+  main.appendChild(intro);
+
+  var ordH = orderFor(w), lastStage = null;
+  for (var oi = 0; oi < ordH.length; oi++){
+    var s = ordH[oi];
+    var d = stepData(w, s);
+    if (!d) continue;
+    var stg = stageOf(s);
+    if (stg && stg !== lastStage){
+      lastStage = stg;
+      var sh = el("section","card stagehead");
+      sh.appendChild(el("p","stagenum", stg.n ? String(stg.n) : "&middot;"));
+      sh.appendChild(el("h2", null, esc(stg.name)));
+      sh.appendChild(el("p","muted", esc(stg.blurb)));
+      main.appendChild(sh);
+    }
+    var card = el("section","card hubstep");
+    var head = el("div","hubhead");
+    head.appendChild(el("span","hubnum", s === "ov" ? "&mdash;" : s));
+    var ht = el("div");
+    ht.appendChild(el("h2",null, esc(d.title.split("| ")[1] || d.title)));
+    ht.appendChild(el("p","muted", esc(d.do)));
+    head.appendChild(ht);
+    card.appendChild(head);
+
+    var row = el("div","btnrow");
+    for (var i=0;i<d.btns.length;i++){ row.appendChild(linkBtn(d.btns[i])); }
+    if (d.btns.length) card.appendChild(row);
+    if (d.turnin) card.appendChild(el("p","turnin", esc(d.turnin)));
+    main.appendChild(card);
+  }
+
+  var gaps = gapsFor(w);
+  if (gaps.length){
+    var g = el("section","card");
+    g.appendChild(el("h2",null,"Still being built"));
+    g.appendChild(el("p","muted","Honest list of what is not up yet for this week. Everything else above works."));
+    var gu = el("ul");
+    for (var q=0;q<gaps.length;q++){ gu.appendChild(el("li", null, esc(gaps[q]))); }
+    g.appendChild(gu);
+    main.appendChild(g);
+  }
+
+  var end = el("section","card");
+  end.appendChild(el("h2",null,"Where to hand things in"));
+  end.appendChild(el("p",null,"Every submit button lives in Canvas, on the page for that step. This page is where you find the work. Canvas is where you turn it in."));
+  var back = el("div","btnrow");
+  var a = el("a","btn");
+  a.href = CANVAS; a.target = "_top"; a.textContent = "Back to Canvas";
+  back.appendChild(a);
+  end.appendChild(back);
+  main.appendChild(end);
+}
+
+/* ---------------- map view ---------------- */
+function renderMap(){
+  var main = document.getElementById("main");
+
+  /* what each step is */
+  var c1 = el("section","card");
+  c1.appendChild(el("h2",null,"The nine steps, every week"));
+  c1.appendChild(el("p","muted","Same shape in all fifteen modules, so students never have to work out what comes next. One page per step, iframed into Canvas."));
+  var ul = el("ul","steplist");
+  var where = {
+    "ov":"week-NN.html",
+    "1a":"blank paper, before anything else",
+    "1b":"note-sheet.html?week=N, the boxes are the competencies",
+    "1c":"the notes PDFs and Silverthorn, first colour",
+    "1d":"the concept videos, second colour",
+    "1e":"the Canvas note sheet assignment",
+    "2a":"recall cards, competency recall, draw it from memory",
+    "3a":"the lab page for that week, plus lab-report-form.html",
+    "3b":"the Canvas discussion",
+    "pf":"BIO005-patient-file.html?week=N, kept by hand",
+    "4a":"practice-exam.html?week=N, then the Canvas log",
+    "4b":"blank paper again, compared against 1a"
+  };
+  for (var i=0;i<ORDER.length;i++){
+    var id3 = ORDER[i];
+    var li = el("li");
+    li.innerHTML = "";
+    var nm = el("span","num");
+    nm.innerHTML = id3 === "ov" ? "&mdash;" : id3;
+    li.appendChild(nm);
+    var d = el("div");
+    d.appendChild(el("span","what", esc(STEP_SHORT[id3])));
+    d.appendChild(el("span","where", esc(where[id3] || "")));
+    li.appendChild(d);
+    ul.appendChild(li);
+  }
+  c1.appendChild(ul);
+  main.appendChild(c1);
+
+  /* the grid */
+  var c2 = el("section","card");
+  c2.appendChild(el("h2",null,"Fifteen modules"));
+  c2.appendChild(el("p","muted","Click any cell to see exactly what that Canvas page looks like."));
+  var leg = el("div","legend",
+    '<span><span class="dot live"></span>Page is built and the button works</span>' +
+    '<span><span class="dot todo"></span>Falls back to the door page until you build it</span>');
+  c2.appendChild(leg);
+
+  var scroller = el("div","scroller");
+  var t = el("table");
+  t.appendChild(el("caption",null,"Week by step. The current week is shaded."));
+  var thead = el("thead");
+  var hr = el("tr");
+  hr.appendChild(el("th",null,"Module"));
+  for (var oi=0; oi<ORDER.length; oi++){
+    var id = ORDER[oi], stg = stageOf(id);
+    hr.appendChild(el("th","stepcol",
+      '<span class="lbl">' + (id === "ov" ? "Over" : (stg ? esc(stg.name) : "")) + '</span>' +
+      '<span class="no">' + (id === "ov" ? "&mdash;" : id) + "</span>"));
+  }
+  hr.appendChild(el("th",null,"Lab for that week"));
+  thead.appendChild(hr);
+  t.appendChild(thead);
+
+  var tbody = el("tbody");
+  var today = new Date();
+  for (var k=0;k<WEEKS.length;k++){
+    var w = WEEKS[k];
+    var tr = el("tr");
+    if (isCurrent(w, today)) tr.className = "now";
+    var th = el("th");
+    th.scope = "row";
+    th.innerHTML = '<span class="wk">Week ' + w.n + " · opens " + esc(w.opens) + "</span>" +
+                   esc(w.title) + (isCurrent(w, today) ? '<span class="rowtag">you are here</span>' : "") +
+                   '<span class="wk vid">' +
+                   (w.exam ? "No new content"
+                     : w.comp + " competencies · " +
+                       (w.videos ? videoCount(w) + " concept videos, recorded" : "no videos yet")) +
+                   "</span>";
+    tr.appendChild(th);
+    for (var s2=0; s2<ORDER.length; s2++){
+      var id2 = ORDER[s2];
+      var td = el("td","cell");
+      if (orderFor(w).indexOf(id2) === -1){ tr.appendChild(td); continue; }
+      var a = el("a");
+      a.href = "?week=" + w.n + "&step=" + id2;
+      a.innerHTML = id2 === "ov" ? "&mdash;" : id2;
+      a.setAttribute("aria-label","Week " + w.n + ", " + shortFor(w, id2));
+      if (!w.exam && ((id2 === "3a" && !w.lab.href) || (id2 === "3b" && noDiscussion(w.n)))) a.className = "todo";
+      td.appendChild(a);
+      tr.appendChild(td);
+    }
+    var labcell = el("td");
+    labcell.innerHTML = w.exam
+      ? '<span class="muted">Exam week, no lab</span>'
+      : (w.lab.label ? esc(w.lab.label) : '<span class="muted">Not built yet</span>');
+    tr.appendChild(labcell);
+    tbody.appendChild(tr);
+  }
+  t.appendChild(tbody);
+  scroller.appendChild(t);
+  c2.appendChild(scroller);
+  main.appendChild(c2);
+
+  /* canvas titles + embed code */
+  var c3 = el("section","card");
+  c3.appendChild(el("h2",null,"Posting a module"));
+  c3.appendChild(el("p",null,"Make ten Canvas pages in the module, paste one iframe into each, and name them with the titles below. Nothing else changes from week to week."));
+  var pick = el("p");
+  pick.innerHTML = '<label for="wkpick"><strong>Show me the titles and the code for </strong></label> ';
+  var sel = el("select");
+  sel.id = "wkpick";
+  sel.style.cssText = "font:inherit;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:#fff";
+  for (var q=0;q<WEEKS.length;q++){
+    var o = document.createElement("option");
+    o.value = WEEKS[q].n;
+    o.textContent = "Week " + WEEKS[q].n + ", " + WEEKS[q].title;
+    sel.appendChild(o);
+  }
+  pick.appendChild(sel);
+  c3.appendChild(pick);
+
+  var titleList = el("ul","titles");
+  titleList.id = "titlelist";
+  c3.appendChild(titleList);
+
+  var pre = el("pre");
+  pre.id = "embed";
+  c3.appendChild(pre);
+
+  var cr = el("div","copyrow");
+  var b1 = el("button","copy","Copy all ten titles");
+  var b2 = el("button","copy","Copy all ten iframes");
+  var st = el("span","status");
+  st.setAttribute("aria-live","polite");
+  st.id = "copystatus";
+  cr.appendChild(b1); cr.appendChild(b2); cr.appendChild(st);
+  c3.appendChild(cr);
+  main.appendChild(c3);
+
+  function fillTitles(){
+    var w = weekByN(parseInt(sel.value,10));
+    titleList.innerHTML = "";
+    var lines = [], frames = [];
+    var ordT = orderFor(w);
+    for (var t2i=0;t2i<ordT.length;t2i++){
+      var s = ordT[t2i];
+      var d = stepData(w, s);
+      var t2 = s==="ov" ? d.canvas : d.title;
+      lines.push(t2);
+      frames.push(iframeFor(w, s));
+      var li = el("li");
+      li.appendChild(el("span","t", esc(t2)));
+      var cb = el("button","copy","Copy");
+      (function(txt, btn){
+        btn.addEventListener("click", function(){ copy(txt, "Copied that title."); });
+      })(t2, cb);
+      li.appendChild(cb);
+      titleList.appendChild(li);
+    }
+    pre.textContent = frames[1];
+    b1.onclick = function(){ copy(lines.join("\n"), "Copied ten titles."); };
+    b2.onclick = function(){ copy(frames.join("\n\n"), "Copied ten iframes, in step order."); };
+  }
+  sel.addEventListener("change", fillTitles);
+  fillTitles();
+}
+
+function iframeFor(w, s){
+  return '<iframe src="' + SITE + 'canvas-steps.html?week=' + w.n + '&step=' + s +
+         '" title="Week ' + w.n + ', ' + shortFor(w, s) + '" width="100%" height="560" ' +
+         'style="border:0;max-width:100%" loading="lazy"></iframe>';
+}
+function copy(text, msg){
+  var s = document.getElementById("copystatus");
+  function done(ok){ if (s) s.textContent = ok ? msg : "Could not copy. Select the text and copy it by hand."; }
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){ done(true); }, function(){ done(false); });
+  } else { done(false); }
+}
+function isCurrent(w, today){
+  var parts = w.opens.split(" ");
+  var months = {Sep:8, Oct:9, Nov:10, Dec:11};
+  var start = new Date(2026, months[parts[0]], parseInt(parts[1],10));
+  var end = new Date(start.getTime() + 7*24*3600*1000);
+  return today >= start && today < end;
+}
+
+/* ---------------- route ---------------- */
+(function(){
+  var p = new URLSearchParams(window.location.search);
+  var wn = parseInt(p.get("week"),10);
+  var raw = (p.get("step") || "").trim().toLowerCase();
+  var w = weekByN(wn);
+  var id = "";
+  if (raw){
+    if (/^\d+$/.test(raw)){ id = LEGACY[parseInt(raw,10)] || ""; }
+    else if (orderFor(w || {}).indexOf(raw) > -1 || ORDER.indexOf(raw) > -1 || EXAM_ORDER.indexOf(raw) > -1){ id = raw; }
+  }
+  if (w && id && stepData(w, id)){ renderStep(w, id); }
+  else if (w){ renderHub(w); }
+  else { renderMap(); }
+})();
+
+/* iframe height sender */
+(function(){
+  var id = "canvas-steps";
+  function send(){
+    var h = Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight,
+      document.body.offsetHeight
+    );
+    if (window.parent !== window){
+      window.parent.postMessage({ id: id, frameId: id, height: h }, "*");
+    }
+  }
+  window.addEventListener("load", send);
+  window.addEventListener("resize", send);
+  if (window.ResizeObserver){
+    try { new ResizeObserver(send).observe(document.body); } catch(e){}
+  }
+  setTimeout(send, 300);
+})();
+</script>
+<script>try{ announcePreview(); }catch(e){}</script>
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>How to Study for This Class · BIO 004 Human Anatomy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@500;700&display=swap">
+<style>
+/* Navy page, white step cards (the printed copy stays on white paper).
+   Six steps, top to bottom. Each step is its own white card with its own
+   color (navy, terra cotta, gold, in turn), its number in a filled circle,
+   and its tools on a faint wash of the same color, so no two neighbouring
+   steps look alike. Every tool appears once, under the step it fits best.
+   Brand: off-white page, white cards lifted by shadow only, navy #0B1530,
+   dark terra cotta #7A2E24, brushed gold #B8924A. No teal, no italics. */
+:root{
+  --page:#FAFAF9; --card:#FFFFFF; --ink:#0B1530; --soft:#454B5C;
+  --navy:#0B1530; --terra:#7A2E24; --gold:#B8924A; --gold-text:#6F5316;
+  --shadow:0 1px 3px rgba(11,21,48,.08); --shadow-up:0 8px 16px rgba(11,21,48,.10);
+  --disp:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --eyebrow:"DM Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:#08101F;color:var(--ink);font-family:var(--disp);font-size:16px;line-height:1.5}
+em,i{font-style:normal}
+.skip{position:absolute;left:-999px;top:8px;background:var(--navy);color:#fff;padding:8px 12px;border-radius:6px;z-index:10}
+.skip:focus{left:16px}
+:focus-visible{outline:3px solid var(--navy);outline-offset:3px}
+.skip:focus-visible{outline-color:#E3C27D}
+.wrap{max-width:1040px;margin:0 auto;padding-block:36px 48px;
+  padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+.course{margin:0;font-family:var(--eyebrow);font-size:clamp(15px,2.2vw,18px);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#E3C27D}
+h1{margin:8px 0 6px;font-size:clamp(1.9rem,4.4vw,2.6rem);line-height:1.1;font-weight:800;letter-spacing:-.02em;color:#fff}
+.lede{margin:0 0 26px;color:#C8D2DA;font-size:1.08rem}
+
+/* steps */
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.step{--c:var(--navy);--c-text:var(--navy);--wash:rgba(11,21,48,.045);--on:#fff;
+  background:var(--card);border-radius:16px;box-shadow:0 14px 34px -14px rgba(0,0,0,.65);padding:22px;
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:20px;align-items:start}
+.step.terra{--c:var(--terra);--c-text:var(--terra);--wash:rgba(122,46,36,.06)}
+.step.gold{--c:var(--gold);--c-text:var(--gold-text);--wash:rgba(184,146,74,.11);--on:var(--navy)}
+@media (max-width:720px){.step{grid-template-columns:minmax(0,1fr);gap:14px;padding:18px}}
+.join{height:30px;display:grid;place-items:center;color:#E3C27D}
+.join svg{width:18px;height:18px}
+.what{display:grid;grid-template-columns:52px minmax(0,1fr);gap:14px;align-items:start}
+.num{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--c);color:var(--on);
+  font-size:1.5rem;font-weight:800}
+.kind{margin:2px 0 2px;font-family:var(--eyebrow);font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--c-text)}
+.step h2{margin:0 0 6px;font-size:1.35rem;line-height:1.2;font-weight:800}
+.step .say{margin:0;color:var(--soft);font-size:15px}
+.use{background:var(--wash);border-radius:12px;padding:14px 16px}
+.use h3{margin:0 0 6px;font-family:var(--eyebrow);font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--c-text)}
+.use h3 + ul{margin-top:0}
+.use h3.sub{margin-top:12px}
+.res{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.res li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;align-items:start;padding:6px 0}
+.res svg{width:20px;height:20px;color:var(--c-text);margin-top:2px}
+.res a{font-weight:700;color:var(--ink);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.res a:hover{text-decoration-thickness:2px}
+.res .plain{font-weight:700}
+.res small{display:block;font-size:13.5px;color:var(--soft)}
+.mods{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.mods a{display:inline-flex;align-items:center;min-height:32px;padding:0 11px;border-radius:999px;background:#fff;
+  font-size:12.5px;font-weight:700;color:var(--ink);text-decoration:none;box-shadow:var(--shadow)}
+.mods a:hover{box-shadow:var(--shadow-up)}
+.mods a.now{background:var(--navy);color:#fff}
+.soon{display:inline-block;margin-left:6px;font-family:var(--eyebrow);font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:#fff;background:var(--terra);border-radius:999px;padding:2px 8px;vertical-align:2px}
+.tbl-slot{margin-top:8px;background:#fff;border-radius:10px;padding:10px 12px;font-size:14px;color:var(--soft)}
+.tbl-slot b{color:var(--ink)}
+
+/* bottom line */
+.goal{margin-top:26px;background:#fff;color:var(--ink);border-radius:16px;box-shadow:0 14px 34px -14px rgba(0,0,0,.65);padding:22px 24px;display:grid;grid-template-columns:44px minmax(0,1fr);gap:16px;align-items:center}
+.goal svg{width:40px;height:40px;color:var(--gold)}
+.goal .k{margin:0;font-family:var(--eyebrow);font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--terra)}
+.goal p{margin:4px 0 0}
+.goal .big{font-size:1.15rem;font-weight:800;line-height:1.3}
+.goal .small{color:var(--soft);font-size:15px}
+.goal .small b{color:var(--ink)}
+.step:focus{outline:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.print-only{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+@media print{
+  @page{size:letter;margin:0.32in 0.4in}
+  body{background:#fff;font-size:9pt;line-height:1.22}
+  .course{color:var(--terra);font-size:11pt} h1{color:var(--ink)} .lede{color:var(--soft)} .join{color:#9AA0AD}
+  .goal{box-shadow:none;border:1px solid #DDE0E6}
+  .wrap{padding:0;max-width:none}
+  .skip{display:none}
+  h1{font-size:18pt;margin:2px 0 2px}
+  .lede{margin:0 0 4px;font-size:9pt}
+  .step{box-shadow:none;border:1px solid #DDE0E6;padding:5px 10px;gap:10px;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);break-inside:avoid;border-radius:10px}
+  .join{height:5px}.join svg{display:none}
+  .what{grid-template-columns:30px minmax(0,1fr);gap:8px}
+  .num{width:30px;height:30px;font-size:12pt}
+  .step h2{font-size:10.5pt;margin:0 0 1px}
+  .step .say{font-size:8.5pt}
+  .kind{font-size:7.5pt}
+  .use{padding:4px 9px}
+  .use h3{font-size:7pt;margin-bottom:0}
+  .use h3.sub{margin-top:2px}
+  .res li{padding:0;grid-template-columns:14px minmax(0,1fr);gap:6px}
+  .res svg{width:12px;height:12px}
+  .res a{text-decoration:none}
+  .res small{font-size:7.4pt;display:inline;margin-left:4px}
+  .res small::before{content:"\00B7  "}
+  .mods{display:none}
+  .tbl-slot{display:none!important}
+  .goal{margin-top:6px;padding:6px 14px;grid-template-columns:26px minmax(0,1fr);gap:10px;border-radius:10px}
+  .goal svg{width:24px;height:24px}
+  .goal .big{font-size:10pt}.goal .small{font-size:8.5pt}
+  .print-only{display:block;margin:6px 0 0;font-size:8pt;color:var(--soft);text-align:center}
+  .step,.num,.use,.goal,.soon{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#steps">Skip to the six steps</a>
+<main class="wrap">
+
+  <header>
+    <p class="course">BIO 004 · Human Anatomy</p>
+    <h1>How to study for this class</h1>
+    <p class="lede">Start at step 1 for each new topic and work your way down.</p>
+    <p class="lede">The links below open each study tool directly. You can also find all of them in one place in <a href="mastery-os-fall-2026.html" target="_top">Mastery OS</a>. Whichever way you get there, everything you do counts toward your weak areas.</p>
+  </header>
+
+  <ol class="steps" id="steps">
+
+    <!-- 1 PREPARE -->
+    <li class="step" id="prepare" tabindex="-1">
+      <div class="what">
+        <span class="num" aria-hidden="true">1</span>
+        <div>
+          <p class="kind">Step 1 · Prepare</p>
+          <h2>Do you want to know what will be on the exam?</h2>
+          <p class="say">Check the competencies and structure list before class.</p>
+          <p class="say">Exams ask you to identify, explain, compare and apply. Practice questions show the style, not the exact wording.</p>
+        </div>
+      </div>
+      <div class="use">
+        <h3>Lecture</h3>
+        <ul class="res">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>
+            <span><a id="compLink" href="bio004-competency-packet.html" target="_top">Course competencies</a><small>What you must be able to do</small></span></li>
+        </ul>
+        <h3 class="sub">Lab</h3>
+        <ul class="res">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+            <span><span class="plain">Lab structure lists</span><small>What you must find in lab</small>
+            <span class="mods" id="modsLists" role="group" aria-label="Lab structure list by module"></span></span></li>
+        </ul>
+        <h3 class="sub">Lecture and lab</h3>
+        <ul class="res">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg>
+            <span><a id="calLink" href="bio004-course-calendar-alt.html" target="_top">Your class schedule</a><small>What is coming up in lecture and lab</small></span></li>
+        </ul>
+      </div>
+    </li>
+    <li class="join" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></li>
+
+    <!-- 2 LEARN -->
+    <li class="step terra" id="learn" tabindex="-1">
+      <div class="what">
+        <span class="num" aria-hidden="true">2</span>
+        <div>
+          <p class="kind">Step 2 · Learn</p>
+          <h2>How do I do the before-class learning?</h2>
+          <p class="say">Read the notes, watch the videos and do the pre-work.</p>
+        </div>
+      </div>
+      <div class="use">
+        <h3>Lecture</h3>
+        <ul class="res">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg>
+            <span><a href="course-materials.html" target="_top">Course materials</a><small>Everything for a module in one place</small></span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h6"/></svg>
+            <span><a href="bio004-quick-access.html?cat=notes" target="_top">Course notes</a><small>Your printed packet, also online</small></span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l5.5-3.5z"/></svg>
+            <span><a href="bio004-quick-access.html?cat=videos" target="_top">Dr. Rennie's videos</a><small>Every lecture and concept video, by module</small></span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span><a href="bio004-quick-access.html?cat=prework" target="_top">Pre-work (not graded)</a><small>What to do before class</small></span></li>
+        </ul>
+        <h3 class="sub">Lab</h3>
+        <ul class="res">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+            <span><a href="BIO004-M3-Lab-Packet.pdf" target="_blank" rel="noopener">Lab packet<span class="sr"> (PDF, opens in a new tab)</span></a><small>Structure lists and muscle and blood cell charts. Your printed copy, also here</small></span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="2" y="6" width="13" height="12" rx="2"/><path d="M15 10.5l6-3.5v10l-6-3.5z"/></svg>
+            <span><a href="bio004-bluelink-videos.html" target="_top">Cadaver videos</a><small>University of Michigan, by body system</small></span></li>
+        </ul>
+      </div>
+    </li>
+    <li class="join" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></li>
+
+    <!-- 3 RETRIEVE -->
+    <li class="step gold" id="retrieve" tabindex="-1">
+      <div class="what">
+        <span class="num" aria-hidden="true">3</span>
+        <div>
+          <p class="kind">Step 3 · Retrieve</p>
+          <h2>Do you want to see if you remember it?</h2>
+          <p class="say">Close your notes. Draw it, label it and explain it from memory.</p>
+        </div>
+      </div>
+      <div class="use">
+        <h3>Lecture</h3>
+        <ul class="res">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="6" width="14" height="12" rx="2"/><path d="M7 6V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"/></svg>
+            <span><a href="mastery-os-fall-2026.html#s-recall" target="_top">Recall cards</a><small>Answer from memory, then see why</small></span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18z"/></svg>
+            <span><a href="mastery-os-fall-2026.html#s-dumps" target="_top">Brain dumps</a><small>Write everything you know on a blank page, then check your answer</small></span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+            <span><span class="plain">Note sheets</span><small>Draw it from the prompts. Your printed copy, also here</small>
+            <span class="mods" role="group" aria-label="Note sheets by module"><a href="BIO004-M1-Note-Sheet-Packet.pdf" target="_blank" rel="noopener">Module 1</a><a href="BIO004-M2-Note-Sheet-Packet.pdf" target="_blank" rel="noopener">Module 2</a><a href="BIO004-M3-Note-Sheet-Packet.pdf" target="_blank" rel="noopener">Module 3</a><a href="BIO004-M4-Note-Sheet-Packet.pdf" target="_blank" rel="noopener">Module 4</a><a href="BIO004-M5-Note-Sheet-Packet.pdf" target="_blank" rel="noopener">Module 5</a></span></span></li>
+        </ul>
+        <h3 class="sub">Lab</h3>
+        <ul class="res">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+            <span><a href="https://drsrennie-stack.github.io/new-digital-atlas/" target="_blank" rel="noopener">Interactive Digital Atlas<span class="sr"> (opens in a new tab)</span></a><small>Name it before you see the label</small></span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>
+            <span><a href="mastery-os-fall-2026.html#s-loops" target="_top">Loops</a><small>Fast picture identification</small></span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M15.5 15.5 20 20"/></svg>
+            <span><a href="histology-help.html" target="_top">Histology help</a><small>Every slide practice tool</small></span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M4 10h16M10 4v16"/></svg>
+            <span><a href="bio004-tissue-chart-practice.html" target="_top">Tissue chart</a><small>Fill in the chart from memory</small></span></li>
+        </ul>
+      </div>
+    </li>
+    <li class="join" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></li>
+
+    <!-- 4 CHECK -->
+    <li class="step" id="check" tabindex="-1">
+      <div class="what">
+        <span class="num" aria-hidden="true">4</span>
+        <div>
+          <p class="kind">Step 4 · Check</p>
+          <h2>How do I know what I still need to study?</h2>
+          <p class="say">Test yourself, then look at your weak areas in lecture and lab.</p>
+        </div>
+      </div>
+      <div class="use">
+        <h3>Lecture</h3>
+        <ul class="res">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="5.5" y="5" width="13" height="16" rx="2"/><path d="M9 5V3.5h6V5"/><path d="M9.5 13.5l2 2 3.5-4"/></svg>
+            <span><a href="bio004-mastery-check.html" target="_top">Mastery Check</a><small>Find the gaps in a module</small></span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 4h12v16H6z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>
+            <span><a href="practice-lecture-exam.html" target="_top">Practice exam</a><small>A fresh practice exam in the real format</small></span></li>
+        </ul>
+        <h3 class="sub">Lab</h3>
+        <ul class="res">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M10 2v7.5L4.5 19a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 9.5V2"/><path d="M8 2h8"/></svg>
+            <span><a href="BIO004-M3-Lab-Packet.pdf" target="_blank" rel="noopener">Sample lab exam questions<span class="sr"> (PDF, opens in a new tab)</span></a><small>At the back of your lab packet</small></span></li>
+        </ul>
+        <h3 class="sub" id="weak">Where are my weak areas?</h3>
+        <ul class="res">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M2 20h20"/></svg>
+            <span><a href="mastery-os-fall-2026.html#s-weak" target="_top">My weak areas</a><small>Ranked from your recall cards, brain dumps, Loops, practice exams and Mastery Checks, with a link to the cards, brain dump and Loop for each one</small></span></li>
+        </ul>
+      </div>
+    </li>
+    <li class="join" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></li>
+
+    <!-- 5 APPLY -->
+    <li class="step terra" id="apply" tabindex="-1">
+      <div class="what">
+        <span class="num" aria-hidden="true">5</span>
+        <div>
+          <p class="kind">Step 5 · Apply</p>
+          <h2>Do you want to practice with your team?</h2>
+          <p class="say">Bring your prep to class and lab and work it out together.</p>
+        </div>
+      </div>
+      <div class="use">
+        <h3>In class</h3>
+        <ul class="res">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span><span class="plain">Lecture TBL</span><small>iRAT, tRAT and application questions</small></span></li>
+        </ul>
+        <h3 class="sub">Study groups</h3>
+        <ul class="res">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>
+            <span><a href="study-session-signup.html" target="_top">Study With Me</a><small>Join or host a study session</small></span></li>
+          <!-- PRACTICE TBL SLOT. When the practice TBL is ready, replace the
+               next <li> with: <a href="YOUR-PAGE.html" target="_top">Practice TBL</a>
+               and delete the Coming soon tag and the tbl-slot paragraph. -->
+          <li id="practice-tbl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="5.5" y="5" width="13" height="16" rx="2"/><path d="M9 5V3.5h6V5"/><path d="M9 11h6M9 15h4"/></svg>
+            <span><span class="plain">Practice TBL</span><span class="soon">Coming soon</span><small>Build and run your own TBL as a group</small>
+            <span class="tbl-slot" style="display:block"><b>For study groups:</b> an iRAT, a tRAT and an application section you work through together.</span></span></li>
+        </ul>
+      </div>
+    </li>
+    <li class="join" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></li>
+
+    <!-- 6 REVISIT -->
+    <li class="step gold" id="revisit" tabindex="-1">
+      <div class="what">
+        <span class="num" aria-hidden="true">6</span>
+        <div>
+          <p class="kind">Step 6 · Revisit</p>
+          <h2>Do you keep forgetting things?</h2>
+          <p class="say">Come back to hard topics every few days. Start with your weak spots.</p>
+        </div>
+      </div>
+      <div class="use">
+        <h3>Use this</h3>
+        <ul class="res">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M19.5 9A8 8 0 0 0 5 7.5"/><path d="M19.5 4.5V9H15"/><path d="M4.5 15A8 8 0 0 0 19 16.5"/><path d="M4.5 19.5V15H9"/></svg>
+            <span><a href="mastery-os-fall-2026.html" target="_top">Mastery OS</a><small>Brings each topic back right before you would forget it</small></span></li>
+        </ul>
+      </div>
+    </li>
+  </ol>
+
+  <section class="goal" aria-labelledby="goal-k">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>
+    <div>
+      <p class="k" id="goal-k">The goal</p>
+      <p class="big">Master the published competencies and required structures.</p>
+      <p class="small"><b>Graded:</b> Lecture TBLs, weekly brain dumps, lecture exams and lab exams. Every tool on this page is recommended, not graded.</p>
+      <p class="small">You do not need every study tool. You do need to master every required competency.</p>
+    </div>
+  </section>
+
+  <p class="print-only">Every link on this sheet: drsrennie-stack.github.io/new-build-bio4-solano/bio004-study-process.html</p>
+</main>
+
+<script>
+(function () {
+  /* the student's own section, and the module class is in now */
+  var sec = null;
+  try { var m = location.search.match(/[?&]sec=(mw|tr-am|tr-eve)/); sec = m ? m[1] : localStorage.getItem('bio004-section'); } catch (e) {}
+  if (sec !== 'mw' && sec !== 'tr-am' && sec !== 'tr-eve') sec = null;
+  if (sec) document.getElementById('calLink').href = 'bio004-schedule-' + sec + '.html';
+  var EXAMS = { mw: ['2026-09-09', '2026-09-30', '2026-10-21', '2026-11-16', '2026-12-09'],
+                tr: ['2026-09-08', '2026-09-29', '2026-10-22', '2026-11-17', '2026-12-10'] };
+  var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; };
+  var today = d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+  var list = EXAMS[sec === 'mw' ? 'mw' : 'tr'], now = 5;
+  for (var i = 0; i < list.length; i++) { if (today <= list[i]) { now = i + 1; break; } }
+  var h = '';
+  for (var n = 1; n <= 5; n++) {
+    h += '<a href="module-' + n + '-structure-list.html" target="_top"' + (n === now ? ' class="now" aria-current="true"' : '') + '>Module ' + n + '</a>';
+  }
+  document.getElementById('modsLists').innerHTML = h;
+  document.getElementById('compLink').href = 'bio004-competency-packet.html#module-' + now;
+})();
+</script>
+<script>
+  /* iframe height sender, so Canvas or Kajabi can size the frame */
+  (function () {
+    var id = 'bio004-study-process';
+    function send() {
+      var h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+      try { parent.postMessage({ id: id, height: h }, '*'); } catch (e) {}
+    }
+    window.addEventListener('load', send);
+    window.addEventListener('resize', send);
+    if (window.ResizeObserver) new ResizeObserver(send).observe(document.body);
+  })();
+</script>
+<script src="bio004-guide-link.js"></script>
+</body>
+</html>

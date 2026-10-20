@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Exam Tutor | MedMasters Collaborative</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#08101F;
+  --navy-soft:#1E2A47;
+  --navy-tint:#ECEFF4;
+  --ink:#08101F;
+  --ink-muted:#4A5468;
+  --maroon:#7A2A22;
+  --maroon-dark:#5E201A;
+  --terra:#8B1D1D;
+  --gold:#DCB45C;
+  --straw:#E8CE85;
+  --page:#FAFAF9;
+  --card:#FFFFFF;
+  --rule:#D7DBE2;
+  --border:#767C8C;
+  --border-strong:#08101F;
+  --shadow-rest:0 1px 3px rgba(8,16,31,.10), 0 1px 2px rgba(8,16,31,.06);
+  --shadow-hover:0 12px 26px rgba(8,16,31,.16);
+  --r-block:8px;
+  --r-card:16px;
+  --pill:99px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Figtree',system-ui,-apple-system,sans-serif;
+  background:var(--page);color:var(--ink);
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;
+}
+em,i,cite,dfn,var,address{font-style:normal;}
+h1,h2,h3{font-family:'Plus Jakarta Sans',system-ui,sans-serif;line-height:1.2;color:var(--navy);}
+h1{font-weight:800;font-size:clamp(30px,4.2vw,48px);letter-spacing:-.02em;}
+h2{font-weight:700;font-size:clamp(19px,2.2vw,24px);}
+h3{font-weight:700;font-size:16.5px;}
+a{color:var(--maroon);}
+a:hover{color:var(--maroon-dark);}
+
+.skip-link{position:absolute;left:-9999px;top:8px;background:var(--navy);color:#fff;padding:10px 16px;font-weight:700;text-decoration:none;z-index:2000;border-radius:var(--r-block);}
+.skip-link:focus{left:8px;}
+:focus-visible{outline:3px solid var(--navy);outline-offset:2px;box-shadow:0 0 0 6px rgba(220,180,92,.9);}
+.card.dark :focus-visible,.site-footer :focus-visible{outline-color:#FFFFFF;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+.hidden{display:none !important;}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px;}
+
+.site-header{background:#fff;padding:16px 0;}
+.site-header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.mark{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.brand{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:18px;color:var(--navy);text-decoration:none;}
+.brand span{color:var(--maroon);}
+.hdr-pill{background:var(--navy-tint);color:var(--navy);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border-radius:var(--pill);}
+
+.hero{padding:30px 0 8px;}
+.eyebrow{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--maroon);margin-bottom:10px;}
+.hero .lede{color:var(--ink-muted);max-width:64ch;margin-top:12px;font-size:17px;}
+
+.statusbar{position:sticky;top:0;z-index:80;background:#fff;box-shadow:var(--shadow-rest);padding:10px 0;margin-top:18px;}
+.statusbar .wrap{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.chip{font-size:12.5px;font-weight:700;padding:5px 13px;border-radius:var(--pill);background:var(--navy-tint);color:var(--navy);}
+.chip.gold{background:var(--gold);color:var(--navy);}
+.chip.terra{background:var(--maroon);color:#fff;}
+.chip.plain{background:#fff;color:var(--ink-muted);border:1px solid var(--border);}
+
+.main{padding:20px 0 60px;}
+.cols{display:grid;grid-template-columns:340px 1fr;gap:18px;align-items:start;}
+@media(max-width:940px){.cols{grid-template-columns:1fr;}}
+.stack{display:flex;flex-direction:column;gap:18px;}
+
+.card{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow-rest);padding:22px;}
+.card.dark{background:var(--navy);color:#fff;}
+.card.dark h2,.card.dark h3{color:#fff;}
+.card.dark .muted{color:#C9D0DC;}
+.card-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+.muted{color:var(--ink-muted);font-size:14.5px;}
+.tiny{font-size:13px;color:var(--ink-muted);}
+.sec-ey{font-family:'Plus Jakarta Sans',sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--maroon);margin:18px 0 8px;}
+.sec-ey:first-child{margin-top:0;}
+.rule{height:1px;background:var(--rule);margin:18px 0;}
+
+label{display:block;font-weight:600;font-size:14.5px;margin-bottom:6px;color:var(--ink);}
+input[type="text"],input[type="number"],select,textarea{
+  font-family:'Figtree',sans-serif;font-size:15px;color:var(--ink);background:#fff;
+  border:2px solid var(--border);border-radius:var(--r-block);padding:10px 12px;width:100%;
+}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%234A5468' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;cursor:pointer;}
+input:focus,select:focus,textarea:focus{border-color:var(--navy);}
+::placeholder{color:#8C93A1;opacity:1;}
+:-ms-input-placeholder{color:#8C93A1;}
+textarea{line-height:1.65;resize:vertical;min-height:120px;}
+fieldset{border:0;}
+legend{font-weight:600;}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;}
+
+.checkline{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:var(--r-block);background:#fff;cursor:pointer;margin-bottom:8px;}
+.checkline:hover{border-color:var(--border-strong);}
+.checkline input{width:18px;height:18px;margin-top:3px;flex:0 0 auto;accent-color:var(--navy);cursor:pointer;}
+.checkline span{font-size:14.5px;font-weight:500;line-height:1.5;}
+.checkline .cl-sub{display:block;font-size:13px;color:var(--ink-muted);font-weight:400;margin-top:2px;}
+
+.note{background:#fff;border:1px solid var(--border);border-radius:var(--r-block);padding:12px 14px;font-size:14px;line-height:1.6;box-shadow:var(--shadow-rest);}
+.note strong{color:var(--navy);}
+
+.toggle-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.tgl{display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 8px;background:#fff;border:2px solid var(--border);border-radius:var(--r-block);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+.tgl:hover{border-color:var(--border-strong);}
+.tgl[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff;}
+.tgl-icon{font-weight:800;font-size:15px;color:var(--navy);}
+.tgl[aria-pressed="true"] .tgl-icon{color:var(--gold);}
+.tgl-label{font-size:12.5px;font-weight:600;color:var(--ink-muted);}
+.tgl[aria-pressed="true"] .tgl-label{color:#fff;}
+
+.segbar{display:flex;border:2px solid var(--border);border-radius:var(--r-block);overflow:hidden;}
+.seg{flex:1;padding:11px 6px;text-align:center;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;border:0;background:#fff;color:var(--ink-muted);cursor:pointer;}
+.seg + .seg{border-left:2px solid var(--border);}
+.seg[aria-pressed="true"]{background:var(--navy);color:#fff;}
+
+.btn{
+  font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15px;
+  background:var(--navy);color:#fff;border:2px solid var(--navy);
+  padding:12px 20px;border-radius:var(--r-block);cursor:pointer;
+  box-shadow:var(--shadow-rest);transition:background .16s ease, box-shadow .16s ease, transform .1s ease;
+  display:inline-flex;align-items:center;gap:9px;
+}
+.btn:hover{background:var(--navy-soft);border-color:var(--navy-soft);box-shadow:var(--shadow-hover);}
+.btn:active{transform:translateY(1px);}
+.btn.ghost{background:#fff;color:var(--navy);border-color:var(--navy);}
+.btn.ghost:hover{background:var(--navy);color:#fff;}
+.btn.sm{font-size:13.5px;padding:9px 14px;}
+.btn .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);}
+.btn.ghost .dot{background:var(--maroon);}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+
+.steps{counter-reset:s;}
+.step{display:flex;gap:12px;padding:11px 0;}
+.step + .step{border-top:1px solid var(--rule);}
+.step-n{width:26px;height:26px;border-radius:var(--pill);background:var(--navy);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+.step-t{font-size:14.5px;line-height:1.6;}
+.step-t strong{color:var(--navy);}
+
+.modal{display:none;position:fixed;inset:0;z-index:900;background:rgba(10,19,34,.6);padding:16px;align-items:flex-start;justify-content:center;overflow:auto;}
+.modal.open{display:flex;}
+.modal-box{width:100%;max-width:860px;margin:5vh auto;background:#fff;border-radius:var(--r-card);box-shadow:var(--shadow-hover);display:flex;flex-direction:column;max-height:86vh;overflow:hidden;}
+.modal-head{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.modal-body{padding:0 20px 16px;overflow:auto;flex:1;}
+.modal-body pre{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:12.5px;line-height:1.7;white-space:pre-wrap;color:var(--ink);background:var(--page);border-radius:var(--r-block);padding:16px;}
+.modal-foot{padding:14px 20px;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;background:var(--page);}
+.x{width:34px;height:34px;border-radius:var(--pill);border:1px solid var(--border);background:#fff;font-size:18px;line-height:1;color:var(--ink-muted);cursor:pointer;}
+.x:hover{border-color:var(--navy);color:var(--navy);}
+
+.site-footer{background:var(--navy);color:#fff;padding:26px 0;}
+.site-footer .wrap{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center;}
+.site-footer .fname{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:16px;}
+.site-footer .fname span{color:var(--gold);}
+.site-footer .fmeta{font-size:13px;color:#C9D0DC;}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(14px);background:var(--navy);color:#fff;padding:12px 20px;border-radius:var(--r-block);font-weight:600;opacity:0;transition:opacity .2s ease, transform .2s ease;pointer-events:none;z-index:3000;max-width:90vw;box-shadow:var(--shadow-hover);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{transition:none !important;animation:none !important;} }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="mark" href="faculty-tools.html" target="_top">
+      <svg width="34" height="34" viewBox="0 0 34 34" role="img" aria-label="MedMasters Collaborative mark">
+        <rect x="1" y="1" width="32" height="32" rx="7" fill="#08101F"></rect>
+        <circle cx="11" cy="12" r="3.2" fill="#DCB45C"></circle>
+        <circle cx="17" cy="12" r="3.2" fill="#FFFFFF"></circle>
+        <circle cx="23" cy="12" r="3.2" fill="#8B1D1D"></circle>
+        <rect x="8" y="19" width="18" height="2.4" rx="1.2" fill="#DCB45C"></rect>
+        <rect x="8" y="24" width="12" height="2.4" rx="1.2" fill="#FFFFFF"></rect>
+      </svg>
+      <span class="brand">Med<span>Masters</span> Collaborative</span>
+    </a>
+    <span class="hdr-pill">AI Exam Tutor</span>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <p class="eyebrow">Active recall, one question at a time</p>
+    <h1>AI Exam Tutor</h1>
+    <p class="lede">Set up the session here, copy the instructions, and paste them into whichever AI you already use. It runs the exam live in the chat: one question at a time, no answers up front, feedback after every response, and a report at the end telling you exactly where to study next.</p>
+  </div>
+</div>
+
+<div class="statusbar" role="status" aria-live="polite">
+  <div class="wrap">
+    <span class="chip" id="modeChip">Standard grading, feedback after each answer</span>
+    <span class="chip gold hidden" id="blueprintChip">Exam blueprint mode</span>
+    <span class="chip gold hidden" id="bonusChip">Reasoning bonus on</span>
+    <span class="chip terra hidden" id="gapChip">Gap Finder on</span>
+    <span class="chip plain hidden" id="sourceChip">Using your pasted material</span>
+  </div>
+</div>
+
+<main class="main" id="main">
+  <div class="wrap">
+    <div class="cols">
+
+      <!-- LEFT COLUMN -->
+      <div class="stack">
+        <section class="card" aria-labelledby="hTopics">
+          <div class="card-head"><h2 id="hTopics">What to study</h2><span class="tiny">One topic per line</span></div>
+          <label for="topics" class="sr-only">Topics, one per line</label>
+          <textarea id="topics" rows="10" placeholder="Examples:
+Cardiac cycle
+Action potentials
+Bone remodeling
+Gas exchange
+Renal filtration
+Endocrine feedback loops"></textarea>
+          <p class="tiny" style="margin-top:6px;">Topics counted: <strong id="topicCount">0</strong></p>
+          <div class="note" style="margin-top:12px;">Specific topics give you a sharper session. Use the wording from your course materials so the questions line up with what you will be tested on.</div>
+        </section>
+
+        <section class="card" aria-labelledby="hSource">
+          <div class="card-head"><h2 id="hSource">Your own material</h2><span class="tiny">Optional</span></div>
+          <p class="muted">Paste notes, card lists, or a competency list. When you do, the AI is told to build questions from your material first and only fill gaps from general knowledge, and to say when it has done that.</p>
+          <label for="sourceText" style="margin-top:12px;">Notes, cards, or competencies</label>
+          <textarea id="sourceText" rows="8" placeholder="Examples:
+Paste a section of your notes.
+Paste a list of your cards.
+Paste your competency list."></textarea>
+          <p class="tiny" style="margin-top:6px;">Characters pasted: <strong id="sourceCount">0</strong></p>
+
+          <div class="rule"></div>
+          <label for="specificQ">Questions you want included</label>
+          <p class="tiny" style="margin-bottom:8px;">Label each one TF, MC, SA, or CL at the start of the line.</p>
+          <textarea id="specificQ" rows="6" placeholder="Examples:
+MC: Which rotator cuff muscle inserts on the lesser tubercle?
+  A. Infraspinatus  B. Supraspinatus  C. Subscapularis  D. Teres minor
+
+TF: The biceps brachii inserts on the radius."></textarea>
+          <p class="tiny" style="margin-top:6px;">Labelled questions found: <strong id="sqCount">0</strong></p>
+        </section>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="stack">
+
+        <section class="card" aria-labelledby="hMode">
+          <div class="card-head"><h2 id="hMode">Session type</h2></div>
+          <div class="segbar" role="group" aria-label="Session type">
+            <button type="button" class="seg" id="modeTutor" data-mode="tutor" aria-pressed="true">Tutor session</button>
+            <button type="button" class="seg" id="modeBlueprint" data-mode="blueprint" aria-pressed="false">Exam blueprint</button>
+          </div>
+          <div class="note" id="modeNote" style="margin-top:12px;"><strong>Tutor session.</strong> A flexible study exam. You choose the question types, the depth, and how hard the grading is.</div>
+
+          <div id="blueprintBox" class="hidden" style="margin-top:16px;">
+            <div class="sec-ey">Blueprint settings</div>
+            <div class="grid2">
+              <div>
+                <label for="bpTF">True or false items</label>
+                <input type="number" id="bpTF" min="0" max="60" step="1" value="20">
+              </div>
+              <div>
+                <label for="bpMC">Multiple choice items</label>
+                <input type="number" id="bpMC" min="0" max="80" step="1" value="40">
+              </div>
+            </div>
+            <div style="margin-top:12px;">
+              <label class="checkline"><input type="checkbox" id="bpMatching" checked><span>Include a matching section<span class="cl-sub">One set of ten, or two sets of five.</span></span></label>
+              <label class="checkline"><input type="checkbox" id="bpBrainDump" checked><span>Include a brain dump<span class="cl-sub">Four prompts, you pick one, scored against a checklist.</span></span></label>
+              <label class="checkline"><input type="checkbox" id="bpDeliverAll"><span>Deliver the whole exam at once instead of question by question<span class="cl-sub">Useful if you want to print it or work on paper. Grading still happens at the end.</span></span></label>
+            </div>
+            <div class="note" style="margin-top:12px;">Blueprint mode locks the format and the scoring: one point per true or false item with half a point of bonus for fixing a false statement, four confidence points spread across the options on every multiple choice question worth one point each, one point per matching pair, and a checklist-scored brain dump.</div>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="hTypes">
+          <div class="card-head"><h2 id="hTypes">Question types and depth</h2></div>
+          <div class="toggle-grid" role="group" aria-label="Question types">
+            <button type="button" class="tgl" data-type="tf" aria-pressed="true"><span class="tgl-icon">T / F</span><span class="tgl-label">True or false</span></button>
+            <button type="button" class="tgl" data-type="mc" aria-pressed="true"><span class="tgl-icon">A to D</span><span class="tgl-label">Multiple choice</span></button>
+            <button type="button" class="tgl" data-type="sa" aria-pressed="true"><span class="tgl-icon">Write</span><span class="tgl-label">Short answer</span></button>
+            <button type="button" class="tgl" data-type="cl" aria-pressed="false"><span class="tgl-icon">Case</span><span class="tgl-label">Clinical apply</span></button>
+          </div>
+          <div class="note" style="margin-top:12px;"><strong>Balanced answer key.</strong> A fresh randomized A, B, C, D sequence is written into the instructions each time you build. It stops the AI from parking the correct answer on B or C, which is a known habit of these models.</div>
+
+          <div class="grid2" style="margin-top:16px;">
+            <div>
+              <label for="qCount">Total questions</label>
+              <select id="qCount">
+                <option>5</option><option>10</option><option selected>15</option><option>20</option><option>25</option><option>30</option><option>40</option><option>50</option>
+              </select>
+            </div>
+            <div>
+              <label for="dok">Depth of knowledge</label>
+              <select id="dok">
+                <option value="exam" selected>Exam mix: 45 percent DOK 2, 45 percent DOK 3, 10 percent DOK 1</option>
+                <option value="balanced">Balanced: DOK 2 and DOK 3</option>
+                <option value="dok1">DOK 1: recall</option>
+                <option value="dok2">DOK 2: application</option>
+                <option value="dok3">DOK 3: analysis</option>
+                <option value="dok4">DOK 4: extended thinking</option>
+                <option value="mixed">Mixed: all four levels</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top:14px;">
+            <label class="checkline"><input type="checkbox" id="equalComp" checked><span>Give every competency or topic equal weight<span class="cl-sub">Spreads the questions evenly instead of piling them onto whichever topic is easiest to write about.</span></span></label>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="hGrading">
+          <div class="card-head"><h2 id="hGrading">How it grades you</h2></div>
+          <div class="segbar" role="group" aria-label="Grading strictness">
+            <button type="button" class="seg" data-strict="coaching" aria-pressed="false">Coaching</button>
+            <button type="button" class="seg" data-strict="standard" aria-pressed="true">Standard</button>
+            <button type="button" class="seg" data-strict="strict" aria-pressed="false">Strict</button>
+          </div>
+          <div class="note" id="strictNote" style="margin-top:12px;"><strong>Standard.</strong> Fair, short feedback after each answer, with a clear explanation of why the correct answer is right.</div>
+
+          <div class="grid3" style="margin-top:16px;">
+            <label class="checkline"><input type="checkbox" id="optJustify" checked><span>Explain my reasoning first<span class="cl-sub">Graded only after you say why.</span></span></label>
+            <label class="checkline"><input type="checkbox" id="optRetry" checked><span>One hint and one retry<span class="cl-sub">A single clue, then one more attempt.</span></span></label>
+            <label class="checkline"><input type="checkbox" id="optScore" checked><span>Running score<span class="cl-sub">Shown after every question.</span></span></label>
+          </div>
+
+          <div class="sec-ey">Reasoning bonus</div>
+          <div class="grid2">
+            <div>
+              <label for="bonusMode">Bonus system</label>
+              <select id="bonusMode">
+                <option value="off">Off</option>
+                <option value="light" selected>Light</option>
+                <option value="strong">Strong, rewards depth</option>
+              </select>
+            </div>
+            <div>
+              <label for="bonusScale">Rating scale</label>
+              <select id="bonusScale">
+                <option value="3">0 to 3</option>
+                <option value="5" selected>0 to 5</option>
+              </select>
+            </div>
+          </div>
+          <label class="checkline" style="margin-top:10px;"><input type="checkbox" id="optAboveBeyond" checked><span>Call out exceptional insight when it happens</span></label>
+        </section>
+
+        <section class="card" aria-labelledby="hGap">
+          <div class="card-head"><h2 id="hGap">Gap Finder</h2><span class="tiny">Diagnostic mode</span></div>
+          <label class="checkline"><input type="checkbox" id="gapOn"><span>Find my specific gaps and tell me how to close them<span class="cl-sub">The AI names what you actually misunderstood rather than just marking the answer wrong.</span></span></label>
+          <div id="gapBox" class="hidden" style="margin-top:12px;">
+            <label for="gapTopics">Topics to probe</label>
+            <textarea id="gapTopics" rows="5" placeholder="Examples:
+Cardiac action potential phases
+Renal tubular reabsorption
+Baroreceptor reflex pathway"></textarea>
+            <p class="tiny" style="margin-top:6px;">Gap topics: <strong id="gapCount">0</strong></p>
+            <div class="note" style="margin-top:10px;">Narrow topics give sharper results. Cardiac action potential phase 2 tells you more than heart does. Broad topics still work, they just produce broader advice.</div>
+            <div class="grid2" style="margin-top:12px;">
+              <div>
+                <label for="gapDepth">How much detail</label>
+                <select id="gapDepth">
+                  <option value="light">Brief fix suggestions</option>
+                  <option value="standard" selected>Focused study actions</option>
+                  <option value="detailed">A full plan for each gap</option>
+                </select>
+              </div>
+              <div>
+                <label for="gapTiming">When to report</label>
+                <select id="gapTiming">
+                  <option value="both" selected>As they come up, plus a summary</option>
+                  <option value="endonly">End report only</option>
+                  <option value="inline">As they come up only</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="hScope">
+          <div class="card-head"><h2 id="hScope">Scope and report</h2></div>
+          <div class="grid2">
+            <div>
+              <label for="discipline">Focus area</label>
+              <select id="discipline">
+                <option value="both" selected>Anatomy and physiology, split evenly</option>
+                <option value="anatomy">Anatomy only</option>
+                <option value="physiology">Physiology only</option>
+                <option value="pharmacology">Pharmacology</option>
+                <option value="pathophysiology">Pathophysiology</option>
+                <option value="nclex">Nursing, NCLEX preparation</option>
+              </select>
+            </div>
+            <div>
+              <label for="endReport">End of session report</label>
+              <select id="endReport">
+                <option value="full" selected>Full breakdown plus a study plan</option>
+                <option value="brief">Score and weak topics only</option>
+                <option value="none">Score only</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="hHow">
+          <div class="card-head"><h2 id="hHow">How the session runs</h2></div>
+          <ol class="steps" style="list-style:none;">
+            <li class="step"><span class="step-n">1</span><span class="step-t"><strong>One question appears.</strong> No answer shown. You respond and say why.</span></li>
+            <li class="step"><span class="step-n">2</span><span class="step-t"><strong>You are graded right away.</strong> Correct, partial, or incorrect, with the reasoning behind it.</span></li>
+            <li class="step"><span class="step-n">3</span><span class="step-t"><strong>A hint and one retry</strong> if you turned that on. One small clue, then another attempt.</span></li>
+            <li class="step"><span class="step-n">4</span><span class="step-t"><strong>The correct answer is revealed</strong> with an explanation, then the next question starts.</span></li>
+            <li class="step"><span class="step-n">5</span><span class="step-t"><strong>An end report</strong> gives your score, your weak topics, and what to do before your next session.</span></li>
+          </ol>
+        </section>
+
+        <section class="card dark" aria-labelledby="hGo">
+          <div class="card-head"><h2 id="hGo">Copy it and go</h2></div>
+          <p class="muted">Pick where you want to run it. The instructions are copied to your clipboard and the site opens in a new tab. Paste with Ctrl and V, or Cmd and V on a Mac.</p>
+          <div class="btn-row" style="margin-top:14px;">
+            <button type="button" class="btn ghost" data-ai="gpt"><span class="dot"></span>ChatGPT</button>
+            <button type="button" class="btn ghost" data-ai="claude"><span class="dot"></span>Claude</button>
+            <button type="button" class="btn ghost" data-ai="gemini"><span class="dot"></span>Gemini</button>
+            <button type="button" class="btn ghost" data-ai="copilot"><span class="dot"></span>Copilot</button>
+            <button type="button" class="btn ghost" id="previewBtn">Read it first</button>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="fname">Med<span>Masters</span> Collaborative</div>
+    <div class="fmeta">Dr. Sharilyn Rennie &middot; Founder and Learning Architect</div>
+  </div>
+</footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="modalTitle">Your session instructions</h2>
+      <button type="button" class="x" id="modalClose" aria-label="Close">&#215;</button>
+    </div>
+    <div class="modal-body"><pre id="promptOut"></pre></div>
+    <div class="modal-foot">
+      <button type="button" class="btn ghost sm" id="copyBtn">Copy to clipboard</button>
+      <button type="button" class="btn sm" data-ai="gpt"><span class="dot"></span>ChatGPT</button>
+      <button type="button" class="btn sm" data-ai="claude"><span class="dot"></span>Claude</button>
+      <button type="button" class="btn sm" data-ai="gemini"><span class="dot"></span>Gemini</button>
+      <button type="button" class="btn sm" data-ai="copilot"><span class="dot"></span>Copilot</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+var $ = function(id){ return document.getElementById(id); };
+
+var AI_URLS = {
+  gpt:"https://chatgpt.com/",
+  claude:"https://claude.ai/new",
+  gemini:"https://gemini.google.com/app",
+  copilot:"https://copilot.microsoft.com/"
+};
+
+var state = { mode:"tutor", strict:"standard" };
+
+function toast(msg, ms){
+  var t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(t._h);
+  t._h = setTimeout(function(){ t.classList.remove("show"); }, ms || 3000);
+}
+
+function lines(v){
+  return String(v||"").split(/\n+/).map(function(s){ return s.trim(); }).filter(Boolean);
+}
+
+/* ---------- live counters and chips ---------- */
+function refreshCounts(){
+  $("topicCount").textContent = lines($("topics").value).length;
+  $("sourceCount").textContent = String($("sourceText").value.trim().length);
+  $("gapCount").textContent = lines($("gapTopics").value).length;
+  var sq = String($("specificQ").value||"").split(/\n+/).filter(function(l){ return /^(MC|TF|FR|SA|CL)\s*:/i.test(l.trim()); }).length;
+  $("sqCount").textContent = String(sq);
+  $("sourceChip").classList.toggle("hidden", $("sourceText").value.trim().length < 40);
+}
+["topics","sourceText","gapTopics","specificQ"].forEach(function(id){
+  $(id).addEventListener("input", refreshCounts);
+});
+
+/* ---------- session type ---------- */
+var MODE_NOTES = {
+  tutor:"<strong>Tutor session.</strong> A flexible study exam. You choose the question types, the depth, and how hard the grading is.",
+  blueprint:"<strong>Exam blueprint.</strong> Runs the exact shape of the in class module exam: true or false with a fix the false bonus, confidence based multiple choice, matching, then a brain dump."
+};
+[$("modeTutor"), $("modeBlueprint")].forEach(function(b){
+  b.addEventListener("click", function(){
+    state.mode = b.dataset.mode;
+    $("modeTutor").setAttribute("aria-pressed", String(state.mode === "tutor"));
+    $("modeBlueprint").setAttribute("aria-pressed", String(state.mode === "blueprint"));
+    $("modeNote").innerHTML = MODE_NOTES[state.mode];
+    $("blueprintBox").classList.toggle("hidden", state.mode !== "blueprint");
+    $("blueprintChip").classList.toggle("hidden", state.mode !== "blueprint");
+  });
+});
+
+/* ---------- question types ---------- */
+var TYPE_NAMES = { tf:"True or false", mc:"Multiple choice", sa:"Short answer", cl:"Clinical application" };
+var typeBtns = [].slice.call(document.querySelectorAll(".tgl"));
+typeBtns.forEach(function(b){
+  b.addEventListener("click", function(){
+    var on = b.getAttribute("aria-pressed") === "true";
+    b.setAttribute("aria-pressed", String(!on));
+  });
+});
+function activeTypes(){
+  return typeBtns.filter(function(b){ return b.getAttribute("aria-pressed") === "true"; })
+                 .map(function(b){ return TYPE_NAMES[b.dataset.type]; });
+}
+
+/* ---------- strictness ---------- */
+var STRICT_NOTES = {
+  coaching:"<strong>Coaching.</strong> More hints and more guidance. You get nudged toward the answer before anything is graded. Good for a first pass through new material.",
+  standard:"<strong>Standard.</strong> Fair, short feedback after each answer, with a clear explanation of why the correct answer is right.",
+  strict:"<strong>Strict.</strong> Precise justification required and no hints before grading. This is the closest to real exam conditions."
+};
+var STRICT_CHIPS = {
+  coaching:"Coaching mode, hints and guidance",
+  standard:"Standard grading, feedback after each answer",
+  strict:"Strict mode, exam conditions"
+};
+[].slice.call(document.querySelectorAll("[data-strict]")).forEach(function(b){
+  b.addEventListener("click", function(){
+    state.strict = b.dataset.strict;
+    [].slice.call(document.querySelectorAll("[data-strict]")).forEach(function(x){
+      x.setAttribute("aria-pressed", String(x === b));
+    });
+    $("strictNote").innerHTML = STRICT_NOTES[state.strict];
+    $("modeChip").textContent = STRICT_CHIPS[state.strict];
+  });
+});
+
+/* ---------- bonus and gap chips ---------- */
+$("bonusMode").addEventListener("change", function(){
+  $("bonusChip").classList.toggle("hidden", $("bonusMode").value === "off");
+});
+$("gapOn").addEventListener("change", function(){
+  var on = $("gapOn").checked;
+  $("gapBox").classList.toggle("hidden", !on);
+  $("gapChip").classList.toggle("hidden", !on);
+});
+
+/* ---------- prompt pieces ---------- */
+function disciplineText(v){
+  switch(v){
+    case "both": return "Anatomy and physiology, with an even split across the session";
+    case "anatomy": return "Anatomy only";
+    case "physiology": return "Physiology only";
+    case "pharmacology": return "Pharmacology only: mechanisms of action, indications, adverse effects, interactions, and therapeutic categories";
+    case "pathophysiology": return "Pathophysiology only: disease mechanisms, causes, clinical presentation, and complications";
+    case "nclex": return "Nursing examination preparation. Use NCLEX style items and emphasize clinical judgment, prioritization, safety, and the nursing process";
+    default: return "Medical science, mixed";
+  }
+}
+
+var DOK_RUBRIC =
+"DEPTH OF KNOWLEDGE DEFINITIONS\n" +
+"  DOK 1, recall: define, identify, name, label, list. No reasoning required.\n" +
+"  DOK 2, application: explain why, apply a concept to a situation, compare structures, predict an outcome.\n" +
+"  DOK 3, analysis: clinical reasoning, evaluate a mechanism, justify a conclusion, connect across systems.\n" +
+"  DOK 4, extended thinking: integrate several body systems, weigh competing explanations, work through a complex case.";
+
+function dokBlock(val, n){
+  if(val === "exam"){
+    var d2 = Math.round(n*0.45), d3 = Math.round(n*0.45), d1 = Math.max(0, n - d2 - d3);
+    return DOK_RUBRIC + "\nDOK TARGET: write " + d1 + " questions at DOK 1, " + d2 + " at DOK 2, and " + d3 +
+      " at DOK 3. That is the mix used on the real exam. Label each question in your grading feedback.";
+  }
+  if(val === "dok1") return DOK_RUBRIC + "\nDOK TARGET: write all " + n + " questions at DOK 1.";
+  if(val === "dok2") return DOK_RUBRIC + "\nDOK TARGET: write all " + n + " questions at DOK 2. Every question must ask the student to apply or explain, not just recall.";
+  if(val === "dok3") return DOK_RUBRIC + "\nDOK TARGET: write all " + n + " questions at DOK 3. Every question must require reasoning, mechanism analysis, or evaluation.";
+  if(val === "dok4") return DOK_RUBRIC + "\nDOK TARGET: write all " + n + " questions at DOK 4. Each one must involve at least two systems interacting.";
+  if(val === "mixed") return DOK_RUBRIC + "\nDOK TARGET: spread across all four levels. A few at DOK 1, most at DOK 2 and DOK 3, and one or two at DOK 4 at the end. Label each question in your grading feedback.";
+  var half = Math.floor(n/2);
+  return DOK_RUBRIC + "\nDOK TARGET: write exactly " + half + " questions at DOK 2 and " + (n-half) + " at DOK 3. Label each one in your grading feedback.";
+}
+
+function keySequence(n){
+  var seq = [];
+  for(var i=0;i<n;i++) seq.push("ABCD"[i%4]);
+  for(var j=seq.length-1;j>0;j--){
+    var k = Math.floor(Math.random()*(j+1));
+    var t = seq[j]; seq[j] = seq[k]; seq[k] = t;
+  }
+  return seq;
+}
+
+function answerBalanceBlock(nMC, includeTF){
+  var out = ["ANSWER POSITION BALANCE, required"];
+  if(nMC > 0){
+    out.push("");
+    out.push("Multiple choice answer position sequence:");
+    out.push("[" + keySequence(nMC).join(", ") + "]");
+    out.push("");
+    out.push("Place the correct answer for the first multiple choice question at the first position in that list, the second at the second position, and so on. Count multiple choice questions only. True or false, short answer, and clinical items do not advance the counter.");
+    out.push("");
+    out.push("This exists to stop the well documented habit these models have of parking the correct answer on B or C. Across the session, A, B, C, and D should each be correct roughly the same number of times.");
+    out.push("");
+    out.push("OPTION WRITING RULES");
+    out.push("- All four options sit at the same level of detail and run about the same length. The correct answer must not be the longest or the most carefully worded one.");
+    out.push("- Do not let always, never, all, none, or only appear only in the correct answer. If you use them, use them in distractors too.");
+    out.push("- Every distractor has to be plausible. Build them from real student misconceptions or near correct reasoning, not from unrelated terms.");
+    out.push("- Do not let sentence structure, vocabulary, or writing style signal which option is correct.");
+  }
+  if(includeTF){
+    out.push("");
+    out.push("True or false balance: aim for about half true and half false across the session, in no predictable order.");
+  }
+  return out.join("\n");
+}
+
+var NCLEX_BLOCK =
+"NURSING, NCLEX SPECIFIC REQUIREMENTS\n" +
+"Test plan alignment, current NCSBN NCLEX-RN test plan. Name the client needs category for each question in your feedback:\n" +
+"- Safe and effective care environment: management of care, safety and infection control\n" +
+"- Health promotion and maintenance\n" +
+"- Psychosocial integrity\n" +
+"- Physiological integrity: basic care and comfort, pharmacological and parenteral therapies, reduction of risk potential, physiological adaptation\n" +
+"Clinical judgment measurement model: target one of the six cognitive operations where it fits, and name it in your feedback. Recognize cues, analyze cues, prioritize hypotheses, generate solutions, take action, evaluate outcomes.\n" +
+"Answer selection rules to apply when writing the item and choosing the key:\n" +
+"1. Airway, breathing, circulation first in an emergency.\n" +
+"2. Maslow: physiological needs before safety, safety before belonging, and so on.\n" +
+"3. Safety first when nothing physiological is immediately threatened.\n" +
+"4. Acute before chronic. Unstable before stable.\n" +
+"5. Assessment before intervention. On a what should the nurse do first item, assess or gather more information is usually the key unless the data already force immediate action.\n" +
+"6. Therapeutic communication: open ended, empathetic, reflective. Avoid why questions, closed questions, false reassurance, advice giving, changing the subject, and turning the focus to the nurse.\n" +
+"7. Scope and delegation: assessment, teaching, evaluation, planning, and clinical judgment cannot be delegated to unlicensed assistive personnel or to an LPN.\n" +
+"8. National standards outrank regional or institutional protocols.\n" +
+"Language conventions: the nurse in third person, never you. The patient is the client. Include the demographics, history, and cues that matter and leave out padding.\n" +
+"Next Generation item types: vary between single best answer with prioritization logic, extended multiple response marked as select all that apply, and short unfolding cases that build across two or three linked questions. On select all that apply items, score one point per correct selection and subtract one per incorrect selection with a floor of zero for the item, and spread the correct selections across the option positions rather than clustering them.\n" +
+"Evidence standard: systematic reviews, meta analyses, and well designed trials; current practice guidelines from NCSBN, ANA, AACN, AHA, ENA, AWHONN, ONS and other recognized bodies; the current NCLEX-RN test plan; current edition standard nursing texts; authoritative drug references; and the CDC, WHO, and FDA. Do not use superseded practice, unverified online sources, study apps, or single case reports where stronger evidence exists. Where the evidence is genuinely contested, say so and teach the current best practice answer.";
+
+function blueprintBlock(){
+  var tf = parseInt($("bpTF").value,10) || 0;
+  var mc = parseInt($("bpMC").value,10) || 0;
+  var matching = $("bpMatching").checked;
+  var brain = $("bpBrainDump").checked;
+  var atOnce = $("bpDeliverAll").checked;
+
+  var out = [];
+  out.push("EXAM BLUEPRINT, follow it exactly");
+  out.push("This session reproduces an in class module exam. Do not change the section order, the counts, or the scoring.");
+  out.push("");
+  out.push("PART 1. TRUE OR FALSE, " + tf + " items, one point each");
+  out.push("- Every statement puts exactly one term under test. Mark that term clearly, for example with **asterisks** around it.");
+  out.push("- About half the statements are true and half are false, in no predictable order.");
+  out.push("- When a statement is false, it is false because of that marked term and nothing else.");
+  out.push("- If the student answers false, ask them to write the term that makes the statement true. A correct replacement earns half a bonus point. A blank or a wrong replacement costs nothing.");
+  out.push("");
+  out.push("PART 2. MULTIPLE CHOICE, " + mc + " items, one point each, confidence based");
+  out.push("- Four options per question, A through D.");
+  out.push("- The student has four confidence points per question to spread across the options however they want. All four on one option means certainty. Two and two means they narrowed it to a pair.");
+  out.push("- Score each question as the points they placed on the correct option divided by four. So four points on the key scores one, three points scores 0.75, two points scores 0.5, and none scores zero.");
+  out.push("- If their points do not add to exactly four, tell them and ask them to redistribute before you score it.");
+  if(matching){
+    out.push("");
+    out.push("PART 3. MATCHING, one point per pair");
+    out.push("- Either one set of ten or two sets of five, drawn from a topic where matching genuinely tests something. Skip this section and say so if the material does not support a clean matching set.");
+    out.push("- Each answer is used once.");
+  }
+  if(brain){
+    out.push("");
+    out.push("PART " + (matching ? "4" : "3") + ". BRAIN DUMP");
+    out.push("- Offer four different prompts and let the student pick the one they can do best.");
+    out.push("- Before they answer, do not show the checklist.");
+    out.push("- After they answer, show the checklist of what a complete response contains, mark what they covered, and give them the chance to argue for anything you missed that they said in their own words.");
+    out.push("- Score it as the fraction of the checklist they covered, and say what that is out of.");
+  }
+  out.push("");
+  out.push("DELIVERY");
+  if(atOnce){
+    out.push("- Present the whole exam at once, every section, with no answers shown. Wait for the student to send back all their answers, then grade the whole thing.");
+  } else {
+    out.push("- Present one question at a time in section order. Never show the answer before they respond, and never reveal what is coming.");
+  }
+  out.push("");
+  out.push("FINAL SCORING REPORT, required");
+  out.push("- Points earned and possible for each section, then the total including any bonus, then the percentage.");
+  out.push("- A breakdown by topic or competency, ordered by where the most points were lost.");
+  out.push("- A breakdown by DOK level.");
+  out.push("- The three topics to go back to first and what to do about each one.");
+  return out.join("\n");
+}
+
+/* ---------- prompt builder ---------- */
+function buildPrompt(){
+  var topics = lines($("topics").value);
+  var source = $("sourceText").value.trim();
+  var sq = $("specificQ").value.trim();
+  var gapOn = $("gapOn").checked;
+  var gapTopics = gapOn ? lines($("gapTopics").value) : [];
+
+  if(gapOn && !gapTopics.length){
+    return { ok:false, error:"Gap Finder is on but there are no topics to probe. Add at least one, or turn Gap Finder off." };
+  }
+  if(!topics.length && !source && !sq && !gapTopics.length){
+    return { ok:false, error:"Add at least one topic, paste some of your own material, or turn on Gap Finder with topics." };
+  }
+
+  var types = activeTypes();
+  var blueprint = state.mode === "blueprint";
+  if(!blueprint && !types.length){
+    return { ok:false, error:"Pick at least one question type." };
+  }
+
+  var n = blueprint
+    ? ((parseInt($("bpTF").value,10)||0) + (parseInt($("bpMC").value,10)||0))
+    : parseInt($("qCount").value,10);
+  var nMC = blueprint ? (parseInt($("bpMC").value,10)||0)
+                      : (types.indexOf("Multiple choice") >= 0 ? n : 0);
+  var hasTF = blueprint ? (parseInt($("bpTF").value,10)||0) > 0
+                        : types.indexOf("True or false") >= 0;
+
+  var disc = $("discipline").value;
+  var bonus = $("bonusMode").value;
+  var scale = $("bonusScale").value;
+  var justify = $("optJustify").checked;
+  var retry = $("optRetry").checked;
+  var score = $("optScore").checked;
+  var report = $("endReport").value;
+
+  var P = [];
+
+  P.push("You are running a live study exam for a student. You are an expert medical science educator. Work through it with them in this chat.");
+  P.push("");
+  P.push("SCOPE: " + disciplineText(disc));
+
+  if(topics.length){
+    P.push("");
+    P.push("TOPICS TO COVER");
+    P.push(topics.map(function(t,i){ return (i+1) + ". " + t; }).join("\n"));
+  } else if(gapTopics.length){
+    P.push("");
+    P.push("TOPICS TO COVER, taken from the Gap Finder list");
+    P.push(gapTopics.map(function(t,i){ return (i+1) + ". " + t; }).join("\n"));
+  }
+
+  if($("equalComp").checked){
+    P.push("");
+    P.push("COVERAGE: give every topic or competency listed above equal weight. Do not let one topic take more than its share because it is easier to write questions about. If a topic cannot carry its share, say so rather than padding it.");
+  }
+
+  if(source){
+    P.push("");
+    P.push("THE STUDENT'S OWN MATERIAL");
+    P.push("Build questions from the material below first. Only go outside it when the material cannot support a question, and when you do, say so in one short line before that question. Never contradict this material. If something in it looks wrong or out of date, flag it plainly instead of quietly writing around it.");
+    P.push("--- start of material ---");
+    P.push(source);
+    P.push("--- end of material ---");
+  }
+
+  if(sq){
+    P.push("");
+    P.push("QUESTIONS TO INCLUDE EXACTLY AS WRITTEN, then fill the remaining slots with new ones");
+    P.push(sq);
+  }
+
+  P.push("");
+  if(blueprint){
+    P.push(blueprintBlock());
+  } else {
+    P.push("QUESTION TYPES TO USE: " + types.join(", "));
+    P.push("TOTAL QUESTIONS: " + n);
+  }
+
+  P.push("");
+  P.push(dokBlock($("dok").value, n));
+
+  if(disc === "nclex"){
+    P.push("");
+    P.push(NCLEX_BLOCK);
+  }
+
+  if(nMC > 0 || hasTF){
+    P.push("");
+    P.push(answerBalanceBlock(nMC, hasTF));
+  }
+
+  P.push("");
+  P.push("HOW TO RUN IT");
+  var strictTail = state.strict === "coaching" ? "Guide them and offer hints before you grade."
+                 : state.strict === "strict" ? "Require precise justification, give no hints before grading, and hold them to exam level rigor."
+                 : "Give fair, short feedback with a clear rationale.";
+  P.push("- Strictness: " + state.strict + ". " + strictTail);
+  P.push("- Reasoning: " + (justify
+    ? "required. Ask them to explain their thinking before you grade anything."
+    : "encouraged but not required. Grade the answer, then invite them to reflect."));
+  P.push("- " + (retry
+    ? "When they get one wrong, give one short hint that does not give the answer away, ask for one retry, grade the retry, then reveal the answer."
+    : "When they get one wrong, go straight to the correct answer with an explanation. No retries."));
+  P.push("- Score: " + (score ? "show the running score after every question, for example Score: 4 of 6." : "hold the score until the end."));
+
+  P.push("");
+  P.push("THE LOOP, repeat for every question");
+  var step = 1;
+  P.push(step++ + ". Give the question number and present one question only. Do not show the answer and do not preview what is coming.");
+  P.push(step++ + ". Wait for the student to respond" + (justify ? " with their answer and their reasoning" : "") + ".");
+  P.push(step++ + ". Grade it right away as correct, partial, or incorrect, and say why.");
+  if(retry) P.push(step++ + ". If it is wrong, give one short hint, take one retry, and grade that.");
+  P.push(step++ + ". Reveal the correct answer with a brief explanation. Say why each wrong option is wrong and what misconception it represents.");
+  if(bonus !== "off") P.push(step++ + ". Rate their reasoning on the 0 to " + scale + " scale described below.");
+  P.push(step++ + ". Move on to the next question.");
+
+  if(bonus === "off"){
+    P.push("");
+    P.push("No reasoning bonus. Grade answers on correctness alone.");
+  } else {
+    P.push("");
+    P.push("REASONING BONUS, " + bonus + " system");
+    P.push("After grading each answer, rate the reasoning on a 0 to " + scale + " scale.");
+    P.push(bonus === "strong"
+      ? "Reward real depth: connection to mechanism, precise terminology, and reasoning that holds up."
+      : "Give a point or two for reasoning that is clear and relevant, even when it is brief.");
+    if($("optAboveBeyond").checked){
+      P.push("When the student shows insight beyond what was asked, say so plainly and explain what was good about it.");
+    }
+    P.push("Never take reasoning points away because the answer was wrong.");
+  }
+
+  if(gapOn){
+    var depth = { light:"Give one line per gap on how to fix it.",
+                  standard:"For each gap, name the concept to review and one concrete thing to do about it.",
+                  detailed:"For each gap, give the concept that was misunderstood, what kind of gap it is, the one thing to review first, a study activity that closes it, and a practice task that proves it is closed." }[$("gapDepth").value];
+    var timing = { inline:"Name each gap as it comes up. No end of session gap summary.",
+                   endonly:"Do not interrupt the flow with gap commentary. Track them quietly and give the whole analysis at the end.",
+                   both:"Name each gap in one sentence as it comes up, then give the consolidated plan at the end." }[$("gapTiming").value];
+    P.push("");
+    P.push("GAP FINDER, on");
+    P.push("Topics to probe:");
+    P.push(gapTopics.map(function(t,i){ return (i+1) + ". " + t; }).join("\n"));
+    P.push("- Write questions that deliberately probe those topics and weave them into the normal flow.");
+    P.push("- When an answer is wrong or partial, name the specific gap rather than just marking it wrong.");
+    P.push("- Classify each gap as one of: a missing prerequisite, a conceptual confusion, a terminology error, a mechanism not understood, or weak clinical application.");
+    P.push("- " + timing);
+    P.push("- " + depth);
+    if($("gapTiming").value !== "inline"){
+      P.push("End of session gap analysis, required:");
+      P.push("1. Every gap you found, grouped by topic.");
+      P.push("2. The gap type and the fix for each one.");
+      P.push("3. The gaps ranked by priority. Which one, closed first, unlocks the most other material?");
+      P.push("4. The single highest priority thing to do before the next session.");
+    }
+  }
+
+  if(!blueprint){
+    P.push("");
+    if(report === "full"){
+      P.push("END OF SESSION REPORT, required");
+      P.push("1. Final score and percentage.");
+      P.push("2. A breakdown by question type.");
+      P.push("3. The three weakest topics with a specific study recommendation for each.");
+      P.push("4. One concrete thing to do before the next study session.");
+    } else if(report === "brief"){
+      P.push("END OF SESSION REPORT: final score, percentage, and the weak topics. Nothing else.");
+    } else {
+      P.push("END OF SESSION REPORT: final score and percentage only.");
+    }
+  }
+
+  P.push("");
+  P.push("ACCURACY, this part is not negotiable");
+  P.push("- Never invent a fact, a structure, a relationship, or a source. If you are not certain, say you are not certain rather than writing something that sounds right.");
+  P.push("- Base every question, answer, and explanation on the strongest evidence available: peer reviewed literature, current practice guidelines from recognized professional organizations, current edition standard textbooks for the discipline, and authoritative public health bodies.");
+  P.push("- Before you present a question, check that the keyed answer is actually correct and that no distractor could also be defended from the wording. Rewrite the question if one could.");
+  P.push("- Say plainly when something is a simplification, a common exception, or a point where sources genuinely disagree.");
+  P.push("- Avoid questions that hinge on a trick, on obscure wording, or on vocabulary that is harder than the concept being tested.");
+  P.push("");
+  P.push("HOW TO WRITE TO THE STUDENT");
+  P.push("- Plain, warm, direct language. Short sentences. Explain hard terms when they first come up.");
+  P.push("- No filler openers, no cheerleading, and no em dashes.");
+  P.push("- Every wrong option is a teaching opportunity. Say what it represents and when it would have been the right answer.");
+  P.push("");
+  P.push("Start with question 1 now. No preamble.");
+
+  return { ok:true, prompt: P.join("\n") };
+}
+
+/* ---------- modal ---------- */
+var lastFocus = null;
+function openModal(text){
+  lastFocus = document.activeElement;
+  $("promptOut").textContent = text;
+  var m = $("modal");
+  m.classList.add("open");
+  m.setAttribute("aria-hidden","false");
+  $("modalClose").focus();
+  document.addEventListener("keydown", trapKeys);
+}
+function closeModal(){
+  var m = $("modal");
+  m.classList.remove("open");
+  m.setAttribute("aria-hidden","true");
+  document.removeEventListener("keydown", trapKeys);
+  if(lastFocus && lastFocus.focus) lastFocus.focus();
+}
+function trapKeys(e){
+  if(e.key === "Escape"){ closeModal(); return; }
+  if(e.key !== "Tab") return;
+  var f = $("modal").querySelectorAll("button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])");
+  if(!f.length) return;
+  var first = f[0], last = f[f.length-1];
+  if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+  else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+}
+$("modalClose").addEventListener("click", closeModal);
+$("modal").addEventListener("click", function(e){ if(e.target === $("modal")) closeModal(); });
+
+/* ---------- copy and go ---------- */
+function copyText(t){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    return navigator.clipboard.writeText(t).then(function(){ return true; }).catch(function(){ return false; });
+  }
+  return Promise.resolve(false);
+}
+
+function handleGo(dest){
+  var r = buildPrompt();
+  if(!r.ok){ toast(r.error, 4500); return; }
+  copyText(r.prompt).then(function(ok){
+    if(!ok){
+      openModal(r.prompt);
+      toast("Your browser blocked the copy. Select the text and copy it by hand.", 4500);
+      return;
+    }
+    toast("Copied. Paste it into the tab that just opened.");
+    setTimeout(function(){ window.open(AI_URLS[dest] || AI_URLS.gpt, "_blank", "noopener"); }, 350);
+  });
+}
+
+[].slice.call(document.querySelectorAll("[data-ai]")).forEach(function(b){
+  b.addEventListener("click", function(){ handleGo(b.dataset.ai); });
+});
+
+$("previewBtn").addEventListener("click", function(){
+  var r = buildPrompt();
+  if(!r.ok){ toast(r.error, 4500); return; }
+  openModal(r.prompt);
+});
+
+$("copyBtn").addEventListener("click", function(){
+  copyText($("promptOut").textContent || "").then(function(ok){
+    toast(ok ? "Copied to clipboard." : "Your browser blocked the copy. Select the text and copy it by hand.");
+  });
+});
+
+refreshCounts();
+})();
+</script>
+
+<script>
+/* Kajabi iframe height sender */
+(function(){
+  function sendHeight(){
+    var h = document.documentElement.scrollHeight;
+    try{ window.parent.postMessage({ type:"resize", id:"medmasters-ai-exam-tutor", height:h }, "*"); }catch(e){}
+  }
+  if("ResizeObserver" in window){
+    try{ new ResizeObserver(sendHeight).observe(document.documentElement); }catch(e){}
+  }
+  window.addEventListener("load", sendHeight);
+  window.addEventListener("resize", sendHeight);
+  document.addEventListener("DOMContentLoaded", sendHeight);
+  sendHeight();
+})();
+</script>
+</body>
+</html>

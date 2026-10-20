@@ -1,0 +1,30 @@
+BIO 004 drop, Oct 19 2026. Drag all of these into the repo root on GitHub (new-build-bio4-solano). Every file goes at the root, same name as here, overwriting what is there.
+
+WHAT CHANGED
+
+index.html                 Now a redirect to the Learning Guide. Was the faculty tool hub.
+welcome.html               Now a redirect to the Learning Guide. Was the old welcome tour.
+faculty-tools.html         NEW. Your faculty tool hub, exactly what index.html used to be.
+welcome-old-fall2026.html  NEW. The old student welcome page, kept in case you want it. Nothing links to it.
+
+Both redirects read the class from ?sec= on the link (mw, tr-am, tr-eve) or from the class the student already picked, and send them to learning-guide-mw / -tr-am / -tr-eve. With neither they land on learning-guide.html, which asks once.
+
+bio004-week.html           "Before class (optional, but recommended)" is now "Before class (not graded)". The line under it now says: learn it any way you like, read and do the sheet, watch and do the sheet, or work the competencies and structure list. This is what every week hub shows.
+bio004-day-card.js         Same wording change on the Today page day card.
+bio004-quick-access.html   Same, on the Pre-work filter chip and its caption.
+bio004-study-process.html  Same, on the Pre-work link.
+bio004-preread.html        Same, in the eyebrow.
+
+The 23 files below are faculty and legacy pages whose "back to hub" link pointed at index.html. That link now points at faculty-tools.html so your tools still work after the redirect. Nothing else in them changed.
+  ai-exam-tutor.html, bio004-lab-policy-announcement.html, canvas-steps.html, course-management.html, course-questions.html, exam-builders.html, exam-simulator.html, lab-week05-sensory-reflex.html, lecture-week.html, lecture-writer.html, lectures-slides.html, tbl-competency-builder.html, team-based-learning.html, tutors.html, week-01.html through week-09.html
+
+CANVAS
+Point each class home page at the guide directly:
+  https://drsrennie-stack.github.io/new-build-bio4-solano/learning-guide.html?sec=mw
+  https://drsrennie-stack.github.io/new-build-bio4-solano/learning-guide.html?sec=tr-am
+  https://drsrennie-stack.github.io/new-build-bio4-solano/learning-guide.html?sec=tr-eve
+Any old link to welcome.html or index.html still works and lands on the guide.
+
+NOT CHANGED
+week-17's "Week 18" arrow: already hidden on the last week, no fix needed.
+today.html: left as the Today tool, reached from the guide.

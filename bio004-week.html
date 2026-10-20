@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>This Week · BIO 004 Human Anatomy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@500;700&display=swap">
+<style>
+/* ============================================================
+   BIO 004 week page, Fall 2026 (weeks 9 to 17)
+   bio004-week.html?w=9&sec=mw   (week-9-hub.html to week-17-hub.html forward here)
+
+   Reads the newest calendar, schedule-alt-fall2026.js (the same data
+   as the class day plan, bio004-course-calendar-alt.html, and the
+   pre-read, bio004-preread.html). Change a day there and this page,
+   the class day plan and the pre-read all change together.
+   Weeks 1 to 8 still open in the weekly schedule.
+
+   One white card per class day on a navy page: what happens in
+   class, then what to do before class, lecture and lab side by side.
+   Lecture pre-work: read the notes, draw on the competency note
+   sheets, watch the videos and correct in a second color.
+   Lab TBL is discontinued and is not shown.
+   Brand: navy #0B1530 / #08101F, terra #7A2E24, gold #B8924A.
+   White cards lifted by shadow only. No serif, no italics.
+   ============================================================ */
+:root{
+  --card:#FFFFFF; --ink:#0B1530; --soft:#454B5C;
+  --navy:#0B1530; --terra:#7A2E24; --gold:#B8924A; --gold-text:#6F5316;
+  --shadow:0 14px 34px -14px rgba(0,0,0,.65);
+  --disp:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --eyebrow:"DM Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:#08101F;color:var(--ink);font-family:var(--disp);font-size:16px;line-height:1.5}
+em,i{font-style:normal}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;color:var(--navy);padding:8px 12px;border-radius:6px;z-index:10;font-weight:700}
+.skip:focus{left:16px}
+:focus-visible{outline:3px solid var(--navy);outline-offset:3px}
+.head :focus-visible,.skip:focus-visible{outline-color:#E3C27D}
+.wrap{max-width:1040px;margin:0 auto;padding-block:32px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* header */
+.head{position:relative;color:#fff;margin:0 0 24px;padding-right:72px}
+.course{margin:0;font-family:var(--eyebrow);font-size:clamp(15px,2.2vw,18px);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#E3C27D}
+h1{margin:8px 0 4px;font-size:clamp(1.8rem,4.6vw,2.5rem);line-height:1.12;font-weight:800;letter-spacing:-.02em;color:#fff}
+.sub{margin:0;color:#C8D2DA;font-size:16px}
+.secs{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}
+.secs button{font:inherit;font-size:14px;font-weight:700;min-height:40px;padding:6px 16px;border-radius:999px;cursor:pointer;
+  background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4)}
+.secs button[aria-pressed="true"]{background:#fff;color:#08101F;border-color:#fff}
+.secs button:hover{border-color:#E3C27D}
+.pick{margin:10px 0 0;color:#E3C27D;font-size:14px;font-weight:700}
+.nav{display:flex;flex-wrap:wrap;gap:8px 22px;margin:16px 0 0;font-size:15px}
+.nav a{color:#fff;font-weight:700;text-underline-offset:3px}
+.nav a:hover{color:#E3C27D}
+.nav [hidden]{display:none}
+
+/* Study With Me, small icon in the corner */
+.swm{position:absolute;top:0;right:0;width:52px;height:52px;border-radius:50%;background:var(--gold);color:#08101F;
+  display:grid;place-items:center;text-decoration:none;box-shadow:0 6px 16px -6px rgba(0,0,0,.6)}
+.swm:hover{background:#E3C27D}
+.swm:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.swm svg{width:24px;height:24px}
+.swm-l{position:absolute;top:58px;right:-8px;white-space:nowrap;font-family:var(--eyebrow);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#E3C27D}
+
+/* day cards */
+#days{display:grid;gap:22px}
+.day{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:22px 24px}
+.day-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin:0 0 4px}
+.day h2{margin:0;font-size:clamp(1.25rem,2.6vw,1.5rem);font-weight:800;letter-spacing:-.01em;color:var(--navy)}
+.tag{font-family:var(--eyebrow);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--terra)}
+.next{display:inline-block;font-family:var(--eyebrow);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:#fff;background:var(--navy);border-radius:999px;padding:3px 10px}
+.times{margin:0 0 14px;color:var(--soft);font-size:14.5px}
+.label{margin:18px 0 8px;font-family:var(--eyebrow);font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--soft)}
+
+.flow{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.flow li{display:grid;grid-template-columns:118px minmax(0,1fr);gap:12px;align-items:baseline}
+.flow .w{font-family:var(--eyebrow);font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--soft)}
+.flow b{color:var(--ink)}
+.flow small{display:block;color:var(--soft);font-size:14px}
+
+.prep{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.side{border-radius:12px;padding:16px 18px}
+.side.lec{background:rgba(11,21,48,.05)}
+.side.lab{background:rgba(122,46,36,.06)}
+.side h3{margin:0 0 4px;font-size:1.05rem;font-weight:800;color:var(--navy)}
+.side.lab h3{color:var(--terra)}
+.side .intro{margin:0 0 10px;color:var(--soft);font-size:14.5px}
+.steps{margin:0;padding:0;list-style:none;counter-reset:s;display:grid;gap:12px}
+.steps>li{counter-increment:s;display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px}
+.steps>li::before{content:counter(s);width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+  background:var(--navy);color:#fff;font-size:13.5px;font-weight:800}
+.side.lab .steps>li::before{background:var(--terra)}
+.steps strong{display:block;font-size:15.5px;color:var(--ink)}
+.steps p{margin:2px 0 4px;color:var(--soft);font-size:14px}
+.links{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:4px}
+.links a{color:var(--ink);font-weight:700;font-size:14.5px;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.links a:hover{color:var(--terra)}
+.links .ext{color:var(--soft);font-weight:400;font-size:13px}
+
+.note{margin:14px 0 0;padding:10px 14px;border-radius:10px;background:rgba(184,146,74,.14);color:var(--ink);font-size:14.5px}
+.foot{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin:18px 0 0}
+.btn{display:inline-flex;align-items:center;min-height:44px;padding:8px 18px;border-radius:999px;background:var(--navy);color:#fff;
+  font-weight:700;font-size:15px;text-decoration:none}
+.btn:hover{background:#142a4a}
+.foot a.plain{color:var(--ink);font-weight:700;font-size:14.5px;text-underline-offset:3px}
+
+.day.exam h2,.day.off h2{color:var(--navy)}
+.day.off{padding:16px 24px}
+.day.off p{margin:4px 0 0;color:var(--soft)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.empty{background:#fff;border-radius:16px;padding:22px 24px;box-shadow:var(--shadow)}
+
+@media (max-width:760px){
+  .prep{grid-template-columns:minmax(0,1fr)}
+  .flow li{grid-template-columns:minmax(0,1fr);gap:0}
+  .day{padding:18px 16px}
+  .side{padding:14px}
+}
+@media (max-width:560px){ .head{padding-right:62px} .swm-l{display:none} }
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;scroll-behavior:auto!important} }
+@media print{
+  body{background:#fff} .head,.head h1,.course,.sub{color:#000} .swm,.secs,.nav,.foot,.pick{display:none!important}
+  .day{box-shadow:none;border:1px solid #999;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#days">Skip to this week's class days</a>
+<main class="wrap" id="main">
+  <header class="head" aria-labelledby="wkTitle">
+    <a class="swm" href="study-session-signup.html" target="_top" aria-label="Study With Me: join or host a study session" title="Study With Me">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span class="swm-l" aria-hidden="true">Study With Me</span>
+    </a>
+    <p class="course">BIO 004 &middot; Human Anatomy</p>
+    <h1 id="wkTitle">This week</h1>
+    <p class="sub" id="wkSub"></p>
+    <div class="secs" role="group" aria-label="Your class">
+      <button type="button" data-sec="mw" aria-pressed="false">Mon / Wed</button>
+      <button type="button" data-sec="tr-am" aria-pressed="false">Tue / Thu morning</button>
+      <button type="button" data-sec="tr-eve" aria-pressed="false">Tue / Thu evening</button>
+    </div>
+    <p class="pick" id="pick" hidden>Pick your class so the days and times are yours.</p>
+    <nav class="nav" aria-label="Other weeks">
+      <a id="prev" href="#" target="_top">&#8592; Previous week</a>
+      <a id="all" href="bio004-course-calendar-alt.html" target="_top">Every week, one page</a>
+      <a id="next" href="#" target="_top">Next week &#8594;</a>
+    </nav>
+  </header>
+
+  <p id="status" class="sr" aria-live="polite"></p>
+  <div id="days"></div>
+</main>
+
+<script src="schedule-alt-fall2026.js"></script>
+<script>
+(function () {
+  'use strict';
+  var A = window.BIO004_ALT;
+  var out = document.getElementById('days');
+  if (!A) { out.innerHTML = '<div class="empty">The schedule did not load. Refresh the page, or open the <a href="bio004-course-calendar.html" target="_top">course calendar</a>.</div>'; return; }
+
+  var FIRST_ALT_WEEK = 9, LAST_WEEK = 17;
+  var TERM = new Date(2026, 7, 17);                 /* Monday of week 1 */
+  var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var MONL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var DOW = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+  function esc(t){ return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function iso(d){ return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+  function parse(s){ var p=s.split('-'); return new Date(+p[0],+p[1]-1,+p[2]); }
+  function addDays(d,n){ return new Date(d.getFullYear(),d.getMonth(),d.getDate()+n); }
+  function join(a){ return a.length<2 ? (a[0]||'') : a.slice(0,-1).join(', ')+' and '+a[a.length-1]; }
+
+  /* ---------- which week, which class ---------- */
+  var q = location.search;
+  var nowWk = Math.floor((new Date() - TERM) / 864e5 / 7) + 1;
+  var W = +((q.match(/[?&]w=(\d+)/)||[])[1] || 0) || nowWk;
+  if (W < 1) W = 1; if (W > LAST_WEEK) W = LAST_WEEK;
+
+  var sec = (q.match(/[?&]sec=(mw|tr-am|tr-eve)/)||[])[1] || null, chosen = !!sec;
+  if (!sec) { try { var ls = localStorage.getItem('bio004-section'); if (/^(mw|tr-am|tr-eve)$/.test(ls)) { sec = ls; chosen = true; } } catch (e) {} }
+  if (!sec) sec = 'mw';
+
+  /* weeks 1 to 8 are not in the new calendar: open them in the weekly schedule */
+  if (W < FIRST_ALT_WEEK) {
+    var old = 'bio004-weekly-schedule.html?hub=' + W + (chosen ? '&sec=' + sec : '');
+    try { if (window.top === window.self) location.replace(old); else window.top.location.replace(new URL(old, location.href).href); }
+    catch (e) { location.replace(old); }
+    return;
+  }
+
+  function weekLink(n){ return 'week-' + n + '-hub.html' + (chosen ? '?sec=' + sec : ''); }
+
+  /* ---------- small builders ---------- */
+  function link(p){
+    var ext = /^https?:/.test(p[0]);
+    return '<li><a href="' + esc(p[0]) + '"' + (ext ? ' target="_blank" rel="noopener"' : ' target="_top"') + '>' + esc(p[1]) + '</a>'
+      + (ext ? ' <span class="ext">(opens in a new tab)</span>' : '') + '</li>';
+  }
+  function links(list){ return list.length ? '<ul class="links">' + list.map(link).join('') + '</ul>' : ''; }
+  function gather(keys, table, field){
+    var seen = {}, o = [];
+    (keys||[]).forEach(function(k){ ((table[k]||{})[field]||[]).forEach(function(p){ if(!seen[p[0]]){ seen[p[0]]=1; o.push(p); } }); });
+    return o;
+  }
+  function lecNames(keys){ return join((keys||[]).map(function(k){ return A.LECTURE[k] ? A.LECTURE[k].name : k; })); }
+  function labNames(keys){ return join((keys||[]).map(function(k){ return A.LAB[k] ? A.LAB[k].name : k; })); }
+  function modeText(L){ return L.text || A.MODE[L.mode] || ''; }
+
+  /* exams for this class, to tell which module a day belongs to */
+  var EXAMS = { mw:['2026-09-09','2026-09-30','2026-10-21','2026-11-16','2026-12-09'],
+                tr:['2026-09-08','2026-09-29','2026-10-22','2026-11-17','2026-12-10'] };
+  function moduleOf(list, d){
+    var ex = EXAMS[A.track(sec)] || EXAMS.mw, n = 1;
+    ex.forEach(function(e){ if (e < d) n++; });
+    return Math.min(n, 5);
+  }
+
+  /* ---------- what happens in class ---------- */
+  function flow(s){
+    var T = A.TIMES[sec], items = [];
+    if (s.kind === 'd1') {
+      items.push(['Lecture', 'Lecture TBL ' + s.tbl.n + ': ' + lecNames(s.tbl.topics),
+        'iRAT on your own, then the tRAT with your team, then appeals. After that, ' + (s.app ? s.app.replace(/^Application: /, '') : 'the application activity') + '.']);
+      items.push(['Lab', labNames(s.labTopic), modeText(s.lab)]);
+      items.push(['End of class', 'Lab brain dump: ' + labNames(s.bd.topics), 'Five minutes, closed notes. Name, draw and connect everything you can from today\'s lab.']);
+    } else {
+      items.push(['Lecture', s.lec, s.prepOnly ? 'Before class: start ' + lecNames(s.lecTopic) : lecNames(s.lecTopic)]);
+      items.push(['Lab', labNames(s.labTopic), modeText(s.lab)]);
+      items.push(['End of class', 'Lecture brain dump: ' + lecNames(s.bd.topics), 'Five minutes, closed notes, on this week\'s lecture topic.']);
+    }
+    return '<p class="times">Lecture ' + esc(T.lecT) + '. Lab ' + esc(T.labT) + '.</p>'
+      + '<ol class="flow">' + items.map(function(i){
+        return '<li><span class="w">' + esc(i[0]) + '</span><span><b>' + esc(i[1]) + '</b>' + (i[2] ? '<small>' + esc(i[2]) + '</small>' : '') + '</span></li>';
+      }).join('') + '</ol>';
+  }
+
+  /* ---------- before class: lecture side ---------- */
+  function lecturePrep(s){
+    var tblDay = s.kind === 'd1';
+    var keys = s.prepTopic ? s.prepTopic : (tblDay ? s.tbl.topics : s.lecTopic);
+    var notes = gather(keys, A.LECTURE, 'notes'), draw = gather(keys, A.LECTURE, 'draw'),
+        videos = gather(keys, A.LECTURE, 'videos');
+    var comps = keys.filter(function(k){ return A.LECTURE[k] && A.LECTURE[k].comps; }).map(function(k){
+      var c = A.LECTURE[k].comps;
+      return ['bio004-competency-packet.html#c' + c[0], 'Competencies ' + c[0] + ' to ' + c[1] + ' (' + A.short(k) + ')'];
+    });
+    var onSheet = keys.some(function(k){ return A.LECTURE[k] && A.LECTURE[k].drawSheet; });
+    var intro = s.prepOnly
+      ? 'In class today is the ' + s.lec + '. Before class, start ' + lecNames(keys) + ': read the notes and start your note sheets. There is no lecture on it in class, so this reading is how you learn it.'
+      : tblDay
+      ? 'Lecture TBL ' + s.tbl.n + ' opens class. It is on ' + lecNames(keys) + '. Learn it any way you like: read the notes and do the sheet, watch the videos and do the sheet, or work the competencies and structure list. The sheet is the route most students use.'
+      : 'Today\'s lecture is on ' + lecNames(keys) + '. You do not need to master it yet. Read the notes and start your note sheets, so the lecture is the second time you see it.';
+    return '<div class="side lec"><h3>Lecture</h3><p class="intro">' + esc(intro) + '</p><ol class="steps">'
+      + '<li><div><strong>Read the notes</strong><p>One section at a time. At the end of each section, look away and say what it was about in one sentence.</p>' + links(notes) + '</div></li>'
+      + '<li><div><strong>Draw it on your note sheets</strong><p>'
+      +   (onSheet ? 'For this topic, draw on the drawing sheet. Each frame says what to draw and label. ' : 'Pick one prompt for each competency and draw it in the box. ')
+      +   'Draw from your notes in one color. Leave what you do not know yet empty.</p>' + links(draw)
+      +   (comps.length ? '<p>What you are expected to be able to do, in your competency packet:</p>' + links(comps) : '') + '</div></li>'
+      + '<li><div><strong>Watch the videos, then correct in a second color</strong><p>Fix and add to your drawings while you watch. What you add in the second color is what to review first.</p>' + links(videos) + '</div></li>'
+      + '</ol></div>';
+  }
+
+  /* ---------- before class: lab side ---------- */
+  function labPrep(s){
+    var keys = s.labTopic, mode = s.lab.mode;
+    var lists = gather(keys, A.LAB, 'list'), sprints = gather(keys, A.LAB, 'sprints');
+    var muscle = keys.some(function(k){ return A.LAB[k] && A.LAB[k].muscle; });
+    var intro = mode === 'review'
+      ? 'Review lab. Go down your structure list and mark everything you still cannot find. That marked list is what you work on in lab.'
+      : mode === 'cadaver'
+      ? 'You saw this on the models. Today is the cadaver and you tag the structures yourself, so come able to find them without tags.'
+      : mode === 'model'
+      ? 'First time on the models. Many structures are tagged for you, not all. Come knowing the names on your list.'
+      : 'Come knowing the names on your structure list, so lab is for finding them.';
+    return '<div class="side lab"><h3>Lab</h3><p class="intro">' + esc(intro) + '</p><ol class="steps">'
+      + '<li><div><strong>Read the structure list once</strong><p>Everything on it is testable.</p>' + links(lists) + '</div></li>'
+      + (sprints.length ? '<li><div><strong>Work the lab sprint</strong><p>Find each structure on the images and answer the questions out loud.</p>' + links(sprints) + '</div></li>' : '')
+      + (muscle ? '<li><div><strong>Fill the muscle chart</strong><p>Origin, insertion, action and innervation for every muscle on the list.</p>' + links([A.MUSCLE_CHART]) + '</div></li>' : '')
+      + '</ol></div>';
+  }
+
+  function dayCard(s, list, nextD){
+    var d = parse(s.d), dt = DOW[d.getDay()] + ', ' + MONL[d.getMonth()] + ' ' + d.getDate();
+    var isNext = s.d === nextD;
+    var nextTag = isNext ? ' <span class="next">Your next class</span>' : '';
+    var hid = 'd' + s.d.replace(/-/g, '');
+    if (s.kind === 'holiday') {
+      return '<article class="day off" aria-labelledby="' + hid + '"><div class="day-top"><h2 id="' + hid + '">' + esc(dt) + '</h2><span class="tag">No class</span></div><p>' + esc(s.lec) + '</p></article>';
+    }
+    if (s.kind === 'exam') {
+      return '<article class="day exam" aria-labelledby="' + hid + '"><div class="day-top"><h2 id="' + hid + '">' + esc(dt) + '</h2><span class="tag">Exam ' + s.exam + '</span>' + nextTag + '</div>'
+        + '<p class="times">Lecture exam and lab practical, both today. Lecture ' + esc(A.TIMES[sec].lecT) + '. Lab ' + esc(A.TIMES[sec].labT) + '.</p>'
+        + '<div class="foot"><a class="btn" href="bio004-study-process.html#prepare" target="_top">What is on the exam?</a>'
+        + '<a class="plain" href="bio004-study-process.html#check" target="_top">How do I know what I still need to study?</a></div></article>';
+    }
+    var tag = s.kind === 'd1' ? 'Lecture TBL ' + s.tbl.n : (s.lab.mode === 'review' ? 'Review lab' : 'Lecture and lab');
+    return '<article class="day" aria-labelledby="' + hid + '">'
+      + '<div class="day-top"><h2 id="' + hid + '">' + esc(dt) + '</h2><span class="tag">' + esc(tag) + '</span>' + nextTag + '</div>'
+      + '<p class="label">In class</p>' + flow(s)
+      + '<p class="label">Before class (not graded)</p><div class="prep">' + lecturePrep(s) + labPrep(s) + '</div>'
+      + (s.note ? '<p class="note">' + esc(s.note) + '</p>' : '')
+      + '<div class="foot"><a class="btn" href="bio004-preread.html?sec=' + encodeURIComponent(sec) + '&amp;day=' + s.d + '" target="_top">Open the full pre-read<span style="position:absolute;left:-9999px"> for ' + esc(dt) + '</span></a>'
+      + '<a class="plain" href="mastery-os-fall-2026.html#s-dumps" target="_top">Brain dump practice</a></div>'
+      + '</article>';
+  }
+
+  var showPicker = false;
+  function render(){
+    document.querySelectorAll('.secs button').forEach(function(b){ b.setAttribute('aria-pressed', String(chosen && b.getAttribute('data-sec') === sec)); });
+    document.getElementById('pick').hidden = chosen;
+    /* The class is already known (the Canvas link carries ?sec=, or the student
+       picked it once), so the buttons stay out of the way. A small link lets a
+       student who picked the wrong class fix it. */
+    var sp = document.querySelector('.secs'), ch = document.getElementById('secChange');
+    if (sp) sp.style.display = (chosen && !showPicker) ? 'none' : '';
+    if (chosen && !showPicker && !ch && sp) {
+      ch = document.createElement('button'); ch.type = 'button'; ch.id = 'secChange';
+      ch.textContent = 'Not your class? Change it';
+      ch.setAttribute('style', 'margin-top:12px;background:none;border:0;padding:0;color:#fff;opacity:.8;font:inherit;font-size:14px;text-decoration:underline;cursor:pointer');
+      ch.addEventListener('click', function(){ showPicker = true; render(); });
+      sp.parentNode.insertBefore(ch, sp.nextSibling);
+    }
+    if (ch) ch.style.display = (chosen && !showPicker) ? '' : 'none';
+
+    var mon = addDays(TERM, 7 * (W - 1)), sun = addDays(mon, 6), a = iso(mon), z = iso(sun);
+    var all = A.sessions(sec), wk = all.filter(function(s){ return s.d >= a && s.d <= z; });
+    var today = iso(new Date()), nextD = null;
+    for (var i = 0; i < all.length; i++) { if (all[i].kind !== 'holiday' && all[i].d >= today) { nextD = all[i].d; break; } }
+
+    var seen = {}, topics = [], ex = null, mods = {};
+    wk.forEach(function(s){
+      if (s.kind === 'exam') { ex = s.exam; mods[s.exam] = 1; }
+      else if (s.kind !== 'holiday') mods[moduleOf(all, s.d)] = 1;
+      (s.lecTopic || []).forEach(function(k){ if (!seen[k]) { seen[k] = 1; topics.push(A.short(k)); } });
+    });
+    if (ex) topics.push('Exam ' + ex);
+    var title = 'Week ' + W + (topics.length ? ': ' + topics.join(', ') : '');
+    var modTxt = Object.keys(mods).map(Number).sort().map(function(n){ return 'Module ' + n; }).join(' into ');
+    document.getElementById('wkTitle').textContent = title;
+    document.title = title + ' · BIO 004 Human Anatomy';
+    document.getElementById('wkSub').textContent = [MON[mon.getMonth()] + ' ' + mon.getDate() + ' to ' + MON[sun.getMonth()] + ' ' + sun.getDate(), modTxt, A.TIMES[sec].label]
+      .filter(Boolean).join(' · ') + (W === nowWk ? ' · This week' : '');
+
+    var pv = document.getElementById('prev'), nx = document.getElementById('next');
+    pv.href = weekLink(W - 1); pv.textContent = '← Week ' + (W - 1); pv.hidden = W <= 1;
+    nx.href = weekLink(W + 1); nx.textContent = 'Week ' + (W + 1) + ' →'; nx.hidden = W >= LAST_WEEK;
+    document.getElementById('all').href = 'bio004-schedule-' + sec + '.html';
+
+    out.innerHTML = wk.length ? wk.map(function(s){ return dayCard(s, all, nextD); }).join('')
+      : '<div class="empty">No class meetings this week for your class.</div>';
+  }
+
+  document.querySelectorAll('.secs button').forEach(function(b){
+    b.addEventListener('click', function(){
+      sec = b.getAttribute('data-sec'); chosen = true;
+      showPicker = false;
+      try { localStorage.setItem('bio004-section', sec); } catch (e) {}
+      try { history.replaceState(null, '', '?w=' + W + '&sec=' + sec + location.hash); } catch (e) {}
+      render();
+      document.getElementById('status').textContent = 'Showing ' + b.textContent + ' for week ' + W + '.';
+    });
+  });
+  render();
+})();
+</script>
+<script>
+  /* iframe height sender, so Canvas or Kajabi can size the frame */
+  (function () {
+    var id = 'bio004-week';
+    function send() {
+      var h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+      try { parent.postMessage({ id: id, height: h }, '*'); } catch (e) {}
+    }
+    window.addEventListener('load', send);
+    window.addEventListener('resize', send);
+    if (window.ResizeObserver) new ResizeObserver(send).observe(document.body);
+  })();
+</script>
+<script src="bio004-guide-link.js"></script>
+</body>
+</html>
