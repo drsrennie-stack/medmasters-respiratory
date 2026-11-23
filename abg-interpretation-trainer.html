@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ABG Interpretation Trainer | MedMasters Collaborative</title>
+<title>ABG Interpretation Trainer | Dr. Sharilyn Rennie</title>
 <meta name="description" content="A leveled teaching trainer for arterial blood gas interpretation. Students pick a starting level and work step by step through pH, PaCO2, HCO3, base excess, the primary disorder, compensation, and oxygenation.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    /* MedMasters Collaborative brand (live course-site tokens) */
+    /* Brand tokens (live course-site tokens) */
     --navy: #08101F;
     --navy-2: #121B30;          /* raised surface on navy */
     --navy-line: #2A3552;       /* hairlines on navy, decorative */
@@ -229,6 +229,9 @@
     display: inline-flex; align-items: center; gap: 8px;
   }
   .pill:hover { border-color: var(--gold); }
+  .pill[aria-pressed="true"] { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+  /* Practice from memory: hide the normal-range hints on answer choices and in the grid */
+  body.no-ranges .opt-sub.rng, body.no-ranges .ttt .cr { display: none; }
   .pill svg { width: 16px; height: 16px; }
 
   .monitor { background: var(--navy); color: #fff; padding: 8px 20px 26px; }
@@ -449,7 +452,7 @@
       </svg>
 
       <div class="intro-title reveal" id="introTitle">
-        <p class="eyebrow" style="color:var(--gold)">MedMasters Collaborative · Respiratory Physiology</p>
+        <p class="eyebrow" style="color:var(--gold)">Respiratory Physiology · Acid-Base Practice</p>
         <h1 id="intro-h1">ABG Interpretation Trainer</h1>
         <p class="intro-sub">Learn to read an arterial blood gas the way clinicians do, one step at a time. Pick your starting level, and the cases get harder as you get them right.</p>
         <div class="intro-actions">
@@ -471,7 +474,7 @@
             <svg viewBox="0 0 40 52"><circle cx="20" cy="12" r="9" fill="#7A2A22"/><path d="M20 19 C9 19 6 32 6 48 L34 48 C34 32 31 19 20 19 Z" fill="#7A2A22"/></svg>
             <svg viewBox="0 0 40 52"><circle cx="20" cy="12" r="9" fill="#DCB45C"/><path d="M20 19 C9 19 6 32 6 48 L34 48 C34 32 31 19 20 19 Z" fill="#DCB45C"/></svg>
           </span>
-          <span>Med<span class="mm">Masters</span> Collaborative</span>
+          <span>ABG <span class="mm">Trainer</span></span>
         </p>
         <button type="button" class="textbtn" id="btnReplay">Replay intro</button>
       </div>
@@ -513,6 +516,7 @@
           <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 3h12M2 8h12M2 13h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Levels</button>
         <button type="button" class="pill" id="btnRef" aria-haspopup="dialog">
           <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="2.5" y="1.5" width="11" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5.5 5.5h5M5.5 8.5h5M5.5 11.5h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Normal ranges</button>
+        <button type="button" class="pill" id="btnRanges" aria-pressed="false" title="Hide the normal ranges so you work from memory">Hide normal ranges</button>
         <button type="button" class="pill" id="btnNew">New case</button>
       </div>
     </div>
@@ -596,7 +600,7 @@
 </dialog>
 
 <footer class="site-foot">
-  <span>ABG Interpretation Trainer</span><span>Dr. Sharilyn Rennie</span><span>MedMasters Collaborative</span>
+  <span>ABG Interpretation Trainer</span><span>Dr. Sharilyn Rennie</span>
 </footer>
 
 <script>
@@ -837,12 +841,14 @@ const GROUPS = {
   oxy:   () => [['normal', 'Normal oxygenation', '80 to 100 mmHg'], ['hypoxemia', 'Hypoxemia', 'below 80 mmHg']]
 };
 
+const RANGE_GROUPS = ['ph', 'paco2', 'hco3', 'be', 'oxy'];
 function optionsHTML(group, name) {
+  const rng = RANGE_GROUPS.includes(group) ? ' rng' : '';
   return GROUPS[group]().map(([val, label, sub], i) => {
     const id = `${name}-${i}`;
     return `<label class="opt" for="${id}">
       <input type="radio" name="${name}" id="${id}" value="${val}">
-      <span class="opt-box">${label}${sub ? `<span class="opt-sub">${sub}</span>` : ''}
+      <span class="opt-box">${label}${sub ? `<span class="opt-sub${rng}">${sub}</span>` : ''}
         <span class="opt-tag tag-answer">Correct answer</span>
         <span class="opt-tag tag-yours">Your answer</span>
       </span>
@@ -854,6 +860,21 @@ function optionsHTML(group, name) {
    8. PROGRESS (saved only in this browser; no personal data)
    ============================================================ */
 const STORE_KEY = 'abgTrainer.progress.v1';
+const RANGES_KEY = 'abgTrainer.hideRanges';
+let hideRanges = false;
+try { hideRanges = localStorage.getItem(RANGES_KEY) === '1'; } catch (e) {}
+function setHideRanges(on) {
+  hideRanges = on;
+  document.body.classList.toggle('no-ranges', on);
+  const b = document.getElementById('btnRanges');
+  if (b) b.setAttribute('aria-pressed', String(on));
+  try { localStorage.setItem(RANGES_KEY, on ? '1' : '0'); } catch (e) {}
+  // Re-render the current guided step so the tip follows the setting.
+  const card = document.querySelector('#stage [data-step]');
+  if (card && typeof renderStep === 'function' && card.querySelector('[data-act="check"]') && !card.querySelector('[data-act="check"]').hidden) {
+    renderStep(Number(card.dataset.index), false);
+  }
+}
 const state = { level: 1, unlocked: 1, completed: [], streak: 0, mode: 'guided', clean: 0, cases: 0 };
 
 function loadProgress() {
@@ -1317,17 +1338,19 @@ function loadCase(focus) {
    ============================================================ */
 function renderStep(i, focus) {
   const st = STEPS[i], lvl = LEVELS[state.level - 1];
+  // Tips quote the normal ranges, so they stay behind the hint button while ranges are hidden.
+  const autoTip = lvl.autoTips && !hideRanges;
   $('stage').innerHTML = `
     <article class="card enter" data-step="${st.id}" data-index="${i}">
       <fieldset class="q" aria-describedby="sprompt">
         <legend><span class="step-count">Step ${i + 1} of ${STEPS.length}</span><h2 class="step-title" id="stitle" tabindex="-1">${st.title}</h2></legend>
         <p class="step-prompt" id="sprompt">${st.prompt()}</p>
-        <div class="tip" id="stip" ${lvl.autoTips ? '' : 'hidden'}><strong>Tip:</strong> ${st.tip()}</div>
+        <div class="tip" id="stip" ${autoTip ? '' : 'hidden'}><strong>Tip:</strong> ${st.tip()}</div>
         <div class="options ${LIST_STEPS.includes(st.id) ? 'list' : ''}">${optionsHTML(st.id, 'g-' + st.id)}</div>
       </fieldset>
       <div class="step-actions">
         <button type="button" class="btn btn-primary" data-act="check">Check</button>
-        ${lvl.autoTips ? '' : '<button type="button" class="btn btn-quiet" data-act="hint" aria-expanded="false" aria-controls="stip">Show a hint</button>'}
+        ${autoTip ? '' : '<button type="button" class="btn btn-quiet" data-act="hint" aria-expanded="false" aria-controls="stip">Show a hint</button>'}
         <button type="button" class="btn btn-primary" data-act="next" hidden>${i < STEPS.length - 1 ? 'Next step' : 'See the case review'}</button>
       </div>
       <div class="fb" id="sfb" role="status" aria-live="polite"></div>
@@ -1661,6 +1684,7 @@ function goDeeper() {
    20. WIRING
    ============================================================ */
 loadProgress();
+setHideRanges(hideRanges);
 
 $('btnSkipIntro').addEventListener('click', () => finishIntro(true));
 $('btnToMenu').addEventListener('click', showMenu);
@@ -1693,6 +1717,10 @@ $('btnReset').addEventListener('click', () => {
 
 $('btnLevels').addEventListener('click', showMenu);
 $('btnNew').addEventListener('click', () => loadCase(true));
+$('btnRanges').addEventListener('click', () => {
+  setHideRanges(!hideRanges);
+  announce(hideRanges ? 'Normal ranges hidden. Work from memory. The reference button still shows them if you need to check.' : 'Normal ranges shown.');
+});
 $('stage').addEventListener('click', stageClick);
 $('stage').addEventListener('change', stageChange);
 
