@@ -713,16 +713,17 @@ function plausible(r, pH, paco2, hco3) {
     case 'mixed_alkalosis':
       return paco2 >= 25 && paco2 <= 34 && hco3 >= 27 && hco3 <= 36;
     case 'metabolic_acidosis':
-      if (r.comp === 'uncompensated') return hco3 <= 20 && paco2 >= 38 && paco2 <= 42;
+      // Uncompensated here means PaCO2 is still in 35 to 45 AND inside Winter's range, so no hidden second disorder.
+      if (r.comp === 'uncompensated') return hco3 <= 21 && paco2 >= e.lo && paco2 <= e.hi;
       return paco2 >= e.lo && paco2 <= e.hi && hco3 >= 8;
     case 'metabolic_alkalosis':
-      if (r.comp === 'uncompensated') return hco3 >= 29 && paco2 >= 38 && paco2 <= 44;
+      if (r.comp === 'uncompensated') return hco3 >= 27 && paco2 >= e.lo && paco2 <= e.hi;
       return paco2 >= e.lo && paco2 <= e.hi && paco2 <= 55 && hco3 <= 45;
     case 'respiratory_acidosis':
-      if (r.comp === 'uncompensated') return paco2 >= 48 && paco2 <= 80 && hco3 >= 24 && hco3 <= 26;
+      if (r.comp === 'uncompensated') return paco2 >= 48 && paco2 <= 80 && hco3 >= 24 && hco3 <= 26 && hco3 >= e.acute - 2;
       return paco2 <= 80 && hco3 >= Math.floor(e.acute) && hco3 <= e.chronic + 2;
     case 'respiratory_alkalosis':
-      if (r.comp === 'uncompensated') return paco2 >= 20 && paco2 <= 32 && hco3 >= 22 && hco3 <= 24;
+      if (r.comp === 'uncompensated') return paco2 >= 20 && paco2 <= 32 && hco3 >= 22 && hco3 <= 24 && hco3 <= e.acute + 2;
       return paco2 >= 20 && hco3 <= Math.ceil(e.acute) && hco3 >= e.chronicLo - 2;
   }
   return false;
@@ -969,7 +970,9 @@ function teachComp() {
   const c = t.compensator, organ = c === 'paco2' ? 'lungs' : 'kidneys';
   const cRange = c === 'paco2' ? '35 to 45 mmHg' : '22 to 26 mEq/L';
   if (t.comp === 'uncompensated') {
-    return `The compensating value, ${H[c]}, is ${current[c]}, still inside its normal range (${cRange}). The ${organ} have not responded yet, so this is <strong>uncompensated</strong>.`;
+    return c === 'paco2'
+      ? `The compensating value, ${H[c]}, is ${current[c]}, still inside its normal range (${cRange}), so this is <strong>uncompensated</strong>. The lungs begin responding within minutes, but when the metabolic change is mild, PaCO<sub>2</sub> can stay inside the normal range.`
+      : `The compensating value, ${H[c]}, is ${current[c]}, still inside its normal range (${cRange}). The kidneys take days to respond, so this is <strong>uncompensated</strong>.`;
   }
   const moved = `The compensating value, ${H[c]}, is ${current[c]}. It has moved outside its normal range in the opposite direction from the primary change, so the ${organ} are working to pull pH back toward normal.`;
   return t.comp === 'partially'
@@ -1634,10 +1637,10 @@ function goDeeper() {
   const e = expected(t.disorder, current.paco2, current.hco3);
   if (t.disorder === 'metabolic_acidosis') {
     formula = `<p class="calc"><strong>Winter's formula.</strong> Expected PaCO<sub>2</sub> = 1.5 × HCO<sub>3</sub><sup>−</sup> + 8 (±2) = 1.5 × ${current.hco3} + 8 = ${fmt1(e.c)}, so ${fmt1(e.lo)} to ${fmt1(e.hi)} mmHg once the lungs have fully responded. Measured PaCO<sub>2</sub> is ${current.paco2}. ${
-      t.comp === 'uncompensated' ? 'It is still in the normal range, so the breathing response has not started yet.' : 'That fits the expected range, so the lungs are compensating appropriately.'}</p>`;
+      t.comp === 'uncompensated' ? 'That fits the expected range, so the lungs are responding as they should. Because the acidosis is mild, the expected PaCO<sub>2</sub> is still inside 35 to 45, so the standard classification calls this uncompensated.' : 'That fits the expected range, so the lungs are compensating appropriately.'}</p>`;
   } else if (t.disorder === 'metabolic_alkalosis') {
     formula = `<p class="calc"><strong>Expected respiratory compensation.</strong> PaCO<sub>2</sub> rises about 0.7 mmHg for each 1 mEq/L rise in HCO<sub>3</sub><sup>−</sup>: 40 + 0.7 × (${current.hco3} − 24) = ${fmt1(e.c)}, so about ${fmt1(e.lo)} to ${fmt1(e.hi)} mmHg. Measured PaCO<sub>2</sub> is ${current.paco2}. ${
-      t.comp === 'uncompensated' ? 'It is still normal, so the lungs have not slowed breathing yet.' : 'That fits, so the lungs are compensating by slowing breathing.'}</p>`;
+      t.comp === 'uncompensated' ? 'That fits the expected range. Because the alkalosis is mild, the expected PaCO<sub>2</sub> is still inside 35 to 45, so the standard classification calls this uncompensated.' : 'That fits, so the lungs are compensating by slowing breathing.'}</p>`;
   } else if (t.disorder === 'respiratory_acidosis') {
     formula = `<p class="calc"><strong>Expected metabolic compensation.</strong> For each 10 mmHg rise in PaCO<sub>2</sub>, HCO<sub>3</sub><sup>−</sup> rises about 1 mEq/L within minutes (acute, from buffering) and about 3.5 mEq/L after several days (chronic, as the kidneys keep more HCO<sub>3</sub><sup>−</sup>). Some references use 4. For a PaCO<sub>2</sub> of ${current.paco2}, that predicts about ${fmt1(e.acute)} (acute) to ${fmt1(e.chronic)} (chronic). Measured HCO<sub>3</sub><sup>−</sup> is ${current.hco3}.</p>`;
   } else if (t.disorder === 'respiratory_alkalosis') {
